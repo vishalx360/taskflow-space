@@ -14,7 +14,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { TaskList } from "@global-components/TaskList";
+import { LIST_BG_COLOR, TaskList } from "@global-components/TaskList";
 import { TaskCard } from "global-components/TaskCard";
 import {
   createSortablePayloadByIndex,
@@ -22,6 +22,7 @@ import {
   getBetweenRankAsc,
   sortByLexoRankAsc,
 } from "utils/List.helpers";
+import { AddListForm } from "@global-components/AddListForm";
 
 const ConstantListData = () => {
   return [
@@ -157,7 +158,7 @@ export default function Home() {
         onDragOver={handleDragOver}
       >
         {/* render all lists */}
-        <Stack direction={"row"} p="5" spacing={5}>
+        <Stack position="relative" direction={"row"} p="5" spacing={5}>
           {Lists.map((list) => {
             return (
               <TaskList
@@ -166,6 +167,16 @@ export default function Home() {
               />
             );
           })}
+          <Box
+            bg={LIST_BG_COLOR}
+            zIndex={10}
+            position="sticky"
+            rounded="xl"
+            top="0"
+            h="fit-content"
+          >
+            <AddListForm />
+          </Box>
         </Stack>
         <DragOverlay>
           {activeId ? (

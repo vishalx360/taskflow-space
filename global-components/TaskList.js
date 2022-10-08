@@ -21,8 +21,9 @@ import {
 } from "@dnd-kit/sortable";
 import { Field, Form, Formik } from "formik";
 import { TaskCard } from "global-components/TaskCard";
+import { AddToListForm } from "./AddToListForm";
 
-const LIST_BG_COLOR = "#ebecf0";
+export const LIST_BG_COLOR = "#ebecf0";
 
 export function TaskList({ list, items = [] }) {
   const { setNodeRef } = useDroppable({
@@ -76,69 +77,3 @@ export function TaskList({ list, items = [] }) {
     </Stack>
   );
 }
-
-function AddToListForm({ list }) {
-  return (
-    <>
-      <Formik
-        validationSchema={AddNewTaskVS}
-        initialValues={{
-          newTaskTitle: "",
-          list: list,
-        }}
-        onSubmit={(values) => {
-          console.log({
-            id: "DB ID",
-            rank: "calculate lastRank in this list and find next",
-            title: values.newTaskTitle,
-            list: values.list,
-          });
-        }}
-      >
-        <Form>
-          {/* newTaskTitle */}
-          <Field name="newTaskTitle">
-            {({ field, form }) => (
-              <FormControl
-                isInvalid={
-                  form.errors.newTaskTitle && form.touched.newTaskTitle
-                }
-                isRequired
-              >
-                <HStack w="full" px="2">
-                  <Input
-                    {...field}
-                    id="newTaskTitle"
-                    type="text"
-                    colorScheme="orange"
-                    w="full"
-                    variant="filled"
-                    placeholder="Add new task"
-                  />
-                  <Button
-                    colorScheme="orange"
-                    variant={"ghost"}
-                    disabled={form.values.newTaskTitle === ""}
-                    type="submit"
-                  >
-                    +
-                  </Button>
-                </HStack>
-                <FormErrorMessage px="2">
-                  {form.errors.newTaskTitle}
-                </FormErrorMessage>
-              </FormControl>
-            )}
-          </Field>
-        </Form>
-      </Formik>
-    </>
-  );
-}
-
-const AddNewTaskVS = Yup.object().shape({
-  newTaskTitle: Yup.string()
-    .max(200, "Max Character Limit Reached")
-    .required(""),
-  list: Yup.string().required(""),
-});
