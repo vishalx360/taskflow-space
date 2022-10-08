@@ -3,9 +3,11 @@
     "baseUrl": "./",
     "paths": {
       "@components/*": ["components/*"],
+      "@global-components/*": ["global-components/*"],
       "@styles/*": ["styles/*"],
       "@contexts/*": ["contexts/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@dndKit/*": ["dndKit/*"]
     }
   }
 }
