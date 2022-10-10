@@ -1,17 +1,28 @@
-#Vira
+# Vira
 
-jira clone
+## Project Management Software | Jira clone
+
+### Tech Stack
+
+- Next.js
+- dndKit
+<!-- - MongoDB
+- Next Auth -->
 
 Todo:
-Add to list
-Add new list
-Scrollable Y Container
-Authentication
-Database
-Team and Invite System using email.
-gravtar for default avatars
-Tags on tasks
-Goals
-Tasks assigned with a Goal
-Goal Completion Percentage View
-Roadmap
+
+- [x] Basic Drag and Drop functionality
+- [x] Scrollable Y Container
+- [ ] Drag to empty list (over = undefined)
+- [ ] Implement SWR or React Query for data
+- [ ] Add to list
+- [ ] Add new list
+- [ ] Authentication
+- [ ] Database Integration
+- [ ] Team and Invite System using email.
+- [ ] Gravtar for default avatars
+- [ ] Tags on tasks
+- [ ] Goals
+- [ ] Tasks assigned with a Goal
+- [ ] Goal Completion Percentage View
+- [ ] Roadmap Feature
