@@ -23,6 +23,7 @@ import {
   sortByLexoRankAsc,
 } from "utils/List.helpers";
 import { AddListForm } from "@global-components/AddListForm";
+import { useRef } from "react";
 
 const ConstantListData = () => {
   return [
@@ -40,7 +41,8 @@ function getData(list, id) {
 export default function Home() {
   // ---------
   const [activeId, setActiveId] = useState(null);
-
+  // add ref to spacer;
+  // const spacer = useRef(null);
   // const [ListData, setListData] = useState(ConstantListData);
 
   const [items, setItems] = useState(ConstantListData());
@@ -137,6 +139,11 @@ export default function Home() {
         rank: newRank.toString(),
         list: newListID,
       };
+      // // store a ref to spacer
+      // spacer.current = {
+      //   list:newListID,
+      //   index:currIndex,
+      // }
       // 4. sort by rank
       // TODO: improve sorting.
       return newItems.sort(sortByLexoRankAsc);
@@ -144,7 +151,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Box bgImage="/background.jpg">
+    <Box bg="gray.800">
       <Head>
         <title>Vira | Project Management</title>
         <link rel="icon" href="/favicon.ico" />
