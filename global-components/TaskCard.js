@@ -1,6 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { nanoid } from "nanoid";
 import TaskModal from "./TaskModal";
 
 export function TaskCard(props) {
@@ -15,7 +16,7 @@ export function TaskCard(props) {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <Box px="3" ref={setNodeRef} style={style} {...attributes} {...listeners}>
       <TaskModal
         taskData={{ title: props.title, description: props.description }}
       >
@@ -40,23 +41,35 @@ export function TaskCard(props) {
           )}
         </Box>
       </TaskModal>
-    </div>
+    </Box>
   );
 }
 
-function EmptyListCard() {
+export function EmptyListCard(props) {
+  // const { attributes, listeners, setNodeRef, transform, transition } =
+  //   useSortable({ id: props.id || nanoid() });
+
+  // const style = {
+  //   transform: CSS.Transform.toString(transform),
+  //   transition,
+  // };
   return (
-    <div>
+    <Box px="3">
       <Box
-        maxW="250px"
-        bg="white"
-        borderColor="gray.200"
-        rounded="xl"
-        shadow="xl"
-        p="5"
+        maxW="300px"
+        minW="270px"
+        textAlign="center"
+        // bg="white"
+        // border={props.active && "2px"}
+        // style={{ rotate: props.active && "-1deg" }}
+        // borderStyle={props.active && "dotted"}
+        // borderColor="gray.200"
+        // rounded="xl"
+        // shadow="xl"
+        px="4"
       >
-        <Text>No task added</Text>
+        <Text fontStyle="italic">No task added</Text>
       </Box>
-    </div>
+    </Box>
   );
 }

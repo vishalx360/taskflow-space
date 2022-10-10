@@ -32,7 +32,7 @@ const ConstantListData = () => {
     ...defaultItems("Done"),
   ];
 };
-const Lists = ["Todo", "Doing", "Done"];
+const DefaultLists = ["Todo", "Doing", "Done"];
 
 function getData(list, id) {
   return list.find((x) => x.id === id);
@@ -40,6 +40,7 @@ function getData(list, id) {
 
 export default function Home() {
   // ---------
+  const [Lists, setLists] = useState(DefaultLists);
   const [activeId, setActiveId] = useState(null);
   // add ref to spacer;
   // const spacer = useRef(null);
@@ -105,6 +106,7 @@ export default function Home() {
   const handleDragOver = useCallback((event) => {
     const { active, over, draggingRect } = event;
     const { id } = active;
+    // handel empty list (over = undefined)
     const { id: overId } = over;
 
     // // Find the containers
@@ -151,7 +153,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Box bg="gray.800">
+    <Box bg="gray.800" h="100%" className="listScrollbar" overflowX="scroll">
       <Head>
         <title>Vira | Project Management</title>
         <link rel="icon" href="/favicon.ico" />
@@ -182,7 +184,7 @@ export default function Home() {
             top="0"
             h="fit-content"
           >
-            <AddListForm />
+            <AddListForm setLists={setLists} />
           </Box>
         </Stack>
         <DragOverlay>
