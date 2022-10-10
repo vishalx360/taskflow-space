@@ -1,9 +1,8 @@
-import { Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 import Head from "next/head";
 import { useCallback, useState } from "react";
 
 import {
-  closestCenter,
   closestCorners,
   DndContext,
   DragOverlay,
@@ -14,6 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { AddListForm } from "@global-components/AddListForm";
 import { LIST_BG_COLOR, TaskList } from "@global-components/TaskList";
 import { TaskCard } from "global-components/TaskCard";
 import {
@@ -22,8 +22,6 @@ import {
   getBetweenRankAsc,
   sortByLexoRankAsc,
 } from "utils/List.helpers";
-import { AddListForm } from "@global-components/AddListForm";
-import { useRef } from "react";
 
 const ConstantListData = () => {
   return [
