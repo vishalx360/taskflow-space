@@ -2,6 +2,8 @@
 
 ## Project Management Software | Jira clone
 
+![Vira Software Poster](poster.png?raw=true "Vira")
+
 ### Tech Stack
 
 - Next.js
