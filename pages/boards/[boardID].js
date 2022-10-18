@@ -7,6 +7,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Tag,
   Text,
 } from "@chakra-ui/react";
 import AvatarRow from "@global-components/AvatarRow";
@@ -15,7 +16,8 @@ import MilestoneView from "@global-components/MilestoneView";
 import RoadmapView from "@global-components/RoadmapView";
 import geopattern from "geopattern";
 import { useRouter } from "next/router";
-
+import { MdArrowLeft, MdArrowRight, MdBookmarkAdd } from "react-icons/md";
+import { FaArrowLeft } from "react-icons/fa";
 import {
   TbCalendarEvent,
   TbClipboardCheck,
@@ -36,42 +38,52 @@ const Board = () => {
       // bg={"green.800"}
     >
       <Tabs h="full" colorScheme="orange">
-        <Box px="5" py="3">
-          <HStack justifyContent="space-between">
-            <Text fontSize="2xl" fontWeight="bold">
-              {boardID}
-            </Text>
+        <TabList px="5">
+          <HStack w="full" justifyContent="space-between">
+            <HStack justifyContent="space-between">
+              <HStack mr="5">
+                {/* TODO: add logo */}
+                <FaArrowLeft />
+                <Text fontSize="2xl" fontWeight="bold">
+                  Vira
+                </Text>
+              </HStack>
+
+              <Tag px="5" rounded="full">
+                <Text fontSize="xl" fontWeight="bold">
+                  {boardID}
+                </Text>
+              </Tag>
+              <Tab>
+                <HStack>
+                  <TbLayoutBoard />
+                  <Text fontWeight="bold" fontSize="lg">
+                    Kanban
+                  </Text>
+                </HStack>
+              </Tab>
+              <Tab>
+                <HStack>
+                  <TbClipboardCheck />
+                  <Text fontWeight="bold" fontSize="lg">
+                    Milestones
+                  </Text>
+                </HStack>
+              </Tab>
+              <Tab>
+                <HStack>
+                  <TbCalendarEvent />
+                  <Text fontWeight="bold" fontSize="lg">
+                    Roadmap
+                  </Text>
+                </HStack>
+              </Tab>
+            </HStack>
             <HStack>
               <Text fontWeight="bold">Your Team</Text>
               <AvatarRow />
             </HStack>
           </HStack>
-        </Box>
-        <TabList px="5">
-          <Tab>
-            <HStack>
-              <TbLayoutBoard />
-              <Text fontWeight="bold" fontSize="lg">
-                Kanban
-              </Text>
-            </HStack>
-          </Tab>
-          <Tab>
-            <HStack>
-              <TbClipboardCheck />
-              <Text fontWeight="bold" fontSize="lg">
-                Milestones
-              </Text>
-            </HStack>
-          </Tab>
-          <Tab>
-            <HStack>
-              <TbCalendarEvent />
-              <Text fontWeight="bold" fontSize="lg">
-                Roadmap
-              </Text>
-            </HStack>
-          </Tab>
         </TabList>
 
         <TabPanels>

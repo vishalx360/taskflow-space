@@ -12,7 +12,6 @@ function MyApp({ Component, pageProps }) {
     <NextUIProvider>
       <ChakraProvider theme={theme}>
         <CSSReset />
-        <Navbar />
         <Component {...pageProps} />
       </ChakraProvider>
     </NextUIProvider>
