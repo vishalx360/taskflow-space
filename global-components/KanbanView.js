@@ -30,6 +30,7 @@ const ConstantListData = () => {
     ...defaultItems("Done", "board1"),
   ];
 };
+
 const DefaultLists = ["Todo", "Doing", "Done"];
 
 function getData(list, id) {
@@ -45,6 +46,7 @@ export default function KanbanView() {
   // const [ListData, setListData] = useState(ConstantListData);
 
   const [items, setItems] = useState(ConstantListData());
+  // console.log(items);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -169,8 +171,9 @@ export default function KanbanView() {
           {Lists.map((list) => {
             return (
               <TaskList
+                key={list}
                 list={list}
-                items={items.filter((x) => x.list === list)}
+                items={items.filter((x) => x.status === list)}
               />
             );
           })}

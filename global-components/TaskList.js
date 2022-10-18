@@ -1,17 +1,4 @@
-import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Stack,
-} from "@chakra-ui/react";
-import * as Yup from "yup";
+import { Box, HStack, Stack } from "@chakra-ui/react";
 
 import { Text } from "@chakra-ui/react";
 import { useDroppable } from "@dnd-kit/core";
@@ -19,7 +6,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Field, Form, Formik } from "formik";
 import { EmptyListCard, TaskCard } from "global-components/TaskCard";
 import { AddToListForm } from "./AddToListForm";
 import ListActionMenu from "./ListActionMenu";

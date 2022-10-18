@@ -7,7 +7,7 @@ export const defaultItems = (status, board) => {
   const data = [];
   for (let i = 0; i < 10; i++) {
     data.push({
-      id: `${i}-id-${board}-`,
+      id: `${i}-id-${board}-${status}`,
       rank: currentRank.toString(),
       title: `Item ${i} of ${status}`,
       description: faker.lorem.sentences(),
