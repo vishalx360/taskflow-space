@@ -264,16 +264,17 @@ const NAV_ITEMS = [
   },
   {
     label: "My Boards",
-    children: [
-      {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
-      },
-      {
-        label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
-        href: "#",
-      },
-    ],
+    href: "/boards",
+    // children: [
+    //   {
+    //     label: "Explore Design Work",
+    //     subLabel: "Trending Design to inspire you",
+    //   },
+    //   {
+    //     label: "New & Noteworthy",
+    //     subLabel: "Up-and-coming Designers",
+    //     href: "#",
+    //   },
+    // ],
   },
 ];

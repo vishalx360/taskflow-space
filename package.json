@@ -18,9 +18,11 @@
     "@fontsource/open-sans": "^4.2.2",
     "@fontsource/poppins": "^4.2.2",
     "@nextui-org/react": "^1.0.0-beta.10",
+    "date-fns": "^2.29.3",
     "faker": "^5.5.3",
     "formik": "^2.2.9",
     "framer-motion": "^6.3.16",
+    "geopattern": "^1.2.3",
     "lexorank": "^1.0.5",
     "nanoid": "^4.0.0",
     "next": "^12.1.6",
@@ -28,6 +30,7 @@
     "react-dom": "^18.1.0",
     "react-icons": "^4.4.0",
     "react-scrollbars-custom": "^4.1.1",
+    "react-timeago": "^7.1.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

@@ -3,15 +3,16 @@ import { LexoRank } from "lexorank";
 
 let currentRank = LexoRank.min();
 
-export const defaultItems = (list) => {
+export const defaultItems = (status, board) => {
   const data = [];
   for (let i = 0; i < 10; i++) {
     data.push({
-      id: `${i}-id-${list}`,
+      id: `${i}-id-${board}-`,
       rank: currentRank.toString(),
-      title: `Item ${i} of list ${list}`,
+      title: `Item ${i} of ${status}`,
       description: faker.lorem.sentences(),
-      list: list,
+      status,
+      board,
     });
     currentRank = currentRank.genNext();
   }
