@@ -11,7 +11,20 @@
 <!-- - MongoDB
 - Next Auth -->
 
-Todo:
+## Different Views
+
+- Roadmap View (Timeline)
+- Milestone Views (Goals)
+- Task View (Kanban)
+
+## Rules
+
+- Each task can be assigned to a milestone.
+- By default each task will have 1 day of time to finish.
+- Collective time to finish all task of a milestone makes the deadline of a milestone.
+- Milestone will have a defined deadline.
+
+## Todo Features:
 
 - [x] Basic Drag and Drop functionality
 - [x] Scrollable Y Container
