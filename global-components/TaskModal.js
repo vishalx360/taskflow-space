@@ -1,5 +1,6 @@
 import { CloseIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
   Button,
   HStack,
@@ -10,6 +11,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useRef } from "react";
@@ -36,17 +38,30 @@ export default function TaskModal({ children, taskData, ...rest }) {
         finalFocusRef={finalRef}
         size="2xl"
         isOpen={isOpen}
+        isCentered
         onClose={onClose}
       >
         <ModalOverlay />
-        <ModalContent rounded="xl">
+        <ModalContent border="2px" rounded="xl">
           <ModalHeader>
             {(taskData && taskData.title) || "Task Title"}
           </ModalHeader>
 
           <ModalCloseButton />
           <ModalBody minH={"300px"} pb="5">
-            {(taskData && taskData.description) || "Task Description"}
+            <HStack mb="5">
+              <Avatar
+                key={"avatar.name"}
+                name={"vkasdsw"}
+                src={"avatar.name"}
+                size={"sm"}
+              />
+              <Text>{taskData.assignedTo || "Assigned To"}</Text>
+            </HStack>
+            <Text>
+              {(taskData && taskData.description) || "Task Description"}
+            </Text>
+            <Button variant={"primary"}>Mark As Done</Button>
           </ModalBody>
         </ModalContent>
       </Modal>

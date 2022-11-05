@@ -10,7 +10,6 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import { RESTDATA } from "@constants/RESTapi";
-import { Navbar } from "@nextui-org/react";
 import { sub } from "date-fns";
 import geopattern from "geopattern";
 import { nanoid } from "nanoid";
@@ -21,8 +20,6 @@ console.log(RESTDATA);
 function Dashboard() {
   return (
     <>
-      <Navbar />
-
       <Box p="10">
         <Text mb="5" fontSize="xl" fontWeight="bold">
           My Boards

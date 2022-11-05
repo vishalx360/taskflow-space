@@ -1,5 +1,6 @@
 import {
   AddIcon,
+  DeleteIcon,
   EditIcon,
   ExternalLinkIcon,
   RepeatIcon,
@@ -26,17 +27,8 @@ function ListActionMenu() {
         variant="outline"
       />
       <MenuList>
-        <MenuItem icon={<AddIcon />} command="⌘T">
-          New Tab
-        </MenuItem>
-        <MenuItem icon={<ExternalLinkIcon />} command="⌘N">
-          New Window
-        </MenuItem>
-        <MenuItem icon={<RepeatIcon />} command="⌘⇧N">
-          Open Closed Tab
-        </MenuItem>
-        <MenuItem icon={<EditIcon />} command="⌘O">
-          Open File...
+        <MenuItem color="red" icon={<DeleteIcon />}>
+          Delete List
         </MenuItem>
       </MenuList>
     </Menu>

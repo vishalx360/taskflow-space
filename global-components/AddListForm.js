@@ -48,13 +48,12 @@ export function AddListForm({ setLists }) {
                     {...field}
                     id="newListName"
                     type="text"
-                    colorScheme="orange"
                     w="full"
                     variant="outline"
                     placeholder="Add new list"
                   />
+
                   <Button
-                    colorScheme="orange"
                     variant={"ghost"}
                     disabled={form.values.newListName === ""}
                     type="submit"

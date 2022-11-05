@@ -1,7 +1,11 @@
 import {
   Box,
+  Button,
+  Center,
+  Divider,
   HStack,
   Icon,
+  Img,
   Tab,
   TabList,
   TabPanel,
@@ -23,6 +27,8 @@ import {
   TbClipboardCheck,
   TbLayoutBoard,
 } from "react-icons/tb";
+import { FiShare, FiShare2 } from "react-icons/fi";
+import InviteModal from "@global-components/InviteModal";
 const Board = () => {
   const router = useRouter();
   const { boardID } = router.query;
@@ -37,23 +43,29 @@ const Board = () => {
       // bgImage={boardID && geopattern.generate("").toDataUri()}
       // bg={"green.800"}
     >
-      <Tabs h="full" colorScheme="orange">
-        <TabList px="5">
-          <HStack w="full" justifyContent="space-between">
-            <HStack justifyContent="space-between">
-              <HStack mr="5">
-                {/* TODO: add logo */}
-                <FaArrowLeft />
-                <Text fontSize="2xl" fontWeight="bold">
-                  Vira
-                </Text>
-              </HStack>
+      <Tabs size="sm" variant="line" h="full" colorScheme="blackAlpha">
+        <TabList>
+          <Center
+            bg="blackAlpha.900"
+            color="white"
+            borderRight="2px"
+            borderBottom="2px"
+            px="10"
+            roundedBottomRight="xl"
+          >
+            <Text fontSize="2xl" fontWeight="bold">
+              Vira
+            </Text>
+          </Center>
 
-              <Tag px="5" rounded="full">
-                <Text fontSize="xl" fontWeight="bold">
-                  {boardID}
-                </Text>
-              </Tag>
+          <HStack px="5" py="2" w="full" justifyContent="space-between">
+            <Box px="5">
+              <Text fontSize="xl" fontWeight="bold">
+                {boardID}
+              </Text>
+            </Box>
+            {/* tabs */}
+            <HStack>
               <Tab>
                 <HStack>
                   <TbLayoutBoard />
@@ -79,9 +91,10 @@ const Board = () => {
                 </HStack>
               </Tab>
             </HStack>
-            <HStack>
+            <HStack ml="auto">
               <Text fontWeight="bold">Your Team</Text>
               <AvatarRow />
+              <InviteModal />
             </HStack>
           </HStack>
         </TabList>

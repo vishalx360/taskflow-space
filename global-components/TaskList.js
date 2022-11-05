@@ -19,22 +19,28 @@ export function TaskList({ list, items = [] }) {
   console.log("rerendering", list);
 
   return (
-    <Stack key={"main:" + list} spacing="0">
+    <Stack border="2px" rounded="xl" key={"main:" + list} spacing="0">
       <HStack
         justifyContent="space-between"
         pt="3"
-        bg={LIST_BG_COLOR}
+        pb="2"
+        // bg={LIST_BG_COLOR}
         zIndex={10}
         position="sticky"
         roundedTop="xl"
         top="0"
       >
-        <Text px="5" pb="2" fontWeight="bold">
+        <Text px="5" pb="1" fontWeight="bold">
           {list}
         </Text>
         <ListActionMenu list={list} />
       </HStack>
-      <Box position="relative" key={list} bg={LIST_BG_COLOR} pb="3">
+      <Box
+        position="relative"
+        key={list}
+        //  bg={LIST_BG_COLOR}
+        pb="3"
+      >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <Stack
             className="listScrollbar"
@@ -60,7 +66,7 @@ export function TaskList({ list, items = [] }) {
       </Box>
       <Box
         pb="3"
-        bg={LIST_BG_COLOR}
+        // bg={LIST_BG_COLOR}
         zIndex={10}
         position="sticky"
         roundedBottom="xl"

@@ -10,6 +10,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",
     "@chakra-ui/react": "^2.2.1",
+    "@cred/neopop-web": "^1.0.0",
     "@dnd-kit/core": "^6.0.5",
     "@dnd-kit/sortable": "^7.0.1",
     "@dnd-kit/utilities": "^3.2.0",
@@ -26,11 +27,12 @@
     "lexorank": "^1.0.5",
     "nanoid": "^4.0.0",
     "next": "^12.1.6",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
     "react-scrollbars-custom": "^4.1.1",
     "react-timeago": "^7.1.0",
+    "styled-components": "^5.3.6",
     "yup": "^0.32.11"
   },
   "devDependencies": {

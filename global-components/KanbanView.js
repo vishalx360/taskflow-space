@@ -177,15 +177,20 @@ export default function KanbanView() {
               />
             );
           })}
-          <Box
-            bg={LIST_BG_COLOR}
-            zIndex={10}
-            position="sticky"
-            rounded="xl"
-            top="0"
-            h="fit-content"
-          >
-            <AddListForm setLists={setLists} />
+          <Box pr="10">
+            <Box
+              // bg={LIST_BG_COLOR}
+              zIndex={10}
+              position="sticky"
+              border="2px"
+              rounded="xl"
+              top="0"
+              maxW="300px"
+              minW="270px"
+              h="fit-content"
+            >
+              <AddListForm setLists={setLists} />
+            </Box>
           </Box>
         </Stack>
         <DragOverlay>

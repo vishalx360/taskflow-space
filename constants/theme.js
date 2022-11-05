@@ -11,5 +11,15 @@ const theme = extendTheme({
       700: "#2a69ac",
     },
   },
+  components: {
+    Button: {
+      variants: {
+        primary: {
+          bg: "black",
+          color: "white",
+        },
+      },
+    },
+  },
 });
 export default theme;

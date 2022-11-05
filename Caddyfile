@@ -1,0 +1,4 @@
+# frontend
+vira.localhost {
+	reverse_proxy localhost:3000
+}

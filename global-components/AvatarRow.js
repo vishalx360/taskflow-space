@@ -32,7 +32,7 @@ function AvatarRow({ avatarSize = "sm" }) {
             height: "full",
             rounded: "full",
             transform: "scale(1.125)",
-            bgGradient: "linear(to-bl, green.400,green.500)",
+            // bgGradient: "linear(to-bl, green.400,green.500)",
             position: "absolute",
             zIndex: -1,
             top: 0,

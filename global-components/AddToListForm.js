@@ -42,13 +42,11 @@ export function AddToListForm({ list }) {
                     {...field}
                     id="newTaskTitle"
                     type="text"
-                    colorScheme="orange"
                     w="full"
-                    variant="filled"
+                    variant="outline"
                     placeholder="Add new task"
                   />
                   <Button
-                    colorScheme="orange"
                     variant={"ghost"}
                     disabled={form.values.newTaskTitle === ""}
                     type="submit"

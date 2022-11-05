@@ -24,16 +24,16 @@ export function TaskCard(props) {
           maxW="300px"
           minW="270px"
           bg={props.active ? "#f0f0f0" : "white"}
-          border={props.active && "2px"}
+          border="1px"
           style={{ rotate: props.active && "-1deg" }}
           borderStyle={props.active && "dotted"}
-          borderColor="gray.200"
+          borderColor="gray.400"
           rounded="xl"
-          shadow="xl"
+          // shadow="xl"
           py="3"
           px="4"
         >
-          <Text fontSize="lg" fontWeight="bold">
+          <Text className="taskTitle" fontSize="lg" fontWeight="bold">
             {props.title}
           </Text>
           {props.description && (
