@@ -1,35 +1,27 @@
 import {
   Box,
-  Button,
   Center,
-  Divider,
   HStack,
-  Icon,
-  Img,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Tag,
   Text,
 } from "@chakra-ui/react";
 import AvatarRow from "@global-components/AvatarRow";
+import InviteModal from "@global-components/InviteModal";
 import KanbanView from "@global-components/KanbanView";
 import MilestoneView from "@global-components/MilestoneView";
 import RoadmapView from "@global-components/RoadmapView";
-import geopattern from "geopattern";
 import { useRouter } from "next/router";
-import { MdArrowLeft, MdArrowRight, MdBookmarkAdd } from "react-icons/md";
-import { FaArrowLeft } from "react-icons/fa";
 import {
   TbCalendarEvent,
   TbClipboardCheck,
   TbLayoutBoard,
 } from "react-icons/tb";
-import { FiShare, FiShare2 } from "react-icons/fi";
-import InviteModal from "@global-components/InviteModal";
-const Board = () => {
+
+const BoardView = () => {
   const router = useRouter();
   const { boardID } = router.query;
 
@@ -115,7 +107,7 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default BoardView;
 
 const BoardNotFound = () => {
   return <p>Board: {boardID}</p>;

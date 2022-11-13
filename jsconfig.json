@@ -7,7 +7,8 @@
       "@styles/*": ["styles/*"],
       "@contexts/*": ["contexts/*"],
       "@constants/*": ["constants/*"],
-      "@dndKit/*": ["dndKit/*"]
+      "@dndKit/*": ["dndKit/*"],
+      "@lib/*": ["lib/*"]
     }
   }
 }
