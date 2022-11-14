@@ -50,7 +50,10 @@ export default function Navbar() {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")}>
+      <Box
+        bg={useColorModeValue("blackAlpha.200", "blackAlpha.800")}
+        color={useColorModeValue("blackAlpha.800", "blackAlpha.200")}
+      >
         <Flex gap="10" alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -62,13 +65,12 @@ export default function Navbar() {
           <Center
             bg="blackAlpha.900"
             color="white"
-            borderRight="2px"
-            borderBottom="2px"
+            borderColor={"black"}
             px="10"
             py="2"
             roundedBottomRight="xl"
           >
-            <Text fontSize="2xl" fontWeight="bold">
+            <Text fontStyle="italic" fontSize="2xl" fontWeight="bold">
               Vira
             </Text>
           </Center>
@@ -86,26 +88,20 @@ export default function Navbar() {
           <Flex px="5" alignItems={"center"}>
             {!loading ? (
               <Menu>
-                <MenuButton as={Button} p="0" rounded="full">
-                  <Box>
+                <MenuButton as={Button} pr="0" rounded="full">
+                  <HStack spacing={5}>
+                    <Text fontSize="1em" isTruncated maxW="xs">
+                      {session.user.name}
+                    </Text>
                     <Avatar
                       h="9"
                       w="9"
                       name={session.user.name}
                       src={session.user.image}
                     />
-                  </Box>
+                  </HStack>
                 </MenuButton>
                 <MenuList roundedBottom="lg">
-                  <Box px="6">
-                    <Text>Signed in as </Text>
-
-                    <Heading fontSize="1em" isTruncated maxW="xs">
-                      {session.user.name}
-                    </Heading>
-                  </Box>
-                  <MenuDivider />
-
                   <NextLink href="/settings" passHref>
                     <MenuItem
                       fontSize="md"
