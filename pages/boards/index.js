@@ -5,10 +5,11 @@ import Workspace from "@global-components/Workspace";
 console.log(RESTDATA);
 
 function Dashboard() {
+  // TODO: fetch all workpspaces and show Workpsace.
   return (
     <Layout>
-      <Workspace />
-      <Workspace />
+      <Workspace name="Personal" />
+      <Workspace name="Company" />
     </Layout>
   );
 }
