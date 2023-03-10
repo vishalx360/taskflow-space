@@ -7,6 +7,9 @@
 ### Tech Stack
 
 - Next.js
+- Prisma
+- Tailwind.CSS
+- Next-Auth
 - dndKit
 <!-- - MongoDB
 - Next Auth -->
