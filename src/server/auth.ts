@@ -37,7 +37,8 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: async ({ session, token }) => {
+    session: ({ session, token }) => {
+      // @ts-ignore
       if (token) session.id = token.id;
       return session;
     },

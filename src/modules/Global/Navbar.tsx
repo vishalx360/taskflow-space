@@ -165,7 +165,9 @@ function AccountMenu() {
                             <Menu.Item>
                                 <button
                                     className={`hover:bg-red-500 hover:text-white group flex w-full items-center rounded-md px-3 py-3 text-sm`}
-                                    onClick={handelLogout}
+                                    onClick={() => {
+                                        void handelLogout();
+                                    }}
                                 >
                                     <FiLogOut
                                         className="mr-2 h-5 w-5"
