@@ -1,14 +1,14 @@
-import { type NextPage } from "next";
+import { type GetServerSidePropsContext, type NextPage } from "next";
 import { getServerSession } from "next-auth";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { authOptions } from "~/server/auth";
 
 
+type Props = { status: "authenticated" | "unauthenticated" }
 
-const HomePage: NextPage = ({ status }) => {
-
+const HomePage: NextPage<Props> = ({ status }: Props) => {
   async function handelSignin() {
     await signIn("google");
   }
@@ -39,7 +39,7 @@ const HomePage: NextPage = ({ status }) => {
                 </Link>
               </div>
             )}
-            {status === "loading" && (
+            {/* {status === "loading" && (
               <div>
                 <p className="my-5 p-2">Loading...</p>
                 <div
@@ -53,7 +53,7 @@ const HomePage: NextPage = ({ status }) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </main>
@@ -64,7 +64,7 @@ const HomePage: NextPage = ({ status }) => {
 export default HomePage;
 
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions)
   return {
     props: {
