@@ -18,6 +18,7 @@ import { useCallback, useState } from "react";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import { TaskList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
+import geopattern from "geopattern";
 
 
 
@@ -40,11 +41,6 @@ function BoardPage() {
   );
 
   const [activeId, setActiveId] = useState(null);
-
-
-
-
-
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
@@ -72,8 +68,7 @@ function BoardPage() {
   }
 
   return <div>
-    <div className="h-screen bg-gray-100">
-
+    <div className={`h-screen bg-[url(/board_bg.jpg)] bg-no-repeat bg-cover`}>
       <nav className="bg-black text-white w-full px-4 py-4 shadow sm:px-4">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <div className="flex items-center gap-10">

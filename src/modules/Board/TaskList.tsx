@@ -22,7 +22,7 @@ export function TaskList({ list }: { list: List }) {
   }
 
   return (
-    <div className="h-full rounded-xl border-2" key={`main:${list.name}`}>
+    <div className="h-full bg-white/90 rounded-xl border-2" key={`main:${list.name}`}>
       <div
         className="sticky top-0 z-10 flex justify-between rounded-t-xl pt-3 pb-2"
       // bg={LIST_BG_COLOR}
