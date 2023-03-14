@@ -2,6 +2,7 @@ import Image from "next/image";
 import geopattern from "geopattern";
 import { api } from "~/utils/api";
 import { Board } from "@prisma/client";
+import Link from "next/link";
 
 export default function BoardList({ workspaceId }: { workspaceId: string }) {
     const { data: boards, isLoading } = api.dashboard.getAllBoards.useQuery({ workspaceId });
@@ -19,7 +20,6 @@ export default function BoardList({ workspaceId }: { workspaceId: string }) {
 
 function Board({ board }: { board: Board }): JSX.Element {
     const background = geopattern.generate(board.id).toDataUri()
-
     return <div className={`relative overflow-hidden rounded-xl hover:-translate-y-1 transition-all w-full md:w-fit`}>
         <Image
             height="50"
@@ -32,7 +32,7 @@ function Board({ board }: { board: Board }): JSX.Element {
                 <h2>
                     {board.name}
                 </h2>
-                <button className="opacity-0 group-hover:opacity-100 transition-all bg-white text-black rounded-full py-2 px-4 shadow-sm">Open</button>
+                <Link prefetch={false} href={`/board/${board.id}`} className="opacity-0 group-hover:opacity-100 transition-all bg-white text-black rounded-full py-2 px-4 shadow-sm">Open</Link>
             </div>
         </div>
     </div>;

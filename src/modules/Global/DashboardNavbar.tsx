@@ -12,7 +12,7 @@ const Items = [
     { title: "Settings", link: "/settings", isExternal: false },
 ];
 
-function Navbar() {
+function DashboardNavbar() {
     const [isOpen, setIsOpen] = useState(false);
     function toggel() {
         setIsOpen((prev) => !prev);
@@ -120,7 +120,7 @@ function Navbar() {
     );
 }
 
-export default Navbar;
+export default DashboardNavbar;
 
 
 

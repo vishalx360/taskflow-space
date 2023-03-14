@@ -28,33 +28,30 @@ export default async function SeedPersonalWorkspace(userId: string) {
     const boardIdMap = new Map();
     Boards.flatMap(board => boardIdMap.set(board.name, board.id));
 
-    DefaultData.map(async boardData => {
-        await Promise.all(boardData.lists.map(listData => {
-            const CreateTasks = listData.tasks.map(task => {
-                return {
-                    Task: {
-                        create: {
-                            title: task,
+    DefaultData.map(boardData => {
+        void (async () => {
+            await Promise.all(boardData.lists.map(listData => {
+                const CreateTasks = listData.tasks.map(task => {
+                    return {
+                        title: task,
+                    }
+                })
+                const list = prisma.list.create({
+                    data: {
+                        name: listData["list-name"],
+                        Board: {
+                            connect: {
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                id: boardIdMap.get(boardData["board-name"])
+                            }
+                        },
+                        tasks: {
+                            create: [...CreateTasks]
                         }
                     }
-                }
-            })
-            const list = prisma.list.create({
-                data: {
-                    name: listData["list-name"],
-                    Board: {
-                        connect: {
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                            id: boardIdMap.get(boardData["board-name"])
-                        }
-                    },
-                    tasks: {
-                        create: [...CreateTasks]
-                    }
-                }
-            });
-            return list;
-        }));
-
+                });
+                return list;
+            }));
+        })()
     })
 }

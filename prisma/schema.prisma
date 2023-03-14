@@ -35,29 +35,21 @@ model Board {
 }
 
 model List {
-    id        String       @id @default(cuid())
-    createdAt DateTime     @default(now())
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
     name      String
-    Board     Board        @relation(fields: [boardId], references: [id])
+    Board     Board    @relation(fields: [boardId], references: [id])
     boardId   String
-    tasks     TaskToList[]
+    tasks     Task[]
 }
 
 model Task {
-    id          String       @id @default(cuid())
-    createdAt   DateTime     @default(now())
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
     title       String
-    description String?      @db.Text
-    taskToList  TaskToList[]
-}
-
-//  many-to-one
-model TaskToList {
-    id     String @id @default(cuid())
-    List   List   @relation(fields: [listId], references: [id])
-    listId String
-    Task   Task   @relation(fields: [taskId], references: [id])
-    taskId String
+    description String?  @db.Text
+    list        List     @relation(fields: [listId], references: [id])
+    listId      String
 }
 
 // Necessary for Next auth ----------------------------------------------------
