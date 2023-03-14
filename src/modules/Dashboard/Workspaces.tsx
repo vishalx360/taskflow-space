@@ -13,7 +13,7 @@ function Workspaces() {
             {workspaces?.map((workspace) => {
                 return (
                     <div key={workspace.id} className="">
-                        <div className='p-2 border-b-2 font-semibold border-gray-300 my-5 text-xl'>
+                        <div className='p-2 border-b-2 border-gray-200 font-semibold my-5 text-xl'>
                             {workspace.name}
                         </div>
                         <div className="">
@@ -43,7 +43,7 @@ function WorkspaceListSkeleton() {
 function WorkspaceSkeleton(): JSX.Element {
     return (
         <div  >
-            <div className='p-2 border-b-2 font-semibold border-gray-300 text-xl'>
+            <div className='p-2 border-b-2 font-semibold border-gray-200 text-xl'>
                 <div className="h-10 w-28 rounded-xl my-3 bg-gray-300 animate-pulse"></div>
             </div>
             <div className="mt-3">

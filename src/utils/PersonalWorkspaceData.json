@@ -1,0 +1,129 @@
+[
+  {
+    "board-name": "Work",
+    "lists": [
+      {
+        "list-name": "TODO",
+        "tasks": [
+          "Research potential suppliers for raw materials",
+          "Schedule a meeting with the sales team to discuss new product ideas",
+          "Review and update employee handbook",
+          "Develop a project plan for a new software implementation"
+        ]
+      },
+      {
+        "list-name": "DOING",
+        "tasks": [
+          "Write a report on market trends and competitor analysis",
+          "Create a social media strategy for the company's upcoming product launch",
+          "Test and troubleshoot a new software feature",
+          "Design a new marketing campaign for an existing product line"
+        ]
+      },
+      {
+        "list-name": "DONE",
+        "tasks": [
+          "Presente a proposal to a client and received their approval",
+          "Draft a proposal for a client's project",
+          "Conduct interviews for new hires",
+          "Completed a training program on a new software tool",
+          "Conducted a successful product launch event",
+          "Finalized a contract negotiation with a vendor",
+          "Completed a website redesign project"
+        ]
+      }
+    ]
+  },
+  {
+    "board-name": "Reading List",
+    "lists": [
+      {
+        "list-name": "TODO",
+        "tasks": [
+          "The Silent Patient by Alex Michaelides",
+          "The Nightingale by Kristin Hannah",
+          "The Vanishing Half by Brit Bennett",
+          "The Seven Husbands of Evelyn Hugo by Taylor Jenkins Reid",
+          "The Immortal Life of Henrietta Lacks by Rebecca Skloot",
+          "Harry Potter and the Philosopher's Stone by J.K. Rowling",
+          "Sapiens: A Brief History of Humankind by Yuval Noah Harari"
+        ]
+      },
+      {
+        "list-name": "DOING",
+        "tasks": [
+          "To Kill a Mockingbird by Harper Lee",
+          "The Great Gatsby by F. Scott Fitzgerald",
+          "Little Fires Everywhere by Celeste Ng",
+          "The Alchemist by Paulo Coelho",
+          "The Girl on the Train by Paula Hawkins"
+        ]
+      },
+      {
+        "list-name": "DONE",
+        "tasks": [
+          "The Catcher in the Rye by J.D. Salinger",
+          "Pride and Prejudice by Jane Austen",
+          "1984 by George Orwell",
+          "The Hobbit by J.R.R. Tolkien",
+          "The Picture of Dorian Gray by Oscar Wilde",
+          "Harry Potter and the Chamber of Secrets by J.K. Rowling",
+          "Harry Potter and the Prisoner of Azkaban by J.K. Rowling",
+          "Harry Potter and the Goblet of Fire by J.K. Rowling",
+          "Harry Potter and the Order of Phoenix by J.K. Rowling",
+          "Harry Potter and the Half-Blood Prince by J.K. Rowling",
+          "Harry Potter and the Deathly Hallows by J.K. Rowling"
+        ]
+      }
+    ]
+  },
+  {
+    "board-name": "Watch List",
+    "lists": [
+      {
+        "list-name": "TODO",
+        "tasks": [
+          "The Godfather",
+          "Schindler's List",
+          "The Shawshank Redemption",
+          "The Dark Knight",
+          "The Lord of the Rings: The Fellowship of the Ring",
+          "The Lord of the Rings: The Two Towers",
+          "The Lord of the Rings: The Return of the King",
+          "Forrest Gump",
+          "Goodfellas",
+          "The Matrix"
+        ]
+      },
+      {
+        "list-name": "DOING",
+        "tasks": [
+          "Inception",
+          "The Prestige",
+          "Interstellar",
+          "The Departed",
+          "The Silence of the Lambs"
+        ]
+      },
+      {
+        "list-name": "DONE",
+        "tasks": [
+          "Pulp Fiction",
+          "The Godfather: Part II",
+          "The Green Mile",
+          "Saving Private Ryan",
+          "Fight Club",
+          "The Usual Suspects",
+          "The Lion King",
+          "The Terminator",
+          "Terminator 2: Judgment Day",
+          "The Exorcist",
+          "Alien",
+          "The Shining",
+          "Psycho",
+          "Jaws"
+        ]
+      }
+    ]
+  }
+]

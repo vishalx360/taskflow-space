@@ -8,6 +8,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import SeedPersonalWorkspace from "~/utils/SeedPersonalWorkspace";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -42,13 +43,18 @@ export const authOptions: NextAuthOptions = {
       if (token) session.id = token.id;
       return session;
     },
-    jwt: ({ token, user }) => {
+    jwt: async ({ token, user, isNewUser }) => {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        // seed personal workspace with default board with list and taks 
+        if (isNewUser) {
+          await SeedPersonalWorkspace(user.id);
+        }
       }
       return token;
     },
+
   },
   adapter: PrismaAdapter(prisma),
   session: {

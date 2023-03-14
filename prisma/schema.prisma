@@ -17,40 +17,50 @@ datasource db {
 model Workspace {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    name      String
+    name      String   @unique
     boards    Board[]
     owner     User     @relation(fields: [userId], references: [id])
     userId    String
+    personal  Boolean  @default(true)
 }
 
 model Board {
     id          String    @id @default(cuid())
     createdAt   DateTime  @default(now())
-    name        String
+    name        String    @unique
     Workspace   Workspace @relation(fields: [workspaceId], references: [id])
     workspaceId String
     lists       List[]
+    members     User[]
 }
 
 model List {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
+    id        String       @id @default(cuid())
+    createdAt DateTime     @default(now())
     name      String
-    Board     Board    @relation(fields: [boardId], references: [id])
+    Board     Board        @relation(fields: [boardId], references: [id])
     boardId   String
-    tasks     Task[]
+    tasks     TaskToList[]
 }
 
 model Task {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    name      String
-    List      List     @relation(fields: [listId], references: [id])
-    listId    String
-    members   User[]
+    id          String       @id @default(cuid())
+    createdAt   DateTime     @default(now())
+    title       String
+    description String?      @db.Text
+    taskToList  TaskToList[]
 }
 
-// Necessary for Next auth
+//  many-to-one
+model TaskToList {
+    id     String @id @default(cuid())
+    List   List   @relation(fields: [listId], references: [id])
+    listId String
+    Task   Task   @relation(fields: [taskId], references: [id])
+    taskId String
+}
+
+// Necessary for Next auth ----------------------------------------------------
 model User {
     id            String      @id @default(cuid())
     name          String?
@@ -60,8 +70,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     workspaces    Workspace[]
-    tasks         Task?       @relation(fields: [taskId], references: [id])
-    taskId        String?
+    boards        Board[]
 }
 
 model Account {
