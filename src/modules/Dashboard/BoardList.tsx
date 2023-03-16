@@ -2,6 +2,9 @@ import { type Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FiStar } from "react-icons/fi";
+
 import { api } from "~/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 
@@ -22,7 +25,8 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
 
 function Board({ board }: { board: Board }): JSX.Element {
     const background = geopattern.generate(board.id).toDataUri()
-    return <div className={`relative overflow-hidden rounded-xl group hover:-translate-y-1 hover:shadow-2xl transition-all w-full md:w-fit`}>
+
+    return <Link prefetch={false} href={`/board/${board.id}`} className={`relative overflow-hidden rounded-xl group hover:-translate-y-1 hover:shadow-2xl transition-all w-full md:w-fit`}>
         <Image
             height="50"
             width="150"
@@ -34,10 +38,10 @@ function Board({ board }: { board: Board }): JSX.Element {
                 <h2>
                     {board.name}
                 </h2>
-                <Link prefetch={false} href={`/board/${board.id}`} className="opacity-0 group-hover:opacity-100 transition-all bg-white text-black rounded-full py-2 px-4 shadow-sm">Open</Link>
+
             </div>
         </div>
-    </div>;
+    </Link>;
 }
 
 
