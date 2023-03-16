@@ -19,6 +19,7 @@ import { TaskCard } from "~/modules/Board/TaskCard";
 import { TaskList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
 import geopattern from "geopattern";
+import Link from "next/link";
 
 
 
@@ -72,11 +73,11 @@ function BoardPage() {
       <nav className="bg-black text-white w-full px-4 py-4 shadow sm:px-4">
         <div className="container mx-auto flex flex-wrap items-center justify-between">
           <div className="flex items-center gap-10">
-            <a href="https://vishalx360.codes/" className="flex items-center">
+            <Link href="/dashboard" className="flex items-center">
               <span className="text-white self-center whitespace-nowrap text-3xl italic font-semibold">
                 VIRA
               </span>
-            </a>
+            </Link>
             <span className="text-white self-center whitespace-nowrap text-xl italic font-semibold">
               {Board?.name} Board
             </span>

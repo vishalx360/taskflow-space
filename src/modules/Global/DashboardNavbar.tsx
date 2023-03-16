@@ -135,12 +135,8 @@ function AccountMenu() {
         <div>
             <Menu as="div" className="relative inline-block text-left">
                 <div>
-                    <Menu.Button className="inline-flex items-center gap-2 md:gap-5 w-full justify-center rounded-md">
-                        <Image height={200} width={200} src={session?.user?.image || "/"} alt="avatar" className="ring-white ring-[2px] w-10 rounded-full" />
-                        <div className='hidden md:block text-left' >
-                            <h1 className="text-sm">{session?.user?.name}</h1>
-                            <h1 className="text-xs text-neutral-100 text-opacity-50">{session?.user.email}</h1>
-                        </div>
+                    <Menu.Button className="group inline-flex items-center gap-2 md:gap-5 w-full justify-center rounded-md">
+                        <Image height={200} width={200} src={session?.user?.image || "/"} alt="avatar" className="ring-white/40 ring-2 group-hover:ring-4 transition-all w-10 rounded-full" />
                         <FiChevronDown className='text-xl' />
                     </Menu.Button>
                 </div>
@@ -153,10 +149,10 @@ function AccountMenu() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 text-black ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute z-20 right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 text-black ring-black ring-opacity-5 focus:outline-none">
 
-                        <div className="p-5 md:p-1">
-                            <div className='md:hidden text-left mb-2' >
+                        <div className="px-5 py-3">
+                            <div className=' text-left mb-2' >
                                 <h1 className="text-sm text-black text-opacity-50">Logged in as</h1>
                                 <h1 className="text-sm mt-3 font-medium">{session?.user?.name}</h1>
                                 <h1 className="text-xs font-medium text-black text-opacity-50">{session?.user.email}</h1>

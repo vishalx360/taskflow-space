@@ -20,7 +20,7 @@ function Workspaces() {
                                 {({ open }) => (
                                     <>
                                         <Disclosure.Button className="w-full transition-all">
-                                            <div className='w-full flex items-center justify-between gap-10 p-2 border-b-2 border-gray-200 font-semibold my-5 text-xl'>
+                                            <div className='hover:bg-neutral-100   w-full flex items-center justify-between gap-10 py-2 px-5 rounded-t-xl border-b-2 border-gray-200 font-semibold my-5 text-xl'>
                                                 <h1>
                                                     {workspace.name}
                                                 </h1>
