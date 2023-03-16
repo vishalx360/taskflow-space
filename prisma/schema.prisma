@@ -21,14 +21,14 @@ model Workspace {
     boards    Board[]
     owner     User     @relation(fields: [userId], references: [id])
     userId    String
-    personal  Boolean  @default(true)
+    personal  Boolean  @default(false)
 }
 
 model Board {
     id          String    @id @default(cuid())
     createdAt   DateTime  @default(now())
     name        String
-    Workspace   Workspace @relation(fields: [workspaceId], references: [id])
+    Workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
     workspaceId String
     lists       List[]
     members     User[]
@@ -38,7 +38,7 @@ model List {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     name      String
-    Board     Board    @relation(fields: [boardId], references: [id])
+    Board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
     boardId   String
     tasks     Task[]
 }
@@ -48,7 +48,7 @@ model Task {
     createdAt   DateTime @default(now())
     title       String
     description String?  @db.Text
-    list        List     @relation(fields: [listId], references: [id])
+    list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
     listId      String
 }
 

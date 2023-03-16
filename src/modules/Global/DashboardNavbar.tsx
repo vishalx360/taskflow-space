@@ -24,7 +24,7 @@ function DashboardNavbar() {
                 <button
                     onClick={toggel}
                     type="button"
-                    className="hover:bg-brand-dark focus:ring-accent ml-3 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 md:hidden "
+                    className="hover: focus:ring-accent ml-3 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 md:hidden "
                     aria-controls="navbar-default"
                     aria-expanded="false"
                 >
@@ -55,7 +55,7 @@ function DashboardNavbar() {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <div className="bg-black border-accent bg-brand-dark border-b-2 shadow-2xl ">
+                        <div className="bg-black border-accent  border-b-2 shadow-2xl ">
                             <ul className="flex  w-full flex-col p-5 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:text-sm md:font-medium  ">
                                 {Items.map((item) => {
                                     const externalProps = item.isExternal

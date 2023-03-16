@@ -1,4 +1,5 @@
-import { IconType } from "react-icons";
+import { type HTMLAttributes, type MouseEventHandler } from "react";
+import { type IconType } from "react-icons";
 import { BiLoaderAlt } from "react-icons/bi";
 
 function PrimaryButton({
@@ -7,11 +8,14 @@ function PrimaryButton({
   isLoading = false,
   loadingText,
   LeftIcon,
+  disabled,
   RightIcon,
+  onClick,
   ...rest
 }: {
+  onClick?: MouseEventHandler<HTMLButtonElement>,
   children: React.ReactNode;
-  className?: string;
+  className?: HTMLAttributes<HTMLButtonElement>["className"];
   disabled?: boolean;
   isLoading?: boolean;
   loadingText?: string;
@@ -22,8 +26,9 @@ function PrimaryButton({
   return (
     <button
       className={`w-fit rounded-full text-white bg-black px-5 py-3 text-center text-sm font-semibold text-brand-dark transition-all hover:bg-neutral-900 focus:outline-none  focus:ring-4 
-        focus:ring-accent
-        disabled:bg-neutral-500 active:translate-y-[2px] ${className || ""}`}
+        focus:ring-accent disabled:bg-neutral-500 active:translate-y-[2px] ${className || ""}`}
+      disabled={disabled}
+      onClick={onClick}
       {...rest}
     >
       <div className="flex items-center justify-center gap-3">

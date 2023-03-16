@@ -7,6 +7,7 @@ export default async function SeedPersonalWorkspace(userId: string) {
         data: {
             name: "Personal Workspace",
             userId,
+            personal: true
         },
     });
 

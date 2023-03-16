@@ -108,7 +108,7 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
                                   required
                                   placeholder="Board name"
                                   {...field}
-                                  className="text-md  block w-full rounded-xl bg-brand-dark  p-3 text-neutral-800 transition-all focus:outline focus:outline-accent"
+                                  className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline focus:outline-none"
                                 />
                                 {meta.touched && meta.error && (
                                   <p className="mt-2 ml-2 text-sm text-red-500">
