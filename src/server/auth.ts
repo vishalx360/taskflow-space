@@ -37,10 +37,15 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: ({ session, token }) => {
-      // @ts-ignore
-      if (token) session.id = token.id;
+      if (token) {
+        session.user = {
+          ...session.user,
+          ...token,
+        };
+      }
       return session;
     },
+
     jwt: async ({ token, user, isNewUser }) => {
       if (user) {
         token.id = user.id;
