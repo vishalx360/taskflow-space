@@ -47,7 +47,7 @@ function Workspaces() {
                                             leaveTo="transform -translate-y-3 opacity-0"
                                         >
                                             <Disclosure.Panel>
-                                                <BoardList workspaceId={workspace.id} />
+                                                <BoardList workspace={workspace} />
                                             </Disclosure.Panel>
                                         </Transition>
                                     </>

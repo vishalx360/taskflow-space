@@ -1,11 +1,13 @@
-import Image from "next/image";
+import { Board, Workspace } from "@prisma/client";
 import geopattern from "geopattern";
-import { api } from "~/utils/api";
-import { Board } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
+import { FaPlusCircle } from "react-icons/fa";
+import { api } from "~/utils/api";
+import CreateNewBoardModal from "./CreateNewBoardModal";
 
-export default function BoardList({ workspaceId }: { workspaceId: string }) {
-    const { data: boards, isLoading } = api.dashboard.getAllBoards.useQuery({ workspaceId });
+export default function BoardList({ workspace }: { workspace: Workspace }) {
+    const { data: boards, isLoading } = api.dashboard.getAllBoards.useQuery({ workspaceId: workspace.id });
 
     if (isLoading) {
         return <BoardListSkeleton />
@@ -13,6 +15,7 @@ export default function BoardList({ workspaceId }: { workspaceId: string }) {
     return (
         <div className="flex flex-wrap gap-5">
             {boards?.map(board => <Board key={board.id} board={board} />)}
+            <CreateNewBoardModal workspace={workspace} />
             {boards?.length === 0 && "No Boards Found"}
         </div>
     )

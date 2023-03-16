@@ -17,7 +17,7 @@ datasource db {
 model Workspace {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    name      String   @unique
+    name      String
     boards    Board[]
     owner     User     @relation(fields: [userId], references: [id])
     userId    String
@@ -27,7 +27,7 @@ model Workspace {
 model Board {
     id          String    @id @default(cuid())
     createdAt   DateTime  @default(now())
-    name        String    @unique
+    name        String
     Workspace   Workspace @relation(fields: [workspaceId], references: [id])
     workspaceId String
     lists       List[]
