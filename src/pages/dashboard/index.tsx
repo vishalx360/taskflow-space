@@ -5,7 +5,7 @@ function DashboardPage() {
     return (
         <>
             <DashboardNavbar />
-            <div className="container mx-auto p-10 space-y-10">
+            <div className="container mt-20 mx-auto space-y-10">
                 <Workspaces />
             </div>
         </>

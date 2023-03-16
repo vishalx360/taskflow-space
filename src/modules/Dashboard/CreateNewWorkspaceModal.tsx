@@ -1,17 +1,15 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { Fragment, useState } from "react";
 import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { api } from "~/utils/api";
-import { CreateNewBoardValidationSchema } from "~/utils/ValidationSchema";
+import { CreateNewWorkspaceValidationSchema } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
 
-
-export default function CreateNewBoardModal({ workspace }: { workspace: Workspace }) {
+export default function CreateNewWorkspaceModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   const utils = api.useContext();
@@ -19,25 +17,25 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
   function closeModal() { setIsOpen(false) }
   function openModal() { setIsOpen(true) }
 
-  const mutation = api.dashboard.createNewBoard.useMutation({
+  const mutation = api.dashboard.createNewWorkspace.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" })
     },
     onSuccess: async () => {
-      await utils.dashboard.getAllBoards.invalidate().catch(err => console.log(err));
-      Toast({ content: "New board created successfully!", status: "success" })
+      await utils.dashboard.getAllWorkspace.invalidate().catch(err => console.log(err));
+      Toast({ content: "New workspace created successfully!", status: "success" })
       setIsOpen(false);
     },
   });
 
   return (
-    <>
-      <button onClick={openModal} className='hover:shadow-xl relative hover:-translate-y-1 h-40 transition-transform w-full md:w-[18rem] font-bold p-5  rounded-xl bg-neutral-100 hover:border-2 border-neutral-300 text-lg text-neutral-700 flex items-center'>
-        <div className="flex gap-3 w-full justify-center items-center">
-          <FaPlusCircle />
-          <h2>
-            Create new board
-          </h2>
+    <div className="px-5">
+      <button onClick={openModal} className="w-full">
+        <div className='hover:bg-neutral-100 w-full flex items-center justify-center gap-10 py-5 px-5 rounded-xl border-2 border-gray-200 font-semibold my-5 text-xl'>
+          <FaPlusCircle className="text-inherit" />
+          <span>
+            Create new workspace
+          </span>
         </div>
       </button>
 
@@ -72,7 +70,7 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
                     as="h3"
                     className="flex items-center gap-5 justify-between text-lg font-medium leading-6 text-gray-900 "
                   >
-                    Create new board in {workspace.name}
+                    Create new workspace
                     <button
                       onClick={closeModal}
                       type="button"
@@ -87,8 +85,8 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
                   <div className="mt-2">
 
                     <Formik
-                      initialValues={{ name: "", workspaceId: workspace.id, }}
-                      validationSchema={toFormikValidationSchema(CreateNewBoardValidationSchema)}
+                      initialValues={{ name: "" }}
+                      validationSchema={toFormikValidationSchema(CreateNewWorkspaceValidationSchema)}
                       onSubmit={
                         (values) => {
                           console.log(values);
@@ -101,12 +99,12 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
                           <Field name="name">
                             {({ field, meta }: FieldProps) => (
                               <div className="my-5">
-                                <label htmlFor="name" className="block mb-2 text-sm font-medium text-neutral-500 dark:text-white">Board Name</label>
+                                <label htmlFor="name" className="block mb-2 text-sm font-medium text-neutral-500 dark:text-white">Workspace Name</label>
                                 <input
                                   type="text"
                                   id="name"
                                   required
-                                  placeholder="Board name"
+                                  placeholder="Workspace name"
                                   {...field}
                                   className="text-md  block w-full rounded-xl bg-brand-dark  p-3 text-neutral-800 transition-all focus:outline focus:outline-accent"
                                 />
@@ -128,7 +126,7 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
                                 className="w-full"
                                 LeftIcon={FaPlus}
                               >
-                                Create new board
+                                Create new workspace
                               </PrimaryButton>
                             )}
                           </Field>
@@ -143,6 +141,6 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 }

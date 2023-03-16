@@ -19,9 +19,8 @@ function DashboardNavbar() {
     }
     const pathname = usePathname();
     return (
-        <nav className="bg-black text-white w-full px-4 py-4 shadow sm:px-4">
+        <nav className="fixed top-0 z-50 h-20 bg-black text-white w-full shadow sm:px-4 flex items-center justify-center">
             <div className="container mx-auto flex flex-wrap items-center justify-between">
-
                 <button
                     onClick={toggel}
                     type="button"

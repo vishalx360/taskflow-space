@@ -16,7 +16,6 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
         <div className="flex flex-wrap gap-5">
             {boards?.map(board => <Board key={board.id} board={board} />)}
             <CreateNewBoardModal workspace={workspace} />
-            {boards?.length === 0 && "No Boards Found"}
         </div>
     )
 }
@@ -24,7 +23,7 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
 function Board({ board }: { board: Board }): JSX.Element {
     const background = geopattern.generate(board.id).toDataUri()
 
-    return <Link prefetch={false} href={`/board/${board.id}`} className={`relative overflow-hidden rounded-xl group hover:-translate-y-1 hover:shadow-2xl transition-all w-full md:w-fit`}>
+    return <Link prefetch={false} href={`/board/${board.id}`} className={`relative overflow-hidden rounded-xl group hover:-translate-y-1 hover:shadow-xl transition-all w-full md:w-fit`}>
         <Image
             height="50"
             width="150"
