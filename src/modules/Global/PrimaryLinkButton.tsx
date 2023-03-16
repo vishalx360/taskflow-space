@@ -1,4 +1,4 @@
-import { IconType } from "react-icons";
+import { type IconType } from "react-icons";
 import { FiExternalLink } from "react-icons/fi";
 
 function PrimaryLinkButton({
@@ -10,7 +10,7 @@ function PrimaryLinkButton({
   isExternal,
   ...rest
 }: {
-  children: any;
+  children: React.ReactNode;
   href: string;
   className?: string;
   LeftIcon?: IconType;
@@ -19,7 +19,7 @@ function PrimaryLinkButton({
 }) {
   return (
     <a
-      className={`block w-full rounded-full bg-accent py-3 px-5 text-center font-semibold text-brand-dark md:py-3 md:px-10 ${className}`}
+      className={`block w-full rounded-full bg-accent py-3 px-5 text-center font-semibold text-brand-dark md:py-3 md:px-10 ${className || ""}`}
       {...rest}
       href={href}
     >

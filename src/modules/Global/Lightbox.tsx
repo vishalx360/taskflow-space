@@ -1,9 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, ReactNode, useState } from "react";
+import React, { Fragment, type ReactNode, useState } from "react";
 import { FiX } from "react-icons/fi";
 
 export default function Lightbox({ children }: { children: ReactNode }) {
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -55,17 +55,19 @@ export default function Lightbox({ children }: { children: ReactNode }) {
                     <span className="sr-only">Close Image Preview</span>
                     <FiX size="2em" />
                   </button>
-                  {React.Children.map(children, (child: any) => {
-                    return React.cloneElement(
-                      child,
-                      {
-                        height: "900",
-                        width: "900",
-                        className:
-                          "border-2 border-white border-opacity-20 rounded-xl",
-                      },
-                      null
-                    );
+                  {React.Children.map<ReactNode, ReactNode>(children, (child) => {
+                    if (React.isValidElement(child)) {
+                      return React.cloneElement(
+                        child,
+                        {
+                          height: "900",
+                          width: "900",
+                          className:
+                            "border-2 border-white border-opacity-20 rounded-xl",
+                        },
+                        null
+                      );
+                    }
                   })}
                 </Dialog.Panel>
               </Transition.Child>

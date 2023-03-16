@@ -1,4 +1,5 @@
-import { IconType } from "react-icons";
+import React from "react";
+import { type IconType } from "react-icons";
 import { FiExternalLink } from "react-icons/fi";
 
 function SecondaryLinkButton({
@@ -10,7 +11,7 @@ function SecondaryLinkButton({
   isExternal,
   ...rest
 }: {
-  children: any;
+  children: React.ReactNode;
   href: string;
   className?: string;
   LeftIcon?: IconType;
@@ -21,7 +22,7 @@ function SecondaryLinkButton({
   const externalProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {}
   return (
     <a
-      className={`block w-full rounded-full  border-2 border-accent bg-brand-light py-2  px-3 text-center font-semibold md:py-3 md:px-10 ${className}`}
+      className={`block w-full rounded-full  border-2 border-accent bg-brand-light py-2  px-3 text-center font-semibold md:py-3 md:px-10 ${className || ""}`}
       {...rest}
       href={href}
 

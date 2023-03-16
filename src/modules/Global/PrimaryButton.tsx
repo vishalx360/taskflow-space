@@ -26,9 +26,9 @@ function PrimaryButton({
         disabled:bg-neutral-500 active:translate-y-[2px] ${className || ""}`}
       {...rest}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
         {isLoading && <BiLoaderAlt className="animate-spin text-xl" />}
-        {LeftIcon && <LeftIcon className="text-inherit" />}
+        {LeftIcon && !isLoading && <LeftIcon className="text-inherit" />}
         {isLoading && loadingText ? loadingText : children}
         {RightIcon && <RightIcon className="text-inherit" />}
       </div>

@@ -33,7 +33,7 @@ function DashboardNavbar() {
                     {!isOpen ? <FiMenu size="2em" /> : <FiX size="2em" />}
                 </button>
                 <div className="flex items-center gap-10">
-                    <a href="https://vishalx360.codes/" className="flex items-center">
+                    <Link href="/" className="flex items-center">
                         {/* <Image
               width="50"
               height="50"
@@ -44,7 +44,7 @@ function DashboardNavbar() {
                         <span className="text-white self-center whitespace-nowrap text-3xl italic font-semibold">
                             VIRA
                         </span>
-                    </a>
+                    </Link>
                 </div>
                 <div className="absolute left-0 top-20 w-full md:hidden">
                     <Transition

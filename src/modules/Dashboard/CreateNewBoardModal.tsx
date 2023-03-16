@@ -3,7 +3,7 @@ import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { Fragment, useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiAlertCircle, FiAlertTriangle, FiCheckCircle, FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { api } from "~/utils/api";
@@ -56,9 +56,7 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
   return (
     <>
       <Toaster position="bottom-center" />
-
-
-      <button onClick={openModal} className='relative hover:-translate-y-1 h-40 transition-transform w-full md:w-[18rem] font-bold p-5  rounded-xl bg-neutral-100 hover:border-2 border-neutral-500 text-lg text-neutral-700 flex items-center'>
+      <button onClick={openModal} className='hover:shadow-2xl relative hover:-translate-y-1 h-40 transition-transform w-full md:w-[18rem] font-bold p-5  rounded-xl bg-neutral-100 hover:border-2 border-neutral-300 text-lg text-neutral-700 flex items-center'>
         <div className="flex gap-3 w-full justify-center items-center">
           <FaPlusCircle />
           <h2>
@@ -152,6 +150,7 @@ export default function CreateNewBoardModal({ workspace }: { workspace: Workspac
                                 disabled={Object.keys(form.errors).length !== 0}
                                 type="submit"
                                 className="w-full"
+                                LeftIcon={FaPlus}
                               >
                                 Create new board
                               </PrimaryButton>

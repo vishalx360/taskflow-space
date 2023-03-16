@@ -1,8 +1,7 @@
-import { Board, Workspace } from "@prisma/client";
+import { type Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
-import { FaPlusCircle } from "react-icons/fa";
 import { api } from "~/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 
@@ -23,14 +22,14 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
 
 function Board({ board }: { board: Board }): JSX.Element {
     const background = geopattern.generate(board.id).toDataUri()
-    return <div className={`relative overflow-hidden rounded-xl hover:-translate-y-1 transition-all w-full md:w-fit`}>
+    return <div className={`relative overflow-hidden rounded-xl group hover:-translate-y-1 hover:shadow-2xl transition-all w-full md:w-fit`}>
         <Image
             height="50"
             width="150"
             src={background}
             alt=""
             className="object-cover h-40 w-full md:w-[18rem]" />
-        <div className='text-white font-bold absolute bottom-0 p-5 w-full h-full bg-gradient-to-t from-black group flex items-end'>
+        <div className='text-white font-bold absolute bottom-0 p-5 w-full h-full bg-gradient-to-t from-black  flex items-end'>
             <div className="flex w-full justify-between items-center">
                 <h2>
                     {board.name}

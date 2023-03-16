@@ -1,27 +1,18 @@
 import {
   closestCorners,
-  DndContext,
-  DragEndEvent,
-  DragOverEvent,
-  DragOverlay,
-  DragStartEvent,
-  KeyboardSensor,
+  DndContext, DragOverlay, KeyboardSensor,
   PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors
+  TouchSensor, useSensor,
+  useSensors, type DragEndEvent,
+  type DragOverEvent, type DragStartEvent, type UniqueIdentifier
 } from "@dnd-kit/core";
-import { DndMonitorEvent } from "@dnd-kit/core/dist/components/DndMonitor";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import { TaskList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
-import geopattern from "geopattern";
-import Link from "next/link";
-
-
 
 
 function BoardPage() {
@@ -41,7 +32,7 @@ function BoardPage() {
     useSensor(TouchSensor, { activationConstraint: { distance: 10 } })
   );
 
-  const [activeId, setActiveId] = useState(null);
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
