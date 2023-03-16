@@ -1,10 +1,11 @@
 import { Disclosure, Transition } from "@headlessui/react";
 import { FaCaretRight } from "react-icons/fa";
+import { FiLoader } from "react-icons/fi";
 import BoardList, { BoardListSkeleton } from "~/modules/Dashboard/BoardList";
 import { api } from "~/utils/api";
 
 function Workspaces() {
-    const { data: workspaces, isLoading } = api.dashboard.getAllWorkspace.useQuery();
+    const { data: workspaces, isLoading, isRefetching } = api.dashboard.getAllWorkspace.useQuery();
     if (isLoading) {
         return <WorkspaceListSkeleton />
     }
@@ -20,10 +21,14 @@ function Workspaces() {
                                 {({ open }) => (
                                     <>
                                         <Disclosure.Button className="w-full transition-all">
-                                            <div className='hover:bg-neutral-100   w-full flex items-center justify-between gap-10 py-2 px-5 rounded-t-xl border-b-2 border-gray-200 font-semibold my-5 text-xl'>
-                                                <h1>
-                                                    {workspace.name}
-                                                </h1>
+                                            <div className='hover:bg-neutral-100 w-full flex items-center justify-between gap-10 py-2 px-5 rounded-t-xl border-b-2 border-gray-200 font-semibold my-5 text-xl'>
+                                                <div className="flex items-center gap-5">
+                                                    <span>
+                                                        {workspace.name}
+                                                    </span>
+                                                    {isRefetching && <FiLoader className="animate-spin h-5 w-5 text-neutral-500" />}
+                                                </div>
+
                                                 {/* <IconButton Icon={MdSettings} >
                                                 Settings
                                             </IconButton> */}

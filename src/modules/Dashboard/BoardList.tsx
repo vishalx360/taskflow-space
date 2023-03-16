@@ -2,8 +2,6 @@ import { type Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FiStar } from "react-icons/fi";
 
 import { api } from "~/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
