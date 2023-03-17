@@ -13,7 +13,7 @@ export default function SignInPage() {
     <>
       <section className="bg-neutral-100 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
-          <a href="#" className="tracking-widest flex items-center mb-8 text-5xl font-normal text-gray-900 dark:text-white">
+          <a href="#" className="tracking-widest flex items-center mb-8 text-5xl font-bold text-gray-900 dark:text-white">
             {/* <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" /> */}
             VIRA
           </a>
@@ -34,7 +34,7 @@ export default function SignInPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-start">
                     <div className="flex items-center h-5">
-                      <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-black dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-black dark:ring-offset-gray-800" required />
+                      <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border checked:bg-black border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-black dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-black dark:ring-offset-gray-800" required />
                     </div>
                     <div className="ml-3 text-sm">
                       <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
