@@ -69,7 +69,9 @@ function Workspaces() {
             </div>
           );
         })}
-        {workspaces?.length === 0 && "No Workspace Found"}
+        <div className="px-6">
+          {workspaces?.length === 0 && "No Workspace Found"}
+        </div>
         <CreateNewWorkspaceModal />
       </div>
     </div>

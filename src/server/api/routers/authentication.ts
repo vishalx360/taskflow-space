@@ -2,6 +2,7 @@
 import { TRPCError } from "@trpc/server";
 import { hash } from "argon2";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import SeedPersonalWorkspace from "~/utils/SeedPersonalWorkspace";
 import { SignUpSchema } from "~/utils/ValidationSchema";
 
 export const AuthenticationRouter = createTRPCRouter({
@@ -24,6 +25,8 @@ export const AuthenticationRouter = createTRPCRouter({
             const result = await ctx.prisma.user.create({
                 data: { name, email, password: hashedPassword },
             });
+
+            await SeedPersonalWorkspace(result.id);
 
             return {
                 status: 201,

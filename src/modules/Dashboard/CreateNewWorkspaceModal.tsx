@@ -40,7 +40,7 @@ export default function CreateNewWorkspaceModal() {
   return (
     <div className="px-5">
       <button onClick={openModal} className="w-full">
-        <div className="my-5 flex w-full items-center justify-center gap-10 rounded-xl border-2 border-gray-200 py-5 px-5 text-xl font-semibold hover:bg-neutral-100">
+        <div className="my-5 flex w-full items-center justify-center gap-10 rounded-xl border-2 border-gray-200 py-5 px-5 text-xl font-medium hover:bg-neutral-100">
           <FaPlusCircle className="text-inherit" />
           <span>Create new workspace</span>
         </div>
