@@ -6,7 +6,7 @@ import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
-import { CreateNewBoardValidationSchema } from "~/utils/ValidationSchema";
+import { CreateNewBoardSchema } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
 
@@ -17,14 +17,14 @@ export default function CreateNewBoardModal({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const utils = api.useContext();
-
   function closeModal() {
     setIsOpen(false);
   }
   function openModal() {
     setIsOpen(true);
   }
+
+  const utils = api.useContext();
 
   const mutation = api.dashboard.createNewBoard.useMutation({
     onError(error) {
@@ -97,10 +97,9 @@ export default function CreateNewBoardModal({
                     <Formik
                       initialValues={{ name: "", workspaceId: workspace.id }}
                       validationSchema={toFormikValidationSchema(
-                        CreateNewBoardValidationSchema
+                        CreateNewBoardSchema
                       )}
                       onSubmit={(values) => {
-                        console.log(values);
                         mutation.mutate(values);
                       }}
                     >

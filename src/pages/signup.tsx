@@ -1,10 +1,33 @@
+import { Field, Form, Formik, type FieldProps } from "formik";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import PasswordInput from "~/modules/Global/PasswordInput";
+import PrimaryButton from "~/modules/Global/PrimaryButton";
+import Toast from "~/modules/Global/Toast";
+import { api } from "~/utils/api";
+import { SignUpSchema } from "~/utils/ValidationSchema";
 
 export default function SignInPage() {
-  // TODO: add credential login
-  async function handelSignin() {
+  const router = useRouter();
+  const utils = api.useContext();
+
+  const mutation = api.authentication.signup.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+    },
+    onSuccess: async () => {
+      await utils.dashboard.getAllBoards
+        .invalidate()
+        .catch((err) => console.log(err));
+      Toast({ content: "Account created successfully!", status: "success" });
+      await router.push("/signin").catch((err) => console.log(err));
+    },
+  });
+
+  async function handelGoogleSignUp() {
     await signIn("google");
   }
   return (
@@ -20,110 +43,101 @@ export default function SignInPage() {
           </a>
           <div className="w-full rounded-lg bg-white shadow-lg dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
+              <h1 className="text-xl font-medium leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 Create new account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              <Formik
+                initialValues={{
+                  name: "",
+                  email: "",
+                  password: "",
+                }}
+                validationSchema={toFormikValidationSchema(SignUpSchema)}
+                onSubmit={(values) => {
+                  mutation.mutate(values);
+                }}
+              >
+                <Form className="space-y-4 md:space-y-6" action="#">
+                  <Field name="name">
+                    {({ field, meta }: FieldProps) => (
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                          Your name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-wider text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+                          placeholder="Full name"
+                          required
+                          {...field}
+                        />
+                        {meta.touched && meta.error && (
+                          <p className="mt-2 ml-2 text-sm text-red-500">
+                            {meta.error}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </Field>
+                  <Field name="email">
+                    {({ field, meta }: FieldProps) => (
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        >
+                          Your email
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-wider text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+                          placeholder="name@company.com"
+                          required
+                          {...field}
+                        />
+                        {meta.touched && meta.error && (
+                          <p className="mt-2 ml-2 text-sm text-red-500">
+                            {meta.error}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </Field>
+                  <PasswordInput />
+                  <PrimaryButton
+                    overwriteClassname
+                    type="submit"
+                    className="text-md w-full rounded-lg bg-black px-5 py-2.5 text-center font-medium text-white hover:bg-black focus:outline-none focus:ring-4 focus:ring-black dark:bg-black dark:hover:bg-black dark:focus:ring-black"
+                    isLoading={mutation.isLoading}
+                    loadingText="Signing up..."
                   >
-                    Your name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-wider text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
-                    placeholder="John doe"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    Sign up
+                  </PrimaryButton>
+                  <button
+                    onClick={() => {
+                      void handelGoogleSignUp();
+                    }}
+                    className="text-md flex w-full items-center justify-center gap-5 rounded-lg border-2 bg-neutral-50 px-5 py-2.5 text-center font-medium text-black hover:bg-neutral-100 focus:outline-none focus:ring-4 focus:ring-black dark:bg-black dark:hover:bg-black dark:focus:ring-black"
                   >
-                    Your email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-wider text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
-                    placeholder="name@company.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="•••••••••••"
-                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-widest text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
-                    required
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-start">
-                    <div className="flex h-5 items-center">
-                      <input
-                        id="remember"
-                        aria-describedby="remember"
-                        type="checkbox"
-                        className="focus:ring-3 h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-black"
-                        required
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="remember"
-                        className="text-gray-500 dark:text-gray-300"
-                      >
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-black hover:underline dark:text-black"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-                <button
-                  type="submit"
-                  className="text-md w-full rounded-lg bg-black px-5 py-2.5 text-center font-medium text-white hover:bg-black focus:outline-none focus:ring-4 focus:ring-black dark:bg-black dark:hover:bg-black dark:focus:ring-black"
-                >
-                  Sign Up
-                </button>
-                <button
-                  onClick={() => {
-                    void handelSignin();
-                  }}
-                  className="text-md flex w-full items-center justify-center gap-5 rounded-lg border-2 bg-neutral-50 px-5 py-2.5 text-center font-medium text-black hover:bg-neutral-100 focus:outline-none focus:ring-4 focus:ring-black dark:bg-black dark:hover:bg-black dark:focus:ring-black"
-                >
-                  <FaGoogle />
-                  Sign Up With Google
-                </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account ?{" "}
-                  <Link
-                    href="/signin"
-                    className="font-medium text-black hover:underline dark:text-black"
-                  >
-                    Sign In
-                  </Link>
-                </p>
-              </form>
+                    <FaGoogle />
+                    Sign Up With Google
+                  </button>
+                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                    Already have an account ?{" "}
+                    <Link
+                      href="/signin"
+                      className="font-medium text-black hover:underline dark:text-black"
+                    >
+                      Sign In
+                    </Link>
+                  </p>
+                </Form>
+              </Formik>
             </div>
           </div>
         </div>

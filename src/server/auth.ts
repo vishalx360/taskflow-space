@@ -9,6 +9,9 @@ import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import SeedPersonalWorkspace from "~/utils/SeedPersonalWorkspace";
+import Credentials from "next-auth/providers/credentials";
+import { verify } from "argon2";
+import { SigninSchema } from "~/utils/ValidationSchema";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -65,6 +68,41 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   providers: [
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "name@company.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        const creds = await SigninSchema.parseAsync(credentials);
+        console.log(creds)
+
+        const user = await prisma.user.findFirst({
+          where: { email: creds.email },
+        });
+
+        if (!user || !user.password) {
+          throw new Error("User not found");
+        }
+
+        const isValidPassword = await verify(user.password, creds.password);
+
+        if (!isValidPassword) {
+          throw new Error("Invalid credentials");
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
+      },
+    }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
@@ -77,8 +115,12 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  jwt: {
+    maxAge: 30 * 24 * 30 * 60, // 15 days
+  },
   pages: {
-    signIn: "/",
+    signIn: "/signin",
+    newUser: "/signup"
   },
 };
 

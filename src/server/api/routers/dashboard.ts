@@ -3,10 +3,10 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
-  CreateNewBoardValidationSchema,
-  CreateNewWorkspaceValidationSchema,
-  DeleteWorkspaceValidationSchema,
-  RenameWorkspaceValidationSchema,
+  CreateNewBoardSchema,
+  CreateNewWorkspaceSchema,
+  DeleteWorkspaceSchema,
+  RenameWorkspaceSchema,
 } from "~/utils/ValidationSchema";
 
 export const DashboardRouter = createTRPCRouter({
@@ -25,7 +25,7 @@ export const DashboardRouter = createTRPCRouter({
     }),
 
   createNewBoard: protectedProcedure
-    .input(CreateNewBoardValidationSchema)
+    .input(CreateNewBoardSchema)
     .mutation(async ({ ctx, input }) => {
       // check if board name is taken
       const nameTaken = await ctx.prisma.board.count({
@@ -43,7 +43,7 @@ export const DashboardRouter = createTRPCRouter({
     }),
 
   createNewWorkspace: protectedProcedure
-    .input(CreateNewWorkspaceValidationSchema)
+    .input(CreateNewWorkspaceSchema)
     .mutation(async ({ ctx, input }) => {
       // check if board name is taken
       const nameTaken = await ctx.prisma.workspace.count({
@@ -68,7 +68,7 @@ export const DashboardRouter = createTRPCRouter({
     }),
 
   renameWorkspace: protectedProcedure
-    .input(RenameWorkspaceValidationSchema)
+    .input(RenameWorkspaceSchema)
     .mutation(async ({ ctx, input }) => {
       // check if workspace exist
       const Workspace = await ctx.prisma.workspace.findUnique({
@@ -113,7 +113,7 @@ export const DashboardRouter = createTRPCRouter({
     }),
 
   deleteWorkspace: protectedProcedure
-    .input(DeleteWorkspaceValidationSchema)
+    .input(DeleteWorkspaceSchema)
     .mutation(async ({ ctx, input }) => {
       // check if workspace exist
       const Workspace = await ctx.prisma.workspace.findUnique({

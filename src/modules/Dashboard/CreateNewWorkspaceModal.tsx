@@ -5,7 +5,7 @@ import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
-import { CreateNewWorkspaceValidationSchema } from "~/utils/ValidationSchema";
+import { CreateNewWorkspaceSchema } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
 
@@ -92,7 +92,7 @@ export default function CreateNewWorkspaceModal() {
                     <Formik
                       initialValues={{ name: "" }}
                       validationSchema={toFormikValidationSchema(
-                        CreateNewWorkspaceValidationSchema
+                        CreateNewWorkspaceSchema
                       )}
                       onSubmit={(values) => {
                         console.log(values);

@@ -22,6 +22,7 @@
     "@trpc/next": "^10.9.0",
     "@trpc/react-query": "^10.9.0",
     "@trpc/server": "^10.9.0",
+    "argon2": "^0.30.3",
     "formik": "^2.2.9",
     "geopattern": "^1.2.3",
     "next": "^13.2.4",

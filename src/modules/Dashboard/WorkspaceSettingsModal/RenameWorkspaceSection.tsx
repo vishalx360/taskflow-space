@@ -3,7 +3,7 @@ import { Field, Form, Formik, type FieldProps } from "formik";
 import { type Dispatch, type SetStateAction } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
-import { RenameWorkspaceValidationSchema } from "~/utils/ValidationSchema";
+import { RenameWorkspaceSchema } from "~/utils/ValidationSchema";
 import PrimaryButton from "../../Global/PrimaryButton";
 import Toast from "../../Global/Toast";
 
@@ -36,9 +36,7 @@ function RenameWorkspaceSection({
 
       <Formik
         initialValues={{ name: workspace.name, workspaceId: workspace.id }}
-        validationSchema={toFormikValidationSchema(
-          RenameWorkspaceValidationSchema
-        )}
+        validationSchema={toFormikValidationSchema(RenameWorkspaceSchema)}
         onSubmit={(values) => {
           console.log(values);
           mutation.mutate(values);
