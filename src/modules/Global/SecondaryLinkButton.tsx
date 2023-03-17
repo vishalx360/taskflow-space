@@ -18,14 +18,16 @@ function SecondaryLinkButton({
   RightIcon?: IconType;
   isExternal?: boolean;
 }) {
-
-  const externalProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {}
+  const externalProps = isExternal
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
   return (
     <a
-      className={`block w-full rounded-full  border-2 border-accent bg-brand-light py-2  px-3 text-center font-semibold md:py-3 md:px-10 ${className || ""}`}
+      className={`border-accent bg-brand-light block  w-full rounded-full border-2 py-2  px-3 text-center font-semibold md:py-3 md:px-10 ${
+        className || ""
+      }`}
       {...rest}
       href={href}
-
       {...externalProps}
     >
       <div className="flex items-center justify-center gap-3">

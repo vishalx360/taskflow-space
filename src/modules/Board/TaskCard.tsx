@@ -3,11 +3,11 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 type Props = {
-  id: UniqueIdentifier
-  active?: boolean,
-  title: string,
-  description?: string,
-}
+  id: UniqueIdentifier;
+  active?: boolean;
+  title: string;
+  description?: string;
+};
 
 export function TaskCard(props: Props) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -30,7 +30,9 @@ export function TaskCard(props: Props) {
         taskData={{ title: props.title, description: props.description }}
       > */}
       <div
-        className={`border-1 min-w-[270px] max-w-[300px] rounded-xl border-gray-400 bg-gray-50 shadow py-3 px-4 ${props.active ? "-rotate-1 border-dotted bg-[#f0f0f0]" : ""}`}
+        className={`border-1 min-w-[270px] max-w-[300px] rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
+          props.active ? "-rotate-1 border-dotted bg-[#f0f0f0]" : ""
+        }`}
       >
         <p className="text-md">{props.title}</p>
         {props.description && <p className="turncate">{props.description}</p>}

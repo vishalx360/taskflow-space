@@ -7,7 +7,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "pretify": "prettier -w ."
   },
   "dependencies": {
     "@dnd-kit/core": "^6.0.5",
@@ -47,8 +48,8 @@
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.2.1",
     "postcss": "^8.4.14",
-    "prettier": "^2.8.1",
-    "prettier-plugin-tailwindcss": "^0.2.1",
+    "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.4",
     "prisma": "^4.9.0",
     "tailwindcss": "^3.2.0",
     "typescript": "^4.9.5"

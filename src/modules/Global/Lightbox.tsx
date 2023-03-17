@@ -55,20 +55,23 @@ export default function Lightbox({ children }: { children: ReactNode }) {
                     <span className="sr-only">Close Image Preview</span>
                     <FiX size="2em" />
                   </button>
-                  {React.Children.map<ReactNode, ReactNode>(children, (child) => {
-                    if (React.isValidElement(child)) {
-                      return React.cloneElement(
-                        child,
-                        {
-                          height: "900",
-                          width: "900",
-                          className:
-                            "border-2 border-white border-opacity-20 rounded-xl",
-                        },
-                        null
-                      );
+                  {React.Children.map<ReactNode, ReactNode>(
+                    children,
+                    (child) => {
+                      if (React.isValidElement(child)) {
+                        return React.cloneElement(
+                          child,
+                          {
+                            height: "900",
+                            width: "900",
+                            className:
+                              "border-2 border-white border-opacity-20 rounded-xl",
+                          },
+                          null
+                        );
+                      }
                     }
-                  })}
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

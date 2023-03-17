@@ -13,7 +13,7 @@ function PrimaryButton({
   onClick,
   ...rest
 }: {
-  onClick?: MouseEventHandler<HTMLButtonElement>,
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
   className?: HTMLAttributes<HTMLButtonElement>["className"];
   disabled?: boolean;
@@ -25,8 +25,10 @@ function PrimaryButton({
 }) {
   return (
     <button
-      className={`w-fit rounded-full text-white bg-black px-5 py-3 text-center text-sm font-semibold text-brand-dark transition-all hover:bg-neutral-900 focus:outline-none  focus:ring-4 
-        focus:ring-accent disabled:bg-neutral-500 active:translate-y-[2px] ${className || ""}`}
+      className={`text-brand-dark focus:ring-accent w-fit rounded-full bg-black px-5 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-neutral-900  focus:outline-none 
+        focus:ring-4 active:translate-y-[2px] disabled:bg-neutral-500 ${
+          className || ""
+        }`}
       disabled={disabled}
       onClick={onClick}
       {...rest}

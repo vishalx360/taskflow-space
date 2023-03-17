@@ -9,7 +9,7 @@ import { DashboardRouter } from "./routers/dashboard";
  */
 export const appRouter = createTRPCRouter({
   dashboard: DashboardRouter,
-  board: BoardRouter
+  board: BoardRouter,
 });
 
 // export type definition of API

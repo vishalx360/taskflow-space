@@ -1,10 +1,16 @@
 import {
   closestCorners,
-  DndContext, DragOverlay, KeyboardSensor,
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
   PointerSensor,
-  TouchSensor, useSensor,
-  useSensors, type DragEndEvent,
-  type DragOverEvent, type DragStartEvent, type UniqueIdentifier
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
+  type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Link from "next/link";
@@ -14,11 +20,13 @@ import { TaskCard } from "~/modules/Board/TaskCard";
 import { TaskList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
 
-
 function BoardPage() {
   const boardId = useSearchParams().get("boardId");
   // fetch board details from boardId.
-  const { data: Board, isLoading } = api.board.getBoard.useQuery({ boardId: boardId || "" }, { enabled: Boolean(boardId), retry: false });
+  const { data: Board, isLoading } = api.board.getBoard.useQuery(
+    { boardId: boardId || "" },
+    { enabled: Boolean(boardId), retry: false }
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -54,72 +62,63 @@ function BoardPage() {
     console.log(event);
   }, []);
 
-
   if (isLoading) {
-    return <BoardSkeleton />
+    return <BoardSkeleton />;
   }
 
-  return <div>
-    <div className={`h-screen bg-[url(/board_bg.jpg)] bg-no-repeat bg-cover`}>
-      <nav className="bg-black text-white w-full px-4 py-4 shadow sm:px-4">
-        <div className="container mx-auto flex flex-wrap items-center justify-between">
-          <div className="flex items-center gap-10">
-            <Link href="/dashboard" className="flex items-center">
-              <span className="text-white self-center whitespace-nowrap text-3xl italic font-semibold">
-                VIRA
+  return (
+    <div>
+      <div className={`h-screen bg-[url(/board_bg.jpg)] bg-cover bg-no-repeat`}>
+        <nav className="w-full bg-black px-4 py-4 text-white shadow sm:px-4">
+          <div className="container mx-auto flex flex-wrap items-center justify-between">
+            <div className="flex items-center gap-10">
+              <Link href="/dashboard" className="flex items-center">
+                <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
+                  VIRA
+                </span>
+              </Link>
+              <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
+                {Board?.name} Board
               </span>
-            </Link>
-            <span className="text-white self-center whitespace-nowrap text-xl italic font-semibold">
-              {Board?.name} Board
-            </span>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/*---  */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        onDragOver={handleDragOver}
-      >
-        <div className="flex gap-5 p-10 ">
-          {Board?.lists.map(list => {
-            return <TaskList key={list.id} list={list} />
-          })}
-        </div>
-        <DragOverlay>
-          {activeId ? (
-            <TaskCard
-              key={activeId}
-              id={activeId}
-              active
-              title="dragged"
-            />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-
+        {/*---  */}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+        >
+          <div className="flex gap-5 p-10 ">
+            {Board?.lists.map((list) => {
+              return <TaskList key={list.id} list={list} />;
+            })}
+          </div>
+          <DragOverlay>
+            {activeId ? (
+              <TaskCard key={activeId} id={activeId} active title="dragged" />
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      </div>
     </div>
-
-
-  </div>;
+  );
 }
 
 export default BoardPage;
 
-
 function BoardSkeleton(): JSX.Element {
   return (
     <div>
-      <div className='p-2 border-b-2 font-semibold border-gray-200 text-xl'>
-        <div className="h-10 w-28 rounded-xl my-3 bg-gray-300 animate-pulse"></div>
+      <div className="border-b-2 border-gray-200 p-2 text-xl font-semibold">
+        <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300"></div>
       </div>
       <div className="mt-3 space-y-5">
-        <div className="h-10 w-52 rounded-xl my-3 bg-gray-300 animate-pulse"></div>
+        <div className="my-3 h-10 w-52 animate-pulse rounded-xl bg-gray-300"></div>
       </div>
     </div>
-  )
+  );
 }
-

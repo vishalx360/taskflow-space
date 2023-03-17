@@ -1,15 +1,16 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter, protectedProcedure
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
     .query(({ ctx, input }) => {
       console.log(input.boardId);
-      return ctx.prisma.board.findUnique({ where: { id: input.boardId }, include: { lists: true } });
+      return ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        include: { lists: true },
+      });
     }),
 
   getTasks: protectedProcedure

@@ -1,7 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
-  getServerSession, type DefaultSession, type NextAuthOptions
+  getServerSession,
+  type DefaultSession,
+  type NextAuthOptions,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";
@@ -50,18 +52,17 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        // seed personal workspace with default board with list and taks 
+        // seed personal workspace with default board with list and taks
         if (isNewUser) {
           await SeedPersonalWorkspace(user.id);
         }
       }
       return token;
     },
-
   },
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
   },
   providers: [
     GoogleProvider({
@@ -71,14 +72,14 @@ export const authOptions: NextAuthOptions = {
         params: {
           prompt: "consent",
           access_type: "offline",
-          response_type: "code"
-        }
-      }
-    })
+          response_type: "code",
+        },
+      },
+    }),
   ],
   pages: {
-    signIn: "/"
-  }
+    signIn: "/",
+  },
 };
 
 /**

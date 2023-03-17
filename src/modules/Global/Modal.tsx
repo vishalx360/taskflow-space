@@ -14,24 +14,19 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {
-        children ?
-          <button
-            type="button"
-            onClick={openModal}
-          >
-            {children}
-          </button>
-          :
-          <button
-            type="button"
-            onClick={openModal}
-            className="rounded-md bg-white bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-          >
-            Open Modal
-          </button>
-
-      }
+      {children ? (
+        <button type="button" onClick={openModal}>
+          {children}
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={openModal}
+          className="rounded-md bg-white bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        >
+          Open Modal
+        </button>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -44,7 +39,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -66,9 +61,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
                     Modal Title
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Content
-                    </p>
+                    <p className="text-sm text-gray-500">Content</p>
                   </div>
 
                   <div className="mt-4">

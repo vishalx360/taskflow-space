@@ -19,7 +19,9 @@ function PrimaryLinkButton({
 }) {
   return (
     <a
-      className={`block w-full rounded-full bg-accent py-3 px-5 text-center font-semibold text-brand-dark md:py-3 md:px-10 ${className || ""}`}
+      className={`bg-accent text-brand-dark block w-full rounded-full py-3 px-5 text-center font-semibold md:py-3 md:px-10 ${
+        className || ""
+      }`}
       {...rest}
       href={href}
     >

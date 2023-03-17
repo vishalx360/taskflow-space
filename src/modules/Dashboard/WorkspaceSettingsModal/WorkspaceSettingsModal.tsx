@@ -7,19 +7,25 @@ import IconButton from "../../Global/IconButton";
 import DeleteWorkspaceSection from "./DeleteWorkspaceSection";
 import RenameWorkspaceSection from "./RenameWorkspaceSection";
 
-
-export default function WorkspaceSettingsModal({ workspace }: { workspace: Workspace }) {
+export default function WorkspaceSettingsModal({
+  workspace,
+}: {
+  workspace: Workspace;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
-
-  function closeModal() { setIsOpen(false) }
-  function openModal() { setIsOpen(true) }
-
-
+  function closeModal() {
+    setIsOpen(false);
+  }
+  function openModal() {
+    setIsOpen(true);
+  }
 
   return (
     <>
-      <IconButton onClick={openModal} Icon={MdSettings} className="">Settings</IconButton>
+      <IconButton onClick={openModal} Icon={MdSettings} className="">
+        Settings
+      </IconButton>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -31,7 +37,7 @@ export default function WorkspaceSettingsModal({ workspace }: { workspace: Works
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -48,13 +54,13 @@ export default function WorkspaceSettingsModal({ workspace }: { workspace: Works
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="flex items-center gap-5 justify-between text-lg font-medium leading-6 text-gray-900 "
+                    className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
                   >
                     {workspace.name} Settings
                     <button
                       onClick={closeModal}
                       type="button"
-                      className="transition-all rounded-lg p-2 text-xs text-inherit  hover:bg-neutral-500 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-10"
+                      className="rounded-lg p-2 text-xs text-inherit transition-all  hover:bg-neutral-500 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-10"
                       aria-controls="navbar-default"
                       aria-expanded="false"
                     >
@@ -63,10 +69,15 @@ export default function WorkspaceSettingsModal({ workspace }: { workspace: Works
                     </button>
                   </Dialog.Title>
 
-                  <RenameWorkspaceSection workspace={workspace} setIsOpen={setIsOpen} />
-                  <div className="w-full border-[1px]  my-5" />
-                  <DeleteWorkspaceSection workspace={workspace} setIsOpen={setIsOpen} />
-
+                  <RenameWorkspaceSection
+                    workspace={workspace}
+                    setIsOpen={setIsOpen}
+                  />
+                  <div className="my-5 w-full  border-[1px]" />
+                  <DeleteWorkspaceSection
+                    workspace={workspace}
+                    setIsOpen={setIsOpen}
+                  />
                 </Dialog.Panel>
               </Transition.Child>
             </div>
