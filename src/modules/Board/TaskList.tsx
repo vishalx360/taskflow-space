@@ -4,6 +4,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { type List } from "@prisma/client";
+import { memo } from "react";
 import { api } from "~/utils/api";
 import { EmptyListCard, TaskCard } from "./TaskCard";
 // import { AddToListForm } from "./AddToListForm";
@@ -11,13 +12,13 @@ import { EmptyListCard, TaskCard } from "./TaskCard";
 
 export const LIST_BG_COLOR = "#ebecf0";
 
-export function TaskList({ list }: { list: List }) {
+function TaskList({ list }: { list: List }) {
   const { data: Tasks, isLoading } = api.board.getTasks.useQuery(
     { listId: list.id || "" },
     { enabled: Boolean(list.id), retry: false }
   );
 
-  console.log("rerendering", Tasks);
+  console.log("rerendering", list.name);
   const { setNodeRef } = useDroppable({ id: list.id });
 
   if (isLoading) {
@@ -79,3 +80,5 @@ export function TaskList({ list }: { list: List }) {
     </div>
   );
 }
+
+export default memo(TaskList);

@@ -16,6 +16,10 @@ export const BoardRouter = createTRPCRouter({
   getTasks: protectedProcedure
     .input(z.object({ listId: z.string() }))
     .query(({ ctx, input }) => {
-      return ctx.prisma.task.findMany({ where: { listId: input.listId } });
+      // sort by rank
+      return ctx.prisma.task.findMany({
+        where: { listId: input.listId },
+        orderBy: { rank: "asc" },
+      });
     }),
 });

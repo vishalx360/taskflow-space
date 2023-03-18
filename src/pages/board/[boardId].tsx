@@ -13,17 +13,22 @@ import {
   type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import Error from "next/error";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { TaskCard } from "~/modules/Board/TaskCard";
-import { TaskList } from "~/modules/Board/TaskList";
+import TaskList from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
 
 function BoardPage() {
   const boardId = useSearchParams().get("boardId");
   // fetch board details from boardId.
-  const { data: Board, isLoading } = api.board.getBoard.useQuery(
+  const {
+    data: Board,
+    isLoading,
+    error,
+  } = api.board.getBoard.useQuery(
     { boardId: boardId || "" },
     { enabled: Boolean(boardId), retry: false }
   );
@@ -44,6 +49,7 @@ function BoardPage() {
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
+      console.log("start:", event);
       const { active } = event;
       setActiveId(active.id);
     },
@@ -53,17 +59,24 @@ function BoardPage() {
   // function to handel drag end event
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     // const { active, over, draggingRect } = event;
-    console.log(event);
+    console.log("end:", event);
   }, []);
 
   // function to handel drag over event
   const handleDragOver = useCallback((event: DragOverEvent) => {
     // const { active, over, draggingRect } = event;
-    console.log(event);
+    console.log("over:", event);
   }, []);
+  if (error) {
+    console.log(error);
+  }
 
   if (isLoading) {
     return <BoardSkeleton />;
+  }
+
+  if (!isLoading && !Board) {
+    return <Error statusCode={404} />;
   }
 
   return (

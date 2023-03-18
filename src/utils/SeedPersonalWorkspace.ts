@@ -1,3 +1,4 @@
+import { LexoRank } from "lexorank";
 import { prisma } from "~/server/db";
 import DefaultData from "./PersonalWorkspaceData.json";
 
@@ -35,9 +36,12 @@ export default async function SeedPersonalWorkspace(userId: string) {
     void (async () => {
       await Promise.all(
         boardData.lists.map((listData) => {
+          let currentLexoRank = LexoRank.min();
           const CreateTasks = listData.tasks.map((task) => {
+            currentLexoRank = currentLexoRank.genNext();
             return {
               title: task,
+              rank: currentLexoRank.toString()
             };
           });
           const list = prisma.list.create({

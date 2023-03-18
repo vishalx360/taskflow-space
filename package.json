@@ -25,6 +25,7 @@
     "argon2": "^0.30.3",
     "formik": "^2.2.9",
     "geopattern": "^1.2.3",
+    "lexorank": "^1.0.5",
     "next": "^13.2.4",
     "next-auth": "^4.19.0",
     "nextjs-progressbar": "^0.0.16",

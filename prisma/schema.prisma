@@ -50,6 +50,7 @@ model Task {
     description String?  @db.Text
     list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
     listId      String
+    rank        String
 }
 
 // Necessary for Next auth ----------------------------------------------------
