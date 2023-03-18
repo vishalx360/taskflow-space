@@ -1,6 +1,7 @@
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
+import NextNprogress from "nextjs-progressbar";
 
 import { api } from "~/utils/api";
 
@@ -14,6 +15,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <Toaster position="bottom-center" />
+      {/* black color  */}
+      <NextNprogress
+        color="#001"
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={3}
+      />
       <Component {...pageProps} />
     </SessionProvider>
   );
