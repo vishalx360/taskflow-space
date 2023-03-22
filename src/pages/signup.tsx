@@ -1,4 +1,6 @@
 import { Field, Form, Formik, type FieldProps } from "formik";
+import { GetServerSidePropsContext } from "next";
+import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,6 +9,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import PasswordInput from "~/modules/Global/PasswordInput";
 import PrimaryButton from "~/modules/Global/PrimaryButton";
 import Toast from "~/modules/Global/Toast";
+import { authOptions } from "~/server/auth";
 import { api } from "~/utils/api";
 import { SignUpSchema } from "~/utils/ValidationSchema";
 
@@ -144,4 +147,15 @@ export default function SignInPage() {
       </section>
     </>
   );
+}
+// if signin redirect to dashboard
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+      },
+    };
+  }
 }
