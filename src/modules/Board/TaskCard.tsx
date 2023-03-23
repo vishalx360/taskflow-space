@@ -22,7 +22,7 @@ export function TaskCard({ id, active, task }: Props) {
   return (
     <TaskModal task={task}>
       <div
-        className="px-3"
+        className="w-full px-3"
         ref={setNodeRef}
         style={style}
         {...attributes}

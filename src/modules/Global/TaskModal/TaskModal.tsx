@@ -52,7 +52,9 @@ export default function TaskModal({
   return (
     <>
       {children ? (
-        <div onClick={openModal}>{children}</div>
+        <div className="w-full" onClick={openModal}>
+          {children}
+        </div>
       ) : (
         <button
           type="button"

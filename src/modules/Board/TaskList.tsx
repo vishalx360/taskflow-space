@@ -3,6 +3,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { Transition } from "@headlessui/react";
 import { type List } from "@prisma/client";
 import { Field, type FieldProps, Form, Formik } from "formik";
 import { memo } from "react";
@@ -96,24 +97,30 @@ function AddToListForm({ list }: { list: List }) {
         }}
       >
         <Form>
-          <div className="flex items-center">
+          <div className="flex w-full max-w-[320px] items-center gap-2">
             <Field name="title">
               {({ field, form, meta }: FieldProps) => (
-                <div className="">
-                  <input
-                    className="w-full rounded-xl border-gray-200 bg-white py-3 px-5 "
-                    type="text"
-                    placeholder="Add to list"
-                    id="title"
-                    required
-                    {...field}
-                  />
-                </div>
+                <input
+                  className="w-full flex-[10] rounded-xl border-gray-200 bg-white py-3 px-5"
+                  type="text"
+                  placeholder="Add to list"
+                  id="title"
+                  required
+                  {...field}
+                />
               )}
             </Field>
             <Field name="submit">
-              {({ form }: FieldProps) =>
-                form.dirty && (
+              {({ form }: FieldProps) => (
+                <Transition
+                  show={form.dirty}
+                  enter="transition-opacity duration-75"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="transition-opacity duration-150"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
                   <PrimaryButton
                     isLoading={mutation.isLoading}
                     loadingText=" "
@@ -122,13 +129,13 @@ function AddToListForm({ list }: { list: List }) {
                       mutation.isLoading
                     }
                     type="submit"
-                    className="bg- ml-2 rounded-xl"
+                    className="flex-[2] rounded-xl"
                     // LeftIcon={FaPlus}
                   >
                     Add
                   </PrimaryButton>
-                )
-              }
+                </Transition>
+              )}
             </Field>
           </div>
           <Field name="title">

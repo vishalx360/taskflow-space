@@ -93,10 +93,12 @@ function BoardPage() {
   }
 
   return (
-    <div className="relative h-screen ">
-      <Image alt="background" fill src="/board_bg.jpg" />
+    <div className="relative  ">
+      <div className="fixed top-0 left-0 h-full w-screen">
+        <Image className="" alt="background" fill src="/board_bg.jpg" />
+      </div>
       <div className="relative">
-        <nav className="w-full bg-black px-4 py-3 text-white shadow sm:px-4">
+        <nav className="fixed top-0 left-0 z-50 w-full bg-black px-4 py-3 text-white shadow sm:px-4">
           <div className="container mx-auto flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-10">
               <Link href="/dashboard" className="flex items-center">
@@ -128,11 +130,12 @@ function BoardPage() {
           onDragEnd={handleDragEnd}
           onDragCancel={handleDragCancel}
         >
-          <div className="flex gap-5 px-10 py-5 ">
+          <div className="mt-14 flex justify-start gap-5 px-8 py-5 ">
             {Board?.lists.map((list) => {
               return <TaskList key={list.id} list={list} />;
             })}
           </div>
+
           <DragOverlay>
             {activeId ? (
               <TaskCard
