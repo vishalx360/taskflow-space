@@ -51,9 +51,7 @@ export default function TaskModal({
   return (
     <>
       {children ? (
-        <button className="text-start" type="button" onClick={openModal}>
-          {children}
-        </button>
+        <div onClick={openModal}>{children}</div>
       ) : (
         <button
           type="button"
