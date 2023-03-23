@@ -24,6 +24,7 @@
     "@trpc/server": "^10.9.0",
     "@types/lodash.isequal": "^4.5.6",
     "argon2": "^0.30.3",
+    "date-fns": "^2.29.3",
     "formik": "^2.2.9",
     "geopattern": "^1.2.3",
     "lexorank": "^1.0.5",

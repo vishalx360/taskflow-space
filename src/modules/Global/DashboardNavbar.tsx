@@ -162,9 +162,6 @@ function AccountMenu() {
           <Menu.Items className="absolute right-0 z-20 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white text-black shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-5 py-3">
               <div className=" mb-2 text-left">
-                <h1 className="text-sm text-black text-opacity-50">
-                  Logged in as
-                </h1>
                 <h1 className="mt-3 text-sm font-medium">
                   {session?.user?.name}
                 </h1>

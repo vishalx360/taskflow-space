@@ -1,10 +1,11 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { type Task } from "@prisma/client";
+import { format } from "date-fns";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { type Dispatch, Fragment, type SetStateAction, useState } from "react";
+import isEqual from "lodash.isequal";
+import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import { FiX } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
-import isEqual from "lodash.isequal";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
 import { UpdateTaskSchema } from "~/utils/ValidationSchema";
@@ -108,9 +109,10 @@ export default function TaskModal({
                               <textarea
                                 id="title"
                                 required
+                                maxLength={100}
                                 placeholder="Task title"
                                 {...field}
-                                className="active:border-1  block w-full resize-none rounded-xl border-none p-3 text-2xl text-neutral-800 transition-all focus:outline-none focus:outline"
+                                className="active:border-1 block  w-full resize-none border-0 border-b-2 border-gray-300 p-3 text-2xl text-neutral-800 transition-all focus:outline-none focus:outline"
                               />
                               {meta.touched && meta.error && (
                                 <p className="mt-2 ml-2 text-sm text-red-500">
@@ -133,7 +135,7 @@ export default function TaskModal({
                       </Dialog.Title>
                       <div className="my-4 px-3">
                         <p className="text-sm text-gray-500">
-                          {task?.createdAt?.toLocaleDateString()}
+                          {format(task?.createdAt, "PPPP")}
                         </p>
                       </div>
                       <Field name="description">
