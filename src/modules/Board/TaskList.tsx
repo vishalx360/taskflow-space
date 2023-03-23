@@ -4,8 +4,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { type List } from "@prisma/client";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { memo } from "react";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
+import { CreateTaskSchema } from "~/utils/ValidationSchema";
+import PrimaryButton from "../Global/PrimaryButton";
+import Toast from "../Global/Toast";
 import { EmptyListCard, TaskCard } from "./TaskCard";
 // import { AddToListForm } from "./AddToListForm";
 // import ListActionMenu from "./ListActionMenu";
@@ -66,17 +71,82 @@ function TaskList({ list }: { list: List }) {
           </div>
         </SortableContext>
       </div>
-      <div
-        className="sticky bottom-0 z-10 rounded-b-xl p-2"
-        // bg={LIST_BG_COLOR}
+      <AddToListForm list={list} />
+    </div>
+  );
+}
+
+function AddToListForm({ list }: { list: List }) {
+  // createTask mutation
+  const utils = api.useContext();
+  const mutation = api.board.createTask.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+    },
+    onSuccess: async () => {
+      await utils.board.getTasks
+        .invalidate({ listId: list.id })
+        .catch((err) => console.log(err));
+      Toast({ content: "TEMP:Added Task Successfully", status: "success" });
+    },
+  });
+  return (
+    <div className="sticky bottom-0 z-10 rounded-b-xl p-2">
+      <Formik
+        initialValues={{ title: "", listId: list.id }}
+        validationSchema={toFormikValidationSchema(CreateTaskSchema)}
+        onSubmit={(values, { resetForm }) => {
+          mutation.mutate(values);
+          resetForm();
+        }}
       >
-        <input
-          className="w-full rounded-xl border-gray-200 bg-white  px-5 "
-          type="text"
-          placeholder="add to list"
-        />
-        {/* <AddToListForm list={list} /> */}
-      </div>
+        <Form>
+          <div className="flex items-center">
+            <Field name="title">
+              {({ field, form, meta }: FieldProps) => (
+                <div className="">
+                  <input
+                    className="w-full rounded-xl border-gray-200 bg-white py-3 px-5 "
+                    type="text"
+                    placeholder="Add to list"
+                    id="title"
+                    required
+                    {...field}
+                  />
+                </div>
+              )}
+            </Field>
+            <Field name="submit">
+              {({ form }: FieldProps) =>
+                form.dirty && (
+                  <PrimaryButton
+                    isLoading={mutation.isLoading}
+                    loadingText=" "
+                    disabled={
+                      Object.keys(form.errors).length !== 0 ||
+                      mutation.isLoading
+                    }
+                    type="submit"
+                    className="bg- ml-2 rounded-xl"
+                    // LeftIcon={FaPlus}
+                  >
+                    Add
+                  </PrimaryButton>
+                )
+              }
+            </Field>
+          </div>
+          <Field name="title">
+            {({ form, meta }: FieldProps) => (
+              <>
+                {form.dirty && meta.touched && meta.error && (
+                  <p className="mt-2 ml-2 text-sm text-red-500">{meta.error}</p>
+                )}
+              </>
+            )}
+          </Field>
+        </Form>
+      </Formik>
     </div>
   );
 }

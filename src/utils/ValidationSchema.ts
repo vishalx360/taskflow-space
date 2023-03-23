@@ -37,3 +37,10 @@ export const RenameWorkspaceSchema = z.object({
 export const DeleteWorkspaceSchema = z.object({
   workspaceId: z.string(),
 });
+
+export const CreateTaskSchema = z.object({
+  title: z.string()
+    .min(1, "Must contain at least 1 character")
+    .max(100, "Must contain less than 100 characters"),
+  listId: z.string(),
+});

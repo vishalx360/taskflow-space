@@ -1,6 +1,8 @@
+import { LexoRank } from "lexorank";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { CreateTaskSchema } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
@@ -22,4 +24,26 @@ export const BoardRouter = createTRPCRouter({
         orderBy: { rank: "asc" },
       });
     }),
+
+  // mutations
+  createTask: protectedProcedure
+    .input(CreateTaskSchema)
+    .mutation(async ({ ctx, input }) => {
+      let rank = LexoRank.min().toString();
+
+      const lastTask = await ctx.prisma.task.findFirst({ where: { listId: input.listId }, orderBy: { rank: "desc" }, select: { rank: true } })
+      if (lastTask?.rank) {
+        const parsedRank = LexoRank.parse(lastTask?.rank)
+        rank = parsedRank.genNext()?.toString();
+      }
+
+      return ctx.prisma.task.create({
+        data: {
+          title: input.title,
+          listId: input.listId,
+          rank
+        },
+      });
+    })
+
 });

@@ -7,6 +7,7 @@ import {
   TouchSensor,
   useSensor,
   useSensors,
+  type DragCancelEvent,
   type DragEndEvent,
   type DragOverEvent,
   type DragStartEvent,
@@ -15,7 +16,7 @@ import {
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Error from "next/error";
 import Link from "next/link";
-import { notFound, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import TaskList from "~/modules/Board/TaskList";
@@ -49,9 +50,9 @@ function BoardPage() {
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
-      console.log("start:", event);
       const { active } = event;
       setActiveId(active.id);
+      console.log("start:", event);
     },
     [setActiveId]
   );
@@ -60,6 +61,11 @@ function BoardPage() {
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     // const { active, over, draggingRect } = event;
     console.log("end:", event);
+  }, []);
+  // function to handel drag end event
+  const handleDragCancel = useCallback((event: DragCancelEvent) => {
+    // const { active, over, draggingRect } = event;
+    console.log("cancel:", event);
   }, []);
 
   // function to handel drag over event
@@ -102,8 +108,9 @@ function BoardPage() {
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
           onDragOver={handleDragOver}
+          onDragEnd={handleDragEnd}
+          onDragCancel={handleDragCancel}
         >
           <div className="flex gap-5 p-10 ">
             {Board?.lists.map((list) => {
