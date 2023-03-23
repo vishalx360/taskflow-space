@@ -22,16 +22,19 @@ function Workspaces() {
       </h1>
       <div className="relative space-y-5">
         {/* TOOD: show workspaces tabs  */}
-        {workspaces?.map((workspace) => {
+        {workspaces?.map((workspace, index) => {
           return (
             <div key={workspace.id}>
-              <Disclosure defaultOpen={workspace.personal}>
+              <Disclosure defaultOpen={workspace.personal || index < 5}>
                 {({ open }) => (
                   <>
                     <div className="mb-5 flex items-center gap-5">
                       <Disclosure.Button className="sticky top-20 z-10 w-full border-b-2 bg-white transition-all ">
-                        <div className="flex w-full items-center justify-between gap-10 rounded-t-xl rounded-l-none border-l-[10px] border-gray-600 py-2 px-5 text-xl font-semibold hover:bg-neutral-100  md:rounded-l-md">
+                        <div className="flex w-full items-center justify-between gap-10 rounded-t-xl rounded-l-none border-gray-600 py-2 px-5 text-xl font-semibold hover:bg-neutral-100  md:rounded-l-md">
                           <div className="flex items-center gap-5">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-black text-white">
+                              {workspace.name[0]}
+                            </div>
                             <span>{workspace.name}</span>
                             {isRefetching && (
                               <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-500" />

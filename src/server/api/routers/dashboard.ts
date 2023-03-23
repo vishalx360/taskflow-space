@@ -38,7 +38,7 @@ export const DashboardRouter = createTRPCRouter({
         });
       }
       return ctx.prisma.board.create({
-        data: { name: input.name, workspaceId: input.workspaceId },
+        data: { name: input.name, workspaceId: input.workspaceId, members: { connect: { id: ctx.session.user.id } } },
       });
     }),
 

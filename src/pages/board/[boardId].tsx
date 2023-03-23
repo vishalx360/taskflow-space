@@ -26,7 +26,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { TaskCard } from "~/modules/Board/TaskCard";
-import TaskList from "~/modules/Board/TaskList";
+import TaskList, { CreateList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
 
 function BoardPage() {
@@ -98,25 +98,24 @@ function BoardPage() {
         <Image className="" alt="background" fill src="/board_bg.jpg" />
       </div>
       <div className="relative">
-        <nav className="fixed top-0 left-0 z-50 w-full bg-black px-4 py-3 text-white shadow sm:px-4">
+        <nav className="fixed top-0 left-0 z-50 w-full bg-black/20 px-4 py-3 text-white shadow sm:px-4">
           <div className="container mx-auto flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-10">
-              <Link href="/dashboard" className="flex items-center">
-                <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
-                  VIRA
-                </span>
-              </Link>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-5 rounded-full border-2 border-neutral-400 p-2 px-4"
+                className="flex items-center gap-5 rounded-full border-2 border-neutral-400 p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20 hover:text-white"
               >
                 <FiArrowLeft className="text-xl" />
-                Dashboard
               </Link>
+              <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
+                {Board?.name}
+              </span>
             </div>
-            <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
-              {Board?.name}
-            </span>
+            <Link href="/dashboard" className="flex items-center">
+              <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
+                VIRA
+              </span>
+            </Link>
             <MembersAvatars members={Board?.members} />
           </div>
         </nav>
@@ -134,6 +133,7 @@ function BoardPage() {
             {Board?.lists.map((list) => {
               return <TaskList key={list.id} list={list} />;
             })}
+            <CreateList boardId={boardId || ""} />
           </div>
 
           <DragOverlay>

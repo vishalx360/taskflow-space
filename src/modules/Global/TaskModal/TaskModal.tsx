@@ -114,7 +114,7 @@ export default function TaskModal({
                                 maxLength={100}
                                 placeholder="Task title"
                                 {...field}
-                                className="active:border-1 block  w-full resize-none border-0 border-b-2 border-gray-300 p-3 text-2xl text-neutral-800 transition-all focus:outline-none focus:outline"
+                                className="w-full resize-none  border-0 border-b-2 border-gray-300 p-3 text-2xl text-neutral-800 outline-none transition-all focus:outline-none focus:outline focus:ring-0 active:ring-0"
                               />
                               {meta.touched && meta.error && (
                                 <p className="mt-2 ml-2 text-sm text-red-500">

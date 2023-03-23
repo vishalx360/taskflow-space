@@ -2,7 +2,7 @@ import { LexoRank } from "lexorank";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { CreateTaskSchema, UpdateTaskSchema } from "~/utils/ValidationSchema";
+import { CreateListSchema, CreateTaskSchema, UpdateListSchema, UpdateTaskSchema } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
@@ -138,6 +138,51 @@ export const BoardRouter = createTRPCRouter({
       return ctx.prisma.task.delete({
         where: { id: input.taskId },
       });
-    })
+    }),
+  createList: protectedProcedure
+    .input(CreateListSchema)
+    .mutation(async ({ ctx, input }) => {
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
 
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      return ctx.prisma.list.create({
+        data: {
+          boardId: input.boardId,
+          name: input.name,
+        }
+      });
+    }),
+  updateList: protectedProcedure
+    .input(UpdateListSchema)
+    .mutation(async ({ ctx, input }) => {
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: input.listId },
+        select: { boardId: true },
+      });
+      if (!list) { throw new Error("List not found") }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      return ctx.prisma.list.update({
+        where: { id: input.listId },
+        data: {
+          name: input.name,
+        }
+      });
+    }),
 });

@@ -53,3 +53,19 @@ export const UpdateTaskSchema = z.object({
   description: z.string()
     .max(500, "Must contain less than 500 characters").optional(),
 });
+
+export const UpdateListSchema = z.object({
+  listId: z.string(),
+  name: z
+    .string()
+    .min(4, "Must contain at least 4 characters")
+    .max(50, "Must contain less than 50 characters"),
+});
+
+export const CreateListSchema = z.object({
+  boardId: z.string(),
+  name: z
+    .string()
+    .min(4, "Must contain at least 4 characters")
+    .max(50, "Must contain less than 50 characters"),
+});

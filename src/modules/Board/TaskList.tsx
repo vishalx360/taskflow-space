@@ -4,12 +4,16 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { Transition } from "@headlessui/react";
-import { type List } from "@prisma/client";
+import { Board, type List } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { memo } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
-import { CreateTaskSchema } from "~/utils/ValidationSchema";
+import {
+  CreateListSchema,
+  CreateTaskSchema,
+  UpdateListSchema,
+} from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
 import { EmptyListCard, TaskCard } from "./TaskCard";
@@ -38,10 +42,7 @@ function TaskList({ list }: { list: List }) {
       key={`main:${list.name}`}
     >
       <div className="sticky top-0 z-10 flex justify-between rounded-t-xl px-3 pt-3 pb-2">
-        <input
-          className="border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none focus:border-b-2 active:border-none"
-          value={list.name}
-        />
+        <UpdateListName list={list} />
         <ListActionMenu list={list} />
       </div>
       <div
@@ -97,7 +98,7 @@ function AddToListForm({ list }: { list: List }) {
         }}
       >
         <Form>
-          <div className="flex w-full max-w-[320px] items-center gap-2">
+          <div className="flex w-full max-w-[310px] items-center gap-2">
             <Field name="title">
               {({ field, form, meta }: FieldProps) => (
                 <input
@@ -178,19 +179,146 @@ function ListActionMenu({ list }: { list: List }) {
         <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
             <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={`${
-                    active ? "bg-white text-black" : "text-gray-900"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                  Edit
-                </button>
-              )}
+              {/* TODO: make functionality */}
+              <button className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-red-100">
+                Delete list
+              </button>
+            </Menu.Item>
+            <Menu.Item>
+              {/* TODO: make functionality */}
+              <button className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-neutral-100">
+                Clear all tasks
+              </button>
             </Menu.Item>
           </div>
         </Menu.Items>
       </Transition>
     </Menu>
+  );
+}
+
+function UpdateListName({ list }: { list: List }) {
+  const mutation = api.board.updateList.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+    },
+    onSuccess: () => {
+      Toast({ content: "List renamed successfully!", status: "success" });
+    },
+  });
+
+  return (
+    <Formik
+      initialValues={{ name: list.name, listId: list.id }}
+      validationSchema={toFormikValidationSchema(UpdateListSchema)}
+      onSubmit={(values) => {
+        mutation.mutate(values);
+      }}
+    >
+      <Form>
+        <Field name="name">
+          {({ field, form, meta }: FieldProps) => (
+            <input
+              className="border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none hover:border-b-2 focus:border-b-2 active:border-none"
+              {...field}
+            />
+          )}
+        </Field>
+      </Form>
+    </Formik>
+  );
+}
+
+export function CreateList({ boardId }: { boardId: string }) {
+  const utils = api.useContext();
+
+  const mutation = api.board.createList.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+    },
+    onSuccess: (newList) => {
+      utils.board.getBoard.setData({ boardId }, (prev) => {
+        return { ...prev, lists: [...prev.lists, newList] };
+      });
+      Toast({ content: "List Created successfully!", status: "success" });
+    },
+  });
+
+  return (
+    <div className="pr-10">
+      <div className="h-fit min-w-[310px] rounded-xl border-2 bg-white/90">
+        <div className="sticky bottom-0 z-10 rounded-b-xl p-2">
+          <Formik
+            initialValues={{ name: "", boardId: boardId }}
+            validationSchema={toFormikValidationSchema(CreateListSchema)}
+            onSubmit={(values, { resetForm }) => {
+              mutation.mutate(values);
+              resetForm();
+            }}
+          >
+            <Form>
+              <div className="flex w-full max-w-[310px] items-center gap-2">
+                <Field name="name">
+                  {({ field, form, meta }: FieldProps) => (
+                    <input
+                      className="w-full flex-[10] rounded-xl border-gray-200 bg-white py-3 px-5"
+                      type="text"
+                      placeholder="Create new list"
+                      id="name"
+                      required
+                      {...field}
+                    />
+                  )}
+                </Field>
+                <Field name="submit">
+                  {({ form }: FieldProps) => (
+                    <Transition
+                      show={form.dirty}
+                      enter="transition-opacity duration-75"
+                      enterFrom="opacity-0"
+                      enterTo="opacity-100"
+                      leave="transition-opacity duration-150"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <PrimaryButton
+                        isLoading={mutation.isLoading}
+                        loadingText=" "
+                        disabled={
+                          Object.keys(form.errors).length !== 0 ||
+                          mutation.isLoading
+                        }
+                        type="submit"
+                        className="flex-[2] rounded-xl"
+                        // LeftIcon={FaPlus}
+                      >
+                        Create
+                      </PrimaryButton>
+                    </Transition>
+                  )}
+                </Field>
+              </div>
+              <Field name="name">
+                {({ form, meta }: FieldProps) => (
+                  <Transition
+                    show={form.dirty && meta.touched && Boolean(meta.error)}
+                    enter="transition-opacity duration-75"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity duration-150"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <p className="mt-2 ml-2 text-sm text-red-500">
+                      {meta.error}
+                    </p>
+                  </Transition>
+                )}
+              </Field>
+            </Form>
+          </Formik>
+        </div>
+      </div>
+    </div>
   );
 }

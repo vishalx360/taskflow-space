@@ -33,7 +33,7 @@ export function TaskCard({ id, active, task }: Props) {
             active ? "-rotate-1 border-dotted bg-[#f0f0f0]" : ""
           }`}
         >
-          <p className="text-md">{task?.title}</p>
+          <p className="text-md line-clamp-2">{task?.title}</p>
           {task?.description && (
             <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
               {task?.description}
