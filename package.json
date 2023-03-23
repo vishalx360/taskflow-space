@@ -33,6 +33,7 @@
     "next-auth": "^4.19.0",
     "nextjs-progressbar": "^0.0.16",
     "react": "18.2.0",
+    "react-awesome-gravatar": "^2.0.3",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.8.0",

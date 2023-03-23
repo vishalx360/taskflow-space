@@ -3,6 +3,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getGravatarUrl, type GravatarOptions } from "react-awesome-gravatar";
 import { Fragment, memo, useState } from "react";
 import {
   FiChevronDown,
@@ -124,6 +125,10 @@ function DashboardNavbar() {
 
 export default DashboardNavbar;
 
+export const GravtarOption: GravatarOptions = {
+  size: 50,
+  default: "retro",
+};
 function AccountMenu() {
   const { data: session } = useSession();
 
@@ -136,16 +141,18 @@ function AccountMenu() {
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="group inline-flex w-full items-center justify-center gap-2 rounded-md md:gap-5">
-            {session?.user?.image ? (
+            {session?.user?.email && (
               <Image
                 height={200}
                 width={200}
-                src={session?.user?.image}
+                // generate default gravtar image
+                src={
+                  session?.user?.image ||
+                  getGravatarUrl(session?.user?.email, GravtarOption)
+                }
                 alt="avatar"
                 className="w-10 rounded-full ring-2 ring-white/40 transition-all group-hover:ring-4"
               />
-            ) : (
-              <FiUser className="h-10 w-10 rounded-full p-2 ring-2 ring-white/40 transition-all group-hover:ring-4" />
             )}
             <FiChevronDown className="text-xl" />
           </Menu.Button>

@@ -19,6 +19,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { getGravatarUrl } from "react-awesome-gravatar";
 import {
   FiAlignLeft,
   FiArrowLeft,
@@ -27,6 +28,7 @@ import {
 } from "react-icons/fi";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import TaskList, { CreateList } from "~/modules/Board/TaskList";
+import { GravtarOption } from "~/modules/Global/DashboardNavbar";
 import { api } from "~/utils/api";
 
 function BoardPage() {
@@ -189,25 +191,20 @@ function MembersAvatars({
       Members
       <div className="flex -space-x-4">
         {members?.slice(0, 3)?.map((member) => {
-          if (member?.image) {
-            return (
-              <Image
-                key={member?.email}
-                height={20}
-                width={20}
-                className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800"
-                src={member?.image}
-                alt=""
-              />
-            );
-          } else {
-            return (
-              <FiUser
-                key={member?.email}
-                className="h-10 w-10 rounded-full border-2 border-white p-2 dark:border-gray-800"
-              />
-            );
-          }
+          return (
+            <Image
+              key={member?.email}
+              height={20}
+              width={20}
+              className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800"
+              src={
+                member?.image ||
+                (member.email && getGravatarUrl(member.email, GravtarOption)) ||
+                getGravatarUrl("default", GravtarOption)
+              }
+              alt=""
+            />
+          );
         })}
         <a
           className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-gray-700 text-xs font-medium text-white hover:bg-gray-600 dark:border-gray-800"
