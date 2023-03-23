@@ -5,7 +5,7 @@ import {
 } from "@dnd-kit/sortable";
 import { Transition } from "@headlessui/react";
 import { type List } from "@prisma/client";
-import { Field, type FieldProps, Form, Formik } from "formik";
+import { Field, Form, Formik, type FieldProps } from "formik";
 import { memo } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
@@ -13,8 +13,9 @@ import { CreateTaskSchema } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
 import { EmptyListCard, TaskCard } from "./TaskCard";
-// import { AddToListForm } from "./AddToListForm";
-// import ListActionMenu from "./ListActionMenu";
+import { Menu } from "@headlessui/react";
+import { Fragment } from "react";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 
 export const LIST_BG_COLOR = "#ebecf0";
 
@@ -36,13 +37,12 @@ function TaskList({ list }: { list: List }) {
       className="h-full rounded-xl border-2 bg-white/90"
       key={`main:${list.name}`}
     >
-      <div
-        className="sticky top-0 z-10 flex justify-between rounded-t-xl pt-3 pb-2"
-        // bg={LIST_BG_COLOR}
-      >
-        <p className="px-5 pb-1 font-bold">{list.name}</p>
-        <p>:</p>
-        {/* <ListActionMenu list={list} /> */}
+      <div className="sticky top-0 z-10 flex justify-between rounded-t-xl px-3 pt-3 pb-2">
+        <input
+          className="border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none focus:border-b-2 active:border-none"
+          value={list.name}
+        />
+        <ListActionMenu list={list} />
       </div>
       <div
         className="relative pb-3"
@@ -154,3 +154,43 @@ function AddToListForm({ list }: { list: List }) {
 }
 
 export default memo(TaskList);
+
+function ListActionMenu({ list }: { list: List }) {
+  return (
+    <Menu as="div" className="relative inline-block text-left">
+      <div>
+        <Menu.Button className="inline-flex justify-center rounded-md bg-neutral-100 bg-opacity-30  p-2 text-sm font-medium text-white transition-opacity hover:bg-opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-opacity-75">
+          <BiDotsVerticalRounded
+            className="h-5 w-5 text-black"
+            aria-hidden="true"
+          />
+        </Menu.Button>
+      </div>
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="px-1 py-1 ">
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  className={`${
+                    active ? "bg-white text-black" : "text-gray-900"
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                >
+                  Edit
+                </button>
+              )}
+            </Menu.Item>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </Menu>
+  );
+}
