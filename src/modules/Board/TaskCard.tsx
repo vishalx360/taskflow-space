@@ -1,17 +1,18 @@
 import { type UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { type Task } from "@prisma/client";
+import TaskModal from "../Global/TaskModal";
 
 type Props = {
   id: UniqueIdentifier;
   active?: boolean;
-  title: string;
-  description?: string;
+  task: Task;
 };
 
-export function TaskCard(props: Props) {
+export function TaskCard({ id, active, task }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: props.id });
+    useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -19,26 +20,24 @@ export function TaskCard(props: Props) {
   };
 
   return (
-    <div
-      className="px-3"
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
-      {/* <TaskModal
-        taskData={{ title: props.title, description: props.description }}
-      > */}
+    <TaskModal task={task}>
       <div
-        className={`border-1 min-w-[270px] max-w-[300px] rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
-          props.active ? "-rotate-1 border-dotted bg-[#f0f0f0]" : ""
-        }`}
+        className="px-3"
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
       >
-        <p className="text-md">{props.title}</p>
-        {props.description && <p className="turncate">{props.description}</p>}
+        <div
+          className={`border-1 min-w-[270px] max-w-[300px] rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
+            active ? "-rotate-1 border-dotted bg-[#f0f0f0]" : ""
+          }`}
+        >
+          <p className="text-md">{task?.title}</p>
+          {task?.description && <p className="turncate">{task?.description}</p>}
+        </div>
       </div>
-      {/* </TaskModal> */}
-    </div>
+    </TaskModal>
   );
 }
 

@@ -23,7 +23,12 @@ export default async function SeedPersonalWorkspace(userId: string) {
               id: Workspace.id,
             },
           },
-        },
+          members: {
+            connect: [{
+              id: userId,
+            }],
+          },
+        }
       });
       return board;
     })

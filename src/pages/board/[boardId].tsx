@@ -119,7 +119,19 @@ function BoardPage() {
           </div>
           <DragOverlay>
             {activeId ? (
-              <TaskCard key={activeId} id={activeId} active title="dragged" />
+              <TaskCard
+                key={activeId}
+                id={activeId}
+                active
+                task={{
+                  id: "dragged",
+                  title: "dragged",
+                  createdAt: new Date(),
+                  rank: "dragged",
+                  description: "",
+                  listId: "dragged",
+                }}
+              />
             ) : null}
           </DragOverlay>
         </DndContext>

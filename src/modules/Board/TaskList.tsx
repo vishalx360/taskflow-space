@@ -58,12 +58,7 @@ function TaskList({ list }: { list: List }) {
           >
             {Tasks?.length !== 0 ? (
               Tasks?.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  id={task.id}
-                  title={task.title}
-                  description={task?.description || ""}
-                />
+                <TaskCard key={task.id} id={task.id} task={task} />
               ))
             ) : (
               <EmptyListCard />

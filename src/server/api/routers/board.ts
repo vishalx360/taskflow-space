@@ -29,6 +29,22 @@ export const BoardRouter = createTRPCRouter({
   createTask: protectedProcedure
     .input(CreateTaskSchema)
     .mutation(async ({ ctx, input }) => {
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: input.listId },
+        select: { boardId: true },
+      });
+      if (!list) { throw new Error("List not found") }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+
+      if (!hasPermission) { throw new Error("Unauthorized") }
+
       let rank = LexoRank.min().toString();
 
       const lastTask = await ctx.prisma.task.findFirst({ where: { listId: input.listId }, orderBy: { rank: "desc" }, select: { rank: true } })
@@ -43,6 +59,35 @@ export const BoardRouter = createTRPCRouter({
           listId: input.listId,
           rank
         },
+      });
+    }),
+
+  deleteTask: protectedProcedure
+    .input(z.object({ taskId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: { id: input.taskId },
+        select: { listId: true },
+      });
+      if (!task) { throw new Error("Task not found") }
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: task.listId },
+        select: { boardId: true },
+      });
+      if (!list) { throw new Error("List not found") }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      return ctx.prisma.task.delete({
+        where: { id: input.taskId },
       });
     })
 
