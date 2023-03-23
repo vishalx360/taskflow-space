@@ -34,7 +34,11 @@ export function TaskCard({ id, active, task }: Props) {
           }`}
         >
           <p className="text-md">{task?.title}</p>
-          {task?.description && <p className="turncate">{task?.description}</p>}
+          {task?.description && (
+            <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
+              {task?.description}
+            </p>
+          )}
         </div>
       </div>
     </TaskModal>
