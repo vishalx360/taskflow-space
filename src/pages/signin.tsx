@@ -166,5 +166,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         destination: "/dashboard",
       },
     };
+  } else {
+    return { props: {} };
   }
 }
