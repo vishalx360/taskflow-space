@@ -15,9 +15,11 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Error from "next/error";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
+import { FiUser } from "react-icons/fi";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import TaskList from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
@@ -100,6 +102,7 @@ function BoardPage() {
                 {Board?.name} Board
               </span>
             </div>
+            <MembersAvatars members={Board?.members} />
           </div>
         </nav>
 
@@ -153,4 +156,73 @@ function BoardSkeleton(): JSX.Element {
       </div>
     </div>
   );
+}
+type MemberType = {
+  image: string | null;
+  name: string | null;
+  email: string | null;
+};
+
+function MembersAvatars({
+  members,
+}: {
+  members: MemberType[] | undefined;
+}): JSX.Element {
+  return (
+    <div className="flex flex-row-reverse items-center justify-center gap-4">
+      Members
+      <div className="flex -space-x-4">
+        {members?.slice(0, 3)?.map((member) => {
+          if (member?.image) {
+            return (
+              <Image
+                key={member?.email}
+                height={20}
+                width={20}
+                className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800"
+                src={member?.image}
+                alt=""
+              />
+            );
+          } else {
+            return (
+              <FiUser
+                key={member?.email}
+                className="h-10 w-10 rounded-full border-2 border-white p-2 dark:border-gray-800"
+              />
+            );
+          }
+        })}
+        <a
+          className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-gray-700 text-xs font-medium text-white hover:bg-gray-600 dark:border-gray-800"
+          href="#"
+        >
+          {members?.length}
+        </a>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* if (member?.image) {
+          return (
+            <Image
+              key={member?.email}
+              height={200}
+              width={200}
+              src={member?.image}
+              alt="avatar"
+              className="w-10 rounded-full ring-2 ring-white/40 transition-all group-hover:ring-4"
+            />
+          );
+        } else {
+          return (
+            <FiUser
+              key={member?.email}
+              className="h-10 w-10 -translate-x-8  rounded-full p-2 ring-2 ring-white/40 transition-all group-hover:ring-4"
+            />
+          );
+        }
+      })} */
 }

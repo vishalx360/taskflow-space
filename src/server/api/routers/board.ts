@@ -11,7 +11,15 @@ export const BoardRouter = createTRPCRouter({
       console.log(input.boardId);
       return ctx.prisma.board.findUnique({
         where: { id: input.boardId },
-        include: { lists: true },
+        include: {
+          lists: true, members: {
+            select: {
+              name: true,
+              email: true,
+              image: true,
+            }
+          }
+        },
       });
     }),
 
