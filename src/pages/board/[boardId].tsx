@@ -19,7 +19,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
-import { FiUser } from "react-icons/fi";
+import {
+  FiAlignLeft,
+  FiArrowLeft,
+  FiArrowLeftCircle,
+  FiUser,
+} from "react-icons/fi";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import TaskList from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
@@ -88,9 +93,10 @@ function BoardPage() {
   }
 
   return (
-    <div>
-      <div className={`h-screen bg-[url(/board_bg.jpg)] bg-cover bg-no-repeat`}>
-        <nav className="w-full bg-black px-4 py-4 text-white shadow sm:px-4">
+    <div className="relative h-screen ">
+      <Image alt="background" fill src="/board_bg.jpg" />
+      <div className="relative">
+        <nav className="w-full bg-black px-4 py-3 text-white shadow sm:px-4">
           <div className="container mx-auto flex flex-wrap items-center justify-between">
             <div className="flex items-center gap-10">
               <Link href="/dashboard" className="flex items-center">
@@ -98,10 +104,17 @@ function BoardPage() {
                   VIRA
                 </span>
               </Link>
-              <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
-                {Board?.name} Board
-              </span>
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-5 rounded-full border-2 border-neutral-400 p-2 px-4"
+              >
+                <FiArrowLeft className="text-xl" />
+                Dashboard
+              </Link>
             </div>
+            <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
+              {Board?.name}
+            </span>
             <MembersAvatars members={Board?.members} />
           </div>
         </nav>
@@ -115,7 +128,7 @@ function BoardPage() {
           onDragEnd={handleDragEnd}
           onDragCancel={handleDragCancel}
         >
-          <div className="flex gap-5 p-10 ">
+          <div className="flex gap-5 px-10 py-5 ">
             {Board?.lists.map((list) => {
               return <TaskList key={list.id} list={list} />;
             })}
