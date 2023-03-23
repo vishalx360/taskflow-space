@@ -9,7 +9,7 @@ function PasswordInput() {
     setTimeout(() => {
       setHidden(true);
       console.log("hide");
-    }, 500);
+    }, 5000);
   }, []);
 
   const show = useCallback(() => {

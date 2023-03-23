@@ -44,3 +44,12 @@ export const CreateTaskSchema = z.object({
     .max(100, "Must contain less than 100 characters"),
   listId: z.string(),
 });
+
+export const UpdateTaskSchema = z.object({
+  taskId: z.string(),
+  title: z.string()
+    .min(1, "Must contain at least 1 character")
+    .max(100, "Must contain less than 100 characters"),
+  description: z.string()
+    .max(500, "Must contain less than 500 characters").optional(),
+});

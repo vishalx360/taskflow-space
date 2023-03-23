@@ -2,7 +2,7 @@ import { type UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { type Task } from "@prisma/client";
-import TaskModal from "../Global/TaskModal";
+import TaskModal from "../Global/TaskModal/TaskModal";
 
 type Props = {
   id: UniqueIdentifier;
