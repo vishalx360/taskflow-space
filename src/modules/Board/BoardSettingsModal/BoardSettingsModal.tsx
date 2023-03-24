@@ -56,7 +56,7 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
                     as="h3"
                     className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
                   >
-                    {board?.name} Settings
+                    Board Settings
                     <button
                       onClick={closeModal}
                       type="button"

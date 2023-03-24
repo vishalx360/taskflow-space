@@ -8,7 +8,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <link rel="manifest" href="/manifest.json" />
+          <link rel="manifest" href="/site.webmanifest" />
           <meta charSet="utf-8" />
           <meta name="title" content="Vira | Project Management made easy" />
           <meta name="description" content="Project Management made easy" />
