@@ -26,6 +26,7 @@ import {
   FiArrowLeftCircle,
   FiUser,
 } from "react-icons/fi";
+import BoardSettingsModal from "~/modules/Board/BoardSettingsModal/BoardSettingsModal";
 import { TaskCard } from "~/modules/Board/TaskCard";
 import TaskList, { CreateList } from "~/modules/Board/TaskList";
 import { GravtarOption } from "~/modules/Global/DashboardNavbar";
@@ -118,7 +119,10 @@ function BoardPage() {
                 VIRA
               </span>
             </Link>
-            <MembersAvatars members={Board?.members} />
+            <div className="flex items-center gap-3">
+              <MembersAvatars members={Board?.members} />
+              <BoardSettingsModal board={Board} />
+            </div>
           </div>
         </nav>
 
