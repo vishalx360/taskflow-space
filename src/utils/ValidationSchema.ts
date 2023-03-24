@@ -34,9 +34,6 @@ export const RenameWorkspaceSchema = z.object({
     .max(50, "Must contain less than 50 characters"),
   workspaceId: z.string(),
 });
-export const DeleteWorkspaceSchema = z.object({
-  workspaceId: z.string(),
-});
 
 export const CreateTaskSchema = z.object({
   title: z.string()
@@ -63,6 +60,14 @@ export const UpdateListSchema = z.object({
 });
 
 export const CreateListSchema = z.object({
+  boardId: z.string(),
+  name: z
+    .string()
+    .min(4, "Must contain at least 4 characters")
+    .max(50, "Must contain less than 50 characters"),
+});
+
+export const UpdateBoardSchema = z.object({
   boardId: z.string(),
   name: z
     .string()

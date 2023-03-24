@@ -2,7 +2,7 @@ import { LexoRank } from "lexorank";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { CreateListSchema, CreateTaskSchema, UpdateListSchema, UpdateTaskSchema } from "~/utils/ValidationSchema";
+import { CreateListSchema, CreateTaskSchema, UpdateBoardSchema, UpdateListSchema, UpdateTaskSchema } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
@@ -12,36 +12,54 @@ export const BoardRouter = createTRPCRouter({
       return ctx.prisma.board.findUnique({
         where: { id: input.boardId },
         include: {
-          lists: true, members: {
-            select: {
-              name: true,
-              email: true,
-              image: true,
-            }
+          lists: true,
+          members: {
+            select: { name: true, email: true, image: true }
           }
         },
       });
     }),
 
-  getTasks: protectedProcedure
-    .input(z.object({ listId: z.string() }))
-    .query(({ ctx, input }) => {
-      // sort by rank
-      return ctx.prisma.task.findMany({
-        where: { listId: input.listId },
-        orderBy: { rank: "asc" },
+  updateBoard: protectedProcedure
+    .input(UpdateBoardSchema)
+    .mutation(async ({ ctx, input }) => {
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        select: { members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      return ctx.prisma.board.update({
+        where: { id: input.boardId },
+        data: {
+          name: input.name,
+        }
       });
     }),
 
-  getTask: protectedProcedure
-    .input(z.object({ taskId: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.prisma.task.findUnique({
-        where: { id: input.taskId },
+  deleteBoard: protectedProcedure
+    .input(z.object({ boardId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        select: { members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      return ctx.prisma.board.delete({
+        where: { id: input.boardId },
       });
     }),
 
-  // mutations
+
+  // Tasks
   createTask: protectedProcedure
     .input(CreateTaskSchema)
     .mutation(async ({ ctx, input }) => {
@@ -77,6 +95,25 @@ export const BoardRouter = createTRPCRouter({
         },
       });
     }),
+
+  getTasks: protectedProcedure
+    .input(z.object({ listId: z.string() }))
+    .query(({ ctx, input }) => {
+      // sort by rank
+      return ctx.prisma.task.findMany({
+        where: { listId: input.listId },
+        orderBy: { rank: "asc" },
+      });
+    }),
+
+  getTask: protectedProcedure
+    .input(z.object({ taskId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.task.findUnique({
+        where: { id: input.taskId },
+      });
+    }),
+
 
   updateTask: protectedProcedure
     .input(UpdateTaskSchema)
@@ -139,6 +176,7 @@ export const BoardRouter = createTRPCRouter({
         where: { id: input.taskId },
       });
     }),
+  // List
   createList: protectedProcedure
     .input(CreateListSchema)
     .mutation(async ({ ctx, input }) => {
@@ -159,6 +197,7 @@ export const BoardRouter = createTRPCRouter({
         }
       });
     }),
+
   updateList: protectedProcedure
     .input(UpdateListSchema)
     .mutation(async ({ ctx, input }) => {
@@ -175,7 +214,9 @@ export const BoardRouter = createTRPCRouter({
       });
       if (!board) { throw new Error("Board not found") }
 
-      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      const hasPermission = board.members.find(
+        (member) => member.id === ctx.session.user.id
+      );
       if (!hasPermission) { throw new Error("Unauthorized"); }
 
       return ctx.prisma.list.update({
@@ -183,6 +224,32 @@ export const BoardRouter = createTRPCRouter({
         data: {
           name: input.name,
         }
+      });
+    }),
+
+  deleteList: protectedProcedure
+    .input(z.object({ listId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: input.listId },
+        select: { boardId: true },
+      });
+      if (!list) { throw new Error("List not found") }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+
+      const hasPermission = board.members.find(
+        (member) => member.id === ctx.session.user.id
+      );
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      return ctx.prisma.list.delete({
+        where: { id: input.listId },
       });
     }),
 });

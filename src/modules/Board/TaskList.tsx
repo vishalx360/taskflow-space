@@ -12,7 +12,7 @@ import { api } from "~/utils/api";
 import {
   CreateListSchema,
   CreateTaskSchema,
-  UpdateListSchema,
+  RenameListSchema,
 } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
@@ -210,7 +210,7 @@ function UpdateListName({ list }: { list: List }) {
   return (
     <Formik
       initialValues={{ name: list.name, listId: list.id }}
-      validationSchema={toFormikValidationSchema(UpdateListSchema)}
+      validationSchema={toFormikValidationSchema(RenameListSchema)}
       onSubmit={(values) => {
         mutation.mutate(values);
       }}

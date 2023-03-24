@@ -4,9 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   CreateNewBoardSchema,
-  CreateNewWorkspaceSchema,
-  DeleteWorkspaceSchema,
-  RenameWorkspaceSchema,
+  CreateNewWorkspaceSchema, RenameWorkspaceSchema
 } from "~/utils/ValidationSchema";
 
 export const DashboardRouter = createTRPCRouter({
@@ -21,6 +19,14 @@ export const DashboardRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.prisma.board.findMany({
         where: { workspaceId: input.workspaceId },
+      });
+    }),
+
+  deleteBoard: protectedProcedure
+    .input(z.object({ boardId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.board.delete({
+        where: { id: input.boardId },
       });
     }),
 
@@ -113,7 +119,9 @@ export const DashboardRouter = createTRPCRouter({
     }),
 
   deleteWorkspace: protectedProcedure
-    .input(DeleteWorkspaceSchema)
+    .input(z.object({
+      workspaceId: z.string(),
+    }))
     .mutation(async ({ ctx, input }) => {
       // check if workspace exist
       const Workspace = await ctx.prisma.workspace.findUnique({

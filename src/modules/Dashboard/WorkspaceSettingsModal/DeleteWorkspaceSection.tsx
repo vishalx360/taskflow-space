@@ -38,8 +38,9 @@ function DeleteWorkspaceSection({
         isLoading={mutation.isLoading}
         onClick={() => mutation.mutate({ workspaceId: workspace.id })}
         LeftIcon={MdDelete}
+        overwriteClassname
         loadingText="Deleting Workspace"
-        className="rounded-xl border-2 border-red-600 bg-transparent text-red-700 hover:bg-red-50 active:bg-red-100"
+        className="rounded-xl border-2 border-red-600 bg-transparent px-4 py-2 text-red-700 hover:bg-red-50 active:bg-red-100"
       >
         Delete this Workspace
       </PrimaryButton>
