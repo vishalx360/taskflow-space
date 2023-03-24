@@ -17,7 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Toaster position="bottom-center" />
       {/* black color  */}
       <NextNprogress
-        color="#001"
+        color="#424242"
         startPosition={0.3}
         stopDelayMs={200}
         height={3}
