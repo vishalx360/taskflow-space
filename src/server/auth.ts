@@ -1,16 +1,16 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
-  type NextAuthOptions,
+  type NextAuthOptions
 } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import SeedPersonalWorkspace from "~/utils/SeedPersonalWorkspace";
-import Credentials from "next-auth/providers/credentials";
-import { verify } from "argon2";
 import { SigninSchema } from "~/utils/ValidationSchema";
 
 /**

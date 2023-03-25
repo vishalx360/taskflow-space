@@ -1,19 +1,19 @@
 import dynamic from "next/dynamic";
 import { type DropResult } from "react-beautiful-dnd";
 
+import { type Board, type Task } from "@prisma/client";
 import Error from "next/error";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { getGravatarUrl } from "react-awesome-gravatar";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import { FiArrowLeft } from "react-icons/fi";
 import BoardSettingsModal from "~/modules/Board/BoardSettingsModal/BoardSettingsModal";
-import { type Board, type Task } from "@prisma/client";
 import TaskList, { CreateList } from "~/modules/Board/TaskList";
-import { api } from "~/utils/api";
-import { getGravatarUrl } from "react-awesome-gravatar";
 import { GravtarOption } from "~/modules/Global/DashboardNavbar";
 import Toast from "~/modules/Global/Toast";
-import { Scrollbars } from "react-custom-scrollbars-2";
+import { api } from "~/utils/api";
 
 const DragDropContext = dynamic(
   () =>

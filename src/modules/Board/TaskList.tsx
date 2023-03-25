@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { type Task, type List } from "@prisma/client";
+import { type List, type Task } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import dynamic from "next/dynamic";
 import { Fragment, memo } from "react";

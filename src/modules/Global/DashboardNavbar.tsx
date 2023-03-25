@@ -3,14 +3,13 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { getGravatarUrl, type GravatarOptions } from "react-awesome-gravatar";
 import { Fragment, memo, useState } from "react";
+import { getGravatarUrl, type GravatarOptions } from "react-awesome-gravatar";
 import {
   FiChevronDown,
   FiExternalLink,
   FiLogOut,
   FiMenu,
-  FiUser,
   FiX,
 } from "react-icons/fi";
 

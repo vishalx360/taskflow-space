@@ -5,9 +5,9 @@ import NextNprogress from "nextjs-progressbar";
 
 import { api } from "~/utils/api";
 
+import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "~/styles/globals.css";
-import { Inter } from "next/font/google";
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
