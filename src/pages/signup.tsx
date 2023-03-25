@@ -1,5 +1,5 @@
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
