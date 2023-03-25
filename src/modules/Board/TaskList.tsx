@@ -13,6 +13,7 @@ import {
   CreateListSchema,
   CreateTaskSchema,
   RenameListSchema,
+  UpdateListSchema,
 } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
@@ -72,8 +73,9 @@ function TaskList({ list }: { list: List }) {
     </div>
   );
 }
+export default memo(TaskList);
 
-function AddToListForm({ list }: { list: List }) {
+export function AddToListForm({ list }: { list: List }) {
   // createTask mutation
   const utils = api.useContext();
   const mutation = api.board.createTask.useMutation({
@@ -154,9 +156,7 @@ function AddToListForm({ list }: { list: List }) {
   );
 }
 
-export default memo(TaskList);
-
-function ListActionMenu({ list }: { list: List }) {
+export function ListActionMenu({ list }: { list: List }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -197,7 +197,7 @@ function ListActionMenu({ list }: { list: List }) {
   );
 }
 
-function UpdateListName({ list }: { list: List }) {
+export function UpdateListName({ list }: { list: List }) {
   const mutation = api.board.updateList.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
@@ -210,7 +210,7 @@ function UpdateListName({ list }: { list: List }) {
   return (
     <Formik
       initialValues={{ name: list.name, listId: list.id }}
-      validationSchema={toFormikValidationSchema(RenameListSchema)}
+      validationSchema={toFormikValidationSchema(UpdateListSchema)}
       onSubmit={(values) => {
         mutation.mutate(values);
       }}
