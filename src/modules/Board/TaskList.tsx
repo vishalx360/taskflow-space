@@ -41,7 +41,7 @@ function TaskList({ list }: { list: List }) {
     <Droppable droppableId={list.id}>
       {(provided, { isDraggingOver }) => (
         <div
-          className={`relative h-fit max-h-[79vh] min-h-[300px] w-[350px]  overflow-y-hidden rounded-2xl bg-neutral-200 ring-black ${
+          className={`prevent-select relative h-fit max-h-[79vh] w-[350px]  overflow-y-hidden rounded-2xl bg-neutral-200 ring-black ${
             isDraggingOver ? "ring-2" : "ring-0"
           }`}
           key={`main:${list.name}`}
@@ -50,11 +50,10 @@ function TaskList({ list }: { list: List }) {
             <UpdateListName list={list} />
             <ListActionMenu list={list} />
           </div>
-
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="mt-0 max-h-[75vh] space-y-2 overflow-y-scroll px-4"
+            className="mt-0 max-h-[75vh] space-y-2 overflow-y-scroll px-2"
           >
             {Tasks?.length !== 0 ? (
               Tasks?.map((task: Task, index: number) => (
@@ -103,9 +102,9 @@ export function AddToListForm({ list }: { list: List }) {
             <Field name="title">
               {({ field, form, meta }: FieldProps) => (
                 <input
-                  className="w-full flex-[10] rounded-xl border-gray-200 bg-white py-3 px-5"
+                  className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent py-3 px-5 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white"
                   type="text"
-                  placeholder="Add to list"
+                  placeholder="+ Add to list"
                   id="title"
                   required
                   {...field}
@@ -246,7 +245,7 @@ export function CreateList({ boardId }: { boardId: string }) {
   return (
     <div className="pr-10">
       <div className="h-fit min-w-[310px] rounded-xl border-2 bg-white/90">
-        <div className="sticky bottom-0 z-10 rounded-b-xl p-2">
+        <div className="sticky bottom-0 z-10 rounded-b-xl p-1">
           <Formik
             initialValues={{ name: "", boardId: boardId }}
             validationSchema={toFormikValidationSchema(CreateListSchema)}
@@ -260,9 +259,9 @@ export function CreateList({ boardId }: { boardId: string }) {
                 <Field name="name">
                   {({ field, form, meta }: FieldProps) => (
                     <input
-                      className="w-full flex-[10] rounded-xl border-gray-200 bg-white py-3 px-5"
+                      className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent py-3 px-5 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white"
                       type="text"
-                      placeholder="Create new list"
+                      placeholder="+ Create a new list"
                       id="name"
                       required
                       {...field}

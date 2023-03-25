@@ -50,6 +50,13 @@ export const UpdateTaskSchema = z.object({
   description: z.string()
     .max(500, "Must contain less than 500 characters").optional(),
 });
+export const MoveTaskSchema = z.object({
+  newListId: z.string(),
+  taskId: z.string(),
+  newPrevTaskId: z.string().optional(),
+  newNextTaskId: z.string().optional(),
+});
+
 
 export const UpdateListSchema = z.object({
   listId: z.string(),

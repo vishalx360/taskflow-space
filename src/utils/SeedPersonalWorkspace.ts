@@ -41,7 +41,7 @@ export default async function SeedPersonalWorkspace(userId: string) {
     void (async () => {
       await Promise.all(
         boardData.lists.map((listData) => {
-          let currentLexoRank = LexoRank.min();
+          let currentLexoRank = LexoRank.middle();
           const CreateTasks = listData.tasks.map((task) => {
             currentLexoRank = currentLexoRank.genNext();
             return {

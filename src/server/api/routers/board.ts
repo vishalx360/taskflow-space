@@ -2,7 +2,7 @@ import { LexoRank } from "lexorank";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { CreateListSchema, CreateTaskSchema, UpdateBoardSchema, UpdateListSchema, UpdateTaskSchema } from "~/utils/ValidationSchema";
+import { CreateListSchema, CreateTaskSchema, MoveTaskSchema, UpdateBoardSchema, UpdateListSchema, UpdateTaskSchema } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
@@ -79,7 +79,7 @@ export const BoardRouter = createTRPCRouter({
 
       if (!hasPermission) { throw new Error("Unauthorized") }
 
-      let rank = LexoRank.min().toString();
+      let rank = LexoRank.middle().toString();
 
       const lastTask = await ctx.prisma.task.findFirst({ where: { listId: input.listId }, orderBy: { rank: "desc" }, select: { rank: true } })
       if (lastTask?.rank) {
@@ -146,6 +146,93 @@ export const BoardRouter = createTRPCRouter({
           description: input.description,
         }
       });
+    }),
+
+  moveTask: protectedProcedure
+    .input(MoveTaskSchema)
+    .mutation(async ({ ctx, input }) => {
+
+      const task = await ctx.prisma.task.findUnique({
+        where: { id: input.taskId },
+        select: { listId: true },
+      });
+      if (!task) { throw new Error("Task not found") }
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: task.listId },
+        select: { boardId: true },
+      });
+      if (!list) { throw new Error("List not found") }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) { throw new Error("Board not found") }
+
+      const hasPermission = board.members.find((member) => member.id === ctx.session.user.id);
+      if (!hasPermission) { throw new Error("Unauthorized"); }
+
+      // if putting on empty list
+      let rank = LexoRank.middle().toString();
+
+      let updatePrevTaskBucket;
+      let updateNextTaskBucket;
+      // get previous task and next task
+      let prevTask;
+      let nextTask;
+
+      if (input.newPrevTaskId) {
+        prevTask = await ctx.prisma.task.findUnique({
+          where: { id: input.newPrevTaskId },
+          select: { rank: true },
+        })
+      }
+      if (input.newNextTaskId) {
+        nextTask = await ctx.prisma.task.findUnique({
+          where: { id: input.newNextTaskId },
+          select: { rank: true },
+        })
+      }
+      console.log("--------INPUT-START--------")
+      console.log({ ...input, prevTaskRank: prevTask?.rank, nextTaskRank: nextTask?.rank })
+      console.log("--------INPUT-END--------")
+
+
+      // TODO: check for rebalancing
+      // if new rank if euqal to nextTask rank, then rebalance to next bucket
+      // if putting in middle, both next and prev exist
+      if (prevTask && nextTask) {
+        console.log("--------putting in middle, both next and prev exist : ", prevTask?.rank, nextTask?.rank)
+        rank = LexoRank.parse(prevTask?.rank).between(LexoRank.parse(nextTask?.rank)).toString();
+        console.log("xxxxxxxxxxxxx:   ", rank, LexoRank.parse(nextTask?.rank).toString())
+
+        if (rank === LexoRank.parse(nextTask?.rank).toString()) {
+          // generate new rank for prevtask currenttask nexttask in new bucket
+          console.log("xxxxxxxxxxxxx:   ", LexoRank.parse(nextTask?.rank).inNextBucket())
+
+        }
+      }
+      // if putting on bottom and prev exist
+      if (prevTask && !nextTask) {
+        console.log("--------putting on top and next exist : ", prevTask?.rank)
+        rank = LexoRank.parse(prevTask?.rank).genNext().toString()
+      }
+      // if putting on top and next exist
+      if (!prevTask && nextTask) {
+        console.log("--------putting on top and next exist : ", nextTask?.rank)
+        rank = LexoRank.parse(nextTask?.rank).genPrev().toString()
+      }
+
+      await ctx.prisma.task.update({
+        where: { id: input.taskId },
+        data: {
+          listId: input.newListId,
+          rank,
+        }
+      });
+      // send lists to update
+      return [task.listId, input.newListId];
     }),
 
   deleteTask: protectedProcedure

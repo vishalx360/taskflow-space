@@ -1,5 +1,21 @@
+import { useState } from "react";
+
 function Testpage() {
-  return <div>Testpage</div>;
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggel = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  return (
+    <div>
+      Testpage
+      {isOpen ? <div>Secret Msg</div> : <div>Public Msg</div>}
+      <button className="rounded-xl bg-green-300 p-2 px-10" onClick={toggel}>
+        {!isOpen ? "Show" : "Hide"}
+      </button>
+    </div>
+  );
 }
 
 // add type to List

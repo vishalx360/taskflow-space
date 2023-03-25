@@ -12,6 +12,8 @@ import TaskList, { CreateList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
 import { getGravatarUrl } from "react-awesome-gravatar";
 import { GravtarOption } from "~/modules/Global/DashboardNavbar";
+import Toast from "~/modules/Global/Toast";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 const DragDropContext = dynamic(
   () =>
@@ -30,11 +32,28 @@ function BoardPage() {
     { enabled: Boolean(boardId), retry: false }
   );
 
-  const onDragEnd = (result: DropResult) => {
+  const mutation = api.board.moveTask.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+    },
+    onSuccess: (listsToUpdate) => {
+      listsToUpdate[0] &&
+        utils.board.getTasks.invalidate({ listId: listsToUpdate[0] });
+      listsToUpdate[1] &&
+        utils.board.getTasks.invalidate({ listId: listsToUpdate[1] });
+
+      Toast({ content: "Task Moved!", status: "success" });
+    },
+  });
+
+  const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
     const { source, destination } = result;
     // if different list
     let removed: Task | undefined;
+
+    let newPrevTaskId;
+    let newNextTaskId;
 
     if (source.droppableId !== destination.droppableId) {
       utils.board.getTasks.setData({ listId: source.droppableId }, (prev) => {
@@ -45,7 +64,19 @@ function BoardPage() {
       utils.board.getTasks.setData(
         { listId: destination.droppableId },
         (prev) => {
+          Toast({ content: "prev.len:" + prev?.length, status: "success" });
+          // todo lookout for edge cases
+          newPrevTaskId =
+            destination.index > 0 ? prev[destination.index - 1].id : null;
           removed && prev?.splice(destination.index, 0, removed);
+          // check if index is not out of bounds
+          Toast({ content: "prev.len:" + prev?.length, status: "success" });
+          console.log(destination.index + 1, prev?.length);
+
+          if (destination.index + 1 <= prev.length - 1) {
+            newNextTaskId = prev[destination.index + 1].id;
+          }
+
           return prev;
         }
       );
@@ -54,9 +85,34 @@ function BoardPage() {
       utils.board.getTasks.setData({ listId: source.droppableId }, (prev) => {
         removed = prev?.splice(source.index, 1)[0];
         removed && prev?.splice(destination.index, 0, removed);
+        // todo lookout for edge cases
+        newPrevTaskId =
+          destination.index > 0 ? prev[destination.index - 1].id : null;
+        // check if index is not out of bounds
+        if (destination.index + 1 <= prev.length - 1) {
+          newNextTaskId = prev[destination.index + 1].id;
+        }
+        // Toast({
+        //   content: ` ${
+        //     newPrevTaskId ? prev[destination.index - 1]?.rank : "null"
+        //   } -> ${destination.index} -> ${
+        //     newNextTaskId ? prev[destination.index + 1].rank : "null"
+        //   }`,
+        //   status: "warning",
+        // });
+
         return prev;
       });
     }
+
+    // make api call to update task
+    await mutation.mutate({
+      taskId: removed?.id || "",
+      newListId: destination.droppableId,
+      newPrevTaskId: newPrevTaskId || "",
+      newNextTaskId: newNextTaskId || "",
+    });
+    return;
   };
 
   if (isLoading) {
@@ -74,13 +130,14 @@ function BoardPage() {
       </div>
       <BoardNavbar board={board} />
       <DragDropContext onDragEnd={onDragEnd}>
-        {/* TODO FIX SCROLLBAR */}
-        <div className="flex w-fit items-start gap-5 overflow-x-scroll   p-5  pt-20">
-          {board?.lists.map((list) => {
-            return <TaskList key={list.id} list={list} />;
-          })}
-          <CreateList boardId={boardId || ""} />
-        </div>
+        <Scrollbars>
+          <div className="flex w-fit items-start gap-5 p-5  pt-20">
+            {board?.lists.map((list) => {
+              return <TaskList key={list.id} list={list} />;
+            })}
+            <CreateList boardId={boardId || ""} />
+          </div>
+        </Scrollbars>
       </DragDropContext>
     </main>
   );
