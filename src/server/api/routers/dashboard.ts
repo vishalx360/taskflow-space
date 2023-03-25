@@ -4,7 +4,8 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   CreateNewBoardSchema,
-  CreateNewWorkspaceSchema, RenameWorkspaceSchema
+  CreateNewWorkspaceSchema,
+  RenameWorkspaceSchema,
 } from "~/utils/ValidationSchema";
 
 export const DashboardRouter = createTRPCRouter({
@@ -44,7 +45,11 @@ export const DashboardRouter = createTRPCRouter({
         });
       }
       return ctx.prisma.board.create({
-        data: { name: input.name, workspaceId: input.workspaceId, members: { connect: { id: ctx.session.user.id } } },
+        data: {
+          name: input.name,
+          workspaceId: input.workspaceId,
+          members: { connect: { id: ctx.session.user.id } },
+        },
       });
     }),
 
@@ -119,9 +124,11 @@ export const DashboardRouter = createTRPCRouter({
     }),
 
   deleteWorkspace: protectedProcedure
-    .input(z.object({
-      workspaceId: z.string(),
-    }))
+    .input(
+      z.object({
+        workspaceId: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       // check if workspace exist
       const Workspace = await ctx.prisma.workspace.findUnique({

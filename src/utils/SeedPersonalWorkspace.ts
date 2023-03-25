@@ -24,11 +24,13 @@ export default async function SeedPersonalWorkspace(userId: string) {
             },
           },
           members: {
-            connect: [{
-              id: userId,
-            }],
+            connect: [
+              {
+                id: userId,
+              },
+            ],
           },
-        }
+        },
       });
       return board;
     })
@@ -46,7 +48,7 @@ export default async function SeedPersonalWorkspace(userId: string) {
             currentLexoRank = currentLexoRank.genNext();
             return {
               title: task,
-              rank: currentLexoRank.toString()
+              rank: currentLexoRank.toString(),
             };
           });
           const list = prisma.list.create({

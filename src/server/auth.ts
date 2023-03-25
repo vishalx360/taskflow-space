@@ -4,7 +4,7 @@ import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
-  type NextAuthOptions
+  type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
       },
       authorize: async (credentials) => {
         const creds = await SigninSchema.parseAsync(credentials);
-        console.log(creds)
+        console.log(creds);
 
         const user = await prisma.user.findFirst({
           where: { email: creds.email },
@@ -120,7 +120,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/signin",
-    newUser: "/signup"
+    newUser: "/signup",
   },
 };
 
