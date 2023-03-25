@@ -1,46 +1,41 @@
-import { type UniqueIdentifier } from "@dnd-kit/core";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { type Task } from "@prisma/client";
+import dynamic from "next/dynamic";
 import TaskModal from "../Global/TaskModal/TaskModal";
+const Draggable = dynamic(
+  () =>
+    import("react-beautiful-dnd").then((mod) => {
+      return mod.Draggable;
+    }),
+  { ssr: false }
+);
 
-type Props = {
-  id: UniqueIdentifier;
-  active?: boolean;
-  task: Task;
-};
-
-export function TaskCard({ id, active, task }: Props) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
+export function TaskCard({ task, index }: { task: Task; index: number }) {
   return (
     <TaskModal task={task}>
-      <div
-        className="w-full px-3"
-        ref={setNodeRef}
-        style={style}
-        {...attributes}
-        {...listeners}
-      >
-        <div
-          className={`border-1 min-w-[270px] max-w-[300px] rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
-            active ? "-rotate-1 border-dotted bg-[#f0f0f0]" : ""
-          }`}
-        >
-          <p className="text-md line-clamp-2">{task?.title}</p>
-          {task?.description && (
-            <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
-              {task?.description}
-            </p>
-          )}
-        </div>
-      </div>
+      <Draggable key={task.id} draggableId={task.id} index={index}>
+        {(provided, { isDragging }) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <div
+              className={`border-1 w-full min-w-[270px] rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
+                isDragging ? "border-dotted bg-[#f0f0f0]" : ""
+              }`}
+            >
+              <p className="text-md font-medium text-black line-clamp-2">
+                {task?.title}
+              </p>
+              {task?.description && (
+                <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
+                  {task?.description}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+      </Draggable>
     </TaskModal>
   );
 }

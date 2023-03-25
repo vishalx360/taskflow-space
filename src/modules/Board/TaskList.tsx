@@ -1,28 +1,29 @@
-import { useDroppable } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { Transition } from "@headlessui/react";
-import { Board, type List } from "@prisma/client";
+import { Menu, Transition } from "@headlessui/react";
+import { Task, type List } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { memo } from "react";
+import dynamic from "next/dynamic";
+import { Fragment, memo } from "react";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
 import {
   CreateListSchema,
   CreateTaskSchema,
-  RenameListSchema,
   UpdateListSchema,
 } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
 import { EmptyListCard, TaskCard } from "./TaskCard";
-import { Menu } from "@headlessui/react";
-import { Fragment } from "react";
-import { BiDotsVerticalRounded } from "react-icons/bi";
 
 export const LIST_BG_COLOR = "#ebecf0";
+
+const Droppable = dynamic(
+  () =>
+    import("react-beautiful-dnd").then((mod) => {
+      return mod.Droppable;
+    }),
+  { ssr: false }
+);
 
 function TaskList({ list }: { list: List }) {
   const { data: Tasks, isLoading } = api.board.getTasks.useQuery(
@@ -31,46 +32,44 @@ function TaskList({ list }: { list: List }) {
   );
 
   console.log("rerendering", list.name);
-  const { setNodeRef } = useDroppable({ id: list.id });
 
   if (isLoading) {
     return <div>loading...</div>;
   }
 
   return (
-    <div
-      className="h-full rounded-xl border-2 bg-white/90"
-      key={`main:${list.name}`}
-    >
-      <div className="sticky top-0 z-10 flex justify-between rounded-t-xl px-3 pt-3 pb-2">
-        <UpdateListName list={list} />
-        <ListActionMenu list={list} />
-      </div>
-      <div
-        className="relative pb-3"
-        key={list.name}
-        //  bg={LIST_BG_COLOR}
-      >
-        <SortableContext
-          items={Tasks || []}
-          strategy={verticalListSortingStrategy}
+    <Droppable droppableId={list.id}>
+      {(provided, { isDraggingOver }) => (
+        <div
+          className={`relative h-fit max-h-[79vh] min-h-[300px] w-[350px]  overflow-y-hidden rounded-2xl bg-neutral-200 ring-black ${
+            isDraggingOver ? "ring-2" : "ring-0"
+          }`}
+          key={`main:${list.name}`}
         >
+          <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-neutral-200 px-3 pt-3 pb-2 text-black">
+            <UpdateListName list={list} />
+            <ListActionMenu list={list} />
+          </div>
+
           <div
-            className="listScrollbar max-h-[75vh] space-y-4 overflow-y-scroll pb-2"
-            ref={setNodeRef}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="mt-0 max-h-[75vh] space-y-2 overflow-y-scroll px-4"
           >
             {Tasks?.length !== 0 ? (
-              Tasks?.map((task) => (
-                <TaskCard key={task.id} id={task.id} task={task} />
+              Tasks?.map((task: Task, index: number) => (
+                <TaskCard key={task.id} index={index} task={task} />
               ))
             ) : (
               <EmptyListCard />
             )}
+            <div className="h-[130px]" />
           </div>
-        </SortableContext>
-      </div>
-      <AddToListForm list={list} />
-    </div>
+          <AddToListForm list={list} />
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
   );
 }
 export default memo(TaskList);
@@ -90,7 +89,7 @@ export function AddToListForm({ list }: { list: List }) {
     },
   });
   return (
-    <div className="sticky bottom-0 z-10 rounded-b-xl p-2">
+    <div className="absolute bottom-0 z-10 w-full rounded-b-xl bg-neutral-200  p-4 transition-all">
       <Formik
         initialValues={{ title: "", listId: list.id }}
         validationSchema={toFormikValidationSchema(CreateTaskSchema)}
@@ -100,7 +99,7 @@ export function AddToListForm({ list }: { list: List }) {
         }}
       >
         <Form>
-          <div className="flex w-full max-w-[310px] items-center gap-2">
+          <div className="flex w-full items-center gap-2">
             <Field name="title">
               {({ field, form, meta }: FieldProps) => (
                 <input

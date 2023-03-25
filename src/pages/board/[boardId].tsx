@@ -1,35 +1,17 @@
-import { type LexoRank } from "lexorank";
-import { columnsFromBackend } from "~/utils/TestData";
-
 import dynamic from "next/dynamic";
 import { type DropResult } from "react-beautiful-dnd";
 
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Error from "next/error";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
-import { getGravatarUrl } from "react-awesome-gravatar";
-import {
-  FiAlignLeft,
-  FiArrowLeft,
-  FiArrowLeftCircle,
-  FiUser,
-} from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 import BoardSettingsModal from "~/modules/Board/BoardSettingsModal/BoardSettingsModal";
-// import { TaskCard } from "~/modules/Board/TaskCard";
-// import TaskList, { CreateList } from "~/modules/Board/TaskList";
-import { GravtarOption } from "~/modules/Global/DashboardNavbar";
+import { type Board, type Task } from "@prisma/client";
+import TaskList, { CreateList } from "~/modules/Board/TaskList";
 import { api } from "~/utils/api";
-import { BoardSkeleton } from "~/modules/Dashboard/BoardList";
-import { EmptyListCard } from "~/modules/Board/TaskCard";
-import {
-  AddToListForm,
-  ListActionMenu,
-  UpdateListName,
-} from "~/modules/Board/TaskList";
-import { List, Task } from "@prisma/client";
+import { getGravatarUrl } from "react-awesome-gravatar";
+import { GravtarOption } from "~/modules/Global/DashboardNavbar";
 
 const DragDropContext = dynamic(
   () =>
@@ -38,57 +20,12 @@ const DragDropContext = dynamic(
     }),
   { ssr: false }
 );
-const Droppable = dynamic(
-  () =>
-    import("react-beautiful-dnd").then((mod) => {
-      return mod.Droppable;
-    }),
-  { ssr: false }
-);
-const Draggable = dynamic(
-  () =>
-    import("react-beautiful-dnd").then((mod) => {
-      return mod.Draggable;
-    }),
-  { ssr: false }
-);
 
-// add type to List
-// const Lists = ["TODO", "DOING", "DONE"];
-
-// add types to InitialData Map()
-// const columnsFromBackend = {
-//   TODO: {
-//     title: "To-do",
-//     items: [],
-//   },
-//   DOING: {
-//     title: "Doing",
-//     items: [],
-//   },
-//   DONE: {
-//     title: "Done",
-//     items: [],
-//   },
-// };
-
-// Lists.map((list) => {
-//   let rank = LexoRank.min();
-//   for (let i = 0; i < 5; i++) {
-//     columnsFromBackend[list].items.push({
-//       title: `${list}-${i}`,
-//       rank,
-//       id: `ID:${list}-${i}`,
-//     });
-//     rank = rank.genNext();
-//   }
-// });
-
-function TestPage() {
+function BoardPage() {
   const boardId = useSearchParams().get("boardId");
   // fetch board details from boardId.
   const utils = api.useContext();
-  const { data: Board, isLoading } = api.board.getBoard.useQuery(
+  const { data: board, isLoading } = api.board.getBoard.useQuery(
     { boardId: boardId || "" },
     { enabled: Boolean(boardId), retry: false }
   );
@@ -126,110 +63,110 @@ function TestPage() {
     return <BoardSkeleton />;
   }
 
-  if (!isLoading && !Board) {
+  if (!isLoading && !board) {
     return <Error statusCode={404} />;
   }
 
   return (
-    <main className="h-screen bg-black text-white">
-      <div className="py-10 text-center  ">
-        <h1 className="text-4xl font-medium">Kanban Board</h1>
-        <h3 className="mt-2 text-xl text-neutral-300">
-          using react-beautiful-dnd and lexorank
-        </h3>
+    <main className="relative h-screen">
+      <div className="fixed top-0 left-0 h-full w-screen">
+        <Image className="" alt="background" fill src="/board_bg.jpg" />
       </div>
+      <BoardNavbar board={board} />
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="container mx-auto flex  w-full items-start justify-evenly gap-5  p-5">
-          {Board?.lists.map((list, index) => {
-            return (
-              <Droppable key={list.id} droppableId={list.id}>
-                {(provided, { isDraggingOver }) => (
-                  <div
-                    className={`h-fit max-h-[79vh] min-h-[70vh] w-[350px] space-y-5 overflow-y-scroll rounded-2xl transition-colors ${
-                      isDraggingOver ? "bg-neutral-400/20" : "bg-white/10"
-                    } p-4`}
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
-                    <TaskList list={list} />
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            );
+        {/* TODO FIX SCROLLBAR */}
+        <div className="flex w-fit items-start gap-5 overflow-x-scroll   p-5  pt-20">
+          {board?.lists.map((list) => {
+            return <TaskList key={list.id} list={list} />;
           })}
+          <CreateList boardId={boardId || ""} />
         </div>
       </DragDropContext>
     </main>
   );
 }
 
-function TaskList({ list }: { list: List }) {
-  const { data: Tasks, isLoading } = api.board.getTasks.useQuery(
-    { listId: list.id || "" },
-    { enabled: Boolean(list.id), retry: false }
-  );
+export default BoardPage;
 
-  console.log("rerendering", list.name);
-
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-
+function BoardNavbar({ board }: { board: Board }) {
   return (
-    <div key={`main:${list.name}`}>
-      <div className="sticky top-0 z-10 flex justify-between rounded-t-xl px-3 pt-3 pb-2">
-        <UpdateListName list={list} />
-        <ListActionMenu list={list} />
-      </div>
-      <div
-        className="relative pb-3"
-        key={list.name}
-        //  bg={LIST_BG_COLOR}
-      >
-        <div className="listScrollbar max-h-[75vh] space-y-4  pb-2">
-          {Tasks?.length !== 0 ? (
-            Tasks?.map((task: Task, index: number) => (
-              <TaskCard key={task.id} index={index} task={task} />
-            ))
-          ) : (
-            <EmptyListCard />
-          )}
+    <nav className="fixed top-0 left-0 z-50 w-full bg-black/20 px-4 py-3 text-white shadow sm:px-4">
+      <div className="container mx-auto flex flex-wrap items-center justify-between">
+        <div className="flex items-center gap-10">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-5 rounded-full border-2 border-neutral-400 p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20 hover:text-white"
+          >
+            <FiArrowLeft className="text-xl" />
+          </Link>
+          <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
+            {board?.name}
+          </span>
+        </div>
+        <Link href="/dashboard" className="flex items-center">
+          <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
+            VIRA
+          </span>
+        </Link>
+        <div className="flex items-center gap-3">
+          <MembersAvatars members={board?.members} />
+          <BoardSettingsModal board={board} />
         </div>
       </div>
-      <AddToListForm list={list} />
+    </nav>
+  );
+}
+
+function BoardSkeleton(): JSX.Element {
+  return (
+    <div>
+      <div className="border-b-2 border-gray-200 p-2 text-xl font-semibold">
+        <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300"></div>
+      </div>
+      <div className="mt-3 space-y-5">
+        <div className="my-3 h-10 w-52 animate-pulse rounded-xl bg-gray-300"></div>
+      </div>
     </div>
   );
 }
+type MemberType = {
+  image: string | null;
+  name: string | null;
+  email: string | null;
+};
 
-function TaskCard({ task, index }: { task: Task; index: number }) {
+function MembersAvatars({
+  members,
+}: {
+  members: MemberType[] | undefined;
+}): JSX.Element {
   return (
-    <Draggable key={task.id} draggableId={task.id} index={index}>
-      {(provided, { isDragging }) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
+    <div className="flex flex-row-reverse items-center justify-center gap-4">
+      Members
+      <div className="flex -space-x-4">
+        {members?.slice(0, 3)?.map((member) => {
+          return (
+            <Image
+              key={member?.email}
+              height={20}
+              width={20}
+              className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800"
+              src={
+                member?.image ||
+                (member.email && getGravatarUrl(member.email, GravtarOption)) ||
+                getGravatarUrl("default", GravtarOption)
+              }
+              alt=""
+            />
+          );
+        })}
+        <a
+          className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-gray-700 text-xs font-medium text-white hover:bg-gray-600 dark:border-gray-800"
+          href="#"
         >
-          <div
-            className={`border-green w-full rounded-2xl bg-neutral-200 p-4 text-black shadow-md ${
-              isDragging ? "-rotate-2" : ""
-            }}`}
-          >
-            <h1 className="font-medium">{task.title}</h1>
-            {/* <p className="mt-2 text-xs">
-              <span>
-                {new Date(task.).toLocaleDateString("en-us", {
-                  month: "short",
-                  day: "2-digit",
-                })}
-              </span>
-            </p> */}
-          </div>
-        </div>
-      )}
-    </Draggable>
+          {members?.length}
+        </a>
+      </div>
+    </div>
   );
 }
-
-export default TestPage;

@@ -1,42 +1,5 @@
-import { type LexoRank } from "lexorank";
-import { useState } from "react";
-import { columnsFromBackend } from "~/utils/TestData";
-
-import dynamic from "next/dynamic";
-import { DropResult } from "react-beautiful-dnd";
-
-const DragDropContext = dynamic(
-  () =>
-    import("react-beautiful-dnd").then((mod) => {
-      return mod.DragDropContext;
-    }),
-  { ssr: false }
-);
-const Droppable = dynamic(
-  () =>
-    import("react-beautiful-dnd").then((mod) => {
-      return mod.Droppable;
-    }),
-  { ssr: false }
-);
-const Draggable = dynamic(
-  () =>
-    import("react-beautiful-dnd").then((mod) => {
-      return mod.Draggable;
-    }),
-  { ssr: false }
-);
-
-// add type to Task
-interface Task {
-  title: string;
-  rank: LexoRank;
-  id: string;
-}
-// add type to TaskList
-interface TaskList {
-  title: string;
-  tasks: Task[];
+function Testpage() {
+  return <div>Testpage</div>;
 }
 
 // add type to List

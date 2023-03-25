@@ -22,7 +22,7 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
       <IconButton
         onClick={openModal}
         Icon={MdSettings}
-        className="border-2 bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
+        className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
       >
         Settings
       </IconButton>
