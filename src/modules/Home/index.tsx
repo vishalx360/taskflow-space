@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import POSTER_URL from "../../../public/poster.png";
+
 const NavLinks = [
   { title: "Home", href: "/home" },
   { title: "Signin", href: "/signin" },
@@ -146,8 +148,9 @@ function Home() {
               alt="Poster"
               width={1920}
               height={1080}
+              placeholder="blur"
               className="h-100 w-full rounded-2xl border-2 object-cover shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl lg:w-4/5"
-              src="/poster.png"
+              src={POSTER_URL}
             />
           </div>
         </div>
