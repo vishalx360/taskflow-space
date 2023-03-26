@@ -45,12 +45,17 @@ export const BoardRouter = createTRPCRouter({
         throw new Error("Unauthorized");
       }
 
-      return ctx.prisma.board.update({
+      await ctx.prisma.board.update({
         where: { id: input.boardId },
         data: {
           name: input.name,
+          background: input.background,
         },
       });
+      return {
+        name: input.name,
+        background: input.background,
+      };
     }),
 
   deleteBoard: protectedProcedure

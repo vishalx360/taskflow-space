@@ -1,0 +1,26 @@
+{
+  "wallpapers": [
+    "https://images.unsplash.com/photo-1620207418302-439b387441b0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1584968124544-d10ce10dd21f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1492138623748-a1b1f758a762?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1526230040953-6bce5ae9861b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1521464302861-ce943915d1c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1555109307-f7d9da25c244?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+    "https://images.unsplash.com/photo-1672243776760-67aec979f591?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90"
+  ],
+  "gradients": [
+    "linear-gradient(to right, #0f2027, #203a43, #2c5364)",
+    "linear-gradient(to bottom, #373b44, #4286f4)",
+    "linear-gradient(to right, #000428, #004e92)",
+    "linear-gradient(to bottom, #2980b9, #6dd5fa, #ffffff)",
+    "linear-gradient(to bottom, #aa4b6b, #6b6b83, #3b8d99)",
+    "linear-gradient(to bottom, #8e2de2, #4a00e0)",
+    "linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4)",
+    "linear-gradient(to bottom, #659999, #f4791f)",
+    "linear-gradient(to bottom, #0f0c29, #302b63, #24243e)",
+    "linear-gradient(to bottom, #44a08d, #093637)"
+  ]
+}

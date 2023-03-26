@@ -30,6 +30,7 @@ export default async function SeedPersonalWorkspace(userId: string) {
               },
             ],
           },
+          background: boardData.background,
         },
       });
       return board;

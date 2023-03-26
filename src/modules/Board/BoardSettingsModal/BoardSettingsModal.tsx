@@ -1,20 +1,36 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { type Board } from "@prisma/client";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
+import Divider from "~/modules/Global/Divider";
 import IconButton from "~/modules/Global/IconButton";
+import { api } from "~/utils/api";
 import DeleteBoardSection from "./DeleteBoardSection";
-import RenameBoardSection from "./RenameBoardSection";
+import UpdateWorkspaceSection from "./UpdateWorkspaceSection";
 
 export default function BoardSettingsModal({ board }: { board: Board | null }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  function closeModal() {
-    setIsOpen(false);
-  }
+  const currentBackground = useRef(board?.background);
+  const utils = api.useContext();
+  // update board background
+  const UpdatelocalBackground = (background: string) => {
+    utils.board.getBoard.setData({ boardId: board.id || "" }, (prev) => {
+      if (prev) {
+        return { ...prev, background };
+      }
+      return prev;
+    });
+  };
   function openModal() {
     setIsOpen(true);
+  }
+  function closeModal() {
+    if (currentBackground.current !== board?.background) {
+      UpdatelocalBackground(currentBackground.current);
+    }
+    setIsOpen(false);
   }
 
   return (
@@ -51,7 +67,7 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
@@ -69,9 +85,14 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
                     </button>
                   </Dialog.Title>
 
-                  <RenameBoardSection board={board} setIsOpen={setIsOpen} />
-                  <div className="my-5 w-full  border-[1px]" />
-                  <DeleteBoardSection board={board} setIsOpen={setIsOpen} />
+                  <UpdateWorkspaceSection
+                    currentBackground={currentBackground}
+                    UpdatelocalBackground={UpdatelocalBackground}
+                    board={board}
+                    setIsOpen={setIsOpen}
+                  />
+                  <Divider />
+                  <DeleteBoardSection board={board} closeModal={closeModal} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

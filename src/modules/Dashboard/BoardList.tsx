@@ -33,13 +33,32 @@ function Board({ board }: { board: Board }): JSX.Element {
       href={`/board/${board.id}`}
       className={`group relative w-full overflow-hidden rounded-xl transition-all hover:-translate-y-1 hover:shadow-xl md:w-fit`}
     >
-      <Image
-        height="50"
-        width="150"
-        src={background}
-        alt=""
-        className="h-40 w-full object-cover md:w-[18rem]"
-      />
+      <div className="h-40 w-full object-cover md:w-[18rem]">
+        {board?.background && board.background.startsWith("wallpaper:") && (
+          <Image
+            className="h-40 w-full object-cover md:w-[18rem]"
+            alt="background"
+            fill
+            src={board.background.slice(10)}
+          />
+        )}
+        {board?.background && board.background.startsWith("gradient:") && (
+          <div
+            className="h-full w-full"
+            style={{ backgroundImage: board.background.slice(9) }}
+          />
+        )}
+        {!board?.background && (
+          <Image
+            height="50"
+            width="150"
+            src={background}
+            alt=""
+            className="h-40 w-full object-cover md:w-[18rem]"
+          />
+        )}
+      </div>
+
       <div className="absolute bottom-0 flex h-full w-full items-end bg-gradient-to-t from-black p-5  font-bold text-white">
         <div className="flex w-full items-center justify-between">
           <h2>{board.name}</h2>

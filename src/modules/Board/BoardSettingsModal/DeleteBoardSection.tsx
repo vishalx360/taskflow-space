@@ -1,6 +1,5 @@
 import { type Board } from "@prisma/client";
 import { useRouter } from "next/router";
-import { type Dispatch, type SetStateAction } from "react";
 import { MdDelete } from "react-icons/md";
 import PrimaryButton from "~/modules/Global/PrimaryButton";
 import { api } from "~/utils/api";
@@ -8,10 +7,10 @@ import Toast from "../../Global/Toast";
 
 function DeleteBoardSection({
   board,
-  setIsOpen,
+  closeModal,
 }: {
   board: Board | null;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  closeModal: () => void;
 }) {
   const router = useRouter();
   const mutation = api.board.deleteBoard.useMutation({
@@ -22,7 +21,7 @@ function DeleteBoardSection({
       Toast({ content: "Board deleted successfully!", status: "success" });
       // redirect to dashboard
       await router.push("/dashboard");
-      setIsOpen(false);
+      closeModal();
     },
   });
 

@@ -1,6 +1,8 @@
 [
   {
     "board-name": "Work",
+    "background": "wallpaper:https://images.unsplash.com/photo-1518235506717-e1ed3306a89b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
+
     "lists": [
       {
         "list-name": "TODO",
@@ -36,6 +38,7 @@
   },
   {
     "board-name": "Reading List",
+    "background": "wallpaper:https://images.unsplash.com/photo-1672243776760-67aec979f591?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
     "lists": [
       {
         "list-name": "TODO",
@@ -79,6 +82,7 @@
   },
   {
     "board-name": "Watch List",
+    "background": "wallpaper:https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2000&q=90",
     "lists": [
       {
         "list-name": "TODO",

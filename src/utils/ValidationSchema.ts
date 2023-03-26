@@ -85,4 +85,5 @@ export const UpdateBoardSchema = z.object({
     .string()
     .min(4, "Must contain at least 4 characters")
     .max(50, "Must contain less than 50 characters"),
+  background: z.string(),
 });

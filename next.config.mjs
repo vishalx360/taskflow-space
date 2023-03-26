@@ -10,7 +10,11 @@
 const config = {
   reactStrictMode: false,
   images: {
-    domains: ["lh3.googleusercontent.com", "www.gravatar.com"],
+    domains: [
+      "lh3.googleusercontent.com",
+      "www.gravatar.com",
+      "images.unsplash.com",
+    ],
   },
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
