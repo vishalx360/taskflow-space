@@ -3,7 +3,7 @@ import { type List, type Task } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import dynamic from "next/dynamic";
 import { Fragment, memo } from "react";
-import { BiDotsVerticalRounded } from "react-icons/bi";
+import { BiDotsVerticalRounded, BiLoaderAlt } from "react-icons/bi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
 import {
@@ -26,7 +26,11 @@ const Droppable = dynamic(
 );
 
 function TaskList({ list }: { list: List }) {
-  const { data: Tasks, isLoading } = api.board.getTasks.useQuery(
+  const {
+    data: Tasks,
+    isLoading,
+    isRefetching,
+  } = api.board.getTasks.useQuery(
     { listId: list.id || "" },
     { enabled: Boolean(list.id), retry: false }
   );
@@ -48,6 +52,20 @@ function TaskList({ list }: { list: List }) {
         >
           <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-neutral-200 px-3 pt-3 pb-2 text-black">
             <UpdateListName list={list} />
+            <Transition
+              show={isRefetching || isLoading}
+              enter="transition-opacity duration-150"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity duration-150"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div>
+                <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-400" />
+              </div>
+            </Transition>
+
             <ListActionMenu list={list} />
           </div>
           <div
