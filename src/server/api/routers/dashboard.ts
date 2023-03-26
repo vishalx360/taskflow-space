@@ -20,6 +20,7 @@ export const DashboardRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.prisma.board.findMany({
         where: { workspaceId: input.workspaceId },
+        orderBy: { updatedAt: "desc" }
       });
     }),
 

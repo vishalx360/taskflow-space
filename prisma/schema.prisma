@@ -27,6 +27,7 @@ model Workspace {
 model Board {
     id          String    @id @default(cuid())
     createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
     name        String
     Workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
     workspaceId String

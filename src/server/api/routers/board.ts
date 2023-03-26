@@ -14,7 +14,12 @@ import {
 export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      await ctx.prisma.board.update({
+        where: { id: input.boardId },
+        data: { updatedAt: new Date() },
+      });
+
       console.log(input.boardId);
       return ctx.prisma.board.findUnique({
         where: { id: input.boardId },
