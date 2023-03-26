@@ -56,7 +56,7 @@ export default function WorkspaceSettingsModal({
                     as="h3"
                     className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
                   >
-                    {workspace.name} Settings
+                    {workspace.name} Workspace Settings
                     <button
                       onClick={closeModal}
                       type="button"

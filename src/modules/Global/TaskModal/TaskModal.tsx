@@ -145,7 +145,6 @@ export default function TaskModal({
                           <>
                             <textarea
                               id="description"
-                              required
                               placeholder="Task description"
                               {...field}
                               className="text-md block w-full  resize-none rounded-xl border-2 border-gray-300 p-3 text-neutral-800 transition-all focus:outline-none focus:outline"

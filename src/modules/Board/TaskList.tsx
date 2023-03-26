@@ -2,7 +2,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { type List, type Task } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import dynamic from "next/dynamic";
-import { Fragment, memo } from "react";
+import { Fragment, memo, useRef } from "react";
 import { BiDotsVerticalRounded, BiLoaderAlt } from "react-icons/bi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
@@ -43,28 +43,28 @@ function TaskList({ list }: { list: List }) {
 
   return (
     <Droppable droppableId={list.id}>
-      {(provided, { isDraggingOver }) => (
+      {(provided) => (
         <div
-          className={`prevent-select relative h-fit max-h-[79vh] w-[350px]  overflow-y-hidden rounded-2xl bg-neutral-200 ring-black ${
-            isDraggingOver ? "ring-2" : "ring-0"
-          }`}
+          className="prevent-select relative h-fit max-h-[79vh] w-[350px] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
           key={`main:${list.name}`}
         >
-          <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-neutral-200 px-3 pt-3 pb-2 text-black">
-            <UpdateListName list={list} />
-            <Transition
-              show={isRefetching || isLoading}
-              enter="transition-opacity duration-150"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity duration-150"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div>
-                <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-400" />
-              </div>
-            </Transition>
+          <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pt-3 pb-2 text-black">
+            <div className="relative flex items-center  ">
+              <UpdateListName list={list} />
+              <Transition
+                show={isRefetching || isLoading}
+                enter="transition-opacity duration-200"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="absolute top-0 right-4">
+                  <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-400" />
+                </div>
+              </Transition>
+            </div>
 
             <ListActionMenu list={list} />
           </div>
@@ -106,7 +106,7 @@ export function AddToListForm({ list }: { list: List }) {
     },
   });
   return (
-    <div className="absolute bottom-0 z-10 w-full rounded-b-xl bg-neutral-200  p-4 transition-all">
+    <div className="absolute bottom-0 z-10 w-full rounded-b-xl bg-[#ebecf0]  p-4 transition-all">
       <Formik
         initialValues={{ title: "", listId: list.id }}
         validationSchema={toFormikValidationSchema(CreateTaskSchema)}
@@ -214,12 +214,14 @@ export function ListActionMenu({ list }: { list: List }) {
 }
 
 export function UpdateListName({ list }: { list: List }) {
+  const InputRef = useRef(null);
   const mutation = api.board.updateList.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: () => {
       Toast({ content: "List renamed successfully!", status: "success" });
+      InputRef?.current?.blur();
     },
   });
 
@@ -227,7 +229,7 @@ export function UpdateListName({ list }: { list: List }) {
     <Formik
       initialValues={{ name: list.name, listId: list.id }}
       validationSchema={toFormikValidationSchema(UpdateListSchema)}
-      onSubmit={(values) => {
+      onSubmit={(values, {}) => {
         mutation.mutate(values);
       }}
     >
@@ -235,6 +237,7 @@ export function UpdateListName({ list }: { list: List }) {
         <Field name="name">
           {({ field, form, meta }: FieldProps) => (
             <input
+              ref={InputRef}
               className="border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none hover:border-b-2 focus:border-b-2 active:border-none"
               {...field}
             />
@@ -256,7 +259,7 @@ export function CreateList({ boardId }: { boardId: string }) {
       utils.board.getBoard.setData({ boardId }, (prev) => {
         return { ...prev, lists: [...prev.lists, newList] };
       });
-      Toast({ content: "List Created successfully!", status: "success" });
+      // Toast({ content: "List Created successfully!", status: "success" });
     },
   });
 

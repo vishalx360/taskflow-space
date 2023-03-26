@@ -41,8 +41,6 @@ function BoardPage() {
         utils.board.getTasks.invalidate({ listId: listsToUpdate[0] });
       listsToUpdate[1] &&
         utils.board.getTasks.invalidate({ listId: listsToUpdate[1] });
-
-      Toast({ content: "Task Moved!", status: "success" });
     },
   });
 
@@ -64,19 +62,16 @@ function BoardPage() {
       utils.board.getTasks.setData(
         { listId: destination.droppableId },
         (prev) => {
-          Toast({ content: "prev.len:" + prev?.length, status: "success" });
           // todo lookout for edge cases
           newPrevTaskId =
             destination.index > 0 ? prev[destination.index - 1].id : null;
           removed && prev?.splice(destination.index, 0, removed);
           // check if index is not out of bounds
-          Toast({ content: "prev.len:" + prev?.length, status: "success" });
           console.log(destination.index + 1, prev?.length);
 
           if (destination.index + 1 <= prev.length - 1) {
             newNextTaskId = prev[destination.index + 1].id;
           }
-
           return prev;
         }
       );
@@ -92,15 +87,6 @@ function BoardPage() {
         if (destination.index + 1 <= prev.length - 1) {
           newNextTaskId = prev[destination.index + 1].id;
         }
-        // Toast({
-        //   content: ` ${
-        //     newPrevTaskId ? prev[destination.index - 1]?.rank : "null"
-        //   } -> ${destination.index} -> ${
-        //     newNextTaskId ? prev[destination.index + 1].rank : "null"
-        //   }`,
-        //   status: "warning",
-        // });
-
         return prev;
       });
     }

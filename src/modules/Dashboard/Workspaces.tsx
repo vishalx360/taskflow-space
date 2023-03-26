@@ -16,7 +16,7 @@ function Workspaces() {
     return <WorkspaceListSkeleton />;
   }
   return (
-    <div className="">
+    <div className="pb-10">
       <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
         Your Workspaces
       </h1>
@@ -75,8 +75,8 @@ function Workspaces() {
         <div className="px-6">
           {workspaces?.length === 0 && "No Workspace Found"}
         </div>
-        <CreateNewWorkspaceModal />
       </div>
+      <CreateNewWorkspaceModal />
     </div>
   );
 }
