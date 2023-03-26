@@ -57,7 +57,13 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         // seed personal workspace with default board with list and taks
         if (isNewUser) {
-          await SeedPersonalWorkspace(user.id);
+          // check if account doesnt exist with same email
+          const emailExist = await prisma.user.count({
+            where: { email: user.email },
+          });
+          if (emailExist === 0) {
+            await SeedPersonalWorkspace(user.id);
+          }
         }
       }
       return token;
@@ -104,6 +110,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     GoogleProvider({
+      allowDangerousEmailAccountLinking: true,
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       authorization: {
