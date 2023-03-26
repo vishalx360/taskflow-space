@@ -1,15 +1,7 @@
-import Workspaces from "~/modules/Dashboard/Workspaces";
-import DashboardNavbar from "~/modules/Global/DashboardNavbar";
+import Dashboard from "~/modules/Dashboard/Dashboard";
 
 function DashboardPage() {
-  return (
-    <>
-      <DashboardNavbar />
-      <div className="container mx-auto mt-20 space-y-10">
-        <Workspaces />
-      </div>
-    </>
-  );
+  return <Dashboard />;
 }
 
 export default DashboardPage;

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, memo, useState } from "react";
-import { getGravatarUrl, type GravatarOptions } from "react-awesome-gravatar";
 import {
   FiChevronDown,
   FiExternalLink,
@@ -12,6 +11,7 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
+import getGravatar from "~/utils/getGravatar";
 
 const Items = [
   { title: "Dashboard", link: "/dashboard" },
@@ -124,10 +124,6 @@ function DashboardNavbar() {
 
 export default DashboardNavbar;
 
-export const GravtarOption: GravatarOptions = {
-  size: 50,
-  default: "retro",
-};
 function AccountMenu() {
   const { data: session } = useSession();
 
@@ -145,10 +141,7 @@ function AccountMenu() {
                 height={200}
                 width={200}
                 // generate default gravtar image
-                src={
-                  session?.user?.image ||
-                  getGravatarUrl(session?.user?.email, GravtarOption)
-                }
+                src={session?.user?.image || getGravatar(session?.user?.email)}
                 alt="avatar"
                 className="w-10 rounded-full ring-2 ring-white/40 transition-all group-hover:ring-4"
               />

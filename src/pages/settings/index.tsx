@@ -1,5 +1,7 @@
+import Settings from "~/modules/Settings/Settings";
+
 function SettingsPage() {
-  return <div className="p-10">SettingsPage</div>;
+  return <Settings />;
 }
 
 export default SettingsPage;
