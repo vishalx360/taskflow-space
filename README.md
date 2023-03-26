@@ -2,7 +2,7 @@
 
 ## Project Management Software | Jira clone
 
-![Vira Software Poster](poster.png?raw=true "Vira")
+![Vira Software Poster](public/poster.png?raw=true "Vira")
 
 ### Tech Stack
 
@@ -10,7 +10,7 @@
 - Prisma
 - Tailwind.CSS
 - Next-Auth
-- dndKit
+- react-beautiful-dnd
 <!-- - MongoDB
 - Next Auth -->
 
