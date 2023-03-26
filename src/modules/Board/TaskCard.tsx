@@ -25,7 +25,7 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
               }`}
             >
               <p className="text-md font-medium text-black line-clamp-2">
-                {task?.title} : {index} : {task.rank}
+                {task?.title}
               </p>
               {task?.description && (
                 <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
