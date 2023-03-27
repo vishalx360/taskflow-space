@@ -14,6 +14,7 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
