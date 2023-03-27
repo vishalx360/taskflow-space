@@ -1,8 +1,8 @@
-# Vira
+# taskflow.space
 
 ## Project Management Software | Jira clone
 
-![Vira Software Poster](public/poster.png?raw=true "Vira")
+![Taskflow.Space Software Poster](public/poster.png?raw=true "Taskflow.space")
 
 ### Tech Stack
 

@@ -46,8 +46,8 @@ function DashboardNavbar() {
               className="mr-3 "
               alt="Vishalx360 Logo"
             /> */}
-            <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
-              VIRA
+            <span className="self-center whitespace-nowrap text-3xl font-medium italic text-white">
+              taskflow.space
             </span>
           </Link>
         </div>

@@ -1,4 +1,4 @@
-vira.localhost {
+taskflow.localhost {
 	reverse_proxy localhost:3000
 }
 

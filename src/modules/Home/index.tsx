@@ -30,7 +30,7 @@ function Home() {
                 alt="Vishalx360 Logo"
               /> */}
               <span className="self-center whitespace-nowrap text-3xl font-semibold  text-black">
-                Vira
+                taskflow.space
               </span>
             </Link>
 
@@ -132,7 +132,7 @@ function Home() {
               Streamline Your Workflow and Conquer Tasks
             </h1>
             <p className="mt-6 text-gray-500">
-              Unleash Your Team&apos;s Potential with Vira <br /> The
+              Unleash Your Team&apos;s Potential with taskflow.space <br /> The
               Collaborative App for Effortless Task Management.
             </p>
             <Link

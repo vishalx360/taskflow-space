@@ -161,7 +161,7 @@ function BoardNavbar({ board }: { board: Board }) {
         </div>
         <Link href="/dashboard" className="flex items-center">
           <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
-            VIRA
+            taskflow.space
           </span>
         </Link>
         <div className="flex items-center gap-3">

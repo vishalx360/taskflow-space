@@ -10,12 +10,15 @@ export default class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <link rel="manifest" href="/site.webmanifest" />
           <meta charSet="utf-8" />
-          <meta name="title" content="Vira | Project Management made easy" />
+          <meta
+            name="title"
+            content="Taskflow.space | Project Management made easy"
+          />
           <meta name="description" content="Project Management made easy" />
           <meta property="og:type" content="website" />
           <meta
             property="og:title"
-            content="Vira | Project Management made easy"
+            content="Taskflow.space | Project Management made easy"
           />
           <meta
             property="og:description"
@@ -24,11 +27,11 @@ export default class MyDocument extends Document {
           <meta property="og:image" content={`${HOST_URL}/poster.png`} />
           <meta property="og:image:type" content="image/png" />
           <meta property="og:url" content={HOST_URL} />
-          <meta property="og:site_name" content="Vira" />
+          <meta property="og:site_name" content="taskflow.space" />
           <meta property="twitter:card" content="summary_large_image" />
           <meta
             name="keywords"
-            content="vira, project management, vishalx360"
+            content="taskflow.space, project management, vishalx360"
           />
         </Head>
         <body>
