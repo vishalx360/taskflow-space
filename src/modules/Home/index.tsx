@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import POSTER_URL from "../../../public/poster.png";
+import LogoImage from "../Global/LogoImage";
 
 const NavLinks = [
   { title: "Home", href: "/home" },
@@ -22,16 +23,7 @@ function Home() {
         <nav className="container mx-auto p-6 lg:flex lg:items-center lg:justify-between">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center">
-              {/* <Image
-                width="50"
-                height="50"
-                src="/images/icons/icon.svg"
-                className="mr-3 "
-                alt="Vishalx360 Logo"
-              /> */}
-              <span className="self-center whitespace-nowrap text-3xl font-semibold  text-black">
-                taskflow.space
-              </span>
+              <LogoImage dark />
             </Link>
 
             {/* <!-- Mobile menu button --> */}
@@ -132,7 +124,7 @@ function Home() {
               Streamline Your Workflow and Conquer Tasks
             </h1>
             <p className="mt-6 text-gray-500">
-              Unleash Your Team&apos;s Potential with taskflow.space <br /> The
+              Unleash Your Team&apos;s Potential with Taskflow <br /> The
               Collaborative App for Effortless Task Management.
             </p>
             <Link

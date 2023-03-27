@@ -12,6 +12,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import getGravatar from "~/utils/getGravatar";
+import LogoImage from "./LogoImage";
 
 const Items = [
   { title: "Dashboard", link: "/dashboard" },
@@ -39,16 +40,7 @@ function DashboardNavbar() {
         </button>
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-center">
-            {/* <Image
-              width="50"
-              height="50"
-              src="/images/icons/icon.svg"
-              className="mr-3 "
-              alt="Vishalx360 Logo"
-            /> */}
-            <span className="self-center whitespace-nowrap text-3xl font-medium italic text-white">
-              taskflow.space
-            </span>
+            <LogoImage />
           </Link>
         </div>
         <div className="absolute left-0 top-20 w-full md:hidden">

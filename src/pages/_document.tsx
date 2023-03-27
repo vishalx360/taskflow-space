@@ -8,6 +8,9 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
+          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <meta name="theme-color" content="#000000" />
           <link rel="manifest" href="/site.webmanifest" />
           <meta charSet="utf-8" />
           <meta

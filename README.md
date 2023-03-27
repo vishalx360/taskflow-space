@@ -1,8 +1,8 @@
 # taskflow.space
 
-## Project Management Software | Jira clone
+## Task Management Software
 
-![Taskflow.Space Software Poster](public/poster.png?raw=true "Taskflow.space")
+![Taskflow.Space Software Poster](public/site_poster.png?raw=true "Taskflow.space")
 
 ### Tech Stack
 

@@ -14,6 +14,7 @@ import TaskList, { CreateList } from "~/modules/Board/TaskList";
 import { GravtarOption } from "~/modules/Global/DashboardNavbar";
 import Toast from "~/modules/Global/Toast";
 import { api } from "~/utils/api";
+import LogoImage from "~/modules/Global/LogoImage";
 
 const DragDropContext = dynamic(
   () =>
@@ -159,10 +160,8 @@ function BoardNavbar({ board }: { board: Board }) {
             {board?.name}
           </span>
         </div>
-        <Link href="/dashboard" className="flex items-center">
-          <span className="self-center whitespace-nowrap text-3xl font-semibold italic text-white">
-            taskflow.space
-          </span>
+        <Link href="/" className="flex items-center">
+          <LogoImage />
         </Link>
         <div className="flex items-center gap-3">
           <MembersAvatars members={board?.members} />
