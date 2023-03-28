@@ -114,14 +114,16 @@ function Home() {
               className="absolute inset-x-0 top-20 z-20 block w-full rounded-b-xl bg-neutral-100 px-6 py-4 shadow-xl transition-all duration-300 ease-in-out"
             >
               <div className="flex flex-col space-y-5">
-                <div className=" mb-2 text-left">
-                  <h1 className="mt-3 text-sm font-medium">
-                    {session?.user?.name}
-                  </h1>
-                  <h1 className="text-xs font-medium text-black text-opacity-50">
-                    {session?.user.email}
-                  </h1>
-                </div>
+                {status === "authenticated" && (
+                  <div className=" mb-2 text-left">
+                    <h1 className="mt-3 text-sm font-medium">
+                      {session?.user?.name}
+                    </h1>
+                    <h1 className="text-xs font-medium text-black text-opacity-50">
+                      {session?.user.email}
+                    </h1>
+                  </div>
+                )}
 
                 {NavLinks.map((navlink) => (
                   <Link
@@ -133,14 +135,16 @@ function Home() {
                   </Link>
                 ))}
 
-                <button
-                  onClick={() => {
-                    void handelLogout();
-                  }}
-                  className="text-left text-gray-700 transition-colors duration-300  lg:mx-8"
-                >
-                  Logout
-                </button>
+                {status === "authenticated" && (
+                  <button
+                    onClick={() => {
+                      void handelLogout();
+                    }}
+                    className="text-left text-gray-700 transition-colors duration-300  lg:mx-8"
+                  >
+                    Logout
+                  </button>
+                )}
               </div>
 
               {/* <a
