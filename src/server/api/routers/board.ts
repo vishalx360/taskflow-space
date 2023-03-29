@@ -440,4 +440,37 @@ export const BoardRouter = createTRPCRouter({
         where: { id: input.listId },
       });
     }),
+
+  clearList: protectedProcedure
+    .input(z.object({ listId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: input.listId },
+        select: { boardId: true },
+      });
+      if (!list) {
+        throw new Error("List not found");
+      }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, members: true },
+      });
+      if (!board) {
+        throw new Error("Board not found");
+      }
+
+      const hasPermission = board.members.find(
+        (member) => member.id === ctx.session.user.id
+      );
+      if (!hasPermission) {
+        throw new Error("Unauthorized");
+      }
+
+      return ctx.prisma.task.deleteMany({
+        where: { listId: input.listId },
+      });
+
+    }),
 });

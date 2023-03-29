@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { type List, type Task } from "@prisma/client";
+import { Board, type List, type Task } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import dynamic from "next/dynamic";
 import { Fragment, memo, useRef } from "react";
@@ -195,16 +195,12 @@ export function ListActionMenu({ list }: { list: List }) {
         <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-1 py-1 ">
             <Menu.Item>
-              {/* TODO: make functionality */}
-              <button className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-red-100">
-                Delete list
-              </button>
+              {({ close }) => (
+                <DeleteListButton closeMenu={close} list={list} />
+              )}
             </Menu.Item>
             <Menu.Item>
-              {/* TODO: make functionality */}
-              <button className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-neutral-100">
-                Clear all tasks
-              </button>
+              {({ close }) => <ClearListButton closeMenu={close} list={list} />}
             </Menu.Item>
           </div>
         </Menu.Items>
@@ -354,5 +350,74 @@ export function TaskListSkeleton({ NumberOfTasks }: { NumberOfTasks: number }) {
         {Tasks}
       </div>
     </div>
+  );
+}
+
+function DeleteListButton({
+  closeMenu,
+  list,
+}: {
+  closeMenu: () => void;
+  list: List;
+}) {
+  const utils = api.useContext();
+
+  const mutation = api.board.deleteList.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+      closeMenu();
+    },
+    onSuccess: () => {
+      utils.board.getBoard.setData({ boardId: list.boardId }, (prev: Board) => {
+        return {
+          ...prev,
+          lists: prev.lists.filter((oldList) => oldList.id !== list.id),
+        };
+      });
+      closeMenu();
+    },
+  });
+  return (
+    <button
+      disabled={mutation.isLoading}
+      onClick={() => {
+        mutation.mutate({ listId: list.id });
+      }}
+      className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-red-100"
+    >
+      Delete list
+    </button>
+  );
+}
+
+function ClearListButton({
+  closeMenu,
+  list,
+}: {
+  closeMenu: () => void;
+  list: List;
+}) {
+  const utils = api.useContext();
+
+  const mutation = api.board.clearList.useMutation({
+    onError(error) {
+      Toast({ content: error.message, status: "error" });
+      closeMenu();
+    },
+    onSuccess: () => {
+      utils.board.getTasks.setData({ listId: list.id }, []);
+      closeMenu();
+    },
+  });
+  return (
+    <button
+      disabled={mutation.isLoading}
+      onClick={() => {
+        mutation.mutate({ listId: list.id });
+      }}
+      className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-red-100"
+    >
+      Clear list
+    </button>
   );
 }
