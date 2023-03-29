@@ -7,7 +7,16 @@ export default async function SeedPersonalWorkspace(userId: string) {
   const Workspace = await prisma.workspace.create({
     data: {
       name: "Personal Workspace",
-      userId,
+      members: {
+        create: {
+          role: "OWNER",
+          user: {
+            connect: {
+              id: userId
+            }
+          }
+        }
+      },
       personal: true,
     },
   });
@@ -22,13 +31,6 @@ export default async function SeedPersonalWorkspace(userId: string) {
             connect: {
               id: Workspace.id,
             },
-          },
-          members: {
-            connect: [
-              {
-                id: userId,
-              },
-            ],
           },
           background: boardData.background,
         },

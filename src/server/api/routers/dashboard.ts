@@ -11,7 +11,7 @@ import {
 export const DashboardRouter = createTRPCRouter({
   getAllWorkspace: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.workspace.findMany({
-      where: { userId: ctx.session.user.id },
+      where: { members: { some: { userId: ctx.session.user.id } } },
     });
   }),
 
@@ -19,14 +19,41 @@ export const DashboardRouter = createTRPCRouter({
     .input(z.object({ workspaceId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.prisma.board.findMany({
-        where: { workspaceId: input.workspaceId },
+        where: { workspaceId: input.workspaceId, Workspace: { members: { some: { userId: ctx.session.user.id } } } },
         orderBy: { updatedAt: "desc" }
       });
     }),
 
   deleteBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        select: { workspaceId: true }
+      })
+
+      if (!board) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found.",
+        });
+      }
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to delete this board.",
+        });
+      }
+
       return ctx.prisma.board.delete({
         where: { id: input.boardId },
       });
@@ -45,11 +72,26 @@ export const DashboardRouter = createTRPCRouter({
           message: "Board already exist with same name in the workspace.",
         });
       }
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to create a board in this workspace",
+        });
+      }
+
       return ctx.prisma.board.create({
         data: {
           name: input.name,
           workspaceId: input.workspaceId,
-          members: { connect: { id: ctx.session.user.id } },
         },
       });
     }),
@@ -61,7 +103,7 @@ export const DashboardRouter = createTRPCRouter({
       const nameTaken = await ctx.prisma.workspace.count({
         where: {
           name: input.name,
-          userId: ctx.session.user.id,
+          members: { some: { userId: ctx.session.user.id } },
         },
       });
       if (nameTaken) {
@@ -71,10 +113,11 @@ export const DashboardRouter = createTRPCRouter({
         });
       }
       console.log(ctx.session.user.id);
+
       return ctx.prisma.workspace.create({
         data: {
           name: input.name,
-          userId: ctx.session.user.id,
+          members: { create: { role: "OWNER", userId: ctx.session.user.id } }
         },
       });
     }),
@@ -94,8 +137,15 @@ export const DashboardRouter = createTRPCRouter({
           message: "Workspace not found.",
         });
       }
-      // check if user is owner of the workspace
-      if (Workspace.userId !== ctx.session.user.id) {
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        },
+      });
+
+      if (!hasPermission) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You dont have permission to rename this workspace.",
@@ -105,7 +155,7 @@ export const DashboardRouter = createTRPCRouter({
       const nameTaken = await ctx.prisma.workspace.count({
         where: {
           name: input.name,
-          userId: ctx.session.user.id,
+          members: { some: { userId: ctx.session.user.id } },
         },
       });
       if (nameTaken) {
@@ -114,13 +164,10 @@ export const DashboardRouter = createTRPCRouter({
           message: "Workspace already exist with the choosen name.",
         });
       }
+
       return ctx.prisma.workspace.update({
-        where: {
-          id: input.workspaceId,
-        },
-        data: {
-          name: input.name,
-        },
+        where: { id: input.workspaceId },
+        data: { name: input.name },
       });
     }),
 
@@ -143,17 +190,23 @@ export const DashboardRouter = createTRPCRouter({
           message: "Workspace not found.",
         });
       }
-      // check if user is owner of the workspace
-      if (Workspace.userId !== ctx.session.user.id) {
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER"] },
+        },
+      });
+
+      if (!hasPermission) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You dont have permission to delete this workspace.",
+          message: "You dont have permission to rename this workspace.",
         });
       }
+
       return ctx.prisma.workspace.delete({
-        where: {
-          id: input.workspaceId,
-        },
+        where: { id: input.workspaceId }
       });
     }),
 });

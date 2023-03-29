@@ -24,7 +24,7 @@ function BoardNavbar({ board }: { board: Board }) {
           <LogoImage />
         </Link>
         <div className="flex items-center gap-3">
-          <BoardMembersModal members={board?.members} />
+          <BoardMembersModal workspaceId={board?.workspaceId} />
           <BoardSettingsModal board={board} />
         </div>
       </div>

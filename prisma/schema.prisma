@@ -15,13 +15,30 @@ datasource db {
 }
 
 model Workspace {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
+    id        String            @id @default(cuid())
+    createdAt DateTime          @default(now())
     name      String
     boards    Board[]
-    owner     User     @relation(fields: [userId], references: [id])
-    userId    String
-    personal  Boolean  @default(false)
+    personal  Boolean           @default(false)
+    members   WorkspaceMember[]
+}
+
+enum WorkspaceMemberRoles {
+    OWNER // Can invite new members, delete existing members and admins and delete the workspace or transfer ownership
+    ADMIN // Can invite new members and delete existing members
+    MEMBER // Can create or update tasks, lists but can not delete the workspace or any board
+}
+
+model WorkspaceMember {
+    id          String               @id @default(cuid())
+    userId      String
+    user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role        WorkspaceMemberRoles @default(MEMBER)
+    Workspace   Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+    workspaceId String
+    createdAt   DateTime             @default(now())
+
+    @@index([userId, workspaceId])
 }
 
 model Board {
@@ -32,7 +49,6 @@ model Board {
     Workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
     workspaceId String
     lists       List[]
-    members     User[]
     background  String    @default("gradient:linear-gradient(to right, #0f2027, #203a43, #2c5364)")
 }
 
@@ -46,27 +62,38 @@ model List {
 }
 
 model Task {
-    id          String   @id @default(cuid())
-    createdAt   DateTime @default(now())
+    id          String       @id @default(cuid())
+    createdAt   DateTime     @default(now())
     title       String
-    description String?  @db.Text
-    list        List     @relation(fields: [listId], references: [id], onDelete: Cascade)
+    description String?      @db.Text
+    list        List         @relation(fields: [listId], references: [id], onDelete: Cascade)
     listId      String
     rank        String
+    members     TaskMember[]
+}
+
+model TaskMember {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    Task      Task     @relation(fields: [taskId], references: [id])
+    taskId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
 }
 
 // Necessary for Next auth ----------------------------------------------------
 model User {
-    id            String      @id @default(cuid())
+    id            String            @id @default(cuid())
     name          String?
-    email         String?     @unique
+    email         String?           @unique
     emailVerified DateTime?
     image         String?
     password      String?
     accounts      Account[]
     sessions      Session[]
-    workspaces    Workspace[]
-    boards        Board[]
+    // extra fields
+    workspaces    WorkspaceMember[]
+    tasks         TaskMember[]
 }
 
 model Account {

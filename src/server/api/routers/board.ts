@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { LexoRank } from "lexorank";
 import { z } from "zod";
 
@@ -12,6 +13,29 @@ import {
 } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
+  getWorkspaceMembers: protectedProcedure
+    .input(z.object({ workspaceId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.workspaceMember.findMany({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+              image: true
+            }
+          }
+        },
+        orderBy: {
+          role: "desc"
+        }
+      });
+    }),
+
   getBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -19,15 +43,10 @@ export const BoardRouter = createTRPCRouter({
         where: { id: input.boardId },
         data: { updatedAt: new Date() },
       });
-
-      console.log(input.boardId);
       return ctx.prisma.board.findUnique({
         where: { id: input.boardId },
         include: {
           lists: true,
-          members: {
-            select: { name: true, email: true, image: true },
-          },
         },
       });
     }),
@@ -37,17 +56,27 @@ export const BoardRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const board = await ctx.prisma.board.findUnique({
         where: { id: input.boardId },
-        select: { members: true },
+        select: { workspaceId: true },
       });
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found.",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to update this board.",
+        });
       }
 
       await ctx.prisma.board.update({
@@ -66,21 +95,32 @@ export const BoardRouter = createTRPCRouter({
   deleteBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: input.boardId },
-        select: { members: true },
+        select: { workspaceId: true },
       });
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found.",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to delete this board.",
+        });
       }
+
 
       return ctx.prisma.board.delete({
         where: { id: input.boardId },
@@ -97,22 +137,35 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true, },
       });
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
 
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to create a task in this board.",
+        });
       }
 
       let rank = LexoRank.middle().toString();
@@ -138,7 +191,43 @@ export const BoardRouter = createTRPCRouter({
 
   getTasks: protectedProcedure
     .input(z.object({ listId: z.string() }))
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: input.listId },
+        select: { boardId: true },
+      });
+      if (!list) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
+      }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, },
+      });
+      if (!board) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
+      }
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to read tasks.",
+        });
+      }
       // sort by rank
       return ctx.prisma.task.findMany({
         where: { listId: input.listId },
@@ -148,7 +237,53 @@ export const BoardRouter = createTRPCRouter({
 
   getTask: protectedProcedure
     .input(z.object({ taskId: z.string() }))
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      const task = await ctx.prisma.task.findUnique({
+        where: { id: input.taskId },
+        select: { listId: true },
+      });
+      if (!task) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Task not found",
+        });
+      }
+      // check if list exists
+      const list = await ctx.prisma.list.findUnique({
+        where: { id: task.listId },
+        select: { boardId: true },
+      });
+      if (!list) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
+      }
+      // check if list belongs to user
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: list.boardId },
+        select: { workspaceId: true, },
+      });
+      if (!board) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
+      }
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to read this task.",
+        });
+      }
       return ctx.prisma.task.findUnique({
         where: { id: input.taskId },
       });
@@ -162,7 +297,10 @@ export const BoardRouter = createTRPCRouter({
         select: { listId: true },
       });
       if (!task) {
-        throw new Error("Task not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Task not found",
+        });
       }
       // check if list exists
       const list = await ctx.prisma.list.findUnique({
@@ -170,22 +308,36 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to update this task.",
+        });
       }
 
       return ctx.prisma.task.update({
@@ -205,7 +357,10 @@ export const BoardRouter = createTRPCRouter({
         select: { listId: true },
       });
       if (!task) {
-        throw new Error("Task not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Task not found",
+        });
       }
       // check if list exists
       const list = await ctx.prisma.list.findUnique({
@@ -213,30 +368,39 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to move this task.",
+        });
       }
 
-      // if putting on empty list
-      let rank = LexoRank.middle().toString();
 
-      let updatePrevTaskBucket;
-      let updateNextTaskBucket;
-      // get previous task and next task
       let prevTask;
       let nextTask;
 
@@ -252,48 +416,18 @@ export const BoardRouter = createTRPCRouter({
           select: { rank: true },
         });
       }
-      console.log("--------INPUT-START--------");
-      console.log({
-        ...input,
-        prevTaskRank: prevTask?.rank,
-        nextTaskRank: nextTask?.rank,
-      });
-      console.log("--------INPUT-END--------");
-
-      // TODO: check for rebalancing
-      // if new rank if euqal to nextTask rank, then rebalance to next bucket
-      // if putting in middle, both next and prev exist
+      // if putting on empty list
+      let rank = LexoRank.middle().toString();
+      // if putting in middle
       if (prevTask && nextTask) {
-        console.log(
-          "--------putting in middle, both next and prev exist : ",
-          prevTask?.rank,
-          nextTask?.rank
-        );
-        rank = LexoRank.parse(prevTask?.rank)
-          .between(LexoRank.parse(nextTask?.rank))
-          .toString();
-        console.log(
-          "xxxxxxxxxxxxx:   ",
-          rank,
-          LexoRank.parse(nextTask?.rank).toString()
-        );
-
-        if (rank === LexoRank.parse(nextTask?.rank).toString()) {
-          // generate new rank for prevtask currenttask nexttask in new bucket
-          console.log(
-            "xxxxxxxxxxxxx:   ",
-            LexoRank.parse(nextTask?.rank).inNextBucket()
-          );
-        }
+        rank = LexoRank.parse(prevTask?.rank).between(LexoRank.parse(nextTask?.rank)).toString();
       }
       // if putting on bottom and prev exist
       if (prevTask && !nextTask) {
-        console.log("--------putting on top and next exist : ", prevTask?.rank);
         rank = LexoRank.parse(prevTask?.rank).genNext().toString();
       }
       // if putting on top and next exist
       if (!prevTask && nextTask) {
-        console.log("--------putting on top and next exist : ", nextTask?.rank);
         rank = LexoRank.parse(nextTask?.rank).genPrev().toString();
       }
 
@@ -316,7 +450,10 @@ export const BoardRouter = createTRPCRouter({
         select: { listId: true },
       });
       if (!task) {
-        throw new Error("Task not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Task not found",
+        });
       }
       // check if list exists
       const list = await ctx.prisma.list.findUnique({
@@ -324,28 +461,43 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to delete this task.",
+        });
       }
 
       return ctx.prisma.task.delete({
         where: { id: input.taskId },
       });
     }),
+
   // List
   createList: protectedProcedure
     .input(CreateListSchema)
@@ -353,17 +505,28 @@ export const BoardRouter = createTRPCRouter({
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: input.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to create list.",
+        });
       }
 
       const listNameExist = await ctx.prisma.list.count({
@@ -391,22 +554,36 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to update list.",
+        });
       }
 
       return ctx.prisma.list.update({
@@ -426,22 +603,36 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to delete list.",
+        });
       }
 
       return ctx.prisma.list.delete({
@@ -458,22 +649,36 @@ export const BoardRouter = createTRPCRouter({
         select: { boardId: true },
       });
       if (!list) {
-        throw new Error("List not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
       }
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, members: true },
+        select: { workspaceId: true },
       });
+
       if (!board) {
-        throw new Error("Board not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found",
+        });
       }
 
-      const hasPermission = board.members.find(
-        (member) => member.id === ctx.session.user.id
-      );
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        },
+      });
+
       if (!hasPermission) {
-        throw new Error("Unauthorized");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to clear list.",
+        });
       }
 
       return ctx.prisma.task.deleteMany({
