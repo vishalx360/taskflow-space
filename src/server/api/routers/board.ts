@@ -3,12 +3,14 @@ import { LexoRank } from "lexorank";
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
 import {
   CreateListSchema,
   CreateTaskSchema,
   MoveTaskSchema,
   UpdateBoardSchema,
   UpdateListSchema,
+  InviteWorkspaceModalSchema,
   UpdateTaskSchema
 } from "~/utils/ValidationSchema";
 
@@ -32,6 +34,120 @@ export const BoardRouter = createTRPCRouter({
         },
         orderBy: {
           role: "desc"
+        }
+      });
+    }),
+
+  inviteMember: protectedProcedure
+    .input(InviteWorkspaceModalSchema)
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: input.email },
+      });
+      // TODO: if user not found, send email to invite
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found with the email.",
+        });
+      }
+
+      const hasPermission = await ctx.prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        }
+      });
+
+      if (!hasPermission || !hasPermission.role) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to invite member.",
+        });
+      }
+
+      const ALLOWED_ROLES = ALLOWED_ROLES_TO_INVITE[hasPermission.role]
+
+      if (!ALLOWED_ROLES.includes(input.role as never)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to invite member with selected role.",
+        });
+      }
+
+      const isMember = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: user.id,
+        },
+      });
+
+      if (isMember) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User already a member.",
+        });
+      }
+
+      return ctx.prisma.workspaceMemberInvitation.create({
+        data: {
+          workspaceId: input.workspaceId,
+          role: input.role,
+          userId: user.id
+        },
+      });
+    }),
+
+  getAllPendingInvitations: protectedProcedure
+    .input(z.object({ workspaceId: z.string() }))
+    .query(async ({ ctx, input }) => {
+
+      const hasPermission = await ctx.prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        }
+      });
+
+      if (!hasPermission || !hasPermission.role) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to view pending invitations.",
+        });
+      }
+
+      return ctx.prisma.workspaceMemberInvitation.findMany({
+        where: {
+          workspaceId: input.workspaceId,
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+              image: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: "desc"
+        }
+      });
+    }),
+
+  getAllMyInvites: protectedProcedure
+    .query(async ({ ctx }) => {
+      return ctx.prisma.workspaceMemberInvitation.findMany({
+        where: {
+          userId: ctx.session.user.id,
+        },
+        include: {
+          Workspace: { select: { name: true, } }
+        },
+        orderBy: {
+          createdAt: "desc"
         }
       });
     }),

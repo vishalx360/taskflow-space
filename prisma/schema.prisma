@@ -15,12 +15,13 @@ datasource db {
 }
 
 model Workspace {
-    id        String            @id @default(cuid())
-    createdAt DateTime          @default(now())
-    name      String
-    boards    Board[]
-    personal  Boolean           @default(false)
-    members   WorkspaceMember[]
+    id                         String                      @id @default(cuid())
+    createdAt                  DateTime                    @default(now())
+    name                       String
+    boards                     Board[]
+    personal                   Boolean                     @default(false)
+    members                    WorkspaceMember[]
+    workspaceMemberInvitations WorkspaceMemberInvitation[]
 }
 
 enum WorkspaceMemberRoles {
@@ -36,9 +37,19 @@ model WorkspaceMember {
     role        WorkspaceMemberRoles @default(MEMBER)
     Workspace   Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
     workspaceId String
-    createdAt   DateTime             @default(now())
+    memberSince DateTime             @default(now())
 
     @@index([userId, workspaceId])
+}
+
+model WorkspaceMemberInvitation {
+    id          String               @id @default(cuid())
+    user        User                 @relation(fields: [userId], references: [id])
+    userId      String
+    role        WorkspaceMemberRoles @default(MEMBER)
+    Workspace   Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+    workspaceId String
+    createdAt   DateTime             @default(now())
 }
 
 model Board {
@@ -83,17 +94,18 @@ model TaskMember {
 
 // Necessary for Next auth ----------------------------------------------------
 model User {
-    id            String            @id @default(cuid())
-    name          String?
-    email         String?           @unique
-    emailVerified DateTime?
-    image         String?
-    password      String?
-    accounts      Account[]
-    sessions      Session[]
+    id                   String                      @id @default(cuid())
+    name                 String?
+    email                String?                     @unique
+    emailVerified        DateTime?
+    image                String?
+    password             String?
+    accounts             Account[]
+    sessions             Session[]
     // extra fields
-    workspaces    WorkspaceMember[]
-    tasks         TaskMember[]
+    workspaces           WorkspaceMember[]
+    tasks                TaskMember[]
+    workspaceInvitations WorkspaceMemberInvitation[]
 }
 
 model Account {

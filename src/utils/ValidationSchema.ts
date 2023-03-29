@@ -87,3 +87,10 @@ export const UpdateBoardSchema = z.object({
     .max(50, "Must contain less than 50 characters"),
   background: z.string(),
 });
+
+
+export const InviteWorkspaceModalSchema = z.object({
+  email: z.string().email("Please enter valid email"),
+  role: z.enum(["ADMIN", "MEMBER"]),
+  workspaceId: z.string(),
+});

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import BoardSettingsModal from "~/modules/Board/BoardSettingsModal/BoardSettingsModal";
 import LogoImage from "~/modules/Global/LogoImage";
-import BoardMembersModal from "./BoardMembersModal/BoardMembersModal";
+import WorkspaceMembersModal from "./WorkspaceMembersModal/WorkspaceMembersModal";
 
 function BoardNavbar({ board }: { board: Board }) {
   return (
@@ -24,7 +24,7 @@ function BoardNavbar({ board }: { board: Board }) {
           <LogoImage />
         </Link>
         <div className="flex items-center gap-3">
-          <BoardMembersModal workspaceId={board?.workspaceId} />
+          <WorkspaceMembersModal workspaceId={board?.workspaceId} />
           <BoardSettingsModal board={board} />
         </div>
       </div>
