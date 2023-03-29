@@ -8,7 +8,10 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "pretify": "prettier -w ."
+    "pretify": "prettier -w .",
+    "resetdb": "prisma migrate reset --preview-feature",
+    "postresetdb": "prisma db push",
+    "updatedb": "prisma db push"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
