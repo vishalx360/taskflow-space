@@ -49,3 +49,9 @@ export function EmptyListCard() {
     </div>
   );
 }
+
+export function TaskCardSkeleton() {
+  return (
+    <div className="border-1 min-h-[60px] w-full animate-pulse rounded-xl border-gray-400 bg-gray-400/50 py-3 px-4 shadow" />
+  );
+}

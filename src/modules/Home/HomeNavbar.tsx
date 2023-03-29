@@ -1,9 +1,9 @@
-import { Transition } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import { Session } from "@prisma/client";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, memo, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import getGravatar from "~/utils/getGravatar";
 import LogoImage from "../Global/LogoImage";

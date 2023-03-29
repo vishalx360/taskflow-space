@@ -16,7 +16,6 @@ function LogoImage({
       width={width}
       height="50"
       src={dark ? BLACK_LOGO_URL : LOGO_URL}
-      placeholder="blur"
       className={className}
       alt="Taskflow.space Logo"
       quality={100}

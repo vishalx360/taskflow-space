@@ -13,7 +13,7 @@ import {
 } from "~/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
-import { EmptyListCard, TaskCard } from "./TaskCard";
+import { EmptyListCard, TaskCard, TaskCardSkeleton } from "./TaskCard";
 
 export const LIST_BG_COLOR = "#ebecf0";
 
@@ -38,7 +38,7 @@ function TaskList({ list }: { list: List }) {
   console.log("rerendering", list.name);
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return <TaskListSkeleton NumberOfTasks={10} />;
   }
 
   return (
@@ -337,6 +337,21 @@ export function CreateList({ boardId }: { boardId: string }) {
             </Form>
           </Formik>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function TaskListSkeleton({ NumberOfTasks }: { NumberOfTasks: number }) {
+  const Tasks = [];
+  for (let i = 0; i < NumberOfTasks; i++) {
+    Tasks.push(<TaskCardSkeleton />);
+  }
+  return (
+    <div className="relative h-fit max-h-[79vh] w-[350px] animate-pulse   rounded-2xl  bg-gray-300 ring-black md:w-[320px]">
+      <div className="mt-0  space-y-2 p-4">
+        <div className=" mb-5 w-28 rounded-xl bg-gray-400/50 p-4" />
+        {Tasks}
       </div>
     </div>
   );
