@@ -61,7 +61,7 @@ function DashboardNavbar() {
                     : {};
                   return (
                     <li onClick={toggel} key={item.title}>
-                      <a
+                      <Link
                         href={item.link}
                         {...externalProps}
                         className={`decoration-accent hover:bg-accent md:hover:text-accent block scroll-smooth rounded-xl py-2 pl-3 pr-4 text-lg text-gray-50 decoration-2 underline-offset-8 md:border-0 md:p-0 md:hover:bg-transparent ${
@@ -72,7 +72,7 @@ function DashboardNavbar() {
                         {item.isExternal && (
                           <FiExternalLink className="text-inherit" />
                         )}
-                      </a>
+                      </Link>
                     </li>
                   );
                 })}

@@ -4,7 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, memo, useState } from "react";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiLogOut } from "react-icons/fi";
 import getGravatar from "~/utils/getGravatar";
 import LogoImage from "../Global/LogoImage";
 
