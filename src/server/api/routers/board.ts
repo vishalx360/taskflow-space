@@ -8,7 +8,7 @@ import {
   MoveTaskSchema,
   UpdateBoardSchema,
   UpdateListSchema,
-  UpdateTaskSchema,
+  UpdateTaskSchema
 } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({

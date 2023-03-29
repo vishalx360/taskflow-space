@@ -5,7 +5,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   CreateNewBoardSchema,
   CreateNewWorkspaceSchema,
-  RenameWorkspaceSchema,
+  RenameWorkspaceSchema
 } from "~/utils/ValidationSchema";
 
 export const DashboardRouter = createTRPCRouter({

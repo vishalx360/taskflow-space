@@ -1,6 +1,6 @@
 import Image from "next/image";
-import LOGO_URL from "../../../public/logo/taskflow-full-logo.png";
 import BLACK_LOGO_URL from "../../../public/logo/taskflow-full-logo-black.png";
+import LOGO_URL from "../../../public/logo/taskflow-full-logo.png";
 
 function LogoImage({
   width = 250,

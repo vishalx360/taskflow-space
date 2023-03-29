@@ -4,7 +4,6 @@ import { FaGoogle } from "react-icons/fa";
 import { MdDevices } from "react-icons/md";
 import getGravatar from "~/utils/getGravatar";
 import DashboardNavbar from "../Global/DashboardNavbar";
-import Divider from "../Global/Divider";
 import PrimaryButton from "../Global/PrimaryButton";
 
 function Settings() {
