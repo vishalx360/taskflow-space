@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import LogoImage from "~/modules/Global/LogoImage";
 import PasswordInput from "~/modules/Global/PasswordInput";
 import PrimaryButton from "~/modules/Global/PrimaryButton";
 import Toast from "~/modules/Global/Toast";
@@ -46,14 +47,10 @@ export default function SignInPage() {
     <>
       <section className="bg-neutral-100 dark:bg-gray-900">
         <div className="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8 lg:py-0">
-          <a
-            href="#"
-            className="mb-8 flex items-center text-5xl font-normal tracking-widest text-gray-900 dark:text-white"
-          >
-            {/* <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" /> */}
-            taskflow.space
-          </a>
-          <div className="w-full rounded-lg bg-white shadow-lg dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+          <div className="my-20">
+            <LogoImage dark width={300} />
+          </div>
+          <div className="w-full rounded-xl bg-white shadow-lg dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-xl font-medium leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
                 Sign in to your account

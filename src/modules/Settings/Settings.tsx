@@ -73,7 +73,7 @@ function Settings() {
               </PrimaryButton>
             </div>
             {/* sessions manager */}
-            <div>
+            {/* <div>
               <h2 className="text-xl font-medium">Sessions</h2>
               <p className="text-neutral-700">
                 If you need to, you can log out of one or all of your other
@@ -89,11 +89,11 @@ function Settings() {
               >
                 Manage Sessions
               </PrimaryButton>
-            </div>
+            </div> */}
             {/* delete account manager */}
             <div>
               <h2 className="text-xl font-medium">Danger Zone</h2>
-              <p className="text-neutral-700">by deleting</p>
+              <p className="text-neutral-700">By deleting your account</p>
               <PrimaryButton
                 // isLoading={mutation.isLoading}
                 // onClick={() => mutation.mutate({ workspaceId: workspace.id })}
