@@ -366,6 +366,14 @@ export const BoardRouter = createTRPCRouter({
         throw new Error("Unauthorized");
       }
 
+      const listNameExist = await ctx.prisma.list.count({
+        where: { name: input.name, boardId: input.boardId },
+      });
+
+      if (listNameExist) {
+        throw new Error("List name already exist");
+      }
+
       return ctx.prisma.list.create({
         data: {
           boardId: input.boardId,
