@@ -20,10 +20,10 @@ function BoardNavbar({ board }: { board: Board }) {
             {board?.name}
           </span>
         </div>
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="hidden items-center lg:flex">
           <LogoImage />
         </Link>
-        <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-3 lg:flex">
           <WorkspaceMembersModal workspaceId={board?.workspaceId} />
           <BoardSettingsModal board={board} />
         </div>

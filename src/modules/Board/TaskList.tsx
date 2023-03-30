@@ -45,7 +45,7 @@ function TaskList({ list }: { list: List }) {
     <Droppable droppableId={list.id}>
       {(provided) => (
         <div
-          className="prevent-select relative h-fit max-h-[79vh] w-[350px] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
+          className="prevent-select relative h-fit max-h-[79vh] w-[300px] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
           key={`main:${list.name}`}
         >
           <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pt-3 pb-2 text-black">
@@ -102,7 +102,6 @@ export function AddToListForm({ list }: { list: List }) {
       await utils.board.getTasks
         .invalidate({ listId: list.id })
         .catch((err) => console.log(err));
-      Toast({ content: "TEMP:Added Task Successfully", status: "success" });
     },
   });
   return (

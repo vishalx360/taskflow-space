@@ -26,7 +26,7 @@ function DashboardNavbar() {
   }
   const pathname = usePathname();
   return (
-    <nav className="fixed top-0 z-50 flex h-20 w-full items-center justify-center bg-black text-white shadow sm:px-4">
+    <nav className="fixed top-0 z-50 flex w-full items-center justify-center bg-black py-2 text-white shadow sm:px-4 ">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         <button
           onClick={toggel}
@@ -40,10 +40,10 @@ function DashboardNavbar() {
         </button>
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-center">
-            <LogoImage />
+            <LogoImage className="w-[180px] lg:w-auto" />
           </Link>
         </div>
-        <div className="absolute left-0 top-20 w-full md:hidden">
+        <div className="absolute left-0 top-14 w-full md:hidden">
           <Transition
             show={isOpen}
             enter="transition-opacity ease-in-out duration-300 transform"
@@ -125,22 +125,20 @@ function AccountMenu() {
   }
   return (
     <div>
-      <Menu as="div" className="relative inline-block text-left">
-        <div>
-          <Menu.Button className="group inline-flex w-full items-center justify-center gap-2 rounded-md md:gap-5">
-            {session?.user?.email && (
-              <Image
-                height={200}
-                width={200}
-                // generate default gravtar image
-                src={session?.user?.image || getGravatar(session?.user?.email)}
-                alt="avatar"
-                className="w-10 rounded-full ring-2 ring-white/40 transition-all group-hover:ring-4"
-              />
-            )}
-            <FiChevronDown className="text-xl" />
-          </Menu.Button>
-        </div>
+      <Menu as="div" className="relative inline-block text-left ">
+        <Menu.Button className="group inline-flex h-full w-full items-center justify-center gap-2 rounded-md md:gap-5">
+          {session?.user?.email && (
+            <Image
+              height={200}
+              width={200}
+              // generate default gravtar image
+              src={session?.user?.image || getGravatar(session?.user?.email)}
+              alt="avatar"
+              className="w-8 rounded-full ring-2 ring-white/40 transition-all group-hover:ring-4 lg:w-10"
+            />
+          )}
+          <FiChevronDown className="text-xl " />
+        </Menu.Button>
         <Transition
           as={Fragment}
           enter="transition ease-out duration-100"
