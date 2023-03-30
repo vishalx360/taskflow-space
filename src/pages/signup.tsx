@@ -36,14 +36,17 @@ export default function SignInPage() {
   }
   return (
     <>
-      <section className="bg-neutral-100 dark:bg-gray-900">
+      <section className="bg-neutral-100 dark:bg-neutral-900">
         <div className="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8 lg:py-0">
-          <div className="my-20">
+          <div className="my-10 block dark:hidden lg:my-20">
             <LogoImage dark width={300} />
           </div>
-          <div className="w-full rounded-xl bg-white shadow-lg dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+          <div className="my-10 hidden dark:block lg:my-20">
+            <LogoImage width={300} />
+          </div>
+          <div className="w-full rounded-xl bg-white shadow-lg dark:border dark:border-neutral-700 dark:bg-neutral-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
-              <h1 className="text-xl font-medium leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
+              <h1 className="text-xl font-medium leading-tight tracking-tight text-neutral-900 dark:text-white md:text-2xl">
                 Create new account
               </h1>
               <Formik
@@ -63,14 +66,14 @@ export default function SignInPage() {
                       <div>
                         <label
                           htmlFor="name"
-                          className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                          className="mb-2 block text-sm font-medium text-neutral-900 dark:text-white"
                         >
                           Your name
                         </label>
                         <input
                           type="text"
                           id="name"
-                          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-wider text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+                          className="block w-full rounded-lg border border-neutral-300 bg-neutral-50 p-2.5  text-neutral-900 focus:border-black focus:ring-black dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-neutral-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
                           placeholder="Full name"
                           required
                           {...field}
@@ -88,14 +91,14 @@ export default function SignInPage() {
                       <div>
                         <label
                           htmlFor="email"
-                          className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                          className="mb-2 block text-sm font-medium text-neutral-900 dark:text-white"
                         >
                           Your email
                         </label>
                         <input
                           type="email"
                           id="email"
-                          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 tracking-wider text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+                          className="block w-full rounded-lg border border-neutral-300 bg-neutral-50 p-2.5  text-neutral-900 focus:border-black focus:ring-black dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-neutral-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
                           placeholder="name@company.com"
                           required
                           {...field}
@@ -122,16 +125,16 @@ export default function SignInPage() {
                     onClick={() => {
                       void handelGoogleSignUp();
                     }}
-                    className="text-md flex w-full items-center justify-center gap-5 rounded-lg border-2 bg-neutral-50 px-5 py-2.5 text-center font-medium text-black hover:bg-neutral-100 focus:outline-none focus:ring-4 focus:ring-black dark:bg-black dark:hover:bg-black dark:focus:ring-black"
+                    className="text-md flex w-full items-center justify-center gap-5 rounded-lg border-2 bg-neutral-50 px-5 py-2.5 text-center font-medium text-black hover:bg-neutral-100 focus:outline-none focus:ring-4 focus:ring-black dark:bg-white dark:text-black dark:hover:bg-black dark:focus:ring-black"
                   >
                     <FaGoogle />
                     Sign Up With Google
                   </button>
-                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  <p className="text-sm font-light text-neutral-500 dark:text-neutral-400">
                     Already have an account ?{" "}
                     <Link
                       href="/signin"
-                      className="font-medium text-black hover:underline dark:text-black"
+                      className="font-medium text-black hover:underline dark:text-blue-500"
                     >
                       Sign In
                     </Link>

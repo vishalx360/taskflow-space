@@ -9,7 +9,7 @@ function PasswordInput() {
     setTimeout(() => {
       setHidden(true);
       console.log("hide");
-    }, 5000);
+    }, 10000);
   }, []);
 
   const show = useCallback(() => {
@@ -32,11 +32,11 @@ function PasswordInput() {
               type={hidden ? "password" : "text"}
               id="password"
               placeholder="•••••••••••"
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pr-3 tracking-widest text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pr-3 text-gray-900 focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
               {...field}
             />
             <button
-              className="absolute right-2 rounded-xl  p-3"
+              className="absolute right-2 rounded-xl p-3  dark:text-white"
               type="button"
               onMouseDown={show}
               onMouseUp={hide}
