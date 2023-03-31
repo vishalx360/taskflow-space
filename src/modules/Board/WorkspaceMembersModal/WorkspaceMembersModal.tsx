@@ -89,11 +89,16 @@ export default function WorkspaceMembersModal({
                   ) : (
                     <MembersList members={members} />
                   )}
-                  <Divider />
-                  <InviteSection
-                    CurrentUserRole={CurrentUserRole}
-                    workspaceId={workspaceId}
-                  />
+                  {(CurrentUserRole === "ADMIN" ||
+                    CurrentUserRole === "OWNER") && (
+                    <>
+                      <Divider />
+                      <InviteSection
+                        CurrentUserRole={CurrentUserRole}
+                        workspaceId={workspaceId}
+                      />
+                    </>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
