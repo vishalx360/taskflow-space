@@ -71,7 +71,7 @@ function TaskList({ list }: { list: List }) {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="mt-0 max-h-[75vh] space-y-2 overflow-y-scroll px-2"
+            className="mt-0 max-h-[75vh] space-y-2 overflow-x-hidden overflow-y-scroll px-2"
           >
             {Tasks?.length !== 0 ? (
               Tasks?.map((task: Task, index: number) => (
