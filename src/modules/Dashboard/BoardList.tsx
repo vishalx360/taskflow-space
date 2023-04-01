@@ -19,7 +19,9 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
       {boards?.map((board) => (
         <Board key={board.id} board={board} />
       ))}
-      <CreateNewBoardModal workspace={workspace} />
+      {workspace?.members[0]?.role !== "MEMBER" && (
+        <CreateNewBoardModal workspace={workspace} />
+      )}
     </div>
   );
 }
