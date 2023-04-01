@@ -44,8 +44,10 @@ model WorkspaceMember {
 
 model WorkspaceMemberInvitation {
     id          String               @id @default(cuid())
-    user        User                 @relation(fields: [userId], references: [id])
-    userId      String
+    recepient   User                 @relation("recepientRelation", fields: [recepientId], references: [id])
+    recepientId String
+    sender      User                 @relation("senderRelation", fields: [senderId], references: [id])
+    senderId    String
     role        WorkspaceMemberRoles @default(MEMBER)
     Workspace   Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
     workspaceId String
@@ -94,18 +96,19 @@ model TaskMember {
 
 // Necessary for Next auth ----------------------------------------------------
 model User {
-    id                   String                      @id @default(cuid())
-    name                 String?
-    email                String?                     @unique
-    emailVerified        DateTime?
-    image                String?
-    password             String?
-    accounts             Account[]
-    sessions             Session[]
+    id                       String                      @id @default(cuid())
+    name                     String?
+    email                    String?                     @unique
+    emailVerified            DateTime?
+    image                    String?
+    password                 String?
+    accounts                 Account[]
+    sessions                 Session[]
     // extra fields
-    workspaces           WorkspaceMember[]
-    tasks                TaskMember[]
-    workspaceInvitations WorkspaceMemberInvitation[]
+    tasks                    TaskMember[]
+    workspaces               WorkspaceMember[]
+    workspaceInvitations     WorkspaceMemberInvitation[] @relation("recepientRelation")
+    sentWorkspaceInvitations WorkspaceMemberInvitation[] @relation("senderRelation")
 }
 
 model Account {

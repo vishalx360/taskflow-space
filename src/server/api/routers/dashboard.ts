@@ -5,7 +5,9 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   CreateNewBoardSchema,
   CreateNewWorkspaceSchema,
-  RenameWorkspaceSchema
+  CreateWorkspaceInvitation,
+  RenameWorkspaceSchema,
+  WorksapceInviteResponse
 } from "~/utils/ValidationSchema";
 
 export const DashboardRouter = createTRPCRouter({
@@ -209,4 +211,60 @@ export const DashboardRouter = createTRPCRouter({
         where: { id: input.workspaceId }
       });
     }),
+
+  // accept invite or decline invite to join workspace
+  inviteResponse: protectedProcedure
+    .input(WorksapceInviteResponse)
+    .mutation(async ({ ctx, input }) => {
+      // check if the user is already a member of the workspace
+      const invitation = await ctx.prisma.workspaceMemberInvitation.findUnique({
+        where: {
+          id: input.workspaceInvitaionId,
+        },
+      });
+      if (!invitation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invitation not found.",
+        });
+      }
+      if (invitation.recepientId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not the recepient of this invite.",
+        });
+      }
+
+      const isAlreadyMember = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: invitation.workspaceId,
+          userId: invitation.recepientId,
+        },
+      });
+
+      const transactions = [];
+      const createWorkspaceMember = ctx.prisma.workspaceMember.create({
+        data: {
+          workspaceId: invitation.workspaceId,
+          role: invitation.role,
+          userId: invitation.recepientId,
+        },
+      });
+      input.accept && transactions.push(createWorkspaceMember);
+
+      const deleteWorkspaceInvitation = ctx.prisma.workspaceMemberInvitation.delete({
+        where: { id: input.workspaceInvitaionId }
+      })
+      transactions.push(deleteWorkspaceInvitation);
+
+      if (isAlreadyMember) {
+        await deleteWorkspaceInvitation;
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You are already a member of the workspace.",
+        });
+      }
+      return ctx.prisma.$transaction(transactions);
+    }),
+
 });

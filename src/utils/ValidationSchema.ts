@@ -89,8 +89,14 @@ export const UpdateBoardSchema = z.object({
 });
 
 
-export const InviteWorkspaceModalSchema = z.object({
+export const CreateWorkspaceInvitation = z.object({
   email: z.string().email("Please enter valid email"),
   role: z.enum(["ADMIN", "MEMBER"]),
   workspaceId: z.string(),
+});
+
+
+export const WorksapceInviteResponse = z.object({
+  accept: z.boolean(),
+  workspaceInvitaionId: z.string(),
 });

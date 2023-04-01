@@ -9,9 +9,9 @@ import PrimaryButton from "~/modules/Global/PrimaryButton";
 import Toast from "~/modules/Global/Toast";
 import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
 import { api } from "~/utils/api";
-import { InviteWorkspaceModalSchema } from "~/utils/ValidationSchema";
-import MemberRow from "./MemberRow";
+import { CreateWorkspaceInvitation } from "~/utils/ValidationSchema";
 import { MemberListSkeleton } from "./MembersList";
+import PendingInviteRow, { PendingInviteRowSkeleton } from "./PendingInviteRow";
 
 export default function InviteSection({
   CurrentUserRole,
@@ -49,7 +49,7 @@ export default function InviteSection({
             workspaceId: string;
           }
         }
-        validationSchema={toFormikValidationSchema(InviteWorkspaceModalSchema)}
+        validationSchema={toFormikValidationSchema(CreateWorkspaceInvitation)}
         onSubmit={(values) => {
           mutation.mutate(values);
         }}
@@ -115,19 +115,23 @@ function PendingInvitationsList({
   workspaceId: string | undefined;
 }) {
   function Panel() {
-    const { data: pendingMembers, isLoading } =
+    const { data: pendingInvitations, isLoading } =
       api.board.getAllPendingInvitations.useQuery(
         { workspaceId: workspaceId ? workspaceId : "" },
-        { enabled: !!workspaceId }
+        { enabled: Boolean(workspaceId) }
       );
 
+    if (isLoading) {
+      return <PendingInvitationsListSkeleton numberOfItems={2} />;
+    }
     return (
       <div className="flex flex-col gap-5">
-        {isLoading && <MemberListSkeleton numberOfMembers={2} />}
-        {pendingMembers?.length !== 0 ? (
+        {pendingInvitations?.length !== 0 ? (
           <>
-            {pendingMembers?.map((member) => {
-              return <MemberRow key={member.id} member={member} />;
+            {pendingInvitations?.map((invitation) => {
+              return (
+                <PendingInviteRow key={invitation.id} invitation={invitation} />
+              );
             })}
           </>
         ) : (
@@ -185,6 +189,19 @@ function PendingInvitationsList({
   );
 }
 
+export function PendingInvitationsListSkeleton({
+  numberOfItems = 2,
+}: {
+  numberOfItems?: number;
+}) {
+  return (
+    <div className="flex flex-col gap-5">
+      {Array.from({ length: numberOfItems }).map((_, index) => {
+        return <PendingInviteRowSkeleton key={index} />;
+      })}
+    </div>
+  );
+}
 function RoleSelector({
   CurrentUserRole,
 }: {

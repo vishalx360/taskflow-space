@@ -13,6 +13,7 @@ import {
 } from "react-icons/fi";
 import getGravatar from "~/utils/getGravatar";
 import LogoImage from "./LogoImage";
+import NotificationDrawer from "./NotificationDrawer/NotificationDrawer";
 
 const Items = [
   { title: "Dashboard", link: "/dashboard" },
@@ -107,7 +108,10 @@ function DashboardNavbar() {
               })}
             </ul>
           </div>
-          <AccountMenuMemo />
+          <div className="flex items-center gap-4">
+            <NotificationDrawer />
+            <AccountMenuMemo />
+          </div>
         </div>
       </div>
     </nav>

@@ -24,7 +24,9 @@ function BoardNavbar({ board }: { board: Board }) {
           <LogoImage />
         </Link>
         <div className="hidden items-center gap-3 lg:flex">
-          <WorkspaceMembersModal workspaceId={board?.workspaceId} />
+          {!board?.Workspace?.personal && (
+            <WorkspaceMembersModal workspaceId={board?.workspaceId} />
+          )}
           <BoardSettingsModal board={board} />
         </div>
       </div>

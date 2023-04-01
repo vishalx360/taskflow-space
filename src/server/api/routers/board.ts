@@ -10,7 +10,7 @@ import {
   MoveTaskSchema,
   UpdateBoardSchema,
   UpdateListSchema,
-  InviteWorkspaceModalSchema,
+  CreateWorkspaceInvitation,
   UpdateTaskSchema
 } from "~/utils/ValidationSchema";
 
@@ -39,7 +39,7 @@ export const BoardRouter = createTRPCRouter({
     }),
 
   inviteMember: protectedProcedure
-    .input(InviteWorkspaceModalSchema)
+    .input(CreateWorkspaceInvitation)
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: { email: input.email },
@@ -82,6 +82,12 @@ export const BoardRouter = createTRPCRouter({
           userId: user.id,
         },
       });
+      const isAlreadyInvited = await ctx.prisma.workspaceMemberInvitation.count({
+        where: {
+          workspaceId: input.workspaceId,
+          recepientId: user.id,
+        },
+      });
 
       if (isMember) {
         throw new TRPCError({
@@ -89,12 +95,19 @@ export const BoardRouter = createTRPCRouter({
           message: "User already a member.",
         });
       }
+      if (isAlreadyInvited) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "User already invited.",
+        });
+      }
 
       return ctx.prisma.workspaceMemberInvitation.create({
         data: {
           workspaceId: input.workspaceId,
           role: input.role,
-          userId: user.id
+          recepientId: user.id,
+          senderId: ctx.session.user.id,
         },
       });
     }),
@@ -123,7 +136,14 @@ export const BoardRouter = createTRPCRouter({
           workspaceId: input.workspaceId,
         },
         include: {
-          user: {
+          sender: {
+            select: {
+              name: true,
+              email: true,
+              image: true
+            }
+          },
+          recepient: {
             select: {
               name: true,
               email: true,
@@ -141,10 +161,24 @@ export const BoardRouter = createTRPCRouter({
     .query(async ({ ctx }) => {
       return ctx.prisma.workspaceMemberInvitation.findMany({
         where: {
-          userId: ctx.session.user.id,
+          recepientId: ctx.session.user.id,
         },
         include: {
-          Workspace: { select: { name: true, } }
+          Workspace: { select: { name: true, } },
+          sender: {
+            select: {
+              name: true,
+              email: true,
+              image: true
+            }
+          },
+          recepient: {
+            select: {
+              name: true,
+              email: true,
+              image: true
+            }
+          }
         },
         orderBy: {
           createdAt: "desc"
@@ -163,6 +197,7 @@ export const BoardRouter = createTRPCRouter({
         where: { id: input.boardId },
         include: {
           lists: true,
+          Workspace: true
         },
       });
     }),

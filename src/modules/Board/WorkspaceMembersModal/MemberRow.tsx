@@ -1,12 +1,9 @@
-import {
-  type WorkspaceMemberInvitation,
-  type WorkspaceMember,
-} from "@prisma/client";
+import { type WorkspaceMember } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import getGravatar from "~/utils/getGravatar";
 
-type UserType = {
+export type UserType = {
   image: string | null;
   name: string | null;
   email: string | null;
@@ -16,14 +13,10 @@ export type WorkspaceMemberWithUser = WorkspaceMember & {
   user: UserType;
 };
 
-type WorkspaceMemberInvitationWithUser = WorkspaceMemberInvitation & {
-  user: UserType;
-};
-
 export default function MemberRow({
   member,
 }: {
-  member: WorkspaceMemberWithUser | WorkspaceMemberInvitationWithUser;
+  member: WorkspaceMemberWithUser;
 }) {
   // get current user email
   const { data: session } = useSession();

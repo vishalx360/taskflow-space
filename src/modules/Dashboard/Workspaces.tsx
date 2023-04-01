@@ -47,6 +47,7 @@ function Workspaces() {
                           />
                         </div>
                       </Disclosure.Button>
+                      {/* TODO hide settings for member role */}
                       {!workspace.personal && (
                         <div className="flex items-center gap-3">
                           <WorkspaceSettingsModal workspace={workspace} />
