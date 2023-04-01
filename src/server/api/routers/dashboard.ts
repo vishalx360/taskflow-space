@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { random } from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
@@ -6,6 +7,16 @@ import {
   CreateNewWorkspaceSchema, RenameWorkspaceSchema,
   WorksapceInviteResponse
 } from "~/utils/ValidationSchema";
+import Backgrounds from "~/utils/BoardBackgrounds.json";
+
+const GetRandomBackgroundGradient = () => {
+  const background = Backgrounds["gradients"][random(0, Backgrounds["gradients"].length - 1)]
+  if (background) {
+    return `gradient:${background}`;
+  } else {
+    return
+  }
+}
 
 export const DashboardRouter = createTRPCRouter({
   getAllWorkspace: protectedProcedure.query(({ ctx }) => {
@@ -93,6 +104,7 @@ export const DashboardRouter = createTRPCRouter({
         data: {
           name: input.name,
           workspaceId: input.workspaceId,
+          background: GetRandomBackgroundGradient(),
         },
       });
     }),
