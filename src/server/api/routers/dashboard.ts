@@ -1,12 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   CreateNewBoardSchema,
-  CreateNewWorkspaceSchema,
-  CreateWorkspaceInvitation,
-  RenameWorkspaceSchema,
+  CreateNewWorkspaceSchema, RenameWorkspaceSchema,
   WorksapceInviteResponse
 } from "~/utils/ValidationSchema";
 
@@ -14,6 +11,8 @@ export const DashboardRouter = createTRPCRouter({
   getAllWorkspace: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.workspace.findMany({
       where: { members: { some: { userId: ctx.session.user.id } } },
+      orderBy: { personal: "desc" },
+      include: { members: { where: { userId: ctx.session.user.id }, select: { role: true } } },
     });
   }),
 
@@ -264,7 +263,8 @@ export const DashboardRouter = createTRPCRouter({
           message: "You are already a member of the workspace.",
         });
       }
-      return ctx.prisma.$transaction(transactions);
+      await ctx.prisma.$transaction(transactions);
+      return input.accept;
     }),
 
 });

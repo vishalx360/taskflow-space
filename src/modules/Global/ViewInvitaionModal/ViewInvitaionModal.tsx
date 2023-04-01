@@ -31,11 +31,14 @@ export default function ViewInvitationModal({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
-    onSuccess: async () => {
+    onSuccess: async (accepted) => {
       await utils.dashboard.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
-      Toast({ content: "Joined new workspace!", status: "success" });
+      Toast({
+        content: accepted ? "Joined new workspace!" : "Rejected invite",
+        status: "success",
+      });
       closeModal();
     },
   });
@@ -60,6 +63,7 @@ export default function ViewInvitationModal({
           workspaceInvitaionId: currentInvitation.id,
           accept: false,
         });
+        setIsRejecting(false);
       } catch (err) {
         console.log(err);
         setIsRejecting(false);
@@ -163,7 +167,7 @@ export default function ViewInvitationModal({
                   <PrimaryButton
                     onClick={AcceptInvitation}
                     isLoading={mutation.isLoading}
-                    loadingText="Creating new board"
+                    loadingText="Accepting..."
                     disabled={mutation.isLoading}
                     type="submit"
                     className="w-full bg-green-200 text-green-700 hover:bg-green-300"
@@ -175,7 +179,7 @@ export default function ViewInvitationModal({
                     onClick={RejectInvitation}
                     isLoading={isRejecting}
                     disabled={mutation.isLoading}
-                    loadingText="Creating new board"
+                    loadingText="Rejecting..."
                     type="submit"
                     overwriteClassname
                     className="w-full rounded-full bg-red-200  px-5 py-3 text-red-700 hover:bg-red-300 "

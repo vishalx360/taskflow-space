@@ -3,6 +3,7 @@ import { BiLoaderAlt } from "react-icons/bi";
 import { FaCaretRight } from "react-icons/fa";
 import BoardList, { BoardListSkeleton } from "~/modules/Dashboard/BoardList";
 import { api } from "~/utils/api";
+import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
 import WorkspaceSettingsModal from "./WorkspaceSettingsModal/WorkspaceSettingsModal";
 
@@ -50,7 +51,10 @@ function Workspaces() {
                       {/* TODO hide settings for member role */}
                       {!workspace.personal && (
                         <div className="flex items-center gap-3">
-                          <WorkspaceSettingsModal workspace={workspace} />
+                          <WorkspaceMembersModal workspaceId={workspace.id} />
+                          {workspace.members[0]?.role === "OWNER" && (
+                            <WorkspaceSettingsModal workspace={workspace} />
+                          )}
                         </div>
                       )}
                     </div>

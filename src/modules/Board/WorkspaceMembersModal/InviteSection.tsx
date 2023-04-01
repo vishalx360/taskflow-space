@@ -50,8 +50,9 @@ export default function InviteSection({
           }
         }
         validationSchema={toFormikValidationSchema(CreateWorkspaceInvitation)}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           mutation.mutate(values);
+          resetForm();
         }}
       >
         <Form>

@@ -18,10 +18,22 @@ export const BoardRouter = createTRPCRouter({
   getWorkspaceMembers: protectedProcedure
     .input(z.object({ workspaceId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return ctx.prisma.workspaceMember.findMany({
+      const hasPermission = await ctx.prisma.workspaceMember.findFirst({
         where: {
           workspaceId: input.workspaceId,
           userId: ctx.session.user.id,
+        }
+      });
+
+      if (!hasPermission || !hasPermission.role) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to view workspace members.",
+        });
+      }
+      return ctx.prisma.workspaceMember.findMany({
+        where: {
+          workspaceId: input.workspaceId,
         },
         include: {
           user: {
@@ -33,7 +45,7 @@ export const BoardRouter = createTRPCRouter({
           }
         },
         orderBy: {
-          role: "desc"
+          role: "asc"
         }
       });
     }),
