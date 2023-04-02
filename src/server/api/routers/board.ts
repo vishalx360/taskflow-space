@@ -50,17 +50,6 @@ export const BoardRouter = createTRPCRouter({
   inviteMember: protectedProcedure
     .input(CreateWorkspaceInvitation)
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.findUnique({
-        where: { email: input.email },
-      });
-      // TODO: if user not found, send email to invite
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found with the email.",
-        });
-      }
-
       const hasPermission = await ctx.prisma.workspaceMember.findFirst({
         where: {
           workspaceId: input.workspaceId,
@@ -75,6 +64,19 @@ export const BoardRouter = createTRPCRouter({
           message: "You dont have permission to invite member.",
         });
       }
+
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: input.email },
+      });
+      // TODO: if user not found, send email to invite
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found with the email.",
+        });
+      }
+
+
 
       const ALLOWED_ROLES = ALLOWED_ROLES_TO_INVITE[hasPermission.role]
 

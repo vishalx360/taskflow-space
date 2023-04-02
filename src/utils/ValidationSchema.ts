@@ -36,7 +36,10 @@ export const RenameWorkspaceSchema = z.object({
     .max(50, "Must contain less than 50 characters"),
   workspaceId: z.string(),
 });
-
+export const TransferWorkspaceOwnershipSchema = z.object({
+  email: z.string().email("Please enter valid email"),
+  workspaceId: z.string(),
+});
 export const CreateTaskSchema = z.object({
   title: z
     .string()

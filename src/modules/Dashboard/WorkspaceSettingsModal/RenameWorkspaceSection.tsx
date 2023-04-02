@@ -30,7 +30,7 @@ function RenameWorkspaceSection({
 
   return (
     <div className="mt-2">
-      <p className="text-md font-semibold text-neutral-500 dark:text-white">
+      <p className="text-md font-medium text-neutral-600 dark:text-white">
         Rename Workspace
       </p>
 
@@ -38,7 +38,6 @@ function RenameWorkspaceSection({
         initialValues={{ name: workspace.name, workspaceId: workspace.id }}
         validationSchema={toFormikValidationSchema(RenameWorkspaceSchema)}
         onSubmit={(values) => {
-          console.log(values);
           mutation.mutate(values);
         }}
       >

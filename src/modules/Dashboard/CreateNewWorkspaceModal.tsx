@@ -95,7 +95,6 @@ export default function CreateNewWorkspaceModal() {
                         CreateNewWorkspaceSchema
                       )}
                       onSubmit={(values) => {
-                        console.log(values);
                         mutation.mutate(values);
                       }}
                     >

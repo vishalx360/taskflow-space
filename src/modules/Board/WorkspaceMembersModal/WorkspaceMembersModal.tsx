@@ -1,4 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
+import { Workspace } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Fragment, useState } from "react";
 import { FiX } from "react-icons/fi";
@@ -7,19 +8,20 @@ import Divider from "~/modules/Global/Divider";
 import IconButton from "~/modules/Global/IconButton";
 import { api } from "~/utils/api";
 import InviteSection from "./InviteSection";
+import LeaveWorkspaceSection from "./LeaveWorkspaceSection";
 import MembersList, { MemberListSkeleton } from "./MembersList";
 
 export default function WorkspaceMembersModal({
-  workspaceId,
+  workspace,
 }: {
-  workspaceId: string;
+  workspace: Workspace;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
 
   const { data: members, isLoading } = api.board.getWorkspaceMembers.useQuery(
     {
-      workspaceId,
+      workspaceId: workspace.id,
     },
     { enabled: isOpen }
   );
@@ -96,7 +98,16 @@ export default function WorkspaceMembersModal({
                       <Divider />
                       <InviteSection
                         CurrentUserRole={CurrentUserRole}
-                        workspaceId={workspaceId}
+                        workspaceId={workspace.id}
+                      />
+                    </>
+                  )}
+                  {CurrentUserRole !== "OWNER" && (
+                    <>
+                      <Divider />
+                      <LeaveWorkspaceSection
+                        setIsOpen={setIsOpen}
+                        workspace={workspace}
                       />
                     </>
                   )}

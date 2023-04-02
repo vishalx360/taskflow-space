@@ -51,7 +51,7 @@ function Workspaces() {
                       {/* TODO hide settings for member role */}
                       {!workspace.personal && (
                         <div className="flex items-center gap-3">
-                          <WorkspaceMembersModal workspaceId={workspace.id} />
+                          <WorkspaceMembersModal workspace={workspace} />
                           {workspace.members[0]?.role === "OWNER" && (
                             <WorkspaceSettingsModal workspace={workspace} />
                           )}

@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
 import IconButton from "../../Global/IconButton";
-import DeleteWorkspaceSection from "./DeleteWorkspaceSection";
+import DangerZone from "./DangerZone";
 import RenameWorkspaceSection from "./RenameWorkspaceSection";
 
 export default function WorkspaceSettingsModal({
@@ -51,7 +51,7 @@ export default function WorkspaceSettingsModal({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
@@ -74,10 +74,7 @@ export default function WorkspaceSettingsModal({
                     setIsOpen={setIsOpen}
                   />
                   <div className="my-5 w-full  border-[1px]" />
-                  <DeleteWorkspaceSection
-                    workspace={workspace}
-                    setIsOpen={setIsOpen}
-                  />
+                  <DangerZone workspace={workspace} setIsOpen={setIsOpen} />
                 </Dialog.Panel>
               </Transition.Child>
             </div>

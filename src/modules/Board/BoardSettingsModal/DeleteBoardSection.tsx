@@ -27,7 +27,7 @@ function DeleteBoardSection({
 
   return (
     <div className="space-y-3">
-      <p className="text-md font-semibold text-neutral-500 dark:text-white">
+      <p className="text-md font-medium text-neutral-600 dark:text-white">
         Delete Board
       </p>
       <p className="">

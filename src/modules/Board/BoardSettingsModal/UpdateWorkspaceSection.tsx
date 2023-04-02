@@ -52,7 +52,6 @@ function UpdateWorkspaceSection({
         }}
         validationSchema={toFormikValidationSchema(UpdateBoardSchema)}
         onSubmit={(values) => {
-          console.log(values);
           mutation.mutate(values);
         }}
       >

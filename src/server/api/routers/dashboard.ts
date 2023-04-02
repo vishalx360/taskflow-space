@@ -6,6 +6,7 @@ import Backgrounds from "~/utils/BoardBackgrounds.json";
 import {
   CreateNewBoardSchema,
   CreateNewWorkspaceSchema, RenameWorkspaceSchema,
+  TransferWorkspaceOwnershipSchema,
   WorksapceInviteResponse
 } from "~/utils/ValidationSchema";
 
@@ -183,6 +184,108 @@ export const DashboardRouter = createTRPCRouter({
         data: { name: input.name },
       });
     }),
+  transferWorkspaceOwnership: protectedProcedure
+    .input(TransferWorkspaceOwnershipSchema)
+    .mutation(async ({ ctx, input }) => {
+      // check if workspace exist
+      const Workspace = await ctx.prisma.workspace.findUnique({
+        where: {
+          id: input.workspaceId,
+        },
+      });
+      if (!Workspace) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workspace not found.",
+        });
+      }
+      const hasPermission = await ctx.prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: "OWNER",
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to transfer ownership of this workspace.",
+        });
+      }
+      // check if the user already in the workspace , then update his role
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: input.email },
+      });
+      // TODO: if user not found, send email to invite
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found with the email.",
+        });
+      }
+
+      const isAlreadyMember = await ctx.prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: user.id,
+        },
+      });
+      const transactions = [];
+
+      const createWorkspaceMember = ctx.prisma.workspaceMember.create({
+        data: { workspaceId: input.workspaceId, role: "OWNER", userId: user.id, },
+      });
+      const updateNewOwnerRole = ctx.prisma.workspaceMember.update({
+        where: { id: isAlreadyMember?.id }, data: { role: "OWNER" },
+      });
+
+      transactions.push(isAlreadyMember ? updateNewOwnerRole : createWorkspaceMember)
+
+      const updateOldOwnerRole = ctx.prisma.workspaceMember.update({
+        where: { id: hasPermission?.id }, data: { role: "ADMIN" },
+      });
+      transactions.push(updateOldOwnerRole);
+
+      await ctx.prisma.$transaction(transactions);
+    }),
+
+  leaveWorkspace: protectedProcedure
+    .input(z.object({ workspaceId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // check if workspace exist
+      const Workspace = await ctx.prisma.workspace.findUnique({
+        where: {
+          id: input.workspaceId,
+        },
+      });
+      if (!Workspace) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workspace not found.",
+        });
+      }
+      const hasPermission = await ctx.prisma.workspaceMember.findFirst({
+        where: {
+          workspaceId: input.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["ADMIN", "MEMBER"] },
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to leave this workspace.",
+        });
+      }
+      return ctx.prisma.workspaceMember.delete({
+        where: {
+          id: hasPermission.id,
+        },
+      });
+    }),
+
 
   deleteWorkspace: protectedProcedure
     .input(
@@ -203,11 +306,12 @@ export const DashboardRouter = createTRPCRouter({
           message: "Workspace not found.",
         });
       }
+
       const hasPermission = await ctx.prisma.workspaceMember.count({
         where: {
           workspaceId: input.workspaceId,
           userId: ctx.session.user.id,
-          role: { in: ["OWNER"] },
+          role: "OWNER",
         },
       });
 
