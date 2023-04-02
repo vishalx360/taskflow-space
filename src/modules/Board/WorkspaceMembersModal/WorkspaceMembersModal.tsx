@@ -14,12 +14,15 @@ export default function WorkspaceMembersModal({
 }: {
   workspaceId: string;
 }) {
-  const { data: members, isLoading } = api.board.getWorkspaceMembers.useQuery({
-    workspaceId,
-  });
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
 
+  const { data: members, isLoading } = api.board.getWorkspaceMembers.useQuery(
+    {
+      workspaceId,
+    },
+    { enabled: isOpen }
+  );
   function openModal() {
     setIsOpen(true);
   }
