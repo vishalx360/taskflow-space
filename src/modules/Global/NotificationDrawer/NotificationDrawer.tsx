@@ -68,7 +68,11 @@ function MyInvitationsList({
     api.board.getAllMyInvites.useQuery();
 
   if (isLoading) {
-    return <PendingInvitationsListSkeleton numberOfItems={4} />;
+    return (
+      <div className="p-4">
+        <PendingInvitationsListSkeleton numberOfItems={4} />;
+      </div>
+    );
   }
   return (
     <div className="space-y-2 ">
