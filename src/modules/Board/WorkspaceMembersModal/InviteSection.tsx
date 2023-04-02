@@ -10,7 +10,6 @@ import Toast from "~/modules/Global/Toast";
 import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
 import { api } from "~/utils/api";
 import { CreateWorkspaceInvitation } from "~/utils/ValidationSchema";
-import { MemberListSkeleton } from "./MembersList";
 import PendingInviteRow, { PendingInviteRowSkeleton } from "./PendingInviteRow";
 
 export default function InviteSection({

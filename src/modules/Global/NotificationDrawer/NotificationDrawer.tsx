@@ -1,12 +1,12 @@
 import { Popover, Transition } from "@headlessui/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import { PendingInvitationsListSkeleton } from "~/modules/Board/WorkspaceMembersModal/InviteSection";
 import { api } from "~/utils/api";
 import ViewInvitationModal from "../ViewInvitaionModal/ViewInvitaionModal";
 import InviteNotificationRow, {
-  WorkspaceMemberInvitationWithSenderAndRecevier,
+  type WorkspaceMemberInvitationWithSenderAndRecevier,
 } from "./InviteNotificationRow";
 
 function NotificationDrawer() {

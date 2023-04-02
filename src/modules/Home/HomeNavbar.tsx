@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Session } from "@prisma/client";
+import { type Session } from "@prisma/client";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";

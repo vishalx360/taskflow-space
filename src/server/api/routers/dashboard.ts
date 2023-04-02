@@ -2,12 +2,12 @@ import { TRPCError } from "@trpc/server";
 import { random } from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import Backgrounds from "~/utils/BoardBackgrounds.json";
 import {
   CreateNewBoardSchema,
   CreateNewWorkspaceSchema, RenameWorkspaceSchema,
   WorksapceInviteResponse
 } from "~/utils/ValidationSchema";
-import Backgrounds from "~/utils/BoardBackgrounds.json";
 
 const GetRandomBackgroundGradient = () => {
   const background = Backgrounds["gradients"][random(0, Backgrounds["gradients"].length - 1)]

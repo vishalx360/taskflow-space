@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { type Dispatch, Fragment, type SetStateAction, useState } from "react";
+import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import { FaCheck } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { api } from "~/utils/api";

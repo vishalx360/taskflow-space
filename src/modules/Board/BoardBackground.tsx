@@ -1,4 +1,4 @@
-import { Board } from "@prisma/client";
+import { type Board } from "@prisma/client";
 import Image from "next/image";
 
 function BoardBackground({ board }: { board: Board }) {

@@ -6,12 +6,9 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
 import {
   CreateListSchema,
-  CreateTaskSchema,
-  MoveTaskSchema,
+  CreateTaskSchema, CreateWorkspaceInvitation, MoveTaskSchema,
   UpdateBoardSchema,
-  UpdateListSchema,
-  CreateWorkspaceInvitation,
-  UpdateTaskSchema
+  UpdateListSchema, UpdateTaskSchema
 } from "~/utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
