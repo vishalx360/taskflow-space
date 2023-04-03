@@ -21,6 +21,16 @@ const server = z.object({
   // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+
+  DOMAIN_NAME: z.string(),
+  // NM Nodemailer
+  NM_DKIM_PRIVATE_KEY: z.string().optional(),
+  NM_DEFAULT_FROM_EMAIL: z.string(),
+  NM_AUTH_EMAIL: z.string(),
+  NM_CLIENT_ID: z.string(),
+  NM_CLIENT_SECRET: z.string(),
+  NM_REDIRECT_URI: z.string(),
+  NM_REFRESH_TOKEN: z.string(),
 });
 
 /**
@@ -44,7 +54,15 @@ const processEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  DOMAIN_NAME: process.env.DOMAIN_NAME,
+  // NM Nodemailer
+  NM_DKIM_PRIVATE_KEY: process.env.NM_DKIM_PRIVATE_KEY,
+  NM_DEFAULT_FROM_EMAIL: process.env.NM_DEFAULT_FROM_EMAIL,
+  NM_AUTH_EMAIL: process.env.NM_AUTH_EMAIL,
+  NM_CLIENT_ID: process.env.NM_CLIENT_ID,
+  NM_CLIENT_SECRET: process.env.NM_CLIENT_SECRET,
+  NM_REDIRECT_URI: process.env.NM_REDIRECT_URI,
+  NM_REFRESH_TOKEN: process.env.NM_REFRESH_TOKEN,
 };
 
 // Don't touch the part below

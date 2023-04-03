@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
+import { BASIC_EMAIL } from "~/utils/email-templates/EmailTemplates";
 import {
   CreateListSchema,
   CreateTaskSchema, CreateWorkspaceInvitation, MoveTaskSchema,
@@ -69,6 +70,19 @@ export const BoardRouter = createTRPCRouter({
         where: { email: input.email },
       });
       // TODO: if user not found, send email to invite
+      const mailOptions = await BASIC_EMAIL({
+        recevierEmail: input.email,
+        subject: "You have been invited to join a workspace on Taskflow",
+        body: `You have been invited to join a workspace on Taskflow. Please click on the link below to join the workspace. \n
+        https://taskflow.space/invitation/${input.workspaceId} \n
+        
+        Regards
+        
+        `,
+      });
+
+      await ctx.sendEmail(mailOptions);
+
       if (!user) {
         throw new TRPCError({
           code: "NOT_FOUND",

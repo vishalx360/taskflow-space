@@ -38,6 +38,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
+    sendEmail: SendEmail
   };
 };
 
@@ -65,6 +66,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import { SendEmail } from "~/utils/SendEmail";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
