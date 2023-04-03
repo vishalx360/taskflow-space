@@ -11,7 +11,6 @@ const { NM_CLIENT_ID,
     NM_REFRESH_TOKEN,
     NM_AUTH_EMAIL,
     NM_DEFAULT_FROM_EMAIL,
-    NM_DKIM_PRIVATE_KEY,
     DOMAIN_NAME
 } =
     process.env;
@@ -60,6 +59,7 @@ export async function SendEmail(mailOptions: MailOptions): Promise<void> {
                 accessToken: accessToken,
             },
             secure: true,
+            tls: true,
             dkim: {
                 domainName: DOMAIN_NAME,
                 keySelector: "nodemailer",
