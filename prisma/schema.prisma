@@ -147,3 +147,11 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+// TEMP
+model Posts {
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    title       String
+    description String
+}

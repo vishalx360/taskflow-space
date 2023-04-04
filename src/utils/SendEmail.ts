@@ -1,7 +1,5 @@
-import { readFile } from "fs/promises";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
-import path from "path";
 
 
 // These id's and secrets should come from .env file.
