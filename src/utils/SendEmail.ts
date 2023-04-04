@@ -11,6 +11,7 @@ const { NM_CLIENT_ID,
     NM_REFRESH_TOKEN,
     NM_AUTH_EMAIL,
     NM_DEFAULT_FROM_EMAIL,
+    NM_DKIM_PRIVATE_KEY,
     DOMAIN_NAME
 } =
     process.env;
@@ -23,6 +24,9 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: NM_REFRESH_TOKEN });
 
+// decode base64 NM_DKIM_PRIVATE_KEY
+const privateKey = Buffer.from(NM_DKIM_PRIVATE_KEY, 'base64').toString('utf-8');
+
 
 type MailOptions = nodemailer.SendMailOptions & { dkim?: string };
 
@@ -31,9 +35,6 @@ type MailOptions = nodemailer.SendMailOptions & { dkim?: string };
 export async function SendEmail(mailOptions: MailOptions): Promise<void> {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
-        const pemFilePath = path.join(process.cwd(), 'DKIM_PRIVATE_KEY.pem');
-        const privateKey = await readFile(pemFilePath, 'utf8');
-
         const transporter = nodemailer.createTransport({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
@@ -54,9 +55,9 @@ export async function SendEmail(mailOptions: MailOptions): Promise<void> {
                 privateKey
             },
         });
+        // console.log(privateKey);
 
         const signedMessage = ({ from: NM_DEFAULT_FROM_EMAIL, ...mailOptions, });
-        // return Promise.resolve();
         const info = await transporter.sendMail(signedMessage);
         console.log("Email sent:", info);
         return Promise.reject(info.response)
