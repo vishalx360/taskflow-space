@@ -1,4 +1,3 @@
-import { DKIMSign } from 'dkim-signer';
 import { readFile } from "fs/promises";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
@@ -26,25 +25,12 @@ oAuth2Client.setCredentials({ refresh_token: NM_REFRESH_TOKEN });
 
 type MailOptions = nodemailer.SendMailOptions & { dkim?: string };
 
-async function signWithDKIM(message: MailOptions): Promise<MailOptions> {
-    const privateKey = await readFile("DKIM_PRIVATE_KEY.pem", 'utf8');
-
-    const dkimHeader = DKIMSign(message, {
-        privateKey,
-        domainName: DOMAIN_NAME,
-        keySelector: "nodemailer",
-    });
-    return {
-        ...message,
-        dkim: `${dkimHeader}${message.html || message.text}`,
-    };
-}
 
 // Send email
 export async function SendEmail(mailOptions: MailOptions): Promise<void> {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
-        const privateKey = await readFile("DKIM_PRIVATE_KEY.pem", 'utf8');
+        const privateKey = await readFile("../../DKIM_PRIVATE_KEY.pem", 'utf8');
 
         const transporter = nodemailer.createTransport({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

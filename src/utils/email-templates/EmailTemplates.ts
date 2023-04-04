@@ -5,7 +5,7 @@ const OTP_EMAIL = async ({ recevierEmail, otp, name = "" }: { recevierEmail: str
     const body = `Your one-time password for Taskflow is ${otp}. Do not share this OTP with anyone for security reasons. This will be valid for the next 10 minutes.\n
     Regards,
     `;
-    const rawHTML = await readFile('src/utils/email-templates/otp-email.html', 'utf8')
+    const rawHTML = await readFile('./otp-email.html', 'utf8')
     return {
         to: recevierEmail,
         subject,
@@ -18,7 +18,7 @@ const OTP_EMAIL = async ({ recevierEmail, otp, name = "" }: { recevierEmail: str
 }
 
 const BASIC_EMAIL = async ({ recevierEmail, subject, body }: { recevierEmail: string, subject: string, body: string }) => {
-    const rawHTML = await readFile('src/utils/email-templates/basic-email.html', 'utf8')
+    const rawHTML = await readFile('./basic-email.html', 'utf8')
     return {
         to: recevierEmail,
         text: body,
