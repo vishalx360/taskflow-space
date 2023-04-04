@@ -66,31 +66,10 @@ export const BoardRouter = createTRPCRouter({
         });
       }
 
-      const user = await ctx.prisma.user.findUnique({
-        where: { email: input.email },
-      });
       // TODO: if user not found, send email to invite
-      const mailOptions = await BASIC_EMAIL({
-        recevierEmail: input.email,
-        subject: "You have been invited to join a workspace on Taskflow",
-        body: `You have been invited to join a workspace on Taskflow. Please click on the link below to join the workspace. \n
-        https://taskflow.space/invitation/${input.workspaceId} \n
-        
-        Regards
-        
-        `,
-      });
-
-      await ctx.sendEmail(mailOptions);
-
-      if (!user) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "User not found with the email.",
-        });
-      }
-
-
+      // make inviraion/invitecode page where it will fetch the invitation, 
+      // if user is loggedin and is the recepient of invite, show the invite modal component 
+      // if not loggedin redirect to signin page with nextURL=invite_url 
 
       const ALLOWED_ROLES = ALLOWED_ROLES_TO_INVITE[hasPermission.role]
 
@@ -104,13 +83,7 @@ export const BoardRouter = createTRPCRouter({
       const isMember = await ctx.prisma.workspaceMember.count({
         where: {
           workspaceId: input.workspaceId,
-          userId: user.id,
-        },
-      });
-      const isAlreadyInvited = await ctx.prisma.workspaceMemberInvitation.count({
-        where: {
-          workspaceId: input.workspaceId,
-          recepientId: user.id,
+          user: { email: input.email }
         },
       });
 
@@ -120,6 +93,12 @@ export const BoardRouter = createTRPCRouter({
           message: "User already a member.",
         });
       }
+      const isAlreadyInvited = await ctx.prisma.workspaceMemberInvitation.count({
+        where: {
+          workspaceId: input.workspaceId,
+          recepientEmail: input.email,
+        },
+      });
       if (isAlreadyInvited) {
         throw new TRPCError({
           code: "CONFLICT",
@@ -127,14 +106,36 @@ export const BoardRouter = createTRPCRouter({
         });
       }
 
-      return ctx.prisma.workspaceMemberInvitation.create({
+      const recepientUser = await ctx.prisma.user.findUnique({
+        where: { email: input.email },
+      });
+
+
+      const invitation = await ctx.prisma.workspaceMemberInvitation.create({
         data: {
           workspaceId: input.workspaceId,
           role: input.role,
-          recepientId: user.id,
+          recepientId: recepientUser?.id,
+          recepientEmail: input.email,
           senderId: ctx.session.user.id,
         },
       });
+
+      const mailOptions = await BASIC_EMAIL({
+        recevierEmail: input.email,
+        subject: "You have been invited to join a workspace on Taskflow",
+        body: ` ${recepientUser?.name ? recepientUser.name : ""} You have been invited to join a workspace on Taskflow. Please click on the link below to join the workspace.
+        <br/>
+        Sign in and visit:
+        <br/>
+        https://taskflow.space/invitation/${invitation?.id}
+        <br/>
+        Regards
+        <br/>
+        `,
+      });
+      return ctx.sendEmail(mailOptions);
+
     }),
 
   getAllPendingInvitations: protectedProcedure

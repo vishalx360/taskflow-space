@@ -43,15 +43,18 @@ model WorkspaceMember {
 }
 
 model WorkspaceMemberInvitation {
-    id          String               @id @default(cuid())
-    recepient   User                 @relation("recepientRelation", fields: [recepientId], references: [id])
-    recepientId String
-    sender      User                 @relation("senderRelation", fields: [senderId], references: [id])
-    senderId    String
-    role        WorkspaceMemberRoles @default(MEMBER)
-    Workspace   Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-    workspaceId String
-    createdAt   DateTime             @default(now())
+    id             String               @id @default(cuid())
+    recepient      User?                @relation("recepientRelation", fields: [recepientId], references: [id])
+    recepientId    String?
+    recepientEmail String
+    sender         User                 @relation("senderRelation", fields: [senderId], references: [id])
+    senderId       String
+    role           WorkspaceMemberRoles @default(MEMBER)
+    Workspace      Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+    workspaceId    String
+    createdAt      DateTime             @default(now())
+
+    @@index([recepientEmail])
 }
 
 model Board {
