@@ -1,11 +1,14 @@
 import { readFile } from "fs/promises";
+import path from "path";
 
 const OTP_EMAIL = async ({ recevierEmail, otp, name = "" }: { recevierEmail: string, otp: string, name?: string }) => {
     const subject = "OTP for taskflow.space";
     const body = `Your one-time password for Taskflow is ${otp}. Do not share this OTP with anyone for security reasons. This will be valid for the next 10 minutes.\n
     Regards,
     `;
-    const rawHTML = await readFile('./otp-email.html', 'utf8')
+    const filepath = path.join(process.cwd(), 'src/utils/email-templates/otp-email.html');
+
+    const rawHTML = await readFile(filepath, 'utf8')
     return {
         to: recevierEmail,
         subject,
@@ -18,7 +21,9 @@ const OTP_EMAIL = async ({ recevierEmail, otp, name = "" }: { recevierEmail: str
 }
 
 const BASIC_EMAIL = async ({ recevierEmail, subject, body }: { recevierEmail: string, subject: string, body: string }) => {
-    const rawHTML = await readFile('./basic-email.html', 'utf8')
+    const filepath = path.join(process.cwd(), 'src/utils/email-templates/basic-email.html');
+    const rawHTML = await readFile(filepath, 'utf8')
+
     return {
         to: recevierEmail,
         text: body,

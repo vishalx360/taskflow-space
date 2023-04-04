@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
+import path from "path";
 
 
 // These id's and secrets should come from .env file.
@@ -30,7 +31,8 @@ type MailOptions = nodemailer.SendMailOptions & { dkim?: string };
 export async function SendEmail(mailOptions: MailOptions): Promise<void> {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
-        const privateKey = await readFile("../../DKIM_PRIVATE_KEY.pem", 'utf8');
+        const pemFilePath = path.join(process.cwd(), 'DKIM_PRIVATE_KEY.pem');
+        const privateKey = await readFile(pemFilePath, 'utf8');
 
         const transporter = nodemailer.createTransport({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
