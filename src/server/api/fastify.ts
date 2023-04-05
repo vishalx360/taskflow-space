@@ -3,9 +3,10 @@ import fastify from 'fastify';
 // import ws from '@fastify/websocket';
 import type { FastifyCookieOptions } from '@fastify/cookie';
 import cookie from '@fastify/cookie';
+import cors from '@fastify/cors';
 import { env } from '../../env.mjs';
-import { appRouter } from './root';
 import { createTRPCContext } from './fastify_trpc.js';
+import { appRouter } from './root';
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -36,6 +37,11 @@ export function createServer(opts: ServerOptions) {
         }     // options for parsing cookies
     } as FastifyCookieOptions)
 
+    void server.register(cors, {
+        origin: new RegExp(`(\https://\.${env.DOMAIN_NAME}|${env.DOMAIN_NAME})$`),
+        credentials: true,
+    })
+
     void server.register(fastifyTRPCPlugin, {
         prefix,
         // useWSS: true,
@@ -43,9 +49,11 @@ export function createServer(opts: ServerOptions) {
 
     });
 
-    server.get('/', () => {
+    server.get('/', (req) => {
+        console.log(req.cookies)
         return { message: 'Server Running...' };
     });
+
     const stop = async () => {
         await server.close();
     };

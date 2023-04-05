@@ -1,6 +1,5 @@
 import { type CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 // import ws from '@fastify/websocket';
-import { type Session } from "next-auth";
 import { env } from '../../env.mjs';
 import { verifyJWT } from "../../utils/jwt";
 import { SendEmail } from '../../utils/SendEmail';
@@ -9,26 +8,20 @@ import { prisma } from "../db";
 import dotenv from "dotenv";
 dotenv.config();
 
-type CreateContextOptions = {
-    session: Session | null;
-};
+// type CreateContextOptions = {
+//     session: Session | null;
+// };
 
-const createInnerTRPCContext = (opts: CreateContextOptions) => {
-    return {
-        session: opts.session,
-        prisma,
-        sendEmail: SendEmail
-    };
-};
+
 
 export async function createTRPCContext({ req, res }: CreateFastifyContextOptions) {
     const session = await getAuthSession({ req, res })
-    return createInnerTRPCContext({ req, res, session, prisma, sendEmail: SendEmail });
+    return { req, res, session, prisma, sendEmail: SendEmail };
 }
 
 
 import { initTRPC, TRPCError } from '@trpc/server';
-import superjson from "superjson"
+import superjson from "superjson";
 
 const t = initTRPC.context<typeof createTRPCContext>().create(
     {
@@ -44,6 +37,7 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+    console.log({ session: ctx.session })
     if (!ctx.session || !ctx.session.user) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
     }
@@ -59,7 +53,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 
 
-async function getAuthSession({ req, res }: CreateFastifyContextOptions) {
+export async function getAuthSession({ req, res }: CreateFastifyContextOptions) {
     const token = req.cookies["__Secure-next-auth.session-token"]
     if (token) {
         try {

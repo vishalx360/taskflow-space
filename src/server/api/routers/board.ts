@@ -2,7 +2,6 @@ import { TRPCError } from "@trpc/server";
 import { LexoRank } from "lexorank";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
 import { ALLOWED_ROLES_TO_INVITE } from "../../../utils/AllowedRolesToInvite";
 import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import {
@@ -11,6 +10,7 @@ import {
   UpdateBoardSchema,
   UpdateListSchema, UpdateTaskSchema
 } from "../../../utils/ValidationSchema";
+import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
 
 export const BoardRouter = createTRPCRouter({
   getWorkspaceMembers: protectedProcedure

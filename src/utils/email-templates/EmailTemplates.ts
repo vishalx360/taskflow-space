@@ -36,4 +36,4 @@ const BASIC_EMAIL = async ({ recevierEmail, subject, body }: { recevierEmail: st
     };
 }
 
-export { OTP_EMAIL, BASIC_EMAIL }
+export { OTP_EMAIL, BASIC_EMAIL };

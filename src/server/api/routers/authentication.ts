@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { hash } from "argon2";
-import { createTRPCRouter, publicProcedure } from "../fastify_trpc";
 import SeedPersonalWorkspace from "../../../utils/SeedPersonalWorkspace";
 import { SignUpSchema } from "../../../utils/ValidationSchema";
+import { createTRPCRouter, publicProcedure } from "../fastify_trpc";
 
 export const AuthenticationRouter = createTRPCRouter({
   signup: publicProcedure

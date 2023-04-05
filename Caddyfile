@@ -1,14 +1,16 @@
+# landing page
 taskflow.localhost {
 	reverse_proxy localhost:3000
 }
-
+# wildcard for all subdomains
 *.taskflow.localhost {
 	reverse_proxy localhost:3000
 }
+# api server
 api.taskflow.localhost {
-	reverse_proxy localhost:2022
+	reverse_proxy localhost:5000
 }
-
+# prisam studio server
 prisma.localhost {
 	reverse_proxy localhost:5555
 }

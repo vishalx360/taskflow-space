@@ -1,13 +1,11 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verify } from "argon2";
-import jwt from "jsonwebtoken";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions
 } from "next-auth";
-import { JWT, JWTDecodeParams, JWTEncodeParams } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";

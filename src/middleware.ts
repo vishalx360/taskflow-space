@@ -5,7 +5,6 @@ import { verifyJWT } from "./utils/jwt";
 
 export async function middleware(req: NextApiRequest, res: NextApiResponse) {
     const token = req.cookies.get("__Secure-next-auth.session-token")?.value;
-    console.log(token)
     const verifiedToken = token && (await verifyJWT(token).catch((err) => console.log(err)));
 
     if (!verifiedToken) {
