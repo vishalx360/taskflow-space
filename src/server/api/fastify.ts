@@ -16,8 +16,6 @@ export interface ServerOptions {
     prefix?: string;
 }
 
-
-
 export function createServer(opts: ServerOptions) {
     const dev = opts.dev ?? true;
     const port = opts.port ?? 3000;
@@ -67,7 +65,7 @@ export function createServer(opts: ServerOptions) {
 
 const serverConfig: ServerOptions = {
     dev: false,
-    port: parseInt(env.PORT || "2022"),
+    port: env.PORT ? parseInt(env.PORT) : 3001,
     prefix: '/trpc',
 };
 
