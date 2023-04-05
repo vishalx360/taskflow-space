@@ -19,6 +19,7 @@ import { type Session } from "next-auth";
 
 import { getServerAuthSession } from "~/server/auth";
 import { prisma } from "~/server/db";
+import { SendEmail } from "~/utils/SendEmail";
 
 type CreateContextOptions = {
   session: Session | null;
@@ -66,7 +67,6 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { SendEmail } from "~/utils/SendEmail";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

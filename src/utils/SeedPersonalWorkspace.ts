@@ -1,5 +1,5 @@
 import { LexoRank } from "lexorank";
-import { prisma } from "~/server/db";
+import { prisma } from "../server/db";
 import DefaultData from "./PersonalWorkspaceData.json";
 
 export default async function SeedPersonalWorkspace(userId: string) {

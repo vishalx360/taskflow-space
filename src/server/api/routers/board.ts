@@ -2,15 +2,15 @@ import { TRPCError } from "@trpc/server";
 import { LexoRank } from "lexorank";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
-import { BASIC_EMAIL } from "~/utils/email-templates/EmailTemplates";
+import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
+import { ALLOWED_ROLES_TO_INVITE } from "../../../utils/AllowedRolesToInvite";
+import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import {
   CreateListSchema,
   CreateTaskSchema, CreateWorkspaceInvitation, MoveTaskSchema,
   UpdateBoardSchema,
   UpdateListSchema, UpdateTaskSchema
-} from "~/utils/ValidationSchema";
+} from "../../../utils/ValidationSchema";
 
 export const BoardRouter = createTRPCRouter({
   getWorkspaceMembers: protectedProcedure

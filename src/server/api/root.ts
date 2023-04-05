@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "~/server/api/trpc";
+import { createTRPCRouter } from "./fastify_trpc";
 import { AuthenticationRouter } from "./routers/authentication";
 import { BoardRouter } from "./routers/board";
 import { DashboardRouter } from "./routers/dashboard";

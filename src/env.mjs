@@ -32,6 +32,8 @@ const server = z.object({
   NM_REFRESH_TOKEN: z.string(),
   NM_DKIM_PRIVATE_KEY: z.string(),
   PORT: z.string().optional(),
+
+
 });
 
 /**
@@ -39,7 +41,7 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-  // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+  NEXT_PUBLIC_TRPC_SEREVR_URL: z.string(),
 });
 
 /**
@@ -65,6 +67,7 @@ const processEnv = {
   NM_REFRESH_TOKEN: process.env.NM_REFRESH_TOKEN,
   NM_DKIM_PRIVATE_KEY: process.env.NM_DKIM_PRIVATE_KEY,
   PORT: process.env.PORT,
+  NEXT_PUBLIC_TRPC_SEREVR_URL: process.env.NEXT_PUBLIC_TRPC_SEREVR_URL,
 };
 
 // Don't touch the part below
