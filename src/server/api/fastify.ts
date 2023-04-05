@@ -1,21 +1,19 @@
 import { type inferAsyncReturnType } from '@trpc/server';
-import { type CreateFastifyContextOptions, fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
+import { fastifyTRPCPlugin, type CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 import dotenv from "dotenv";
 import fastify from 'fastify';
 // import ws from '@fastify/websocket';
 import { z } from 'zod';
-
 dotenv.config();
-
 import { prisma } from "../db";
-
+import type { FastifyCookieOptions } from '@fastify/cookie';
+import cookie from '@fastify/cookie';
 import { initTRPC } from '@trpc/server';
-import superjson from 'superjson';
 import { SendEmail } from '../../utils/SendEmail';
-
+import { env } from '../../env.mjs';
+import jwt from "jsonwebtoken"
 const t = initTRPC.context<Context>().create(
     // {transformer: superjson}
-
 );
 
 export const router = t.router;
@@ -37,7 +35,6 @@ export function createContext({ req, res }: CreateFastifyContextOptions) {
 }
 
 export type Context = inferAsyncReturnType<typeof createContext>;
-
 
 
 
@@ -85,6 +82,8 @@ export interface ServerOptions {
     prefix?: string;
 }
 
+
+
 export function createServer(opts: ServerOptions) {
     const dev = opts.dev ?? true;
     const port = opts.port ?? 3000;
@@ -92,15 +91,40 @@ export function createServer(opts: ServerOptions) {
     const server = fastify({ maxParamLength: 5000, logger: dev });
 
     // void server.register(ws);
+
+    void server.register(cookie, {
+        secret: env.NEXTAUTH_SECRET, // for cookies signature
+        parseOptions: {
+            signed: true,
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/',
+            secure: true,
+            domain: `.${env.DOMAIN_NAME}`
+        }     // options for parsing cookies
+    } as FastifyCookieOptions)
+
     void server.register(fastifyTRPCPlugin, {
         prefix,
         // useWSS: true,
         trpcOptions: { router: appRouter, createContext },
+
     });
 
     server.get('/', () => {
         return { message: 'Server Running...' };
     });
+    server.get('/cookie', (req, reply) => {
+        const nextAuthCokieRaw = req.cookies["__Secure-next-auth.session-token"]
+        // `reply.unsignCookie()` is also available
+        const cookie = nextAuthCokieRaw ? jwt.verify(nextAuthCokieRaw, env.NEXTAUTH_SECRET) : "Not Signed In";
+        return reply
+            .setCookie('foo', 'bar', {
+                path: '/',
+                signed: true
+            })
+            .send({ cookie })
+    })
 
     const stop = async () => {
         await server.close();
@@ -119,10 +143,9 @@ export function createServer(opts: ServerOptions) {
 }
 
 
-// process.env.PORT TODO
 const serverConfig: ServerOptions = {
     dev: false,
-    port: 2022,
+    port: parseInt(env.PORT || "2022"),
     prefix: '/trpc',
 };
 

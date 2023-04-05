@@ -2,6 +2,13 @@ taskflow.localhost {
 	reverse_proxy localhost:3000
 }
 
+*.taskflow.localhost {
+	reverse_proxy localhost:3000
+}
+api.taskflow.localhost {
+	reverse_proxy localhost:2022
+}
+
 prisma.localhost {
 	reverse_proxy localhost:5555
 }

@@ -31,6 +31,7 @@ const server = z.object({
   NM_REDIRECT_URI: z.string(),
   NM_REFRESH_TOKEN: z.string(),
   NM_DKIM_PRIVATE_KEY: z.string(),
+  PORT: z.string().optional(),
 });
 
 /**
@@ -62,7 +63,8 @@ const processEnv = {
   NM_CLIENT_SECRET: process.env.NM_CLIENT_SECRET,
   NM_REDIRECT_URI: process.env.NM_REDIRECT_URI,
   NM_REFRESH_TOKEN: process.env.NM_REFRESH_TOKEN,
-  NM_DKIM_PRIVATE_KEY: process.env.NM_DKIM_PRIVATE_KEY
+  NM_DKIM_PRIVATE_KEY: process.env.NM_DKIM_PRIVATE_KEY,
+  PORT: process.env.PORT,
 };
 
 // Don't touch the part below

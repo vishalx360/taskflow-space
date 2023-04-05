@@ -13,10 +13,12 @@
     "resetdb": "prisma migrate reset --preview-feature",
     "postresetdb": "prisma db push",
     "updatedb": "prisma db push",
-    "start:server": "node dist/trpc_fastify.js",
-    "build:server": "esbuild src/server/api/trpc_fastify.ts --bundle --packages=external --platform=node --format=esm --outdir=dist --sourcemap"
+    "start:server": "node dist/fastify.js",
+    "build:server": "esbuild src/server/api/fastify.ts --bundle --packages=external --platform=node --format=esm --outdir=dist --sourcemap"
   },
   "dependencies": {
+    "@auth/core": "^0.5.1",
+    "@fastify/cookie": "^8.3.0",
     "@fastify/websocket": "^7.2.0",
     "@headlessui/react": "^1.7.13",
     "@next-auth/prisma-adapter": "^1.0.5",
@@ -36,6 +38,7 @@
     "formik": "^2.2.9",
     "geopattern": "^1.2.3",
     "googleapis": "^114.0.0",
+    "jose": "^4.13.1",
     "lexorank": "^1.0.5",
     "lodash.isequal": "^4.5.0",
     "next": "^13.2.4",
@@ -61,6 +64,7 @@
     "@types/eslint": "^8.21.1",
     "@types/express": "^4.17.17",
     "@types/geopattern": "^1.2.6",
+    "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "^18.14.0",
     "@types/nodemailer": "^6.4.7",
     "@types/prettier": "^2.7.2",

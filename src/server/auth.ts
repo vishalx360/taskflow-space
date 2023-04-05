@@ -1,18 +1,20 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verify } from "argon2";
+import jwt from "jsonwebtoken";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions
 } from "next-auth";
+import { JWT, JWTDecodeParams, JWTEncodeParams } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import { signJTW, verifyJWT } from "~/utils/jwt";
 import SeedPersonalWorkspace from "~/utils/SeedPersonalWorkspace";
 import { SigninSchema } from "~/utils/ValidationSchema";
-
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -27,19 +29,15 @@ declare module "next-auth" {
       // role: UserRole;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
-
+// DECODE -> JWT -> SESSION -> ENCODE
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   callbacks: {
     session: ({ session, token }) => {
       if (token) {
@@ -69,10 +67,18 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
+  secret: env.NEXTAUTH_SECRET,
+  jwt: {
+    async encode({ secret, token }) {
+      return await signJTW(token, secret)
+    },
+    async decode({ secret, token }) {
+      return await verifyJWT(token, secret)
+    },
+    maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
   },
+
+  session: { strategy: "jwt" },
   providers: [
     Credentials({
       name: "credentials",
@@ -86,22 +92,16 @@ export const authOptions: NextAuthOptions = {
       },
       authorize: async (credentials) => {
         const creds = await SigninSchema.parseAsync(credentials);
-        console.log(creds);
-
         const user = await prisma.user.findFirst({
           where: { email: creds.email },
         });
-
         if (!user || !user.password) {
           throw new Error("User not found");
         }
-
         const isValidPassword = await verify(user.password, creds.password);
-
         if (!isValidPassword) {
           throw new Error("Invalid credentials");
         }
-
         return {
           id: user.id,
           email: user.email,
@@ -122,8 +122,17 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  jwt: {
-    maxAge: 30 * 24 * 30 * 60, // 15 days
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true,
+        domain: `.${env.DOMAIN_NAME}`
+      }
+    },
   },
   pages: {
     signIn: "/signin",
