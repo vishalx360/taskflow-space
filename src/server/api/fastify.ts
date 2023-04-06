@@ -4,12 +4,17 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 const app = fastify()
 
+
+app.get('/health-check', async (req, res) => {
+    await res.send('Server is running')
+})
+
 app.get('/feed', async (req, res) => {
     const posts = await prisma.post.findMany({
         where: { published: true },
         include: { author: true },
     })
-    res.send(posts)
+    await res.send(posts)
 })
 
 app.post('/post', async (req, res) => {
@@ -22,7 +27,7 @@ app.post('/post', async (req, res) => {
             author: { connect: { email: authorEmail } },
         },
     })
-    res.send(post)
+    await res.send(post)
 })
 
 app.put('/publish/:id', async (req, res) => {
@@ -31,7 +36,7 @@ app.put('/publish/:id', async (req, res) => {
         where: { id },
         data: { published: true },
     })
-    res.send(post)
+    await res.send(post)
 })
 
 app.delete('/user/:id', async (req, res) => {
@@ -41,7 +46,7 @@ app.delete('/user/:id', async (req, res) => {
             id,
         },
     })
-    res.send(user)
+    await res.send(user)
 })
 
 const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
