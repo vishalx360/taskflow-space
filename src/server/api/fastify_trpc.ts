@@ -8,20 +8,36 @@ import { prisma } from "../db";
 import dotenv from "dotenv";
 dotenv.config();
 
-// type CreateContextOptions = {
-//     session: Session | null;
-// };
+type CreateContextOptions = {
+    session: Session | null;
+    req: FastifyRequestType;
+    res: FastifyReplyType;
+};
 
+const createInnerTRPCContext = (opts: CreateContextOptions) => {
+    return {
+        req: opts.req,
+        res: opts.res,
+        session: opts.session,
+        prisma,
+        sendEmail: SendEmail
+    };
+};
 
 
 export async function createTRPCContext({ req, res }: CreateFastifyContextOptions) {
     const session = await getAuthSession({ req, res })
-    return { req, res, session, prisma, sendEmail: SendEmail };
+    return createInnerTRPCContext({
+        req, res,
+        session,
+    });
 }
 
 
 import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from "superjson";
+import { Session } from '@prisma/client';
+import { FastifyReplyType, FastifyRequestType } from 'fastify/types/type-provider.js';
 
 const t = initTRPC.context<typeof createTRPCContext>().create(
     {
@@ -53,7 +69,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 
 
-export async function getAuthSession({ req, res }: CreateFastifyContextOptions) {
+export async function getAuthSession({ req, res }: CreateFastifyContextOptions): Promise<Session | null> {
     const token = req.cookies["__Secure-next-auth.session-token"]
     if (token) {
         try {
