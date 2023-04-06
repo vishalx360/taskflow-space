@@ -2,7 +2,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { type Board, type List, type Task } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import dynamic from "next/dynamic";
-import { Fragment, memo, useRef } from "react";
+import { Fragment, memo, RefObject, useRef } from "react";
 import { BiDotsVerticalRounded, BiLoaderAlt } from "react-icons/bi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
@@ -34,6 +34,8 @@ function TaskList({ list }: { list: List }) {
     { listId: list.id || "" },
     { enabled: Boolean(list.id), retry: false }
   );
+
+  const listEndRef = useRef<HTMLDivElement>(null);
 
   console.log("rerendering", list.name);
 
@@ -80,10 +82,10 @@ function TaskList({ list }: { list: List }) {
             ) : (
               <EmptyListCard />
             )}
-            <div className="h-[130px]" />
+            <div ref={listEndRef} className="h-[130px]" />
           </div>
-          <AddToListForm list={list} />
           {provided.placeholder}
+          <AddToListForm listEndRef={listEndRef} list={list} />
         </div>
       )}
     </Droppable>
@@ -91,26 +93,51 @@ function TaskList({ list }: { list: List }) {
 }
 export default memo(TaskList);
 
-export function AddToListForm({ list }: { list: List }) {
+export function AddToListForm({
+  list,
+  listEndRef,
+}: {
+  list: List;
+  listEndRef: RefObject<HTMLDivElement>;
+}) {
   // createTask mutation
   const utils = api.useContext();
   const mutation = api.board.createTask.useMutation({
-    onError(error) {
+    onError: async (error) => {
       Toast({ content: error.message, status: "error" });
     },
-    onSuccess: async () => {
+    onSettled: async () => {
       await utils.board.getTasks
         .invalidate({ listId: list.id })
         .catch((err) => console.log(err));
     },
   });
+
+  // optimistic update
+  const optimisticUpdate = (values: { title: string; listId: string }) => {
+    const newTask: Task = {
+      id: Math.random().toString(36).substr(2, 9),
+      title: values.title,
+      listId: values.listId,
+      createdAt: new Date(),
+      rank: "",
+      description: "",
+    };
+    utils.board.getTasks.setData({ listId: list.id }, (oldData) => {
+      return [...oldData, newTask];
+    });
+    // make listEndRef visible
+    listEndRef?.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="absolute bottom-0 z-10 w-full rounded-b-xl bg-[#ebecf0]  p-4 transition-all">
+    <div className="sticky bottom-0 z-10 w-full rounded-b-xl bg-[#ebecf0]  p-4 transition-all">
       <Formik
         initialValues={{ title: "", listId: list.id }}
         validationSchema={toFormikValidationSchema(CreateTaskSchema)}
         onSubmit={(values, { resetForm }) => {
           mutation.mutate(values);
+          optimisticUpdate(values);
           resetForm();
         }}
       >
@@ -140,12 +167,8 @@ export function AddToListForm({ list }: { list: List }) {
                   leaveTo="opacity-0"
                 >
                   <PrimaryButton
-                    isLoading={mutation.isLoading}
                     loadingText=" "
-                    disabled={
-                      Object.keys(form.errors).length !== 0 ||
-                      mutation.isLoading
-                    }
+                    disabled={Object.keys(form.errors).length !== 0}
                     type="submit"
                     className="flex-[2] rounded-xl"
                     // LeftIcon={FaPlus}

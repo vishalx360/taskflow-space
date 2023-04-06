@@ -215,10 +215,37 @@ export const BoardRouter = createTRPCRouter({
   getBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
     .query(async ({ ctx, input }) => {
+      // check if board exist and user has permission to view it
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        select: { workspaceId: true },
+      });
+      if (!board) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found.",
+        });
+      }
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+        }
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to view this board.",
+        });
+      }
+
       await ctx.prisma.board.update({
         where: { id: input.boardId },
         data: { updatedAt: new Date() },
       });
+
       return ctx.prisma.board.findUnique({
         where: { id: input.boardId },
         include: {
@@ -357,13 +384,14 @@ export const BoardRouter = createTRPCRouter({
         rank = parsedRank.genNext()?.toString();
       }
 
-      return ctx.prisma.task.create({
+      const newTask = await ctx.prisma.task.create({
         data: {
           title: input.title,
           listId: input.listId,
           rank,
         },
       });
+      return newTask;
     }),
 
   getTasks: protectedProcedure
