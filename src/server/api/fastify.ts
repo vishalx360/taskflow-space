@@ -50,8 +50,11 @@ export function createServer(opts: ServerOptions) {
     });
 
     server.get('/', (req) => {
-        console.log(req.cookies)
         return { message: 'Server Running...' };
+    });
+    server.get('/health-check', (req, reply) => {
+        console.log("Health Check ")
+        reply.status(200).send({ message: 'Server Running...' })
     });
 
     const stop = async () => {
@@ -72,7 +75,7 @@ export function createServer(opts: ServerOptions) {
 
 
 const serverConfig: ServerOptions = {
-    dev: false,
+    dev: true,
     port: env.PORT ? parseInt(env.PORT) : 3001,
     prefix: '/trpc',
 };

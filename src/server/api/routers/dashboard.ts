@@ -20,6 +20,13 @@ const GetRandomBackgroundGradient = () => {
 }
 
 export const DashboardRouter = createTRPCRouter({
+  getUser: protectedProcedure.query(({ ctx }) => {
+    console.log("getting user info: ", ctx.session.user.id)
+    return ctx.prisma.user.findUnique({
+      where: { id: ctx.session.user.id }
+    });
+  }),
+
   getAllWorkspace: protectedProcedure.query(({ ctx }) => {
     console.log("getAllWorkspace", ctx.session.user.id)
     return ctx.prisma.workspace.findMany({
