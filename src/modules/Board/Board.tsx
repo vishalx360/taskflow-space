@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { type DropResult } from "react-beautiful-dnd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { FiArrowLeft } from "react-icons/fi";
+import { useDebouncedCallback } from "use-debounce";
 import TaskList, {
   CreateList,
   TaskListSkeleton,
@@ -33,15 +34,25 @@ function Board() {
     { enabled: Boolean(boardId), retry: false }
   );
 
+  const syncListDebounced = useDebouncedCallback(
+    // function
+    async (listId: string) => {
+      console.count("syncListDebounced");
+      await utils.board.getTasks
+        .invalidate({ listId })
+        .catch((err) => console.log(err));
+    },
+    // delay in ms
+    3000
+  );
+
   const mutation = api.board.moveTask.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
-    onSuccess: (listsToUpdate) => {
-      listsToUpdate[0] &&
-        utils.board.getTasks.invalidate({ listId: listsToUpdate[0] });
-      listsToUpdate[1] &&
-        utils.board.getTasks.invalidate({ listId: listsToUpdate[1] });
+    onSuccess: async (listsToUpdate) => {
+      listsToUpdate[0] && (await syncListDebounced(listsToUpdate[0]));
+      listsToUpdate[1] && (await syncListDebounced(listsToUpdate[1]));
     },
   });
 

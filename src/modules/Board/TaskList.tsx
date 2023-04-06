@@ -105,10 +105,10 @@ export function AddToListForm({
   const utils = api.useContext();
   const syncListDebounced = useDebouncedCallback(
     // function
-    async () => {
+    async (listId: string) => {
       console.count("syncListDebounced");
       await utils.board.getTasks
-        .invalidate({ listId: list.id })
+        .invalidate({ listId })
         .catch((err) => console.log(err));
     },
     // delay in ms
@@ -121,7 +121,7 @@ export function AddToListForm({
       Toast({ content: error.message, status: "error" });
     },
     onSettled: async () => {
-      await syncListDebounced();
+      await syncListDebounced(list.id);
     },
   });
 
