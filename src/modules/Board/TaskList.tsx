@@ -92,6 +92,7 @@ function TaskList({ list }: { list: List }) {
   );
 }
 export default memo(TaskList);
+import { useDebouncedCallback } from "use-debounce";
 
 export function AddToListForm({
   list,
@@ -102,14 +103,25 @@ export function AddToListForm({
 }) {
   // createTask mutation
   const utils = api.useContext();
-  const mutation = api.board.createTask.useMutation({
-    onError: async (error) => {
-      Toast({ content: error.message, status: "error" });
-    },
-    onSettled: async () => {
+  const syncListDebounced = useDebouncedCallback(
+    // function
+    async () => {
+      console.count("syncListDebounced");
       await utils.board.getTasks
         .invalidate({ listId: list.id })
         .catch((err) => console.log(err));
+    },
+    // delay in ms
+    3000
+  );
+
+  const mutation = api.board.createTask.useMutation({
+    onError: (error) => {
+      // remove optimistic update on error
+      Toast({ content: error.message, status: "error" });
+    },
+    onSettled: async () => {
+      await syncListDebounced();
     },
   });
 
