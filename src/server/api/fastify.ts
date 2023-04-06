@@ -9,7 +9,7 @@ app.get('/feed', async (req, res) => {
         where: { published: true },
         include: { author: true },
     })
-    res.json(posts)
+    res.send(posts)
 })
 
 app.post('/post', async (req, res) => {
@@ -22,7 +22,7 @@ app.post('/post', async (req, res) => {
             author: { connect: { email: authorEmail } },
         },
     })
-    res.json(post)
+    res.send(post)
 })
 
 app.put('/publish/:id', async (req, res) => {
@@ -31,7 +31,7 @@ app.put('/publish/:id', async (req, res) => {
         where: { id },
         data: { published: true },
     })
-    res.json(post)
+    res.send(post)
 })
 
 app.delete('/user/:id', async (req, res) => {
@@ -41,10 +41,10 @@ app.delete('/user/:id', async (req, res) => {
             id,
         },
     })
-    res.json(user)
+    res.send(user)
 })
 
-const port = process.env.PORT ? parseInt(process.env.PORT) : 3001,
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
 
 void app.listen({ port });
 console.log(`Server running on http://localhost:${port}`);
