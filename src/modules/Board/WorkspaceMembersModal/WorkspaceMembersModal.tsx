@@ -21,7 +21,7 @@ export default function WorkspaceMembersModal({
 
   const { data: members, isLoading } = api.board.getWorkspaceMembers.useQuery(
     {
-      workspaceId: workspace.id,
+      workspaceId: workspace?.id,
     },
     { enabled: isOpen }
   );
