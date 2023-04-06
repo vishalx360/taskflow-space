@@ -12,7 +12,12 @@ const Draggable = dynamic(
 export function TaskCard({ task, index }: { task: Task; index: number }) {
   return (
     <TaskModal task={task}>
-      <Draggable key={task.id} draggableId={task.id} index={index}>
+      <Draggable
+        isDragDisabled={task?.pending}
+        key={task.id}
+        draggableId={task.id}
+        index={index}
+      >
         {(provided, { isDragging }) => (
           <div
             ref={provided.innerRef}
@@ -24,7 +29,11 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                 isDragging ? "border-dotted bg-[#f0f0f0]" : ""
               }`}
             >
-              <p className="text-md font-medium text-black line-clamp-2">
+              <p
+                className={`text-md font-medium text-black line-clamp-2 ${
+                  task?.pending ? "text-neutral-600" : "text-black"
+                }`}
+              >
                 {task?.title}
               </p>
               {task?.description && (

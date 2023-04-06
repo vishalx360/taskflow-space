@@ -1,3 +1,4 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { type Board, type Task } from "@prisma/client";
 import dynamic from "next/dynamic";
 import Error from "next/error";

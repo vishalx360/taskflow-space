@@ -134,6 +134,7 @@ export function AddToListForm({
       createdAt: new Date(),
       rank: "",
       description: "",
+      pending: true,
     };
     utils.board.getTasks.setData({ listId: list.id }, (oldData) => {
       return [...oldData, newTask];

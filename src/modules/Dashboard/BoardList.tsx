@@ -2,6 +2,7 @@ import { type Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { api } from "~/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
@@ -10,12 +11,13 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.dashboard.getAllBoards.useQuery({
     workspaceId: workspace.id,
   });
+  const [parent] = useAutoAnimate();
 
   if (isLoading) {
     return <BoardListSkeleton />;
   }
   return (
-    <div className="flex flex-wrap gap-5">
+    <div ref={parent} className="flex flex-wrap gap-5">
       {boards?.map((board) => (
         <Board key={board.id} board={board} />
       ))}

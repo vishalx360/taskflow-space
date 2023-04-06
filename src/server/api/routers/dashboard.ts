@@ -102,13 +102,14 @@ export const DashboardRouter = createTRPCRouter({
         });
       }
 
-      return ctx.prisma.board.create({
+      const newBoard = await ctx.prisma.board.create({
         data: {
           name: input.name,
           workspaceId: input.workspaceId,
           background: GetRandomBackgroundGradient(),
         },
       });
+      return newBoard;
     }),
 
   createNewWorkspace: protectedProcedure

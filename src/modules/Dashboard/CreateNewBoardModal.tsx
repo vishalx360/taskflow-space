@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -17,6 +17,7 @@ export default function CreateNewBoardModal({
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const initailFocusRef = useRef(null);
   function closeModal() {
     setIsOpen(false);
   }
@@ -30,10 +31,11 @@ export default function CreateNewBoardModal({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
-    onSuccess: async () => {
-      await utils.dashboard.getAllBoards
-        .invalidate()
-        .catch((err) => console.log(err));
+    onSuccess: async (newBoard) => {
+      utils.dashboard.getAllBoards.setData(
+        { workspaceId: workspace.id },
+        (oldData) => [...oldData, newBoard]
+      );
       Toast({ content: "New board created successfully!", status: "success" });
       setIsOpen(false);
     },
@@ -52,7 +54,12 @@ export default function CreateNewBoardModal({
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog
+          initialFocus={initailFocusRef}
+          as="div"
+          className="relative z-10"
+          onClose={closeModal}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -117,6 +124,7 @@ export default function CreateNewBoardModal({
                                 <input
                                   type="text"
                                   id="name"
+                                  ref={initailFocusRef}
                                   required
                                   placeholder="Board name"
                                   {...field}
@@ -135,7 +143,10 @@ export default function CreateNewBoardModal({
                               <PrimaryButton
                                 isLoading={mutation.isLoading}
                                 loadingText="Creating new board"
-                                disabled={Object.keys(form.errors).length !== 0}
+                                disabled={
+                                  mutation.isLoading ||
+                                  Object.keys(form.errors).length !== 0
+                                }
                                 type="submit"
                                 className="w-full"
                                 LeftIcon={FaPlus}
