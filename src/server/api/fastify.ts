@@ -1,85 +1,50 @@
-import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
-import fastify from 'fastify';
-// import ws from '@fastify/websocket';
-import type { FastifyCookieOptions } from '@fastify/cookie';
-import cookie from '@fastify/cookie';
-import cors from '@fastify/cors';
-import { env } from '../../env.mjs';
-import { createTRPCContext } from './fastify_trpc.js';
-import { appRouter } from './root';
+import fastify from 'fastify'
+import { PrismaClient } from '@prisma/client'
 
-import dotenv from "dotenv";
-dotenv.config();
+const prisma = new PrismaClient()
+const app = fastify()
 
-export interface ServerOptions {
-    dev?: boolean;
-    port?: number;
-    prefix?: string;
-}
-
-export function createServer(opts: ServerOptions) {
-    const dev = opts.dev ?? true;
-    const port = opts.port ?? 3000;
-    const prefix = opts.prefix ?? '/trpc';
-    const server = fastify({ maxParamLength: 5000, logger: dev });
-
-    // void server.register(ws);
-
-    void server.register(cookie, {
-        secret: env.NEXTAUTH_SECRET, // for cookies signature
-        parseOptions: {
-            signed: true,
-            httpOnly: true,
-            sameSite: 'lax',
-            path: '/',
-            secure: true,
-            domain: `.${env.DOMAIN_NAME}`
-        }     // options for parsing cookies
-    } as FastifyCookieOptions)
-
-    void server.register(cors, {
-        origin: new RegExp(`(\https://\.${env.DOMAIN_NAME}|${env.DOMAIN_NAME})$`),
-        credentials: true,
+app.get('/feed', async (req, res) => {
+    const posts = await prisma.post.findMany({
+        where: { published: true },
+        include: { author: true },
     })
+    res.json(posts)
+})
 
-    void server.register(fastifyTRPCPlugin, {
-        prefix,
-        // useWSS: true,
-        trpcOptions: { router: appRouter, createContext: createTRPCContext },
+app.post('/post', async (req, res) => {
+    const { title, content, authorEmail } = req.body
+    const post = await prisma.post.create({
+        data: {
+            title,
+            content,
+            published: false,
+            author: { connect: { email: authorEmail } },
+        },
+    })
+    res.json(post)
+})
 
-    });
+app.put('/publish/:id', async (req, res) => {
+    const { id } = req.params
+    const post = await prisma.post.update({
+        where: { id },
+        data: { published: true },
+    })
+    res.json(post)
+})
 
-    server.get('/', (req) => {
-        return { message: 'Server Running...' };
-    });
-    server.get('/health-check', (req, reply) => {
-        console.log("Health Check ")
-        reply.status(200).send({ message: 'Server Running...' })
-    });
+app.delete('/user/:id', async (req, res) => {
+    const { id } = req.params
+    const user = await prisma.user.delete({
+        where: {
+            id,
+        },
+    })
+    res.json(user)
+})
 
-    const stop = async () => {
-        await server.close();
-    };
-    const start = async () => {
-        try {
-            await server.listen({ port });
-            console.log(`Server running on http://localhost:${port}`);
-        } catch (err) {
-            server.log.error(err);
-            process.exit(1);
-        }
-    };
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3001,
 
-    return { server, start, stop };
-}
-
-
-const serverConfig: ServerOptions = {
-    dev: true,
-    port: env.PORT ? parseInt(env.PORT) : 3001,
-    prefix: '/trpc',
-};
-
-
-const server = createServer(serverConfig);
-void server.start();
+void app.listen({ port });
+console.log(`Server running on http://localhost:${port}`);

@@ -149,9 +149,20 @@ model VerificationToken {
 }
 
 // TEMP
-model Posts {
-    id          String   @id @default(cuid())
-    createdAt   DateTime @default(now())
-    title       String
-    description String
+// Define the `User` table in the database
+model TempUser {
+    id    Int     @id @default(autoincrement())
+    name  String?
+    email String  @unique
+    posts Post[]
+}
+
+// Define the `Post` table in the database
+model Post {
+    id        Int       @id @default(autoincrement())
+    published Boolean?  @default(false)
+    title     String
+    content   String?
+    author    TempUser? @relation(fields: [authorId], references: [id])
+    authorId  Int?
 }
