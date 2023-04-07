@@ -2,9 +2,9 @@ steps:
   - name: node:18.13.0
     entrypoint: npm
     args: ["install"]
-  - name: env-variables
+  - name: node:18.13.0
     entrypoint: npm
-    args: ["run"]
+    args: ["run", "build:server"]
     env:
       - "DATABASE_URL=${_DATABASE_URL}"
       - "DOMAIN_NAME=${_DOMAIN_NAME}"
@@ -21,9 +21,6 @@ steps:
       - "NM_DKIM_PRIVATE_KEY=${_NM_DKIM_PRIVATE_KEY}"
       - "NM_REDIRECT_URI=${_NM_REDIRECT_URI}"
       - "NM_REFRESH_TOKEN=${_NM_REFRESH_TOKEN}"
-  - name: node:18.13.0
-    entrypoint: npm
-    args: ["run", "build:server"]
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
 options:
