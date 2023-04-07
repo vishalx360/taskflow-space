@@ -26,5 +26,7 @@ steps:
     args: ["run", "build:server"]
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
-    serviceAccount: "taskflow-space@appspot.gserviceaccount.com"
+options:
+  logging: "NONE"
+serviceAccount: "taskflow-space@appspot.gserviceaccount.com"
 timeout: "1600s"
