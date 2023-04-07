@@ -25,5 +25,5 @@ steps:
     args: ["app", "deploy"]
 options:
   logging: "NONE"
-serviceAccount: "taskflow-space@appspot.gserviceaccount.com"
 timeout: "1600s"
+# serviceAccount: "taskflow-space@appspot.gserviceaccount.com"
