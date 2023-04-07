@@ -2,7 +2,7 @@ steps:
   - name: install-deps
     entrypoint: npm
     args: ["install"]
-  - name: env-variables-init
+  - name: env-variables
     entrypoint: npm
     args: ["run", "create-env"]
     env:
