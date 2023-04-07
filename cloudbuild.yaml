@@ -26,4 +26,8 @@ steps:
     args: ["run", "build:server"]
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
+    logsBucket: "my-logs-bucket"
+    options:
+      logging: "LEGACY"
+    serviceAccount: "taskflow-space@appspot.gserviceaccount.com"
 timeout: "1600s"
