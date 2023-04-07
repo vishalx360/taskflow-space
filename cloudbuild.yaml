@@ -28,6 +28,6 @@ steps:
     args: ["app", "deploy"]
     logsBucket: "my-logs-bucket"
     options:
-      logging: "LEGACY"
+      logging: "NONE"
     serviceAccount: "taskflow-space@appspot.gserviceaccount.com"
 timeout: "1600s"
