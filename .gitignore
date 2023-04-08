@@ -43,3 +43,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 dist
+
+app.yaml
