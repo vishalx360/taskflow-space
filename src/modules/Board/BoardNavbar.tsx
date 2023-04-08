@@ -16,14 +16,14 @@ function BoardNavbar({ board }: { board: Board }) {
           >
             <FiArrowLeft className="text-xl" />
           </Link>
-          <span className="self-center whitespace-nowrap text-xl font-semibold italic text-white">
+          <span className="self-center whitespace-nowrap text-xl font-semibold text-white">
             {board?.name}
           </span>
         </div>
-        <Link href="/" className="hidden items-center lg:flex">
+        <Link href="/" className="hidden items-center md:flex">
           <LogoImage />
         </Link>
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="flex items-center gap-3">
           {!board?.Workspace?.personal && (
             <WorkspaceMembersModal workspaceId={board?.workspaceId} />
           )}

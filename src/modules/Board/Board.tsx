@@ -1,4 +1,3 @@
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { type Board, type Task } from "@prisma/client";
 import dynamic from "next/dynamic";
 import Error from "next/error";
@@ -124,7 +123,7 @@ function Board() {
 
   return (
     <main className="relative h-screen">
-      <BoardBackground board={board} />
+      <BoardBackground background={board?.background} />
       <BoardNavbar board={board} />
       <DragDropContext onDragEnd={onDragEnd}>
         <Scrollbars>
@@ -143,32 +142,48 @@ function Board() {
 export default Board;
 
 function BoardSkeleton(): JSX.Element {
+  const params = useSearchParams();
+  const background = params.get("background");
+  const boardName = params.get("boardName");
   return (
-    <div className="h-screen border-2  bg-neutral-100">
-      <nav className=" top-0 left-0 z-50 w-full  px-4 text-white shadow sm:px-4">
-        <div className="container mx-auto flex flex-wrap items-center justify-between">
+    <div className="relative h-screen ">
+      <BoardBackground background={background} />
+      <nav className="fixed top-0 left-0 z-50 w-full  px-4 text-white shadow sm:px-4">
+        <div className="container mx-auto flex  items-center justify-between">
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
-              className="flex items-center gap-5 rounded-full border-2 border-neutral-400 p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20 hover:text-white"
+              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${
+                background
+                  ? "border-white/50 text-white"
+                  : "border-neutral-400 text-neutral-600"
+              }`}
             >
-              <FiArrowLeft className="text-xl text-black" />
+              <FiArrowLeft className="text-xl" />
             </Link>
-            <span className="self-center whitespace-nowrap text-xl font-semibold italic text-neutral-600">
-              <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300"></div>
+            <span className="self-center whitespace-nowrap text-xl font-semibold  text-white">
+              {boardName ? (
+                <span className="self-center whitespace-nowrap text-xl font-semibold">
+                  {boardName}
+                </span>
+              ) : (
+                <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300" />
+              )}
             </span>
           </div>
-          <Link href="/" className="flex items-center">
-            <LogoImage dark />
+          <Link href="/" className="hidden  items-center md:flex">
+            <LogoImage dark={!Boolean(background)} />
           </Link>
+
           <div className="flex items-center gap-3">
-            <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300"></div>
-            <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300"></div>
+            <div className="my-3 h-10 w-10 animate-pulse rounded-xl bg-gray-300 md:w-20"></div>
+            <div className="my-3 h-10 w-10 animate-pulse rounded-xl bg-gray-300 md:w-20"></div>
           </div>
         </div>
       </nav>
-      <Scrollbars>
-        <div className="flex w-fit items-start gap-5 p-5 pt-5">
+
+      <Scrollbars className="z-40">
+        <div className="flex w-fit items-start gap-5 p-5  pt-20">
           <TaskListSkeleton NumberOfTasks={10} />
           <TaskListSkeleton NumberOfTasks={7} />
           <TaskListSkeleton NumberOfTasks={9} />

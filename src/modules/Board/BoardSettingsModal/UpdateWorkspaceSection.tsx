@@ -96,7 +96,7 @@ function UpdateWorkspaceSection({
                     !form.dirty || Object.keys(form.errors).length !== 0
                   }
                   type="submit"
-                  className="rounded-xl"
+                  className="w-full rounded-xl md:w-fit"
                 >
                   Save Changes
                 </PrimaryButton>

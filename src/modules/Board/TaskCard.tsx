@@ -25,12 +25,12 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
             {...provided.dragHandleProps}
           >
             <div
-              className={`border-1 w-full min-w-[270px] rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
+              className={`border-1 w-full rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
                 isDragging ? "border-dotted bg-[#f0f0f0]" : ""
               }`}
             >
               <p
-                className={`text-md font-medium text-black line-clamp-2 ${
+                className={`md:text-md text-sm font-medium text-black line-clamp-2 ${
                   task?.pending ? "text-neutral-600" : "text-black"
                 }`}
               >

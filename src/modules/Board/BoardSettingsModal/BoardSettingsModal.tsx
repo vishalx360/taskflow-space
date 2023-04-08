@@ -40,7 +40,7 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
         Icon={MdSettings}
         className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
       >
-        Settings
+        <p className="hidden lg:inline">Settings</p>
       </IconButton>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

@@ -3,7 +3,11 @@ import { type Board, type List, type Task } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import dynamic from "next/dynamic";
 import { Fragment, memo, RefObject, useRef } from "react";
-import { BiDotsVerticalRounded, BiLoaderAlt } from "react-icons/bi";
+import {
+  BiDotsHorizontalRounded,
+  BiDotsVerticalRounded,
+  BiLoaderAlt,
+} from "react-icons/bi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { api } from "~/utils/api";
 import {
@@ -47,12 +51,14 @@ function TaskList({ list }: { list: List }) {
     <Droppable droppableId={list.id}>
       {(provided) => (
         <div
-          className="prevent-select relative h-fit max-h-[79vh] w-[300px] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
+          className="prevent-select relative h-fit max-h-[79vh] w-[300px]  max-w-[70vw] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
           key={`main:${list.name}`}
         >
           <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pt-3 pb-2 text-black">
-            <div className="relative flex items-center  ">
-              <UpdateListName list={list} />
+            <div className="relative flex items-center  justify-start">
+              <div className="max-w-[200px]">
+                <UpdateListName list={list} />
+              </div>
               <Transition
                 show={isRefetching || isLoading}
                 enter="transition-opacity duration-200"
@@ -73,7 +79,7 @@ function TaskList({ list }: { list: List }) {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="mt-0 max-h-[75vh] space-y-2 overflow-x-hidden overflow-y-scroll px-2"
+            className="taskListScroll mt-0 max-h-[75vh] space-y-2 overflow-x-hidden overflow-y-scroll px-2"
           >
             {Tasks?.length !== 0 ? (
               Tasks?.map((task: Task, index: number) => (
@@ -212,7 +218,7 @@ export function ListActionMenu({ list }: { list: List }) {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center rounded-md bg-neutral-100 bg-opacity-30  p-2 text-sm font-medium text-white transition-opacity hover:bg-opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-opacity-75">
-          <BiDotsVerticalRounded
+          <BiDotsHorizontalRounded
             className="h-5 w-5 text-black"
             aria-hidden="true"
           />
@@ -269,7 +275,7 @@ export function UpdateListName({ list }: { list: List }) {
           {({ field, form, meta }: FieldProps) => (
             <input
               ref={InputRef}
-              className="border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none hover:border-b-2 focus:border-b-2 active:border-none"
+              className="w-full border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none hover:border-b-2 focus:border-b-2 active:border-none"
               {...field}
             />
           )}
@@ -379,7 +385,7 @@ export function TaskListSkeleton({ NumberOfTasks }: { NumberOfTasks: number }) {
     Tasks.push(<TaskCardSkeleton />);
   }
   return (
-    <div className="relative h-fit max-h-[79vh] w-[350px] animate-pulse   rounded-2xl  bg-gray-300 ring-black md:w-[320px]">
+    <div className="prevent-select relative h-fit max-h-[79vh] w-[300px]  max-w-[70vw] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]">
       <div className="mt-0  space-y-2 p-4">
         <div className=" mb-5 w-28 rounded-xl bg-gray-400/50 p-4" />
         {Tasks}

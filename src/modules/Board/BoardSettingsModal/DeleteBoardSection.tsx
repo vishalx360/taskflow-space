@@ -41,7 +41,7 @@ function DeleteBoardSection({
         disabled={mutation.isLoading}
         overwriteClassname
         loadingText="Deleting Board"
-        className="rounded-xl border-2 border-red-600 bg-transparent px-4 py-2 text-red-700 hover:bg-red-50 active:bg-red-100 disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-400"
+        className="w-full rounded-xl border-2 border-red-600 bg-transparent px-4 py-2 text-red-700 hover:bg-red-50 active:bg-red-100 disabled:border-gray-200 disabled:bg-gray-200 disabled:text-gray-400 md:w-fit"
       >
         Delete this Board
       </PrimaryButton>

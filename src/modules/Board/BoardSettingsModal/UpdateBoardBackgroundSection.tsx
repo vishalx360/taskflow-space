@@ -27,7 +27,7 @@ function UpdateBoardBackgroundSection({
               <h3 className="mb-2 block text-sm font-medium text-neutral-500 dark:text-white">
                 Gradients
               </h3>
-              <ul className="grid w-full gap-4 md:grid-cols-5">
+              <ul className="grid w-full grid-cols-5 gap-4 md:grid-cols-5">
                 {BoardBackGrounds.gradients.map((gradient, index) => (
                   <li key={gradient}>
                     <input
@@ -51,7 +51,7 @@ function UpdateBoardBackgroundSection({
                         </div>
                       )}
                       <div
-                        className={`h-[50px] w-[80px]`}
+                        className={`aspect-video  w-[60px] md:w-[80px]`}
                         style={{ backgroundImage: gradient }}
                       />
                     </label>
@@ -63,7 +63,7 @@ function UpdateBoardBackgroundSection({
               <h3 className="mt-3 mb-2 block text-sm font-medium text-neutral-500 dark:text-white">
                 Wallpapers
               </h3>
-              <ul className="grid w-full gap-4 md:grid-cols-5">
+              <ul className="grid w-full grid-cols-5 gap-2 md:grid-cols-5">
                 {BoardBackGrounds.wallpapers.map((imageURL, index) => (
                   <li key={imageURL}>
                     <input
@@ -79,7 +79,7 @@ function UpdateBoardBackgroundSection({
                     />
                     <label
                       htmlFor={`wallpaper:${index}`}
-                      className="relative inline-flex w-fit cursor-pointer items-center justify-between overflow-hidden rounded-lg border-2 border-gray-200 bg-white  text-white  hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600"
+                      className="relative inline-flex w-full cursor-pointer items-center justify-between overflow-hidden rounded-lg border-2 border-gray-200 bg-white  text-white  hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600"
                     >
                       {field.value === `wallpaper:${imageURL}` && (
                         <div className="absolute flex h-full w-full items-center justify-center bg-black/30">
@@ -87,9 +87,9 @@ function UpdateBoardBackgroundSection({
                         </div>
                       )}
                       <Image
-                        className="h-12 w-full bg-gray-200 object-cover"
+                        className="aspect-video w-full bg-gray-200 object-cover "
                         alt="background"
-                        width={80}
+                        width={90}
                         height={40}
                         src={imageURL}
                       />

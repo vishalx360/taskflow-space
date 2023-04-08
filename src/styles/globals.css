@@ -6,7 +6,8 @@
 
 ::-webkit-scrollbar {
   width: 8px;
-  border-radius: 5px;
+  border-radius: 8px;
+  height: 0;
 }
 
 /* Track */
@@ -23,6 +24,12 @@
   border-radius: 10px;
 }
 
+.taskListScroll::-webkit-scrollbar-thumb {
+  background: #bec2cd;
+}
+.taskListScroll::-webkit-scrollbar-thumb:hover {
+  background: #202020;
+}
 /* Handle on hover */
 
 ::-webkit-scrollbar-thumb:hover {

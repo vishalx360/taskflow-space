@@ -42,7 +42,7 @@ export default function WorkspaceMembersModal({
         Icon={MdPeople}
         className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
       >
-        Members
+        <p className="hidden lg:inline">Members</p>
       </IconButton>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
