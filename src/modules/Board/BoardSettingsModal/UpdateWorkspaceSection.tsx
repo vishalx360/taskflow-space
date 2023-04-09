@@ -84,7 +84,6 @@ function UpdateWorkspaceSection({
 
           <UpdateBoardBackgroundSection
             UpdatelocalBackground={UpdatelocalBackground}
-            board={board}
           />
           <Field name="submit">
             {({ field, form, meta }: FieldProps) => (

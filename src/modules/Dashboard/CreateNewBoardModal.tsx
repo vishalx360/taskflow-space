@@ -27,12 +27,12 @@ export default function CreateNewBoardModal({
 
   const utils = api.useContext();
 
-  const mutation = api.dashboard.createNewBoard.useMutation({
+  const mutation = api.board.createNewBoard.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async (newBoard) => {
-      utils.dashboard.getAllBoards.setData(
+      utils.board.getAllBoards.setData(
         { workspaceId: workspace.id },
         (oldData) => [...oldData, newBoard]
       );

@@ -19,12 +19,13 @@ export default function WorkspaceMembersModal({
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
 
-  const { data: members, isLoading } = api.board.getWorkspaceMembers.useQuery(
-    {
-      workspaceId: workspace?.id,
-    },
-    { enabled: isOpen }
-  );
+  const { data: members, isLoading } =
+    api.workspace.getWorkspaceMembers.useQuery(
+      {
+        workspaceId: workspace?.id,
+      },
+      { enabled: isOpen }
+    );
   function openModal() {
     setIsOpen(true);
   }

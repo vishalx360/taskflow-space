@@ -17,12 +17,12 @@ function LeaveWorkspaceSection({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const utils = api.useContext();
-  const mutation = api.dashboard.leaveWorkspace.useMutation({
+  const mutation = api.workspace.leaveWorkspace.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async () => {
-      await utils.dashboard.getAllWorkspace
+      await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
       Toast({ content: "Left workspace successfully!", status: "success" });

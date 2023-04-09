@@ -23,7 +23,7 @@ export default function SignInPage() {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async () => {
-      await utils.dashboard.getAllBoards
+      await utils.board.getAllBoards
         .invalidate()
         .catch((err) => console.log(err));
       Toast({ content: "Account created successfully!", status: "success" });

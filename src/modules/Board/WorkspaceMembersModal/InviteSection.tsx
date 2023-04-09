@@ -20,12 +20,12 @@ export default function InviteSection({
   workspaceId: string;
 }) {
   const utils = api.useContext();
-  const mutation = api.board.inviteMember.useMutation({
+  const mutation = api.workspace.inviteMember.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async () => {
-      await utils.board.getAllPendingInvitations
+      await utils.workspace.getAllPendingInvitations
         .invalidate({ workspaceId })
         .catch((err) => console.log(err));
       // TODO: invalidate pending invites list
@@ -116,7 +116,7 @@ function PendingInvitationsList({
 }) {
   function Panel() {
     const { data: pendingInvitations, isLoading } =
-      api.board.getAllPendingInvitations.useQuery(
+      api.workspace.getAllPendingInvitations.useQuery(
         { workspaceId: workspaceId ? workspaceId : "" },
         { enabled: Boolean(workspaceId) }
       );

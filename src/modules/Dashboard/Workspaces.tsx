@@ -12,7 +12,7 @@ function Workspaces() {
     data: workspaces,
     isLoading,
     isRefetching,
-  } = api.dashboard.getAllWorkspace.useQuery();
+  } = api.workspace.getAllWorkspace.useQuery();
   if (isLoading) {
     return <WorkspaceListSkeleton />;
   }

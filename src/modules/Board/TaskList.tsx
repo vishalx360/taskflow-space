@@ -34,7 +34,7 @@ function TaskList({ list }: { list: List }) {
     data: Tasks,
     isLoading,
     isRefetching,
-  } = api.board.getTasks.useQuery(
+  } = api.task.getTasks.useQuery(
     { listId: list.id || "" },
     { enabled: Boolean(list.id), retry: false }
   );
@@ -113,7 +113,7 @@ export function AddToListForm({
     // function
     async (listId: string) => {
       console.count("syncListDebounced");
-      await utils.board.getTasks
+      await utils.task.getTasks
         .invalidate({ listId })
         .catch((err) => console.log(err));
     },
@@ -121,7 +121,7 @@ export function AddToListForm({
     3000
   );
 
-  const mutation = api.board.createTask.useMutation({
+  const mutation = api.task.createTask.useMutation({
     onError: (error) => {
       // remove optimistic update on error
       Toast({ content: error.message, status: "error" });
@@ -142,7 +142,7 @@ export function AddToListForm({
       description: "",
       pending: true,
     };
-    utils.board.getTasks.setData({ listId: list.id }, (oldData) => {
+    utils.task.getTasks.setData({ listId: list.id }, (oldData) => {
       return [...oldData, newTask];
     });
     // make listEndRef visible
@@ -252,7 +252,7 @@ export function ListActionMenu({ list }: { list: List }) {
 
 export function UpdateListName({ list }: { list: List }) {
   const InputRef = useRef(null);
-  const mutation = api.board.updateList.useMutation({
+  const mutation = api.list.updateList.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
@@ -288,7 +288,7 @@ export function UpdateListName({ list }: { list: List }) {
 export function CreateList({ boardId }: { boardId: string }) {
   const utils = api.useContext();
 
-  const mutation = api.board.createList.useMutation({
+  const mutation = api.list.createList.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
@@ -403,7 +403,7 @@ function DeleteListButton({
 }) {
   const utils = api.useContext();
 
-  const mutation = api.board.deleteList.useMutation({
+  const mutation = api.list.deleteList.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
       closeMenu();
@@ -440,7 +440,7 @@ function ClearListButton({
 }) {
   const utils = api.useContext();
 
-  const mutation = api.board.clearList.useMutation({
+  const mutation = api.list.clearList.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
       closeMenu();

@@ -30,13 +30,13 @@ export default function TaskModal({
   }
   const utils = api.useContext();
 
-  const UpdateMutation = api.board.updateTask.useMutation({
+  const UpdateMutation = api.task.updateTask.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async () => {
       // TODO: optimistically update the UI
-      await utils.board.getTasks
+      await utils.task.getTasks
         .invalidate({ listId: task.listId })
         .catch((err) => console.log(err));
       Toast({ content: "Task updated successfully!", status: "success" });
@@ -208,13 +208,13 @@ function DeleteTask({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const utils = api.useContext();
-  const deleteMutation = api.board.deleteTask.useMutation({
+  const deleteMutation = api.task.deleteTask.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async () => {
       // TODO: optimistically update the UI
-      await utils.board.getTasks
+      await utils.task.getTasks
         .invalidate({ listId: task.listId })
         .catch((err) => console.log(err));
       Toast({ content: "Task deleted successfully!", status: "success" });

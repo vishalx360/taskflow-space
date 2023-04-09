@@ -65,7 +65,7 @@ function MyInvitationsList({
   >;
 }) {
   const { data: myInvitations, isLoading } =
-    api.board.getAllMyInvites.useQuery();
+    api.workspace.getAllMyInvites.useQuery();
 
   if (isLoading) {
     return (

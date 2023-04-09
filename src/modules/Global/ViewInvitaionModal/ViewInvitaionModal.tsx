@@ -27,12 +27,12 @@ export default function ViewInvitationModal({
   const [isRejecting, setIsRejecting] = useState(false);
   const utils = api.useContext();
 
-  const mutation = api.dashboard.inviteResponse.useMutation({
+  const mutation = api.workspace.inviteResponse.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async (accepted) => {
-      await utils.dashboard.getAllWorkspace
+      await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
       Toast({

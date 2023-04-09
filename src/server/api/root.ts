@@ -1,7 +1,9 @@
 import { createTRPCRouter } from "./fastify_trpc";
 import { AuthenticationRouter } from "./routers/authentication";
 import { BoardRouter } from "./routers/board";
-import { DashboardRouter } from "./routers/dashboard";
+import { ListRouter } from "./routers/list";
+import { TaskRouter } from "./routers/task";
+import { WorkspaceRouter } from "./routers/workspace";
 
 /**
  * This is the primary router for your server.
@@ -9,8 +11,10 @@ import { DashboardRouter } from "./routers/dashboard";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  dashboard: DashboardRouter,
+  workspace: WorkspaceRouter,
   board: BoardRouter,
+  list: ListRouter,
+  task: TaskRouter,
   authentication: AuthenticationRouter,
 });
 

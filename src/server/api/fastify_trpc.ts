@@ -4,6 +4,7 @@ import { env } from '../../env.mjs';
 import { verifyJWT } from "../../utils/jwt";
 import { SendEmail } from '../../utils/SendEmail';
 import { prisma } from "../db";
+import { type Session } from "next-auth";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -36,7 +37,6 @@ export async function createTRPCContext({ req, res }: CreateFastifyContextOption
 
 import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from "superjson";
-import { Session } from '@prisma/client';
 import { FastifyReplyType, FastifyRequestType } from 'fastify/types/type-provider.js';
 
 const t = initTRPC.context<typeof createTRPCContext>().create(

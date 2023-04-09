@@ -1,14 +1,14 @@
-import { Board, type Board as BoardBox, type Workspace } from "@prisma/client";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { api } from "~/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
-  const { data: boards, isLoading } = api.dashboard.getAllBoards.useQuery({
+  const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
     workspaceId: workspace.id,
   });
   const [parent] = useAutoAnimate();

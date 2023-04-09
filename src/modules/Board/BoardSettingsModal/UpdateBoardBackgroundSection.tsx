@@ -1,19 +1,13 @@
-import { type Board } from "@prisma/client";
 import { Field, type FieldProps } from "formik";
 import Image from "next/image";
 import { FiCheckCircle } from "react-icons/fi";
-import { api } from "~/utils/api";
 import BoardBackGrounds from "~/utils/BoardBackgrounds.json";
 
 function UpdateBoardBackgroundSection({
-  board,
   UpdatelocalBackground,
 }: {
-  board: Board | null;
   UpdatelocalBackground: (background: string) => void;
 }) {
-  const utils = api.useContext();
-
   return (
     <div className="mt-5">
       <p className="text-md mb-3 font-semibold text-neutral-500 dark:text-white">

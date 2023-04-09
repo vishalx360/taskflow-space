@@ -38,7 +38,7 @@ function Board() {
     // function
     async (listId: string) => {
       console.count("syncListDebounced");
-      await utils.board.getTasks
+      await utils.task.getTasks
         .invalidate({ listId })
         .catch((err) => console.log(err));
     },
@@ -46,7 +46,7 @@ function Board() {
     3000
   );
 
-  const mutation = api.board.moveTask.useMutation({
+  const mutation = api.task.moveTask.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
@@ -66,12 +66,12 @@ function Board() {
     let newNextTaskId;
 
     if (source.droppableId !== destination.droppableId) {
-      utils.board.getTasks.setData({ listId: source.droppableId }, (prev) => {
+      utils.task.getTasks.setData({ listId: source.droppableId }, (prev) => {
         removed = prev?.splice(source.index, 1)[0];
         return prev;
       });
 
-      utils.board.getTasks.setData(
+      utils.task.getTasks.setData(
         { listId: destination.droppableId },
         (prev) => {
           // todo lookout for edge cases
@@ -89,7 +89,7 @@ function Board() {
       );
     } else {
       // if same list
-      utils.board.getTasks.setData({ listId: source.droppableId }, (prev) => {
+      utils.task.getTasks.setData({ listId: source.droppableId }, (prev) => {
         removed = prev?.splice(source.index, 1)[0];
         removed && prev?.splice(destination.index, 0, removed);
         // todo lookout for edge cases

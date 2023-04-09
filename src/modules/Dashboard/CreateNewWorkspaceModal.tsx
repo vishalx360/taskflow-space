@@ -21,12 +21,12 @@ export default function CreateNewWorkspaceModal() {
     setIsOpen(true);
   }
 
-  const mutation = api.dashboard.createNewWorkspace.useMutation({
+  const mutation = api.workspace.createNewWorkspace.useMutation({
     onError(error) {
       Toast({ content: error.message, status: "error" });
     },
     onSuccess: async () => {
-      await utils.dashboard.getAllWorkspace
+      await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
       Toast({
