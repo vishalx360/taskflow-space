@@ -1,7 +1,10 @@
 import { Disclosure, Transition } from "@headlessui/react";
 import { BiLoaderAlt } from "react-icons/bi";
 import { FaCaretRight } from "react-icons/fa";
-import BoardList, { BoardListSkeleton } from "~/modules/Dashboard/BoardList";
+import BoardList, {
+  BoardListSkeleton,
+  RecentBoardList,
+} from "~/modules/Dashboard/BoardList";
 import { api } from "~/utils/api";
 import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
@@ -17,7 +20,11 @@ function Workspaces() {
     return <WorkspaceListSkeleton />;
   }
   return (
-    <div className="pb-10">
+    <div className="space-y-2 pb-10">
+      <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
+        Recent Boards
+      </h1>
+      <RecentBoardList />
       <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
         Your Workspaces
       </h1>

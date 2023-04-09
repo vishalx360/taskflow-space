@@ -32,6 +32,25 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
   );
 }
 
+export function RecentBoardList() {
+  const { data: boards, isLoading } = api.board.getRecentBoards.useQuery();
+  const [parent] = useAutoAnimate();
+
+  if (isLoading) {
+    return <BoardListSkeleton />;
+  }
+  return (
+    <div
+      ref={parent}
+      className="grid grid-cols-2 gap-2 px-4 md:flex md:flex-wrap md:gap-5"
+    >
+      {boards?.map((board) => (
+        <Board key={board.id} board={board} />
+      ))}
+    </div>
+  );
+}
+
 function Board({ board }: { board: Board }): JSX.Element {
   const background = geopattern.generate(board.id).toDataUri();
 
@@ -73,7 +92,7 @@ function Board({ board }: { board: Board }): JSX.Element {
         )}
       </div>
 
-      <div className="absolute bottom-0 flex h-full w-full items-end whitespace-nowrap bg-gradient-to-t from-black to-black/20 p-3 text-sm  font-medium text-white md:text-lg ">
+      <div className="absolute bottom-0 flex h-full w-full items-end whitespace-nowrap bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
         <div className="flex w-full flex-col  items-start justify-between ">
           <h2 className="font-medium">{board.name}</h2>
           <TimeAgo

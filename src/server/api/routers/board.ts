@@ -22,6 +22,21 @@ const GetRandomBackgroundGradient = () => {
 
 export const BoardRouter = createTRPCRouter({
 
+  getRecentBoards: protectedProcedure
+    .query(({ ctx, input }) => {
+      return ctx.prisma.board.findMany({
+        where: {
+          Workspace: {
+            members: {
+              some: { userId: ctx.session.user.id }
+            }
+          }
+        },
+        orderBy: { updatedAt: "desc" },
+        take: 4
+      });
+    }),
+
   getAllBoards: protectedProcedure
     .input(z.object({ workspaceId: z.string() }))
     .query(({ ctx, input }) => {
