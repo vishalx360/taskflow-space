@@ -3,10 +3,11 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import getGravatar from "~/utils/getGravatar";
 import { type UserType } from "./MemberRow";
+import TimeAgo from "react-timeago";
 
 type WorkspaceMemberInvitationWithSenderAndRecevier =
   WorkspaceMemberInvitation & {
-    recepient: UserType;
+    recepient?: UserType;
     sender: UserType;
   };
 function PendingInviteRow({
@@ -37,7 +38,8 @@ function PendingInviteRow({
           className="h-8 w-8 rounded-full border-2 border-white dark:border-gray-800"
           src={
             recepient?.image ||
-            (recepient?.email && getGravatar(recepient?.email)) ||
+            (invitation.recepientEmail &&
+              getGravatar(invitation.recepientEmail)) ||
             getGravatar("default")
           }
           alt=""
@@ -48,10 +50,11 @@ function PendingInviteRow({
           <h1>
             {sender?.email === session?.user.email ? "You " : sender?.name}
             {"  "}
-            invited <span className="font-medium">{recepient?.name}</span>
+            invited{" "}
+            <span className="font-medium">{recepient?.name || "a user"}</span>
           </h1>
           <h2 className="text-xs text-neutral-600">
-            {invitation.createdAt.toLocaleString()}
+            <TimeAgo date={invitation.createdAt} />
           </h2>
           {/* <h2 className="text-neutral-600">{recepient?.email}</h2> */}
         </div>

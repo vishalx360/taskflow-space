@@ -11,7 +11,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import { signJTW, verifyJWT } from "~/utils/jwt";
-import SeedPersonalWorkspace from "~/utils/SeedPersonalWorkspace";
+import NewUserSideEffects from "~/utils/NewUserSideEffects";
 import { SigninSchema } from "~/utils/ValidationSchema";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -58,7 +58,7 @@ export const authOptions: NextAuthOptions = {
             where: { email: user.email },
           });
           if (emailExist === 0) {
-            await SeedPersonalWorkspace(user.id);
+            await NewUserSideEffects(user.id, user.email);
           }
         }
       }

@@ -3,6 +3,7 @@ import { Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
+import TimeAgo from "react-timeago";
 
 import { api } from "~/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
@@ -72,9 +73,14 @@ function Board({ board }: { board: Board }): JSX.Element {
         )}
       </div>
 
-      <div className="absolute bottom-0 flex h-full w-full items-end whitespace-nowrap bg-gradient-to-t from-black p-5 text-sm  font-medium text-white md:text-lg ">
-        <div className="flex w-full items-center justify-between ">
-          <h2>{board.name}</h2>
+      <div className="absolute bottom-0 flex h-full w-full items-end whitespace-nowrap bg-gradient-to-t from-black to-black/20 p-3 text-sm  font-medium text-white md:text-lg ">
+        <div className="flex w-full flex-col  items-start justify-between ">
+          <h2 className="font-medium">{board.name}</h2>
+          <TimeAgo
+            className="mt-1 text-xs text-neutral-400"
+            date={board.updatedAt}
+            live={false}
+          />
         </div>
       </div>
     </Link>

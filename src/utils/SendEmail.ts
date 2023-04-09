@@ -10,7 +10,8 @@ const { NM_CLIENT_ID,
     NM_AUTH_EMAIL,
     NM_DEFAULT_FROM_EMAIL,
     NM_DKIM_PRIVATE_KEY,
-    DOMAIN_NAME
+    DOMAIN_NAME,
+    NODE_ENV,
 } =
     process.env;
 
@@ -31,6 +32,11 @@ type MailOptions = nodemailer.SendMailOptions & { dkim?: string };
 
 // Send email
 export async function SendEmail(mailOptions: MailOptions): Promise<void> {
+    if (NODE_ENV !== 'production') {
+        console.log("Email logged: dev mode");
+        console.log(mailOptions.text)
+        return
+    }
     try {
         const accessToken = await oAuth2Client.getAccessToken();
         const transporter = nodemailer.createTransport({
@@ -58,7 +64,7 @@ export async function SendEmail(mailOptions: MailOptions): Promise<void> {
         const signedMessage = ({ from: NM_DEFAULT_FROM_EMAIL, ...mailOptions, });
         const info = await transporter.sendMail(signedMessage);
         console.log("Email sent:", info);
-        return Promise.reject(info.response)
+        return Promise.resolve()
 
     } catch (error) {
         console.error(error);

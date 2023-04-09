@@ -48,7 +48,7 @@ function InviteNotificationRow({
             </span>
             {"  "}
             invited{" "}
-            {recepient?.email === session?.user.email
+            {invitation.recepientEmail === session?.user.email
               ? "you "
               : recepient?.name}{" "}
             to join{" "}

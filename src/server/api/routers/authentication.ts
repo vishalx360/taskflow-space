@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { hash } from "argon2";
 import { z } from "zod";
-import SeedPersonalWorkspace from "../../../utils/SeedPersonalWorkspace";
+import NewUserSideEffects from "../../../utils/NewUserSideEffects";
 import { SignUpSchema } from "../../../utils/ValidationSchema";
 import { createTRPCRouter, publicProcedure } from "../fastify_trpc";
 
@@ -26,7 +26,7 @@ export const AuthenticationRouter = createTRPCRouter({
         data: { name, email, password: hashedPassword },
       });
 
-      await SeedPersonalWorkspace(result.id);
+      await NewUserSideEffects(result.id, email);
 
       return {
         status: 201,

@@ -2,7 +2,13 @@ import { LexoRank } from "lexorank";
 import { prisma } from "../server/db";
 import DefaultData from "./PersonalWorkspaceData.json";
 
-export default async function SeedPersonalWorkspace(userId: string) {
+export default async function NewUserSideEffects(userId: string, email: string) {
+  // connect existing invitations
+  await prisma.workspaceMemberInvitation.updateMany({
+    where: { recepientEmail: email },
+    data: { recepientId: userId },
+  });
+
   // create workspace
   const Workspace = await prisma.workspace.create({
     data: {
