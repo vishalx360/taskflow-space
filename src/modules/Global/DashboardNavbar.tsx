@@ -54,7 +54,7 @@ function DashboardNavbar() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="border-accent border-b-2  bg-black shadow-2xl ">
+            <div className="border-accent border-b-2  bg-neutral-900 shadow-2xl ">
               <ul className="flex  w-full flex-col p-5 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:text-sm md:font-medium  ">
                 {Items.map((item) => {
                   const externalProps = item.isExternal

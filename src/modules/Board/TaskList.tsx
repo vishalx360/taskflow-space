@@ -165,7 +165,7 @@ export function AddToListForm({
             <Field name="title">
               {({ field, form, meta }: FieldProps) => (
                 <input
-                  className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent py-3 px-5 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white"
+                  className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent py-2 px-5 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white md:py-3"
                   type="text"
                   placeholder="+ Add to list"
                   id="title"
