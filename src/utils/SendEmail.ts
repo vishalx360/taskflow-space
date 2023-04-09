@@ -1,5 +1,6 @@
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
+import { env } from "../env.mjs";
 
 
 // These id's and secrets should come from .env file.
@@ -13,7 +14,7 @@ const { NM_CLIENT_ID,
     DOMAIN_NAME,
     NODE_ENV,
 } =
-    process.env;
+    env;
 
 const oAuth2Client = new google.auth.OAuth2(
     NM_CLIENT_ID,
@@ -34,7 +35,11 @@ type MailOptions = nodemailer.SendMailOptions & { dkim?: string };
 export async function SendEmail(mailOptions: MailOptions): Promise<void> {
     if (NODE_ENV !== 'production') {
         console.log("Email logged: dev mode");
-        console.log(mailOptions.text)
+        console.log({
+            to: mailOptions.to,
+            subject: mailOptions.subject,
+            text: mailOptions.text
+        })
         return
     }
     try {
