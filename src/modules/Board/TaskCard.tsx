@@ -51,9 +51,9 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
 
 export function EmptyListCard() {
   return (
-    <div className="px-3">
-      <div className="min-w-[300px] max-w-[270px] px-4 text-center">
-        <p className="italic">No task added</p>
+    <div className="p-3">
+      <div className=" w-full px-4 text-center">
+        <p className="italic text-neutral-500">No task added</p>
       </div>
     </div>
   );
