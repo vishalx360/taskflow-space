@@ -52,7 +52,13 @@ export function RecentBoardGrid() {
   );
 }
 
-function BoardBox({ board }: { board: BoardBox }): JSX.Element {
+export function BoardBox({
+  board,
+  fill = false,
+}: {
+  board: BoardBox;
+  fill?: boolean;
+}): JSX.Element {
   const background = geopattern.generate(board.id).toDataUri();
 
   let boardUrl = `/board/${board.id}`;
@@ -68,7 +74,11 @@ function BoardBox({ board }: { board: BoardBox }): JSX.Element {
         href={boardUrl}
         className={`group relative w-full   transition-all hover:-translate-y-1 hover:shadow-xl md:w-fit`}
       >
-        <div className="h-28 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]">
+        <div
+          className={`h-28 w-full overflow-hidden rounded-xl md:h-40 ${
+            fill ? "w-full" : "md:w-[18rem]"
+          }`}
+        >
           {board?.background && board.background.startsWith("wallpaper:") && (
             <Image
               className="h-28 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]"

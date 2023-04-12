@@ -2,14 +2,57 @@ import { useToast } from "@/hooks/use-toast";
 import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
+import random from "lodash.random";
+
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { Plus } from "lucide-react";
+import {
+  FormInput,
+  FormInputIcon,
+  Plus,
+  RefreshCcw,
+  Table2,
+} from "lucide-react";
 import { Fragment, type ReactNode, useRef, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";
+import UpdateBoardBackgroundSection from "../Board/BoardSettingsModal/UpdateBoardBackgroundSection";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
+
+import { Textarea } from "../ui/text-area";
+import { Input } from "../ui/input";
+import { BoardBox } from "./BoardGrid";
+import { LucideFormInput } from "lucide-react";
+import Backgrounds from "../../utils/BoardBackgrounds.json";
+
+import { RandomWordOptions, generateSlug } from "random-word-slugs";
+import { MdGeneratingTokens } from "react-icons/md";
+
+const slugOption: RandomWordOptions<3> = {
+  format: "title",
+  categories: {
+    noun: ["time", "business", "thing", "technology", "place"],
+    adjective: ["color", "time", "condition"],
+  },
+  partsOfSpeech: ["adjective", "noun", "noun"],
+};
+
+const GetRandomBackgroundGradient = () => {
+  const background =
+    Backgrounds["gradients"][random(0, Backgrounds["gradients"].length - 1)];
+  if (background) {
+    return `gradient:${background}`;
+  } else {
+    return;
+  }
+};
 
 export default function CreateNewBoardModal({
   children,
@@ -103,7 +146,10 @@ export default function CreateNewBoardModal({
                     as="h3"
                     className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
                   >
-                    Create new board in {workspace.name}
+                    <div className="flex items-center gap-2">
+                      <Table2 />
+                      Create new board
+                    </div>
                     <button
                       onClick={closeModal}
                       type="button"
@@ -117,7 +163,12 @@ export default function CreateNewBoardModal({
                   </Dialog.Title>
                   <div className="mt-2">
                     <Formik
-                      initialValues={{ name: "", workspaceId: workspace.id }}
+                      initialValues={{
+                        name: generateSlug(3, slugOption),
+                        description: "",
+                        workspaceId: workspace.id,
+                        background: GetRandomBackgroundGradient(),
+                      }}
                       validationSchema={toFormikValidationSchema(
                         CreateNewBoardSchema
                       )}
@@ -126,33 +177,116 @@ export default function CreateNewBoardModal({
                       }}
                     >
                       <Form>
-                        <div className="flex flex-col gap-2">
+                        <div>
                           <Field name="name">
-                            {({ field, meta }: FieldProps) => (
-                              <div className="my-5">
-                                <label
-                                  htmlFor="name"
-                                  className="mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
-                                >
-                                  Board Name
-                                </label>
-                                <input
-                                  type="text"
-                                  id="name"
-                                  ref={initailFocusRef}
-                                  required
-                                  placeholder="Board name"
-                                  {...field}
-                                  className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
-                                />
-                                {meta.touched && meta.error && (
-                                  <p className="ml-2 mt-2 text-sm text-red-500">
-                                    {meta.error}
-                                  </p>
-                                )}
+                            {({ form, meta }: FieldProps) => (
+                              <div className="mb-5 ">
+                                <BoardBox
+                                  fill
+                                  board={{ ...form.values, id: "preview" }}
+                                />{" "}
                               </div>
                             )}
                           </Field>
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
+                              {workspace.name[0]}
+                            </div>
+                            <span className=" text-start line-clamp-1">
+                              {workspace.name}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <Accordion
+                            type="single"
+                            defaultValue="item-1"
+                            collapsible
+                          >
+                            <AccordionItem value="item-1">
+                              <AccordionTrigger>Board details</AccordionTrigger>
+                              <AccordionContent className="p-1">
+                                <Field name="name">
+                                  {({ form, field, meta }: FieldProps) => (
+                                    <div className="mt-2">
+                                      <label
+                                        htmlFor="name"
+                                        className="mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
+                                      >
+                                        Board Name
+                                      </label>
+                                      <div className="flex gap-2">
+                                        <Input
+                                          type="text"
+                                          id="name"
+                                          ref={initailFocusRef}
+                                          required
+                                          placeholder="Board name"
+                                          {...field}
+                                          // className="text-md  block w-full rounded-xl   p-2.5 text-neutral-800 transition-all focus:outline-none focus:outline"
+                                        />
+                                        <Button
+                                          type="button"
+                                          size="sm"
+                                          onClick={() => {
+                                            form.setFieldValue(
+                                              "name",
+                                              generateSlug(3, slugOption)
+                                            );
+                                          }}
+                                          variant={"subtle"}
+                                        >
+                                          <RefreshCcw size={"1.2em"} />
+                                        </Button>
+                                      </div>
+
+                                      {meta.touched && meta.error && (
+                                        <p className="ml-2 mt-2 text-sm text-red-500">
+                                          {meta.error}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </Field>
+                                <Field name="description">
+                                  {({ field, meta }: FieldProps) => (
+                                    <div className="mt-5">
+                                      <label
+                                        htmlFor="description"
+                                        className="mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
+                                      >
+                                        Board description
+                                      </label>
+                                      <Textarea
+                                        id="description"
+                                        placeholder="Board description"
+                                        {...field}
+                                        className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
+                                      />
+                                      {meta.touched && meta.error && (
+                                        <p className="ml-2 mt-2 text-sm text-red-500">
+                                          {meta.error}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </Field>
+                              </AccordionContent>
+                            </AccordionItem>
+
+                            <AccordionItem value="item-3">
+                              <AccordionTrigger>
+                                Board backgorund
+                              </AccordionTrigger>
+                              <AccordionContent className="p-1">
+                                <UpdateBoardBackgroundSection
+                                  UpdatelocalBackground={() => null}
+                                />
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+
                           <Field name="submit">
                             {({ form }: FieldProps) => (
                               <Button

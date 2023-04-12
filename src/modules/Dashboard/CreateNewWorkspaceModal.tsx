@@ -3,7 +3,7 @@ import { CreateNewWorkspaceSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { Plus } from "lucide-react";
+import { LayoutDashboard, Plus } from "lucide-react";
 import { Fragment, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -101,7 +101,10 @@ export default function CreateNewWorkspaceModal() {
                     as="h3"
                     className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
                   >
-                    Create new workspace
+                    <div className="flex items-center gap-2">
+                      <LayoutDashboard />
+                      Create new workspace
+                    </div>
                     <button
                       onClick={closeModal}
                       type="button"

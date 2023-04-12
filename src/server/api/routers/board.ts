@@ -113,7 +113,8 @@ export const BoardRouter = createTRPCRouter({
         data: {
           name: input.name,
           workspaceId: input.workspaceId,
-          background: GetRandomBackgroundGradient(),
+          background: input.background || GetRandomBackgroundGradient(),
+          description: input.description,
         },
       });
       return newBoard;

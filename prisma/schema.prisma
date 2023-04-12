@@ -63,6 +63,7 @@ model Board {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime  @updatedAt
     name        String
+    description String?
     Workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
     workspaceId String
     lists       List[]
