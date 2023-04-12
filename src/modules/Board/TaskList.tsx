@@ -382,7 +382,7 @@ export function CreateList({ boardId }: { boardId: string }) {
 export function TaskListSkeleton({ NumberOfTasks }: { NumberOfTasks: number }) {
   const Tasks = [];
   for (let i = 0; i < NumberOfTasks; i++) {
-    Tasks.push(<TaskCardSkeleton />);
+    Tasks.push(<TaskCardSkeleton key={"skeleton" + i} />);
   }
   return (
     <div className="prevent-select relative h-fit max-h-[79vh] w-[300px]  max-w-[70vw] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]">
