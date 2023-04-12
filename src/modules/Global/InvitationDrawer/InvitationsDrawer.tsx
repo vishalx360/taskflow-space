@@ -1,15 +1,17 @@
 import { PendingInvitationsListSkeleton } from "@/modules/Board/WorkspaceMembersModal/InviteSection";
 import { api } from "@/utils/api";
-import { Popover, Transition } from "@headlessui/react";
+// import { Popover, Transition } from "@headlessui/react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/modules/ui/popover";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import { FiChevronDown } from "react-icons/fi";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
+import Divider from "../Divider";
 import ViewInvitationModal from "../ViewInvitaionModal/ViewInvitaionModal";
 import InviteNotificationRow, {
+  InviteNotificationRowSkeleton,
   type WorkspaceMemberInvitationWithSenderAndRecevier,
 } from "./InviteNotificationRow";
 
-function NotificationDrawer() {
+function InvitationDrawer() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentInvitation, setCurrentInvitation] =
     useState<null | WorkspaceMemberInvitationWithSenderAndRecevier>(null);
@@ -18,44 +20,33 @@ function NotificationDrawer() {
     setIsOpen(!isOpen);
   };
   return (
-    <Popover className="relative ">
+    <Popover>
       <ViewInvitationModal
         setCurrentInvitation={setCurrentInvitation}
         currentInvitation={currentInvitation}
       />
-      <Popover.Button
-        onClick={toggelPopover}
-        className="relative z-10 flex items-center gap-1 rounded-md border border-transparent  py-2 text-neutral-100  lg:px-2"
-      >
+      <PopoverTrigger onClick={toggelPopover} className="">
         <MdOutlineMarkEmailUnread className="text-2xl" />
-        <FiChevronDown className="hidden text-xl lg:inline" />
-      </Popover.Button>
-      <Popover.Overlay className="fixed inset-0 bg-black opacity-20" />
-      <Transition
-        enter="transition duration-100 ease-out"
-        enterFrom="transform scale-95 opacity-0"
-        enterTo="transform scale-100 opacity-100"
-        leave="transition duration-75 ease-out"
-        leaveFrom="transform scale-100 opacity-100"
-        leaveTo="transform scale-95 opacity-0"
-      >
-        <Popover.Panel className="fixed -right-20 z-20 mt-2 w-screen origin-top-right overflow-hidden rounded-md bg-white shadow-xl sm:absolute sm:right-0 sm:w-[400px]">
-          <div className="py-2">
-            <MyInvitationsList setCurrentInvitation={setCurrentInvitation} />
-          </div>
-          {/* <a
+      </PopoverTrigger>
+      {/* <Popover.Overlay className="fixed inset-0 bg-black opacity-20" /> */}
+      <PopoverContent className="mt-2 w-screen bg-white/95 p-2 shadow-xl backdrop-blur-sm  sm:w-[500px]">
+        <h1 className="text-md px-5 font-medium text-neutral-800">
+          Invitations
+        </h1>
+        <Divider className="my-2" />
+        <MyInvitationsList setCurrentInvitation={setCurrentInvitation} />
+        {/* <a
             href="#"
             className="block bg-neutral-800 py-2 text-center font-bold text-white hover:underline dark:bg-gray-700"
           >
             See all invitations
           </a> */}
-        </Popover.Panel>
-      </Transition>
+      </PopoverContent>
     </Popover>
   );
 }
 
-export default NotificationDrawer;
+export default InvitationDrawer;
 
 function MyInvitationsList({
   setCurrentInvitation,
@@ -69,13 +60,15 @@ function MyInvitationsList({
 
   if (isLoading) {
     return (
-      <div className="p-4">
-        <PendingInvitationsListSkeleton numberOfItems={4} />;
+      <div className="">
+        <div className="p-4">
+          <InvitationDrawerSkeleton numberOfItems={4} />
+        </div>
       </div>
     );
   }
   return (
-    <div className="space-y-2 ">
+    <div className="space-y-2">
       {myInvitations?.length !== 0 ? (
         <>
           {myInvitations?.map((invitation) => (
@@ -91,6 +84,20 @@ function MyInvitationsList({
           No Invites found
         </div>
       )}
+    </div>
+  );
+}
+
+export function InvitationDrawerSkeleton({
+  numberOfItems = 2,
+}: {
+  numberOfItems?: number;
+}) {
+  return (
+    <div className="space-y-2">
+      {Array.from({ length: numberOfItems }).map((_, index) => {
+        return <InviteNotificationRowSkeleton key={index} />;
+      })}
     </div>
   );
 }

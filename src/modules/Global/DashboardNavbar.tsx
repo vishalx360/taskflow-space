@@ -13,7 +13,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import LogoImage from "./LogoImage";
-import NotificationDrawer from "./NotificationDrawer/NotificationDrawer";
+import InvitationDrawer from "./InvitationDrawer/InvitationsDrawer";
 import { UserMenu } from "./UserMenu";
 
 const Items = [
@@ -28,7 +28,7 @@ function DashboardNavbar() {
   }
   const pathname = usePathname();
   return (
-    <nav className="fixed top-0 z-50 flex w-full items-center justify-center bg-black/80 py-2 text-white shadow backdrop-blur-3xl sm:px-4 ">
+    <nav className="fixed top-0 z-50 flex w-full items-center justify-center bg-neutral-950 py-2 text-white shadow sm:px-4 ">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         <button
           onClick={toggel}
@@ -118,7 +118,7 @@ function DashboardNavbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <NotificationDrawer />
+            <InvitationDrawer />
             <UserMenu />
           </div>
         </div>

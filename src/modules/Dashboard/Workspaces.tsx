@@ -36,7 +36,7 @@ function Workspaces() {
                   <>
                     <div className="mb-5 flex items-center gap-5 border-b-2">
                       <Disclosure.Button className="sticky top-20 z-10 w-full  transition-all ">
-                        <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 py-2 text-xl font-semibold   md:rounded-l-md">
+                        <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 py-2 text-xl font-normal   md:rounded-l-md">
                           <div className="flex items-center gap-3 md:gap-5">
                             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
                               {workspace.name[0]}
