@@ -10,6 +10,7 @@ import InviteNotificationRow, {
   InviteNotificationRowSkeleton,
   type WorkspaceMemberInvitationWithSenderAndRecevier,
 } from "./InviteNotificationRow";
+import { Mails, PlusCircle } from "lucide-react";
 
 function InvitationDrawer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +27,7 @@ function InvitationDrawer() {
         currentInvitation={currentInvitation}
       />
       <PopoverTrigger onClick={toggelPopover} className="">
-        <MdOutlineMarkEmailUnread className="text-2xl" />
+        <Mails />
       </PopoverTrigger>
       {/* <Popover.Overlay className="fixed inset-0 bg-black opacity-20" /> */}
       <PopoverContent className="mt-2 w-screen bg-white/95 p-2 shadow-xl backdrop-blur-sm  sm:w-[500px]">

@@ -29,8 +29,8 @@ function DashboardNavbar() {
   const pathname = usePathname();
   return (
     <nav className="fixed top-0 z-50 flex w-full items-center justify-center bg-neutral-950 py-2 text-white shadow sm:px-4 ">
-      <div className="container mx-auto flex flex-wrap items-center justify-between">
-        <button
+      <div className="container mx-auto flex flex-wrap items-center justify-between px-5 py-3 md:py-0">
+        {/* <button
           onClick={toggel}
           type="button"
           className="hover: focus:ring-accent ml-3 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 focus:outline-none focus:ring-2 md:hidden "
@@ -45,7 +45,7 @@ function DashboardNavbar() {
           )}
         </button>
         {/* movile nav */}
-        <div className="absolute left-0 top-14 w-full  md:hidden">
+        {/* <div className="absolute left-0 top-14 w-full  md:hidden">
           <Transition
             show={isOpen}
             enter="transition-opacity ease-in-out duration-300 transform"
@@ -81,7 +81,7 @@ function DashboardNavbar() {
               </ul>
             </div>
           </Transition>
-        </div>
+        </div>  */}
         {/* logo */}
         <div className="flex items-center gap-10">
           <Link href="/" className="flex items-center">
@@ -117,7 +117,7 @@ function DashboardNavbar() {
             </ul>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5 md:gap-6">
             <InvitationDrawer />
             <UserMenu />
           </div>
