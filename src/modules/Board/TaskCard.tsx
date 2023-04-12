@@ -1,6 +1,7 @@
 import { type Task } from "@prisma/client";
 import dynamic from "next/dynamic";
 import TaskModal from "../Global/TaskModal/TaskModal";
+import { TaskContextMenu } from "../Global/TaskContextMenu";
 const Draggable = dynamic(
   () =>
     import("react-beautiful-dnd").then((mod) => {
@@ -12,39 +13,41 @@ const Draggable = dynamic(
 export function TaskCard({ task, index }: { task: Task; index: number }) {
   return (
     <TaskModal task={task}>
-      <Draggable
-        isDragDisabled={task?.pending}
-        key={task.id}
-        draggableId={task.id}
-        index={index}
-      >
-        {(provided, { isDragging }) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
+      <TaskContextMenu task={task}>
+        <Draggable
+          isDragDisabled={task?.pending}
+          key={task.id}
+          draggableId={task.id}
+          index={index}
+        >
+          {(provided, { isDragging }) => (
             <div
-              className={`border-1 w-full rounded-xl border-gray-400 bg-gray-50 py-3 px-4 shadow ${
-                isDragging ? "border-dotted bg-[#f0f0f0]" : ""
-              }`}
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
             >
-              <p
-                className={`md:text-md text-sm font-medium text-black line-clamp-2 ${
-                  task?.pending ? "text-neutral-600" : "text-black"
+              <div
+                className={`border-1 w-full rounded-xl border-gray-400 bg-gray-50 px-4 py-3 shadow ${
+                  isDragging ? "border-dotted bg-[#f0f0f0]" : ""
                 }`}
               >
-                {task?.title}
-              </p>
-              {task?.description && (
-                <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
-                  {task?.description}
+                <p
+                  className={`md:text-md text-sm font-medium text-black line-clamp-2 ${
+                    task?.pending ? "text-neutral-600" : "text-black"
+                  }`}
+                >
+                  {task?.title}
                 </p>
-              )}
+                {task?.description && (
+                  <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
+                    {task?.description}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
-      </Draggable>
+          )}
+        </Draggable>
+      </TaskContextMenu>
     </TaskModal>
   );
 }
@@ -61,6 +64,6 @@ export function EmptyListCard() {
 
 export function TaskCardSkeleton() {
   return (
-    <div className="border-1 min-h-[60px] w-full animate-pulse rounded-xl border-gray-400 bg-gray-400/50 py-3 px-4 shadow" />
+    <div className="border-1 min-h-[60px] w-full animate-pulse rounded-xl border-gray-400 bg-gray-400/50 px-4 py-3 shadow" />
   );
 }

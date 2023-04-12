@@ -7,6 +7,7 @@ import TimeAgo from "react-timeago";
 
 import { api } from "@/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
+import { BoardBoxContextMenu } from "../Global/BoardBoxContextMenu";
 
 export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
@@ -61,48 +62,50 @@ function BoardBox({ board }: { board: BoardBox }): JSX.Element {
   boardUrl = boardUrl + "?" + newParams.toString();
 
   return (
-    <Link
-      prefetch={false}
-      href={boardUrl}
-      className={`group relative w-full overflow-hidden rounded-xl transition-all hover:-translate-y-1 hover:shadow-xl md:w-fit`}
-    >
-      <div className="h-28 w-full object-cover md:h-40 md:w-[18rem]">
-        {board?.background && board.background.startsWith("wallpaper:") && (
-          <Image
-            className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
-            alt="background"
-            fill
-            src={board.background.slice(10)}
-          />
-        )}
-        {board?.background && board.background.startsWith("gradient:") && (
-          <div
-            className="h-full w-full"
-            style={{ backgroundImage: board.background.slice(9) }}
-          />
-        )}
-        {!board?.background && (
-          <Image
-            height="50"
-            width="150"
-            src={background}
-            alt=""
-            className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
-          />
-        )}
-      </div>
-
-      <div className="absolute bottom-0 flex h-full w-full items-end whitespace-nowrap bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
-        <div className="flex w-full flex-col  items-start justify-between ">
-          <h2 className="font-medium">{board.name}</h2>
-          <TimeAgo
-            className="mt-1 text-xs text-neutral-400"
-            date={board.updatedAt}
-            live={false}
-          />
+    <BoardBoxContextMenu key={board.id} board={board}>
+      <Link
+        prefetch={false}
+        href={boardUrl}
+        className={`group relative w-full   transition-all hover:-translate-y-1 hover:shadow-xl md:w-fit`}
+      >
+        <div className="h-28 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]">
+          {board?.background && board.background.startsWith("wallpaper:") && (
+            <Image
+              className="h-28 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]"
+              alt="background"
+              fill
+              src={board.background.slice(10)}
+            />
+          )}
+          {board?.background && board.background.startsWith("gradient:") && (
+            <div
+              className="h-full w-full"
+              style={{ backgroundImage: board.background.slice(9) }}
+            />
+          )}
+          {!board?.background && (
+            <Image
+              height="50"
+              width="150"
+              src={background}
+              alt=""
+              className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
+            />
+          )}
         </div>
-      </div>
-    </Link>
+
+        <div className="absolute bottom-0 flex h-full w-full items-end overflow-hidden whitespace-nowrap rounded-xl bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
+          <div className="flex w-full flex-col  items-start justify-between ">
+            <h2 className="font-medium">{board.name}</h2>
+            <TimeAgo
+              className="mt-1 text-xs text-neutral-400"
+              date={board.updatedAt}
+              live={false}
+            />
+          </div>
+        </div>
+      </Link>
+    </BoardBoxContextMenu>
   );
 }
 

@@ -16,6 +16,7 @@ import { api } from "@/utils/api";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
+import { BoardContextMenu } from "../Global/BoardContextMenu";
 
 const DragDropContext = dynamic(
   () =>
@@ -125,16 +126,18 @@ function Board() {
     <main className="relative h-screen">
       <BoardBackground background={board?.background} />
       <BoardNavbar board={board} />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Scrollbars>
-          <div className="flex w-fit items-start gap-5 p-5  pt-20">
-            {board?.lists.map((list) => {
-              return <TaskList key={list.id} list={list} />;
-            })}
-            <CreateList boardId={boardId || ""} />
-          </div>
-        </Scrollbars>
-      </DragDropContext>
+      <BoardContextMenu board={board}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Scrollbars>
+            <div className="flex w-fit items-start gap-5 p-5  pt-20">
+              {board?.lists.map((list) => {
+                return <TaskList key={list.id} list={list} />;
+              })}
+              <CreateList boardId={boardId || ""} />
+            </div>
+          </Scrollbars>
+        </DragDropContext>
+      </BoardContextMenu>
     </main>
   );
 }
