@@ -1,16 +1,14 @@
-import { PendingInvitationsListSkeleton } from "@/modules/Board/WorkspaceMembersModal/InviteSection";
 import { api } from "@/utils/api";
 // import { Popover, Transition } from "@headlessui/react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/modules/ui/popover";
+import { Mails } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import { MdOutlineMarkEmailUnread } from "react-icons/md";
 import Divider from "../Divider";
 import ViewInvitationModal from "../ViewInvitaionModal/ViewInvitaionModal";
 import InviteNotificationRow, {
   InviteNotificationRowSkeleton,
   type WorkspaceMemberInvitationWithSenderAndRecevier,
 } from "./InviteNotificationRow";
-import { Mails, PlusCircle } from "lucide-react";
 
 function InvitationDrawer() {
   const [isOpen, setIsOpen] = useState(false);

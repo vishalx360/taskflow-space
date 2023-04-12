@@ -5,7 +5,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { Plus } from "lucide-react";
 import { Fragment, useState } from "react";
-import { FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";

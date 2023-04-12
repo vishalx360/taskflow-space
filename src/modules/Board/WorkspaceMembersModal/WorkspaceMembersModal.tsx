@@ -2,7 +2,7 @@ import Divider from "@/modules/Global/Divider";
 import IconButton from "@/modules/Global/IconButton";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
-import { Workspace } from "@prisma/client";
+import { type Workspace } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Fragment, useState } from "react";
 import { FiX } from "react-icons/fi";

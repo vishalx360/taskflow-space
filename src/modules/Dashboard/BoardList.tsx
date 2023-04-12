@@ -1,13 +1,13 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Board, type Workspace } from "@prisma/client";
+import { type Board, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from "react-timeago";
 
 import { api } from "@/utils/api";
-import CreateNewBoardModal from "./CreateNewBoardModal";
 import { Plus } from "lucide-react";
+import CreateNewBoardModal from "./CreateNewBoardModal";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
@@ -59,10 +59,7 @@ export function RecentBoardList() {
     return <BoardListSkeleton />;
   }
   return (
-    <div
-      ref={parent}
-      className="grid grid-cols-2 gap-2 px-4 md:flex md:flex-wrap md:gap-5"
-    >
+    <div ref={parent} className="flex flex-col items-center ">
       {boards?.map((board) => (
         <BoardRow key={board.id} board={board} />
       ))}

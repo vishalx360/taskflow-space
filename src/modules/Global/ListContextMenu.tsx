@@ -7,7 +7,7 @@ import {
 import { type ReactNode } from "react";
 
 import { ContextMenuShortcut } from "@/modules/ui/context-menu";
-import { List } from "@prisma/client";
+import { type List } from "@prisma/client";
 
 export function ListContextMenu({
   children,

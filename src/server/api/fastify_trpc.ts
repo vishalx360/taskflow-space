@@ -36,7 +36,7 @@ export async function createTRPCContext({ req, res }: CreateFastifyContextOption
 
 
 import { initTRPC, TRPCError } from '@trpc/server';
-import { FastifyReplyType, FastifyRequestType } from 'fastify/types/type-provider.js';
+import { type FastifyReplyType, type FastifyRequestType } from 'fastify/types/type-provider.js';
 import superjson from "superjson";
 
 const t = initTRPC.context<typeof createTRPCContext>().create(

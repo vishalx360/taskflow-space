@@ -5,15 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, memo, useState } from "react";
-import {
-  FiChevronDown,
-  FiExternalLink,
-  FiLogOut,
-  FiMenu,
-  FiX,
-} from "react-icons/fi";
-import LogoImage from "./LogoImage";
+import { FiChevronDown, FiExternalLink, FiLogOut } from "react-icons/fi";
 import InvitationDrawer from "./InvitationDrawer/InvitationsDrawer";
+import LogoImage from "./LogoImage";
 import { UserMenu } from "./UserMenu";
 
 const Items = [
