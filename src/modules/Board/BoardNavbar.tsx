@@ -28,7 +28,7 @@ function BoardNavbar({ board }: { board: Board }) {
           >
             <FiArrowLeft className="text-xl" />
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="flex items-center gap-2">
@@ -43,7 +43,7 @@ function BoardNavbar({ board }: { board: Board }) {
               </Tooltip>
             </TooltipProvider>
 
-            <span className="self-center whitespace-nowrap text-xl font-medium text-white">
+            <span className="self-center whitespace-nowrap text-xl font-medium text-white line-clamp-1">
               {board?.name}
             </span>
           </div>
@@ -51,7 +51,7 @@ function BoardNavbar({ board }: { board: Board }) {
         <Link href="/" className="hidden items-center md:flex">
           <LogoImage />
         </Link>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {!board?.Workspace?.personal && (
             <WorkspaceMembersModal hideText workspace={board.Workspace} />
           )}

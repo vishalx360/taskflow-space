@@ -5,15 +5,17 @@ import { Dialog, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { Plus } from "lucide-react";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, ReactNode, useRef, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";
 
 export default function CreateNewBoardModal({
+  children,
   workspace,
 }: {
+  children: ReactNode;
   workspace: Workspace;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,15 +52,21 @@ export default function CreateNewBoardModal({
 
   return (
     <>
-      <button
-        onClick={openModal}
-        className="relative  flex h-full w-full items-center rounded-xl border-neutral-300 bg-neutral-100 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-300/50 hover:ring-2  md:h-40 md:w-[18rem] md:text-lg"
-      >
-        <div className="flex w-full items-center justify-center gap-3">
-          <FaPlusCircle />
-          <h2>New board</h2>
-        </div>
-      </button>
+      {children ? (
+        <button className="w-full" onClick={openModal}>
+          {children}
+        </button>
+      ) : (
+        <button
+          onClick={openModal}
+          className="relative  flex h-full w-full items-center rounded-xl border-neutral-300 bg-neutral-100 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-300/50 hover:ring-2  md:h-40 md:w-[18rem] md:text-lg"
+        >
+          <div className="flex w-full items-center justify-center gap-3">
+            <FaPlusCircle />
+            <h2>New board</h2>
+          </div>
+        </button>
+      )}
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog

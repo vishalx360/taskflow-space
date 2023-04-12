@@ -7,6 +7,7 @@ import TimeAgo from "react-timeago";
 
 import { api } from "@/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
+import { Plus } from "lucide-react";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
@@ -23,7 +24,28 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
         <BoardRow key={board.id} board={board} />
       ))}
       {workspace?.members[0]?.role !== "MEMBER" && (
-        <CreateNewBoardModal workspace={workspace} />
+        <CreateNewBoardModal workspace={workspace}>
+          <div
+            className={`group relative flex w-full items-center gap-5 p-3 transition-all hover:-translate-y-[2px] hover:bg-neutral-200/50`}
+          >
+            <div className="relative w-32">
+              <div
+                className={`flex aspect-video items-center justify-center rounded-xl border-2 border-black/20 text-black/40`}
+              >
+                <Plus />
+              </div>
+            </div>
+
+            <div className="w-full ">
+              <div className="flex w-full flex-col  items-start justify-between ">
+                <h2 className="font-medium">Create new board</h2>
+                <p className="mt-1 text-xs text-neutral-400">
+                  in {workspace.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </CreateNewBoardModal>
       )}
     </div>
   );

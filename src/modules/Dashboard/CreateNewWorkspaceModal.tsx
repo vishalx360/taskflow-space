@@ -46,13 +46,31 @@ export default function CreateNewWorkspaceModal() {
   });
 
   return (
-    <div className="px-5">
-      <button onClick={openModal} className="w-full">
+    <div className="">
+      {/* <button onClick={openModal} className="w-full">
         <div className="my-5 flex w-full items-center justify-center gap-5 rounded-xl border-2 border-gray-200 px-5 py-5 font-medium hover:bg-neutral-100 md:gap-10 md:text-xl">
           <FaPlusCircle className="text-inherit" />
           <span>New workspace</span>
         </div>
-      </button>
+      </button> */}
+
+      <div className="my-8 mb-5 flex items-center gap-5 border-b-2 border-t-2 py-5">
+        <button
+          onClick={openModal}
+          className="sticky top-20 z-10 w-full  transition-all "
+        >
+          <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 py-2 text-xl font-normal   md:rounded-l-md">
+            <div className="flex items-center gap-3 md:gap-5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-2 uppercase  text-white md:h-10 md:w-10 md:text-xl">
+                <Plus />
+              </div>
+              <span className=" text-start line-clamp-1">
+                Create new workspace
+              </span>
+            </div>
+          </div>
+        </button>
+      </div>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
