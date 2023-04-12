@@ -27,7 +27,7 @@ function DashboardNavbar() {
   }
   const pathname = usePathname();
   return (
-    <nav className="fixed top-0 z-50 flex w-full items-center justify-center bg-black py-2 text-white shadow sm:px-4 ">
+    <nav className="fixed top-0 z-50 flex w-full items-center justify-center bg-black/80 py-2 text-white shadow backdrop-blur-3xl sm:px-4 ">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         <button
           onClick={toggel}
@@ -37,14 +37,14 @@ function DashboardNavbar() {
           aria-expanded="false"
         >
           <span className="sr-only">Open main menu</span>
-          {!isOpen ? <FiMenu size="2em" /> : <FiX size="2em" />}
+          {!isOpen ? (
+            <FiMenu className="text-white" size="2em" />
+          ) : (
+            <FiX className="text-white" size="2em" />
+          )}
         </button>
-        <div className="flex items-center gap-10">
-          <Link href="/" className="flex items-center">
-            <LogoImage className="w-[180px] lg:w-auto" />
-          </Link>
-        </div>
-        <div className="absolute left-0 top-14 w-full md:hidden">
+        {/* movile nav */}
+        <div className="absolute left-0 top-14 w-full  md:hidden">
           <Transition
             show={isOpen}
             enter="transition-opacity ease-in-out duration-300 transform"
@@ -54,7 +54,7 @@ function DashboardNavbar() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="border-accent border-b-2  bg-neutral-900 shadow-2xl ">
+            <div className="border-accent   bg-neutral-900 shadow-2xl  ">
               <ul className="flex  w-full flex-col p-5 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:text-sm md:font-medium  ">
                 {Items.map((item) => {
                   const externalProps = item.isExternal
@@ -81,6 +81,13 @@ function DashboardNavbar() {
             </div>
           </Transition>
         </div>
+        {/* logo */}
+        <div className="flex items-center gap-10">
+          <Link href="/" className="flex items-center">
+            <LogoImage className="w-[180px] lg:w-auto" />
+          </Link>
+        </div>
+        {/* desktop nav */}
         <div className="flex items-center gap-10">
           <div className="hidden w-full md:block md:w-auto">
             <ul className="mt-4  flex flex-col rounded-lg border border-gray-100 p-4  md:mt-0 md:flex-row md:space-x-8 md:border-0 md:text-sm md:font-medium  ">
@@ -108,6 +115,7 @@ function DashboardNavbar() {
               })}
             </ul>
           </div>
+
           <div className="flex items-center gap-4">
             <NotificationDrawer />
             <AccountMenuMemo />
