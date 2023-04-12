@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Board, type Workspace } from "@prisma/client";
+import { Board as BoardBox, type Workspace } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,19 +8,22 @@ import TimeAgo from "react-timeago";
 import { api } from "@/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 
-export default function BoardList({ workspace }: { workspace: Workspace }) {
+export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
     workspaceId: workspace.id,
   });
   const [parent] = useAutoAnimate();
 
   if (isLoading) {
-    return <BoardListSkeleton />;
+    return <BoardGridSkeleton />;
   }
   return (
-    <div ref={parent} className="flex flex-col items-center ">
+    <div
+      ref={parent}
+      className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-5"
+    >
       {boards?.map((board) => (
-        <BoardRow key={board.id} board={board} />
+        <BoardBox key={board.id} board={board} />
       ))}
       {workspace?.members[0]?.role !== "MEMBER" && (
         <CreateNewBoardModal workspace={workspace} />
@@ -29,12 +32,12 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
   );
 }
 
-export function RecentBoardList() {
+export function RecentBoardGrid() {
   const { data: boards, isLoading } = api.board.getRecentBoards.useQuery();
   const [parent] = useAutoAnimate();
 
   if (isLoading) {
-    return <BoardListSkeleton />;
+    return <BoardGridSkeleton />;
   }
   return (
     <div
@@ -42,13 +45,13 @@ export function RecentBoardList() {
       className="grid grid-cols-2 gap-2 px-4 md:flex md:flex-wrap md:gap-5"
     >
       {boards?.map((board) => (
-        <BoardRow key={board.id} board={board} />
+        <BoardBox key={board.id} board={board} />
       ))}
     </div>
   );
 }
 
-function BoardRow({ board }: { board: Board }): JSX.Element {
+function BoardBox({ board }: { board: BoardBox }): JSX.Element {
   const background = geopattern.generate(board.id).toDataUri();
 
   let boardUrl = `/board/${board.id}`;
@@ -61,38 +64,35 @@ function BoardRow({ board }: { board: Board }): JSX.Element {
     <Link
       prefetch={false}
       href={boardUrl}
-      className={`group relative flex w-full items-center gap-5 p-3 transition-all hover:-translate-y-[2px] hover:bg-neutral-200/50`}
+      className={`group relative w-full overflow-hidden rounded-xl transition-all hover:-translate-y-1 hover:shadow-xl md:w-fit`}
     >
-      <div className="relative w-32">
+      <div className="h-28 w-full object-cover md:h-40 md:w-[18rem]">
         {board?.background && board.background.startsWith("wallpaper:") && (
           <Image
-            className="aspect-video w-full rounded-xl bg-gray-200 object-cover "
+            className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
             alt="background"
-            width={90}
-            height={40}
+            fill
             src={board.background.slice(10)}
           />
         )}
         {board?.background && board.background.startsWith("gradient:") && (
           <div
-            className={`aspect-video rounded-xl`}
+            className="h-full w-full"
             style={{ backgroundImage: board.background.slice(9) }}
           />
         )}
         {!board?.background && (
           <Image
             height="50"
-            width="80"
+            width="150"
             src={background}
             alt=""
-            className={`aspect-video rounded-xl`}
-
-            // className="aspect-video h-28 w-full object-cover md:h-40 md:w-[18rem]"
+            className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
           />
         )}
       </div>
 
-      <div className="w-full ">
+      <div className="absolute bottom-0 flex h-full w-full items-end whitespace-nowrap bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
         <div className="flex w-full flex-col  items-start justify-between ">
           <h2 className="font-medium">{board.name}</h2>
           <TimeAgo
@@ -106,19 +106,19 @@ function BoardRow({ board }: { board: Board }): JSX.Element {
   );
 }
 
-export function BoardListSkeleton() {
+export function BoardGridSkeleton() {
   return (
     <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-5">
-      <BoardSkeleton />
-      <BoardSkeleton />
-      <BoardSkeleton />
-      <BoardSkeleton />
-      <BoardSkeleton />
+      <BoardBoxSkeleton />
+      <BoardBoxSkeleton />
+      <BoardBoxSkeleton />
+      <BoardBoxSkeleton />
+      <BoardBoxSkeleton />
     </div>
   );
 }
 
-export function BoardSkeleton(): JSX.Element {
+export function BoardBoxSkeleton(): JSX.Element {
   return (
     <div
       className={`h-28 w-full animate-pulse rounded-xl bg-gray-300 object-cover md:h-40 md:w-[18rem]`}

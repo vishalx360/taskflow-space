@@ -9,8 +9,10 @@ import RenameWorkspaceSection from "./RenameWorkspaceSection";
 
 export default function WorkspaceSettingsModal({
   workspace,
+  hideText = false,
 }: {
   workspace: Workspace;
+  hideText?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,7 +26,7 @@ export default function WorkspaceSettingsModal({
   return (
     <>
       <IconButton onClick={openModal} Icon={MdSettings} className="">
-        Settings
+        <p className={hideText ? "hidden lg:inline" : ""}>Settings</p>
       </IconButton>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

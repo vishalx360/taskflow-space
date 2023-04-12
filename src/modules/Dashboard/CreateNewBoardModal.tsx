@@ -46,7 +46,7 @@ export default function CreateNewBoardModal({
     <>
       <button
         onClick={openModal}
-        className="relative  flex h-28 w-full items-center rounded-xl border-neutral-300 bg-neutral-100 p-5 text-sm font-medium text-neutral-700 transition-colors hover:border-2 hover:bg-neutral-300/50  md:h-40 md:w-[18rem] md:text-lg"
+        className="relative  flex h-full w-full items-center rounded-xl border-neutral-300 bg-neutral-100 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-300/50 hover:ring-2  md:h-40 md:w-[18rem] md:text-lg"
       >
         <div className="flex w-full items-center justify-center gap-3">
           <FaPlusCircle />

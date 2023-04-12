@@ -9,6 +9,7 @@ import { api } from "@/utils/api";
 import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
 import WorkspaceSettingsModal from "./WorkspaceSettingsModal/WorkspaceSettingsModal";
+import BoardGrid, { RecentBoardGrid } from "./BoardGrid";
 
 function Workspaces() {
   const {
@@ -24,7 +25,7 @@ function Workspaces() {
       <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
         Recent Boards
       </h1>
-      <RecentBoardList />
+      <RecentBoardGrid />
       <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
         Your Workspaces
       </h1>
@@ -36,14 +37,16 @@ function Workspaces() {
               <Disclosure defaultOpen={workspace.personal || index < 5}>
                 {({ open }) => (
                   <>
-                    <div className="mb-5 flex items-center gap-5">
-                      <Disclosure.Button className="sticky top-20 z-10 w-full border-b-2 bg-white transition-all ">
-                        <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 py-2 text-xl font-semibold hover:bg-neutral-100  md:rounded-l-md">
+                    <div className="mb-5 flex items-center gap-5 border-b-2">
+                      <Disclosure.Button className="sticky top-20 z-10 w-full  transition-all ">
+                        <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 py-2 text-xl font-semibold   md:rounded-l-md">
                           <div className="flex items-center gap-3 md:gap-5">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-black p-2 text-sm text-white md:h-10 md:w-10 md:text-xl">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
                               {workspace.name[0]}
                             </div>
-                            <span>{workspace.name}</span>
+                            <span className=" text-start line-clamp-1">
+                              {workspace.name}
+                            </span>
                             {isRefetching && (
                               <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-500" />
                             )}
@@ -57,10 +60,16 @@ function Workspaces() {
                       </Disclosure.Button>
                       {/* TODO hide settings for member role */}
                       {!workspace.personal && (
-                        <div className="hidden items-center gap-3 md:flex">
-                          <WorkspaceMembersModal workspace={workspace} />
+                        <div className="flex items-center gap-3 px-2">
+                          <WorkspaceMembersModal
+                            hideText
+                            workspace={workspace}
+                          />
                           {workspace.members[0]?.role === "OWNER" && (
-                            <WorkspaceSettingsModal workspace={workspace} />
+                            <WorkspaceSettingsModal
+                              hideText
+                              workspace={workspace}
+                            />
                           )}
                         </div>
                       )}
@@ -75,15 +84,12 @@ function Workspaces() {
                       leaveTo="transform -translate-y-3 opacity-0"
                     >
                       <Disclosure.Panel className="px-4">
-                        {!workspace.personal && (
-                          <div className="my-5 flex items-center gap-3 md:hidden">
-                            <WorkspaceMembersModal workspace={workspace} />
-                            {workspace.members[0]?.role === "OWNER" && (
-                              <WorkspaceSettingsModal workspace={workspace} />
-                            )}
-                          </div>
-                        )}
-                        <BoardList workspace={workspace} />
+                        <div className="hidden md:block">
+                          <BoardGrid workspace={workspace} />
+                        </div>
+                        <div className="block md:hidden">
+                          <BoardList workspace={workspace} />
+                        </div>
                       </Disclosure.Panel>
                     </Transition>
                   </>
