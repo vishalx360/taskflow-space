@@ -7,10 +7,11 @@ import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import { FiX } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "~/utils/api";
-import { UpdateTaskSchema } from "~/utils/ValidationSchema";
+import { api } from "@/utils/api";
+import { UpdateTaskSchema } from "@/utils/ValidationSchema";
 import PrimaryButton from "../PrimaryButton";
 import Toast from "../Toast";
+import { Button } from "@/modules/ui/Button";
 
 export default function TaskModal({
   children,
@@ -117,7 +118,7 @@ export default function TaskModal({
                                 className="w-full resize-none  border-0 border-b-2 border-gray-300 p-3 text-2xl text-neutral-800 outline-none transition-all focus:outline-none focus:outline focus:ring-0 active:ring-0"
                               />
                               {meta.touched && meta.error && (
-                                <p className="mt-2 ml-2 text-sm text-red-500">
+                                <p className="ml-2 mt-2 text-sm text-red-500">
                                   {meta.error}
                                 </p>
                               )}
@@ -151,7 +152,7 @@ export default function TaskModal({
                               rows={8}
                             />
                             {meta.touched && meta.error && (
-                              <p className="mt-2 ml-2 text-sm text-red-500">
+                              <p className="ml-2 mt-2 text-sm text-red-500">
                                 {meta.error}
                               </p>
                             )}
@@ -176,13 +177,13 @@ export default function TaskModal({
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <PrimaryButton
+                                <Button
                                   isLoading={UpdateMutation.isLoading}
                                   loadingText="Saving Changes..."
                                   className="rounded-xl"
                                 >
                                   Save Changes
-                                </PrimaryButton>
+                                </Button>
                               </Transition>
                             </>
                           )}
@@ -217,21 +218,19 @@ function DeleteTask({
       await utils.task.getTasks
         .invalidate({ listId: task.listId })
         .catch((err) => console.log(err));
-      Toast({ content: "Task deleted successfully!", status: "success" });
       setIsOpen(false);
     },
   });
   return (
-    <PrimaryButton
+    <Button
       type="button"
       isLoading={deleteMutation.isLoading}
       onClick={() => deleteMutation.mutate({ taskId: task.id })}
       LeftIcon={MdDelete}
       loadingText="Deleting Task"
-      overwriteClassname
-      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+      variant="destructiveOutline"
     >
       Delete Task
-    </PrimaryButton>
+    </Button>
   );
 }

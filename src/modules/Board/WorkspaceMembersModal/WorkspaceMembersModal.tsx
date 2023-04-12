@@ -4,17 +4,19 @@ import { useSession } from "next-auth/react";
 import { Fragment, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { MdPeople } from "react-icons/md";
-import Divider from "~/modules/Global/Divider";
-import IconButton from "~/modules/Global/IconButton";
-import { api } from "~/utils/api";
+import Divider from "@/modules/Global/Divider";
+import IconButton from "@/modules/Global/IconButton";
+import { api } from "@/utils/api";
 import InviteSection from "./InviteSection";
 import LeaveWorkspaceSection from "./LeaveWorkspaceSection";
 import MembersList, { MemberListSkeleton } from "./MembersList";
 
 export default function WorkspaceMembersModal({
   workspace,
+  hideText = false,
 }: {
   workspace: Workspace;
+  hideText?: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
@@ -43,7 +45,7 @@ export default function WorkspaceMembersModal({
         Icon={MdPeople}
         className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
       >
-        <p className="hidden lg:inline">Members</p>
+        <p className={hideText ? "hidden lg:inline" : ""}>Members</p>
       </IconButton>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>

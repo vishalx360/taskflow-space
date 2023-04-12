@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from "react-timeago";
 
-import { api } from "~/utils/api";
+import { api } from "@/utils/api";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {

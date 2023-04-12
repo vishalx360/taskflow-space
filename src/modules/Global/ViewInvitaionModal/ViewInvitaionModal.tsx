@@ -4,11 +4,13 @@ import Image from "next/image";
 import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import { FaCheck } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
-import { api } from "~/utils/api";
-import getGravatar from "~/utils/getGravatar";
+import { api } from "@/utils/api";
+import getGravatar from "@/utils/getGravatar";
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../NotificationDrawer/InviteNotificationRow";
 import PrimaryButton from "../PrimaryButton";
 import Toast from "../Toast";
+import { Button } from "@/modules/ui/Button";
+import { Check } from "lucide-react";
 
 export default function ViewInvitationModal({
   currentInvitation,
@@ -164,29 +166,29 @@ export default function ViewInvitationModal({
                   </h2>
                 </div>
                 <div className="mt-2 flex items-center gap-5">
-                  <PrimaryButton
+                  <Button
                     onClick={AcceptInvitation}
                     isLoading={mutation.isLoading}
                     loadingText="Accepting..."
                     disabled={mutation.isLoading}
                     type="submit"
-                    className="w-full bg-green-200 text-green-700 hover:bg-green-300"
-                    LeftIcon={FaCheck}
+                    // className="w-full bg-green-200 text-green-700 hover:bg-green-300"
+                    className="w-full"
+                    LeftIcon={Check}
                   >
                     Accept
-                  </PrimaryButton>
-                  <PrimaryButton
+                  </Button>
+                  <Button
                     onClick={RejectInvitation}
                     isLoading={isRejecting}
                     disabled={mutation.isLoading}
                     loadingText="Rejecting..."
                     type="submit"
-                    overwriteClassname
-                    className="w-full rounded-full bg-red-200  px-5 py-3 text-red-700 hover:bg-red-300 "
                     LeftIcon={FiX}
+                    variant="destructiveOutline"
                   >
                     Reject
-                  </PrimaryButton>
+                  </Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

@@ -4,10 +4,12 @@ import { Fragment, useState } from "react";
 import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "~/utils/api";
-import { CreateNewWorkspaceSchema } from "~/utils/ValidationSchema";
+import { api } from "@/utils/api";
+import { CreateNewWorkspaceSchema } from "@/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
+import { Button } from "../ui/Button";
+import { Plus } from "lucide-react";
 
 export default function CreateNewWorkspaceModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +42,7 @@ export default function CreateNewWorkspaceModal() {
   return (
     <div className="px-5">
       <button onClick={openModal} className="w-full">
-        <div className="my-5 flex w-full items-center justify-center gap-10 rounded-xl border-2 border-gray-200 py-5 px-5 text-xl font-medium hover:bg-neutral-100">
+        <div className="my-5 flex w-full items-center justify-center gap-10 rounded-xl border-2 border-gray-200 px-5 py-5 text-xl font-medium hover:bg-neutral-100">
           <FaPlusCircle className="text-inherit" />
           <span>Create new workspace</span>
         </div>
@@ -118,7 +120,7 @@ export default function CreateNewWorkspaceModal() {
                                   className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
                                 />
                                 {meta.touched && meta.error && (
-                                  <p className="mt-2 ml-2 text-sm text-red-500">
+                                  <p className="ml-2 mt-2 text-sm text-red-500">
                                     {meta.error}
                                   </p>
                                 )}
@@ -127,16 +129,16 @@ export default function CreateNewWorkspaceModal() {
                           </Field>
                           <Field name="submit">
                             {({ form }: FieldProps) => (
-                              <PrimaryButton
+                              <Button
                                 isLoading={mutation.isLoading}
                                 loadingText="Creating new board"
                                 disabled={Object.keys(form.errors).length !== 0}
                                 type="submit"
                                 className="w-full"
-                                LeftIcon={FaPlus}
+                                LeftIcon={Plus}
                               >
                                 Create new workspace
-                              </PrimaryButton>
+                              </Button>
                             )}
                           </Field>
                         </div>

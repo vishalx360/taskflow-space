@@ -1,4 +1,4 @@
-import DashboardNavbar from "~/modules/Global/DashboardNavbar";
+import DashboardNavbar from "@/modules/Global/DashboardNavbar";
 import Workspaces from "./Workspaces";
 
 function Dashboard() {

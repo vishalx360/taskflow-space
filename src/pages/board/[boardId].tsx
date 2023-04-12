@@ -1,4 +1,4 @@
-import Board from "~/modules/Board/Board";
+import Board from "@/modules/Board/Board";
 
 function BoardPage() {
   return <Board />;

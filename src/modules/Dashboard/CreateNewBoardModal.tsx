@@ -1,3 +1,5 @@
+import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
@@ -5,10 +7,9 @@ import { Fragment, useRef, useState } from "react";
 import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "~/utils/api";
-import { CreateNewBoardSchema } from "~/utils/ValidationSchema";
-import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
+import { Button } from "../ui/Button";
+import { Plus } from "lucide-react";
 
 export default function CreateNewBoardModal({
   workspace,
@@ -131,7 +132,7 @@ export default function CreateNewBoardModal({
                                   className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
                                 />
                                 {meta.touched && meta.error && (
-                                  <p className="mt-2 ml-2 text-sm text-red-500">
+                                  <p className="ml-2 mt-2 text-sm text-red-500">
                                     {meta.error}
                                   </p>
                                 )}
@@ -140,7 +141,7 @@ export default function CreateNewBoardModal({
                           </Field>
                           <Field name="submit">
                             {({ form }: FieldProps) => (
-                              <PrimaryButton
+                              <Button
                                 isLoading={mutation.isLoading}
                                 loadingText="Creating new board"
                                 disabled={
@@ -149,10 +150,10 @@ export default function CreateNewBoardModal({
                                 }
                                 type="submit"
                                 className="w-full"
-                                LeftIcon={FaPlus}
+                                LeftIcon={Plus}
                               >
                                 Create new board
-                              </PrimaryButton>
+                              </Button>
                             )}
                           </Field>
                         </div>

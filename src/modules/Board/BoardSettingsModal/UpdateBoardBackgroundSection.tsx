@@ -1,7 +1,7 @@
 import { Field, type FieldProps } from "formik";
 import Image from "next/image";
 import { FiCheckCircle } from "react-icons/fi";
-import BoardBackGrounds from "~/utils/BoardBackgrounds.json";
+import BoardBackGrounds from "@/utils/BoardBackgrounds.json";
 
 function UpdateBoardBackgroundSection({
   UpdatelocalBackground,

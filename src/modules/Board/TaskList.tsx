@@ -1,22 +1,19 @@
-import { Menu, Transition } from "@headlessui/react";
-import { type Board, type List, type Task } from "@prisma/client";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import dynamic from "next/dynamic";
-import { Fragment, memo, RefObject, useRef } from "react";
-import {
-  BiDotsHorizontalRounded,
-  BiDotsVerticalRounded,
-  BiLoaderAlt,
-} from "react-icons/bi";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "~/utils/api";
 import {
   CreateListSchema,
   CreateTaskSchema,
   UpdateListSchema,
-} from "~/utils/ValidationSchema";
-import PrimaryButton from "../Global/PrimaryButton";
+} from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
+import { Menu, Transition } from "@headlessui/react";
+import { type Board, type List, type Task } from "@prisma/client";
+import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
+import dynamic from "next/dynamic";
+import { Fragment, RefObject, memo, useRef } from "react";
+import { BiDotsHorizontalRounded, BiLoaderAlt } from "react-icons/bi";
+import { useDebouncedCallback } from "use-debounce";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 import Toast from "../Global/Toast";
+import { Button } from "../ui/Button";
 import { EmptyListCard, TaskCard, TaskCardSkeleton } from "./TaskCard";
 
 export const LIST_BG_COLOR = "#ebecf0";
@@ -54,7 +51,7 @@ function TaskList({ list }: { list: List }) {
           className="prevent-select relative h-fit max-h-[79vh] w-[300px]  max-w-[70vw] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
           key={`main:${list.name}`}
         >
-          <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pt-3 pb-2 text-black">
+          <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pb-2 pt-3 text-black">
             <div className="relative flex items-center  justify-start">
               <div className="max-w-[200px]">
                 <UpdateListName list={list} />
@@ -68,7 +65,7 @@ function TaskList({ list }: { list: List }) {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="absolute top-0 right-4">
+                <div className="absolute right-4 top-0">
                   <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-400" />
                 </div>
               </Transition>
@@ -90,6 +87,7 @@ function TaskList({ list }: { list: List }) {
             )}
             <div ref={listEndRef} className="h-[130px]" />
           </div>
+
           {provided.placeholder}
           <AddToListForm listEndRef={listEndRef} list={list} />
         </div>
@@ -98,7 +96,6 @@ function TaskList({ list }: { list: List }) {
   );
 }
 export default memo(TaskList);
-import { useDebouncedCallback } from "use-debounce";
 
 export function AddToListForm({
   list,
@@ -165,7 +162,7 @@ export function AddToListForm({
             <Field name="title">
               {({ field, form, meta }: FieldProps) => (
                 <input
-                  className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent py-2 px-5 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white md:py-3"
+                  className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent px-5 py-2 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white md:py-3"
                   type="text"
                   placeholder="+ Add to list"
                   id="title"
@@ -185,15 +182,14 @@ export function AddToListForm({
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <PrimaryButton
+                  <Button
                     loadingText=" "
                     disabled={Object.keys(form.errors).length !== 0}
                     type="submit"
                     className="flex-[2] rounded-xl"
-                    // LeftIcon={FaPlus}
                   >
                     Add
-                  </PrimaryButton>
+                  </Button>
                 </Transition>
               )}
             </Field>
@@ -202,7 +198,7 @@ export function AddToListForm({
             {({ form, meta }: FieldProps) => (
               <>
                 {form.dirty && meta.touched && meta.error && (
-                  <p className="mt-2 ml-2 text-sm text-red-500">{meta.error}</p>
+                  <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
                 )}
               </>
             )}
@@ -317,7 +313,7 @@ export function CreateList({ boardId }: { boardId: string }) {
                 <Field name="name">
                   {({ field, form, meta }: FieldProps) => (
                     <input
-                      className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent py-3 px-5 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white"
+                      className="w-full flex-[10] rounded-xl border-2 border-gray-300/60 bg-transparent px-5 py-3 font-medium transition-all hover:border-b-2 hover:bg-white/50 focus:bg-white active:bg-white"
                       type="text"
                       placeholder="+ Create a new list"
                       id="name"
@@ -337,7 +333,7 @@ export function CreateList({ boardId }: { boardId: string }) {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <PrimaryButton
+                      <Button
                         isLoading={mutation.isLoading}
                         loadingText=" "
                         disabled={
@@ -349,28 +345,14 @@ export function CreateList({ boardId }: { boardId: string }) {
                         // LeftIcon={FaPlus}
                       >
                         Create
-                      </PrimaryButton>
+                      </Button>
                     </Transition>
                   )}
                 </Field>
               </div>
-              <Field name="name">
-                {({ form, meta }: FieldProps) => (
-                  <Transition
-                    show={form.dirty && meta.touched && Boolean(meta.error)}
-                    enter="transition-opacity duration-75"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="transition-opacity duration-150"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <p className="mt-2 ml-2 text-sm text-red-500">
-                      {meta.error}
-                    </p>
-                  </Transition>
-                )}
-              </Field>
+              <div className="ml-2 mt-2 text-sm text-red-500">
+                <ErrorMessage name="name" />
+              </div>
             </Form>
           </Formik>
         </div>
@@ -446,7 +428,7 @@ function ClearListButton({
       closeMenu();
     },
     onSuccess: () => {
-      utils.board.getTasks.setData({ listId: list.id }, []);
+      utils.task.getTasks.setData({ listId: list.id }, []);
       closeMenu();
     },
   });

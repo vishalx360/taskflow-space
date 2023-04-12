@@ -4,8 +4,8 @@ import { FaCaretRight } from "react-icons/fa";
 import BoardList, {
   BoardListSkeleton,
   RecentBoardList,
-} from "~/modules/Dashboard/BoardList";
-import { api } from "~/utils/api";
+} from "@/modules/Dashboard/BoardList";
+import { api } from "@/utils/api";
 import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
 import WorkspaceSettingsModal from "./WorkspaceSettingsModal/WorkspaceSettingsModal";
@@ -38,7 +38,7 @@ function Workspaces() {
                   <>
                     <div className="mb-5 flex items-center gap-5">
                       <Disclosure.Button className="sticky top-20 z-10 w-full border-b-2 bg-white transition-all ">
-                        <div className="flex w-full items-center justify-between gap-10 rounded-t-xl rounded-l-none border-gray-600 py-2 px-5 text-xl font-semibold hover:bg-neutral-100  md:rounded-l-md">
+                        <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 py-2 text-xl font-semibold hover:bg-neutral-100  md:rounded-l-md">
                           <div className="flex items-center gap-3 md:gap-5">
                             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-black p-2 text-sm text-white md:h-10 md:w-10 md:text-xl">
                               {workspace.name[0]}

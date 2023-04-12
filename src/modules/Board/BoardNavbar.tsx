@@ -1,13 +1,13 @@
+import BoardSettingsModal from "@/modules/Board/BoardSettingsModal/BoardSettingsModal";
+import LogoImage from "@/modules/Global/LogoImage";
 import { type Board } from "@prisma/client";
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
-import BoardSettingsModal from "~/modules/Board/BoardSettingsModal/BoardSettingsModal";
-import LogoImage from "~/modules/Global/LogoImage";
 import WorkspaceMembersModal from "./WorkspaceMembersModal/WorkspaceMembersModal";
 
 function BoardNavbar({ board }: { board: Board }) {
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full bg-black/20 px-4 py-3 text-white shadow sm:px-4">
+    <nav className="fixed left-0 top-0 z-50 w-full bg-black/20 px-4 py-3 text-white shadow sm:px-4">
       <div className="container mx-auto flex flex-wrap items-center justify-between">
         <div className="flex items-center gap-10">
           <Link
@@ -25,7 +25,7 @@ function BoardNavbar({ board }: { board: Board }) {
         </Link>
         <div className="flex items-center gap-3">
           {!board?.Workspace?.personal && (
-            <WorkspaceMembersModal workspaceId={board?.workspaceId} />
+            <WorkspaceMembersModal hideText workspace={board.Workspace} />
           )}
           <BoardSettingsModal board={board} />
         </div>

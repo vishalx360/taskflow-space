@@ -2,8 +2,8 @@ import { type WorkspaceMemberInvitation } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { type Dispatch, type SetStateAction } from "react";
-import { type UserType } from "~/modules/Board/WorkspaceMembersModal/MemberRow";
-import getGravatar from "~/utils/getGravatar";
+import { type UserType } from "@/modules/Board/WorkspaceMembersModal/MemberRow";
+import getGravatar from "@/utils/getGravatar";
 
 export type WorkspaceMemberInvitationWithSenderAndRecevier =
   WorkspaceMemberInvitation & {

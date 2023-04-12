@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, memo, useState } from "react";
 import { FiChevronDown, FiLogOut } from "react-icons/fi";
-import getGravatar from "~/utils/getGravatar";
+import getGravatar from "@/utils/getGravatar";
 import LogoImage from "../Global/LogoImage";
 
 async function handelLogout() {

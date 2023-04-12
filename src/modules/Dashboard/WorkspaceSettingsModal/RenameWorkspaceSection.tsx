@@ -2,10 +2,11 @@ import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { type Dispatch, type SetStateAction } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "~/utils/api";
-import { RenameWorkspaceSchema } from "~/utils/ValidationSchema";
+import { api } from "@/utils/api";
+import { RenameWorkspaceSchema } from "@/utils/ValidationSchema";
 import PrimaryButton from "../../Global/PrimaryButton";
 import Toast from "../../Global/Toast";
+import { Button } from "@/modules/ui/Button";
 
 function RenameWorkspaceSection({
   workspace,
@@ -47,7 +48,7 @@ function RenameWorkspaceSection({
               <>
                 <label
                   htmlFor="name"
-                  className="mt-3 mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
+                  className="mb-2 mt-3 block text-sm font-medium text-neutral-500 dark:text-white"
                 >
                   Workspace Name
                 </label>
@@ -60,7 +61,7 @@ function RenameWorkspaceSection({
                     {...field}
                     className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
                   />
-                  <PrimaryButton
+                  <Button
                     isLoading={mutation.isLoading}
                     loadingText="Renaming"
                     disabled={
@@ -68,13 +69,12 @@ function RenameWorkspaceSection({
                       Object.keys(form.errors).length !== 0
                     }
                     type="submit"
-                    className="rounded-xl"
                   >
                     Rename
-                  </PrimaryButton>
+                  </Button>
                 </div>
                 {meta.touched && meta.error && (
-                  <p className="mt-2 ml-2 text-sm text-red-500">{meta.error}</p>
+                  <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
                 )}
               </>
             )}

@@ -1,4 +1,4 @@
-import Home from "~/modules/Home";
+import Home from "@/modules/Home";
 
 function index() {
   return <Home />;

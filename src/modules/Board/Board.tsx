@@ -10,9 +10,9 @@ import { useDebouncedCallback } from "use-debounce";
 import TaskList, {
   CreateList,
   TaskListSkeleton,
-} from "~/modules/Board/TaskList";
-import Toast from "~/modules/Global/Toast";
-import { api } from "~/utils/api";
+} from "@/modules/Board/TaskList";
+import Toast from "@/modules/Global/Toast";
+import { api } from "@/utils/api";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
@@ -148,7 +148,7 @@ function BoardSkeleton(): JSX.Element {
   return (
     <div className="relative h-screen ">
       <BoardBackground background={background} />
-      <nav className="fixed top-0 left-0 z-50 w-full  px-4 text-white shadow sm:px-4">
+      <nav className="fixed left-0 top-0 z-50 w-full  px-4 text-white shadow sm:px-4">
         <div className="container mx-auto flex  items-center justify-between">
           <div className="flex items-center gap-10">
             <Link

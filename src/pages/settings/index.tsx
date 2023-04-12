@@ -1,4 +1,4 @@
-import Settings from "~/modules/Settings/Settings";
+import Settings from "@/modules/Settings/Settings";
 
 function SettingsPage() {
   return <Settings />;

@@ -1,3 +1,6 @@
+import { Button } from "@/modules/ui/Button";
+import { UpdateBoardSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { type Board } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import {
@@ -6,13 +9,10 @@ import {
   type SetStateAction,
 } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "~/utils/api";
-import { UpdateBoardSchema } from "~/utils/ValidationSchema";
-import PrimaryButton from "../../Global/PrimaryButton";
 import Toast from "../../Global/Toast";
 import UpdateBoardBackgroundSection from "./UpdateBoardBackgroundSection";
 
-function UpdateWorkspaceSection({
+function UpdateBoardSection({
   board,
   setIsOpen,
   currentBackground,
@@ -76,7 +76,7 @@ function UpdateWorkspaceSection({
                   />
                 </div>
                 {meta.touched && meta.error && (
-                  <p className="mt-2 ml-2 text-sm text-red-500">{meta.error}</p>
+                  <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
                 )}
               </>
             )}
@@ -87,8 +87,8 @@ function UpdateWorkspaceSection({
           />
           <Field name="submit">
             {({ field, form, meta }: FieldProps) => (
-              <div className="mt-5 flex items-center justify-start gap-5">
-                <PrimaryButton
+              <div className="mt-5 ">
+                <Button
                   isLoading={mutation.isLoading}
                   loadingText="Saving Changes..."
                   disabled={
@@ -98,7 +98,7 @@ function UpdateWorkspaceSection({
                   className="w-full rounded-xl md:w-fit"
                 >
                   Save Changes
-                </PrimaryButton>
+                </Button>
               </div>
             )}
           </Field>
@@ -108,4 +108,4 @@ function UpdateWorkspaceSection({
   );
 }
 
-export default UpdateWorkspaceSection;
+export default UpdateBoardSection;

@@ -5,9 +5,10 @@ import { type Dispatch, type SetStateAction } from "react";
 import { FaCaretRight } from "react-icons/fa";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import PrimaryButton from "~/modules/Global/PrimaryButton";
-import { api } from "~/utils/api";
+import PrimaryButton from "@/modules/Global/PrimaryButton";
+import { api } from "@/utils/api";
 import Toast from "../../Global/Toast";
+import { Button } from "@/modules/ui/Button";
 
 function LeaveWorkspaceSection({
   workspace,
@@ -89,7 +90,7 @@ function LeaveWorkspaceSection({
                         <>
                           <label
                             htmlFor="confirmation"
-                            className="mt-3 mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
+                            className="mb-2 mt-3 block text-sm font-medium text-neutral-500 dark:text-white"
                           >
                             Please type
                             <span className="px-2 font-semibold">
@@ -106,24 +107,20 @@ function LeaveWorkspaceSection({
                               {...field}
                               className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
                             />
-                            <PrimaryButton
+                            <Button
                               isLoading={mutation.isLoading}
                               disabled={
                                 !form.dirty ||
                                 Object.keys(form.errors).length !== 0
                               }
-                              overwriteClassname
                               loadingText="Leave..."
-                              className="rounded-xl border-2 border-red-600 bg-transparent px-4 py-2 text-red-700 hover:bg-red-50 active:bg-red-100
-                    
-                    disabled:cursor-not-allowed disabled:border-neutral-200 disabled:bg-neutral-100 disabled:text-neutral-400
-                    "
+                              variant="destructiveOutline"
                             >
                               Leave
-                            </PrimaryButton>
+                            </Button>
                           </div>
                           {meta.touched && meta.error && (
-                            <p className="mt-2 ml-2 text-sm text-red-500">
+                            <p className="ml-2 mt-2 text-sm text-red-500">
                               {meta.error}
                             </p>
                           )}

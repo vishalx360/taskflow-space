@@ -11,7 +11,7 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
-import getGravatar from "~/utils/getGravatar";
+import getGravatar from "@/utils/getGravatar";
 import LogoImage from "./LogoImage";
 import NotificationDrawer from "./NotificationDrawer/NotificationDrawer";
 

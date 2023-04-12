@@ -2,9 +2,10 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FaGoogle } from "react-icons/fa";
 import { MdDevices } from "react-icons/md";
-import getGravatar from "~/utils/getGravatar";
+import getGravatar from "@/utils/getGravatar";
 import DashboardNavbar from "../Global/DashboardNavbar";
 import PrimaryButton from "../Global/PrimaryButton";
+import { Button } from "../ui/Button";
 
 function Settings() {
   const { data: session } = useSession();
@@ -45,31 +46,29 @@ function Settings() {
                 className=""
                 placeholder="Re-Type New Password"
               /> */}
-              <PrimaryButton
+              <Button
                 // isLoading={mutation.isLoading}
                 // onClick={() => mutation.mutate({ workspaceId: workspace.id })}
                 LeftIcon={FaGoogle}
-                overwriteClassname
                 loadingText="Deleting Workspace"
-                className="mt-4 rounded-xl border-2  px-4 py-2 text-black hover:bg-neutral-50 active:bg-neutral-100"
+                className="mt-4"
               >
                 Reset Password
-              </PrimaryButton>
+              </Button>
             </div>
             {/* linked social account manager */}
             <div>
               <h2 className="text-xl font-medium">Social Accounts</h2>
               <p className="text-neutral-700">Linked Social Logins</p>
-              <PrimaryButton
+              <Button
                 // isLoading={mutation.isLoading}
                 // onClick={() => mutation.mutate({ workspaceId: workspace.id })}
                 LeftIcon={FaGoogle}
-                overwriteClassname
                 loadingText="Deleting Workspace"
-                className="mt-4 rounded-xl border-2  px-4 py-2 text-black hover:bg-neutral-50 active:bg-neutral-100"
+                className="mt-4"
               >
                 Connect Google Account
-              </PrimaryButton>
+              </Button>
             </div>
             {/* sessions manager */}
             {/* <div>
@@ -78,7 +77,7 @@ function Settings() {
                 If you need to, you can log out of one or all of your other
                 devices.
               </p>
-              <PrimaryButton
+              <Button
                 // isLoading={mutation.isLoading}
                 // onClick={() => mutation.mutate({ workspaceId: workspace.id })}
                 LeftIcon={MdDevices}
@@ -87,22 +86,21 @@ function Settings() {
                 className="mt-4 rounded-xl border-2  px-4 py-2 text-black hover:bg-neutral-50 active:bg-neutral-100"
               >
                 Manage Sessions
-              </PrimaryButton>
+              </Button>
             </div> */}
             {/* delete account manager */}
             <div>
               <h2 className="text-xl font-medium">Danger Zone</h2>
               <p className="text-neutral-700">By deleting your account</p>
-              <PrimaryButton
+              <Button
                 // isLoading={mutation.isLoading}
                 // onClick={() => mutation.mutate({ workspaceId: workspace.id })}
                 LeftIcon={MdDevices}
-                overwriteClassname
                 loadingText="Deleting Workspace"
-                className="mt-4 rounded-xl border-2  px-4 py-2 text-black hover:bg-neutral-50 active:bg-neutral-100"
+                className="mt-4"
               >
                 Delete My Account
-              </PrimaryButton>
+              </Button>
             </div>
           </div>
         </div>

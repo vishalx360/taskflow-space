@@ -28,6 +28,7 @@ const config = {
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/ban-ts-comment": "warn",
   },
+  ignorePatterns: ["node_modules", "dist", "coverage", ".next", "tailwind.config.js"],
 };
 
 module.exports = config;

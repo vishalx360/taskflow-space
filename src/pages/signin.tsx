@@ -7,12 +7,13 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import LogoImage from "~/modules/Global/LogoImage";
-import PasswordInput from "~/modules/Global/PasswordInput";
-import PrimaryButton from "~/modules/Global/PrimaryButton";
-import Toast from "~/modules/Global/Toast";
-import { authOptions } from "~/server/auth";
-import { SigninSchema } from "~/utils/ValidationSchema";
+import LogoImage from "@/modules/Global/LogoImage";
+import PasswordInput from "@/modules/Global/PasswordInput";
+import PrimaryButton from "@/modules/Global/PrimaryButton";
+import Toast from "@/modules/Global/Toast";
+import { authOptions } from "@/server/auth";
+import { SigninSchema } from "@/utils/ValidationSchema";
+import { Button } from "@/modules/ui/Button";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -85,7 +86,7 @@ export default function SignInPage() {
                           {...field}
                         />
                         {meta.touched && meta.error && (
-                          <p className="mt-2 ml-2 text-sm text-red-500">
+                          <p className="ml-2 mt-2 text-sm text-red-500">
                             {meta.error}
                           </p>
                         )}
@@ -120,26 +121,28 @@ export default function SignInPage() {
                       Forgot password?
                     </a>
                   </div> */}
-                  <PrimaryButton
-                    overwriteClassname
+                  <Button
                     type="submit"
-                    className="text-md w-full rounded-lg bg-black px-5 py-2.5 text-center font-medium text-white hover:bg-black focus:outline-none focus:ring-4 focus:ring-black dark:bg-black dark:hover:bg-black dark:focus:ring-black"
+                    className="text-md w-full"
+                    size="lg"
                     isLoading={isLoading}
                     loadingText="Signing in..."
                   >
                     Sign in
-                  </PrimaryButton>
+                  </Button>
                 </Form>
               </Formik>
-              <button
+              <Button
                 onClick={() => {
                   void handelGoogleSignin();
                 }}
-                className="text-md flex w-full items-center justify-center gap-5 rounded-lg border-2 bg-neutral-50 px-5 py-2.5 text-center font-medium text-black hover:bg-neutral-100 focus:outline-none focus:ring-4 focus:ring-black dark:bg-white dark:text-black dark:hover:bg-black dark:focus:ring-black"
+                variant="outline"
+                className="text-md flex w-full items-center justify-center gap-4"
+                size="lg"
+                LeftIcon={FaGoogle}
               >
-                <FaGoogle />
                 Sign In With Google
-              </button>
+              </Button>
               <p className="text-sm font-light text-neutral-500 dark:text-neutral-400">
                 Don’t have an account yet?{" "}
                 <Link

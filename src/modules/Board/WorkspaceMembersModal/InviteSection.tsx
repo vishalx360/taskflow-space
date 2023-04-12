@@ -1,3 +1,8 @@
+import Toast from "@/modules/Global/Toast";
+import { Button } from "@/modules/ui/Button";
+import { ALLOWED_ROLES_TO_INVITE } from "@/utils/AllowedRolesToInvite";
+import { CreateWorkspaceInvitation } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { Disclosure, Listbox, Transition } from "@headlessui/react";
 import { type WorkspaceMemberRoles } from "@prisma/client";
 import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
@@ -5,11 +10,6 @@ import { Fragment } from "react";
 import { BiCheck, BiChevronDown } from "react-icons/bi";
 import { FaCaretRight } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import PrimaryButton from "~/modules/Global/PrimaryButton";
-import Toast from "~/modules/Global/Toast";
-import { ALLOWED_ROLES_TO_INVITE } from "~/utils/AllowedRolesToInvite";
-import { api } from "~/utils/api";
-import { CreateWorkspaceInvitation } from "~/utils/ValidationSchema";
 import PendingInviteRow, { PendingInviteRowSkeleton } from "./PendingInviteRow";
 
 export default function InviteSection({
@@ -81,24 +81,22 @@ export default function InviteSection({
             </div>
             <Field name="submit">
               {({ form }: FieldProps) => (
-                <PrimaryButton
-                  overwriteClassname
+                <Button
                   disabled={
                     mutation.isLoading ||
                     Object.keys(form.errors).length !== 0 ||
                     !form.dirty
                   }
                   type="submit"
-                  className="ml-auto w-fit rounded-lg bg-black px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-black focus:outline-none focus:ring-1 focus:ring-black disabled:bg-neutral-500 dark:bg-black dark:hover:bg-black dark:focus:ring-black"
                   isLoading={mutation.isLoading}
-                  loadingText="Sending Invite"
+                  loadingText="Inviting"
                 >
                   Invite
-                </PrimaryButton>
+                </Button>
               )}
             </Field>
           </div>
-          <div className="mt-2 ml-2 text-sm text-red-500">
+          <div className="ml-2 mt-2 text-sm text-red-500">
             <ErrorMessage name="email" />
             <ErrorMessage name="role" />
           </div>
