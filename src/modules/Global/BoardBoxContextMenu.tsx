@@ -6,17 +6,7 @@ import {
 } from "@/modules/ui/context-menu";
 import { type ReactNode } from "react";
 
-import {
-  ContextMenuCheckboxItem,
-  ContextMenuLabel,
-  ContextMenuRadioGroup,
-  ContextMenuRadioItem,
-  ContextMenuSeparator,
-  ContextMenuShortcut,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-} from "@/modules/ui/context-menu";
+import { ContextMenuShortcut } from "@/modules/ui/context-menu";
 import { type Board } from "@prisma/client";
 
 export function BoardBoxContextMenu({

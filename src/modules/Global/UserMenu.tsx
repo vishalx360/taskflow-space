@@ -1,6 +1,4 @@
 import {
-  Cloud,
-  CreditCard,
   Github,
   Keyboard,
   LifeBuoy,
@@ -15,7 +13,6 @@ import {
   Users,
 } from "lucide-react";
 
-import { Button } from "@/modules/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,10 +27,9 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/modules/ui/dropdown-menu";
+import getGravatar from "@/utils/getGravatar";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import getGravatar from "@/utils/getGravatar";
-import { FiChevronDown } from "react-icons/fi";
 
 export function UserMenu() {
   const { data: session } = useSession();

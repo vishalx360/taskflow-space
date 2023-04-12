@@ -1,3 +1,10 @@
+import { useToast } from "@/hooks/use-toast";
+import LogoImage from "@/modules/Global/LogoImage";
+import PasswordInput from "@/modules/Global/PasswordInput";
+import { Button } from "@/modules/ui/button";
+import { authOptions } from "@/server/auth";
+import { SignUpSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
@@ -6,28 +13,26 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaGoogle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import LogoImage from "@/modules/Global/LogoImage";
-import PasswordInput from "@/modules/Global/PasswordInput";
-import PrimaryButton from "@/modules/Global/PrimaryButton";
-import Toast from "@/modules/Global/Toast";
-import { authOptions } from "@/server/auth";
-import { api } from "@/utils/api";
-import { SignUpSchema } from "@/utils/ValidationSchema";
-import { Button } from "@/modules/ui/button";
 
 export default function SignInPage() {
   const router = useRouter();
   const utils = api.useContext();
+  const { toast } = useToast();
 
   const mutation = api.authentication.signup.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async () => {
       await utils.board.getAllBoards
         .invalidate()
         .catch((err) => console.log(err));
-      Toast({ content: "Account created successfully!", status: "success" });
+      toast({ title: "Account created successfully!" });
       await router.push("/signin").catch((err) => console.log(err));
     },
   });

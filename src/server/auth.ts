@@ -1,3 +1,8 @@
+import { env } from "@/env.mjs";
+import { prisma } from "@/server/db";
+import NewUserSideEffects from "@/utils/NewUserSideEffects";
+import { SigninSchema } from "@/utils/ValidationSchema";
+import { signJTW, verifyJWT } from "@/utils/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
@@ -8,11 +13,6 @@ import {
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { env } from "@/env.mjs";
-import { prisma } from "@/server/db";
-import { signJTW, verifyJWT } from "@/utils/jwt";
-import NewUserSideEffects from "@/utils/NewUserSideEffects";
-import { SigninSchema } from "@/utils/ValidationSchema";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.

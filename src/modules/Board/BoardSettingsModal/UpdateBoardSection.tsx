@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";
 import { UpdateBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
@@ -9,7 +10,6 @@ import {
   type SetStateAction,
 } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Toast from "../../Global/Toast";
 import UpdateBoardBackgroundSection from "./UpdateBoardBackgroundSection";
 
 function UpdateBoardSection({
@@ -24,15 +24,21 @@ function UpdateBoardSection({
   UpdatelocalBackground: (background: string) => void;
 }) {
   const utils = api.useContext();
+  const { toast } = useToast();
   const mutation = api.board.updateBoard.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async (data) => {
       await utils.board.getBoard
         .invalidate({ boardId: board?.id })
         .catch((err) => console.log(err));
-      Toast({ content: "Board updated successfully!", status: "success" });
+      toast({ title: "Board updated successfully!" });
       currentBackground.current = data.background;
       setIsOpen(false);
     },

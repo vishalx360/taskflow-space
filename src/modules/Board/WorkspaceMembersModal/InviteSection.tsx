@@ -1,4 +1,4 @@
-import Toast from "@/modules/Global/Toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";
 import { ALLOWED_ROLES_TO_INVITE } from "@/utils/AllowedRolesToInvite";
 import { CreateWorkspaceInvitation } from "@/utils/ValidationSchema";
@@ -19,17 +19,24 @@ export default function InviteSection({
   CurrentUserRole: WorkspaceMemberRoles | undefined;
   workspaceId: string;
 }) {
+  const { toast } = useToast();
+
   const utils = api.useContext();
   const mutation = api.workspace.inviteMember.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async () => {
       await utils.workspace.getAllPendingInvitations
         .invalidate({ workspaceId })
         .catch((err) => console.log(err));
       // TODO: invalidate pending invites list
-      Toast({ content: "Succesfully sent invite", status: "success" });
+      toast({ title: "Succesfully sent invite" });
     },
   });
 

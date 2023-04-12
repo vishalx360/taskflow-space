@@ -1,16 +1,14 @@
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/modules/ui/button";
+import { api } from "@/utils/api";
+import getGravatar from "@/utils/getGravatar";
 import { Dialog, Transition } from "@headlessui/react";
+import { Check } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
-import { FaCheck } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
-import { api } from "@/utils/api";
-import getGravatar from "@/utils/getGravatar";
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../NotificationDrawer/InviteNotificationRow";
-import PrimaryButton from "../PrimaryButton";
-import Toast from "../Toast";
-import { Button } from "@/modules/ui/button";
-import { Check } from "lucide-react";
 
 export default function ViewInvitationModal({
   currentInvitation,
@@ -28,18 +26,25 @@ export default function ViewInvitationModal({
   }
   const [isRejecting, setIsRejecting] = useState(false);
   const utils = api.useContext();
+  const { toast } = useToast();
 
   const mutation = api.workspace.inviteResponse.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async (accepted) => {
       await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
-      Toast({
-        content: accepted ? "Joined new workspace!" : "Rejected invite",
-        status: "success",
+      toast({
+        title: accepted ? "Joined new workspace!" : "Rejected invite",
+        // description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       closeModal();
     },

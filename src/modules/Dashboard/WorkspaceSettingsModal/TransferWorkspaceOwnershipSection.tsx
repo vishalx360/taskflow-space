@@ -1,12 +1,11 @@
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/modules/ui/button";
+import { TransferWorkspaceOwnershipSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { type Dispatch, type SetStateAction } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "@/utils/api";
-import { TransferWorkspaceOwnershipSchema } from "@/utils/ValidationSchema";
-import PrimaryButton from "../../Global/PrimaryButton";
-import Toast from "../../Global/Toast";
-import { Button } from "@/modules/ui/button";
 
 function RenameWorkspaceSection({
   workspace,
@@ -15,18 +14,25 @@ function RenameWorkspaceSection({
   workspace: Workspace;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { toast } = useToast();
   const utils = api.useContext();
   const mutation = api.workspace.transferWorkspaceOwnership.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async () => {
       await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
-      Toast({
-        content: "Workspace transfered successfully!",
-        status: "success",
+      toast({
+        title: "Workspace transfered successfully!",
+        // description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       setIsOpen(false);
     },

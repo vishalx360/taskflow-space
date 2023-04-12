@@ -1,8 +1,8 @@
+import Divider from "@/modules/Global/Divider";
 import { Disclosure, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { type Dispatch, type SetStateAction } from "react";
 import { FaCaretRight } from "react-icons/fa";
-import Divider from "@/modules/Global/Divider";
 import DeleteWorkspaceSection from "./DeleteWorkspaceSection";
 import TransferWorkspaceOwnershipSection from "./TransferWorkspaceOwnershipSection";
 

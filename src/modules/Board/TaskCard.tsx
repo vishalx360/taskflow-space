@@ -1,7 +1,7 @@
 import { type Task } from "@prisma/client";
 import dynamic from "next/dynamic";
-import TaskModal from "../Global/TaskModal/TaskModal";
 import { TaskContextMenu } from "../Global/TaskContextMenu";
+import TaskModal from "../Global/TaskModal/TaskModal";
 const Draggable = dynamic(
   () =>
     import("react-beautiful-dnd").then((mod) => {

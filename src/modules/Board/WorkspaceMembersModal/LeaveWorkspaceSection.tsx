@@ -1,3 +1,6 @@
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/modules/ui/button";
+import { api } from "@/utils/api";
 import { Disclosure, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
@@ -5,10 +8,6 @@ import { type Dispatch, type SetStateAction } from "react";
 import { FaCaretRight } from "react-icons/fa";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import PrimaryButton from "@/modules/Global/PrimaryButton";
-import { api } from "@/utils/api";
-import Toast from "../../Global/Toast";
-import { Button } from "@/modules/ui/button";
 
 function LeaveWorkspaceSection({
   workspace,
@@ -18,15 +17,22 @@ function LeaveWorkspaceSection({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const utils = api.useContext();
+  const { toast } = useToast();
+
   const mutation = api.workspace.leaveWorkspace.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async () => {
       await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
-      Toast({ content: "Left workspace successfully!", status: "success" });
+      toast({ title: "Left workspace successfully!" });
       setIsOpen(false);
     },
   });

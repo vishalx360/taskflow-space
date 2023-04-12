@@ -1,7 +1,7 @@
+import BoardBackGrounds from "@/utils/BoardBackgrounds.json";
 import { Field, type FieldProps } from "formik";
 import Image from "next/image";
 import { FiCheckCircle } from "react-icons/fi";
-import BoardBackGrounds from "@/utils/BoardBackgrounds.json";
 
 function UpdateBoardBackgroundSection({
   UpdatelocalBackground,
@@ -54,7 +54,7 @@ function UpdateBoardBackgroundSection({
               </ul>
             </div>
             <div>
-              <h3 className="mt-3 mb-2 block text-sm font-medium text-neutral-500 dark:text-white">
+              <h3 className="mb-2 mt-3 block text-sm font-medium text-neutral-500 dark:text-white">
                 Wallpapers
               </h3>
               <ul className="grid w-full grid-cols-5 gap-2 md:grid-cols-5">
@@ -94,7 +94,7 @@ function UpdateBoardBackgroundSection({
             </div>
 
             {meta.touched && meta.error && (
-              <p className="mt-2 ml-2 text-sm text-red-500">{meta.error}</p>
+              <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
             )}
           </>
         )}

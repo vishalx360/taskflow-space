@@ -1,11 +1,11 @@
+import Divider from "@/modules/Global/Divider";
+import IconButton from "@/modules/Global/IconButton";
+import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { type Board } from "@prisma/client";
 import { Fragment, useRef, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
-import Divider from "@/modules/Global/Divider";
-import IconButton from "@/modules/Global/IconButton";
-import { api } from "@/utils/api";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
 

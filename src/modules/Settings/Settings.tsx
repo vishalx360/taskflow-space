@@ -1,10 +1,9 @@
+import getGravatar from "@/utils/getGravatar";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FaGoogle } from "react-icons/fa";
 import { MdDevices } from "react-icons/md";
-import getGravatar from "@/utils/getGravatar";
 import DashboardNavbar from "../Global/DashboardNavbar";
-import PrimaryButton from "../Global/PrimaryButton";
 import { Button } from "../ui/button";
 
 function Settings() {

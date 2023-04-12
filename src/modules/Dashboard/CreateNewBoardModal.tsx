@@ -1,15 +1,15 @@
+import { useToast } from "@/hooks/use-toast";
 import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
+import { Plus } from "lucide-react";
 import { Fragment, useRef, useState } from "react";
-import { FaPlus, FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Toast from "../Global/Toast";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
 
 export default function CreateNewBoardModal({
   workspace,
@@ -27,17 +27,23 @@ export default function CreateNewBoardModal({
   }
 
   const utils = api.useContext();
+  const { toast } = useToast();
 
   const mutation = api.board.createNewBoard.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async (newBoard) => {
       utils.board.getAllBoards.setData(
         { workspaceId: workspace.id },
         (oldData) => [...oldData, newBoard]
       );
-      Toast({ content: "New board created successfully!", status: "success" });
+      toast({ title: "New board created successfully!" });
       setIsOpen(false);
     },
   });

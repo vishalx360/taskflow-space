@@ -1,15 +1,12 @@
+import BoardList, { BoardListSkeleton } from "@/modules/Dashboard/BoardList";
+import { api } from "@/utils/api";
 import { Disclosure, Transition } from "@headlessui/react";
 import { BiLoaderAlt } from "react-icons/bi";
 import { FaCaretRight } from "react-icons/fa";
-import BoardList, {
-  BoardListSkeleton,
-  RecentBoardList,
-} from "@/modules/Dashboard/BoardList";
-import { api } from "@/utils/api";
 import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
+import BoardGrid, { RecentBoardGrid } from "./BoardGrid";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
 import WorkspaceSettingsModal from "./WorkspaceSettingsModal/WorkspaceSettingsModal";
-import BoardGrid, { RecentBoardGrid } from "./BoardGrid";
 
 function Workspaces() {
   const {

@@ -1,3 +1,9 @@
+import { useToast } from "@/hooks/use-toast";
+import LogoImage from "@/modules/Global/LogoImage";
+import PasswordInput from "@/modules/Global/PasswordInput";
+import { Button } from "@/modules/ui/button";
+import { authOptions } from "@/server/auth";
+import { SigninSchema } from "@/utils/ValidationSchema";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
@@ -7,18 +13,11 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import LogoImage from "@/modules/Global/LogoImage";
-import PasswordInput from "@/modules/Global/PasswordInput";
-import PrimaryButton from "@/modules/Global/PrimaryButton";
-import Toast from "@/modules/Global/Toast";
-import { authOptions } from "@/server/auth";
-import { SigninSchema } from "@/utils/ValidationSchema";
-import { Button } from "@/modules/ui/button";
 
 export default function SignInPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { toast } = useToast();
   const handelCredentialSignin = useCallback(
     async (credentails: { email: string; password: string }) => {
       setIsLoading(true);
@@ -29,12 +28,14 @@ export default function SignInPage() {
       });
       setIsLoading(false);
       if (result?.ok) {
-        Toast({ content: "Login successful!", status: "success" });
+        toast({ description: "Login successful!" });
         await router.push("/dashboard").catch((err) => console.log(err));
       } else {
-        Toast({
-          content: result?.error || "Something went wrong.",
-          status: "error",
+        toast({
+          variant: "destructive",
+          title: result?.error || "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+          // action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
       }
     },

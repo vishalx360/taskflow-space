@@ -1,18 +1,18 @@
+import { useToast } from "@/hooks/use-toast";
+import { CreateNewWorkspaceSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { Field, Form, Formik, type FieldProps } from "formik";
+import { Plus } from "lucide-react";
 import { Fragment, useState } from "react";
-import { FaPlus, FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { api } from "@/utils/api";
-import { CreateNewWorkspaceSchema } from "@/utils/ValidationSchema";
-import PrimaryButton from "../Global/PrimaryButton";
-import Toast from "../Global/Toast";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
 
 export default function CreateNewWorkspaceModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const { toast } = useToast();
 
   const utils = api.useContext();
 
@@ -25,15 +25,21 @@ export default function CreateNewWorkspaceModal() {
 
   const mutation = api.workspace.createNewWorkspace.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async () => {
       await utils.workspace.getAllWorkspace
         .invalidate()
         .catch((err) => console.log(err));
-      Toast({
-        content: "New workspace created successfully!",
-        status: "success",
+      toast({
+        title: "New workspace created successfully!",
+        // description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       setIsOpen(false);
     },

@@ -6,8 +6,8 @@ import Link from "next/link";
 import TimeAgo from "react-timeago";
 
 import { api } from "@/utils/api";
-import CreateNewBoardModal from "./CreateNewBoardModal";
 import { BoardBoxContextMenu } from "../Global/BoardBoxContextMenu";
+import CreateNewBoardModal from "./CreateNewBoardModal";
 
 export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({

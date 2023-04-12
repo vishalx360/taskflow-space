@@ -1,3 +1,4 @@
+import getGravatar from "@/utils/getGravatar";
 import { Menu, Transition } from "@headlessui/react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -11,7 +12,6 @@ import {
   FiMenu,
   FiX,
 } from "react-icons/fi";
-import getGravatar from "@/utils/getGravatar";
 import LogoImage from "./LogoImage";
 import NotificationDrawer from "./NotificationDrawer/NotificationDrawer";
 import { UserMenu } from "./UserMenu";

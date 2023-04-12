@@ -23,7 +23,7 @@ function SecondaryLinkButton({
     : {};
   return (
     <a
-      className={`border-accent bg-brand-light block  w-full rounded-full border-2 py-2  px-3 text-center font-semibold md:py-3 md:px-10 ${
+      className={`border-accent bg-brand-light block  w-full rounded-full border-2 px-3  py-2 text-center font-semibold md:px-10 md:py-3 ${
         className || ""
       }`}
       {...rest}

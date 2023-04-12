@@ -1,5 +1,4 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { type Board } from "@prisma/client";
 import Image from "next/image";
 
 function BoardBackground({
@@ -10,7 +9,7 @@ function BoardBackground({
   const [parent] = useAutoAnimate();
 
   return (
-    <div ref={parent} className="fixed top-0 left-0 h-full w-screen ">
+    <div ref={parent} className="fixed left-0 top-0 h-full w-screen ">
       {background && background.startsWith("wallpaper:") && (
         <Image
           key={background}

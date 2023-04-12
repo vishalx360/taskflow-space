@@ -1,3 +1,4 @@
+import { useToast } from "@/hooks/use-toast";
 import {
   CreateListSchema,
   CreateTaskSchema,
@@ -12,10 +13,9 @@ import { Fragment, RefObject, memo, useRef } from "react";
 import { BiDotsHorizontalRounded, BiLoaderAlt } from "react-icons/bi";
 import { useDebouncedCallback } from "use-debounce";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import Toast from "../Global/Toast";
+import { ListContextMenu } from "../Global/ListContextMenu";
 import { Button } from "../ui/button";
 import { EmptyListCard, TaskCard, TaskCardSkeleton } from "./TaskCard";
-import { ListContextMenu } from "../Global/ListContextMenu";
 
 export const LIST_BG_COLOR = "#ebecf0";
 
@@ -108,6 +108,7 @@ export function AddToListForm({
   listEndRef: RefObject<HTMLDivElement>;
 }) {
   // createTask mutation
+  const toast = useToast();
   const utils = api.useContext();
   const syncListDebounced = useDebouncedCallback(
     // function
@@ -124,7 +125,12 @@ export function AddToListForm({
   const mutation = api.task.createTask.useMutation({
     onError: (error) => {
       // remove optimistic update on error
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSettled: async () => {
       await syncListDebounced(list.id);
@@ -250,13 +256,19 @@ export function ListActionMenu({ list }: { list: List }) {
 }
 
 export function UpdateListName({ list }: { list: List }) {
+  const { toast } = useToast();
   const InputRef = useRef(null);
   const mutation = api.list.updateList.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: () => {
-      Toast({ content: "List renamed successfully!", status: "success" });
+      toast({ title: "List renamed successfully!" });
       InputRef?.current?.blur();
     },
   });
@@ -286,16 +298,21 @@ export function UpdateListName({ list }: { list: List }) {
 
 export function CreateList({ boardId }: { boardId: string }) {
   const utils = api.useContext();
-
+  const { toast } = useToast();
   const mutation = api.list.createList.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: (newList) => {
       utils.board.getBoard.setData({ boardId }, (prev) => {
         return { ...prev, lists: [...prev.lists, newList] };
       });
-      // Toast({ content: "List Created successfully!", status: "success" });
+      // toast({ title: "List Created successfully!",  });
     },
   });
 
@@ -386,11 +403,17 @@ function DeleteListButton({
   closeMenu: () => void;
   list: List;
 }) {
+  const { toast } = useToast();
   const utils = api.useContext();
 
   const mutation = api.list.deleteList.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
       closeMenu();
     },
     onSuccess: () => {
@@ -424,10 +447,15 @@ function ClearListButton({
   list: List;
 }) {
   const utils = api.useContext();
-
+  const { toast } = useToast();
   const mutation = api.list.clearList.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
       closeMenu();
     },
     onSuccess: () => {

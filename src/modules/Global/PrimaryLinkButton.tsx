@@ -19,7 +19,7 @@ function PrimaryLinkButton({
 }) {
   return (
     <a
-      className={`bg-accent text-brand-dark block w-full rounded-full py-3 px-5 text-center font-semibold md:py-3 md:px-10 ${
+      className={`bg-accent text-brand-dark block w-full rounded-full px-5 py-3 text-center font-semibold md:px-10 md:py-3 ${
         className || ""
       }`}
       {...rest}

@@ -45,7 +45,7 @@ function PasswordInput() {
             </button>
           </div>
           {meta.touched && meta.error && (
-            <p className="mt-2 ml-2 text-sm text-red-500">{meta.error}</p>
+            <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
           )}
         </div>
       )}

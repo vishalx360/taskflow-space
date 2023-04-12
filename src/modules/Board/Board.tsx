@@ -1,3 +1,9 @@
+import { useToast } from "@/hooks/use-toast";
+import TaskList, {
+  CreateList,
+  TaskListSkeleton,
+} from "@/modules/Board/TaskList";
+import { api } from "@/utils/api";
 import { type Board, type Task } from "@prisma/client";
 import dynamic from "next/dynamic";
 import Error from "next/error";
@@ -7,16 +13,10 @@ import { type DropResult } from "react-beautiful-dnd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { FiArrowLeft } from "react-icons/fi";
 import { useDebouncedCallback } from "use-debounce";
-import TaskList, {
-  CreateList,
-  TaskListSkeleton,
-} from "@/modules/Board/TaskList";
-import Toast from "@/modules/Global/Toast";
-import { api } from "@/utils/api";
+import { BoardContextMenu } from "../Global/BoardContextMenu";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
-import { BoardContextMenu } from "../Global/BoardContextMenu";
 
 const DragDropContext = dynamic(
   () =>
@@ -27,6 +27,7 @@ const DragDropContext = dynamic(
 );
 
 function Board() {
+  const { toast } = useToast();
   const boardId = useSearchParams().get("boardId");
   // fetch board details from boardId.
   const utils = api.useContext();
@@ -49,7 +50,12 @@ function Board() {
 
   const mutation = api.task.moveTask.useMutation({
     onError(error) {
-      Toast({ content: error.message, status: "error" });
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     },
     onSuccess: async (listsToUpdate) => {
       listsToUpdate[0] && (await syncListDebounced(listsToUpdate[0]));
