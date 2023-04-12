@@ -54,7 +54,7 @@ function PendingInviteRow({
             <span className="font-medium">{recepient?.name || "a user"}</span>
           </h1>
           <h2 className="text-xs text-neutral-600">
-            <TimeAgo date={invitation.createdAt} />
+            <TimeAgo live={false} date={invitation.createdAt} />
           </h2>
           {/* <h2 className="text-neutral-600">{recepient?.email}</h2> */}
         </div>
