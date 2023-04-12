@@ -11,7 +11,7 @@ import { api } from "@/utils/api";
 import { UpdateTaskSchema } from "@/utils/ValidationSchema";
 import PrimaryButton from "../PrimaryButton";
 import Toast from "../Toast";
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 
 export default function TaskModal({
   children,

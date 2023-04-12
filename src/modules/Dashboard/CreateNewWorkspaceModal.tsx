@@ -8,7 +8,7 @@ import { api } from "@/utils/api";
 import { CreateNewWorkspaceSchema } from "@/utils/ValidationSchema";
 import PrimaryButton from "../Global/PrimaryButton";
 import Toast from "../Global/Toast";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 
 export default function CreateNewWorkspaceModal() {

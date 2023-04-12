@@ -13,7 +13,7 @@ import PrimaryButton from "@/modules/Global/PrimaryButton";
 import Toast from "@/modules/Global/Toast";
 import { authOptions } from "@/server/auth";
 import { SigninSchema } from "@/utils/ValidationSchema";
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 
 export default function SignInPage() {
   const router = useRouter();

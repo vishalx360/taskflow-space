@@ -1,5 +1,5 @@
 import Toast from "@/modules/Global/Toast";
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 import { ALLOWED_ROLES_TO_INVITE } from "@/utils/AllowedRolesToInvite";
 import { CreateWorkspaceInvitation } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";

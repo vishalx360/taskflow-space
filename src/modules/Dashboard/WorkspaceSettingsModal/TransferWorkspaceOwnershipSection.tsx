@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 import { TransferWorkspaceOwnershipSchema } from "@/utils/ValidationSchema";
 import PrimaryButton from "../../Global/PrimaryButton";
 import Toast from "../../Global/Toast";
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 
 function RenameWorkspaceSection({
   workspace,

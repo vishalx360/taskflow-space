@@ -5,7 +5,7 @@ import { MdDevices } from "react-icons/md";
 import getGravatar from "@/utils/getGravatar";
 import DashboardNavbar from "../Global/DashboardNavbar";
 import PrimaryButton from "../Global/PrimaryButton";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 
 function Settings() {
   const { data: session } = useSession();

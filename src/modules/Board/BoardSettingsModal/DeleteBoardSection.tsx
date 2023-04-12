@@ -1,4 +1,4 @@
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 import { api } from "@/utils/api";
 import { type Board } from "@prisma/client";
 import { useRouter } from "next/router";

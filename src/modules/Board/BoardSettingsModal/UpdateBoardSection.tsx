@@ -1,4 +1,4 @@
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 import { UpdateBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { type Board } from "@prisma/client";

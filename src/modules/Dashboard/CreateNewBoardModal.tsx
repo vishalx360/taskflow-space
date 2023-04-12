@@ -8,7 +8,7 @@ import { FaPlus, FaPlusCircle } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import Toast from "../Global/Toast";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 
 export default function CreateNewBoardModal({

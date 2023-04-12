@@ -8,7 +8,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import PrimaryButton from "@/modules/Global/PrimaryButton";
 import { api } from "@/utils/api";
 import Toast from "../../Global/Toast";
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 
 function LeaveWorkspaceSection({
   workspace,

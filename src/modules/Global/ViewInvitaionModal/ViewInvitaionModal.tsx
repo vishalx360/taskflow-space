@@ -9,7 +9,7 @@ import getGravatar from "@/utils/getGravatar";
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../NotificationDrawer/InviteNotificationRow";
 import PrimaryButton from "../PrimaryButton";
 import Toast from "../Toast";
-import { Button } from "@/modules/ui/Button";
+import { Button } from "@/modules/ui/button";
 import { Check } from "lucide-react";
 
 export default function ViewInvitationModal({

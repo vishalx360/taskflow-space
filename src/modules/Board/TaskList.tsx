@@ -13,7 +13,7 @@ import { BiDotsHorizontalRounded, BiLoaderAlt } from "react-icons/bi";
 import { useDebouncedCallback } from "use-debounce";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import Toast from "../Global/Toast";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 import { EmptyListCard, TaskCard, TaskCardSkeleton } from "./TaskCard";
 
 export const LIST_BG_COLOR = "#ebecf0";

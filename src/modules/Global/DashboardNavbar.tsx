@@ -14,6 +14,7 @@ import {
 import getGravatar from "@/utils/getGravatar";
 import LogoImage from "./LogoImage";
 import NotificationDrawer from "./NotificationDrawer/NotificationDrawer";
+import { UserMenu } from "./UserMenu";
 
 const Items = [
   { title: "Dashboard", link: "/dashboard" },
@@ -54,7 +55,7 @@ function DashboardNavbar() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="border-accent   bg-neutral-900 shadow-2xl  ">
+            <div className="border-accent rounded-b-xl  bg-neutral-900 shadow-2xl  ">
               <ul className="flex  w-full flex-col p-5 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:text-sm md:font-medium  ">
                 {Items.map((item) => {
                   const externalProps = item.isExternal
@@ -118,7 +119,7 @@ function DashboardNavbar() {
 
           <div className="flex items-center gap-4">
             <NotificationDrawer />
-            <AccountMenuMemo />
+            <UserMenu />
           </div>
         </div>
       </div>
