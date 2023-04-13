@@ -1,8 +1,11 @@
-import Divider from "@/modules/Global/Divider";
-import { Disclosure, Transition } from "@headlessui/react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
 import { type Workspace } from "@prisma/client";
 import { type Dispatch, type SetStateAction } from "react";
-import { FaCaretRight } from "react-icons/fa";
 import DeleteWorkspaceSection from "./DeleteWorkspaceSection";
 import TransferWorkspaceOwnershipSection from "./TransferWorkspaceOwnershipSection";
 
@@ -14,50 +17,27 @@ function DangerZone({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <Disclosure defaultOpen={false}>
-      {({ open }) => (
-        <>
-          <div className="my-5 flex items-center gap-5">
-            <Disclosure.Button className="w-full ">
-              <div className="flex w-full items-center justify-between gap-10 rounded-xl rounded-t-xl border border-red-200 px-5  text-red-500  hover:bg-red-50 ">
-                <div className="flex items-center gap-5">
-                  <p className="text-md py-3 ">Danger Zone</p>
-                  {/* {isRefetching && (
-                    <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-500" />
-                  )} */}
-                </div>
-                <FaCaretRight
-                  className={`${
-                    open ? "rotate-90 transform" : ""
-                  } h-5 w-5 text-inherit`}
-                />
-              </div>
-            </Disclosure.Button>
-          </div>
-
-          <Transition
-            enter="transition duration-150 ease-in"
-            enterFrom="transform -translate-y-3 opacity-0"
-            enterTo="transform translate-y-0  opacity-100"
-            leave="transition duration-150 ease-out"
-            leaveFrom="transform translate-y-0 opacity-100"
-            leaveTo="transform -translate-y-3 opacity-0"
-          >
-            <Disclosure.Panel className="space-y-5 rounded-xl border border-red-200 p-4">
-              <TransferWorkspaceOwnershipSection
-                workspace={workspace}
-                setIsOpen={setIsOpen}
-              />
-              <Divider />
-              <DeleteWorkspaceSection
-                workspace={workspace}
-                setIsOpen={setIsOpen}
-              />
-            </Disclosure.Panel>
-          </Transition>
-        </>
-      )}
-    </Disclosure>
+    <Accordion type="single" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger className="rounded-xl border-neutral-400 px-2  text-neutral-600">
+          Transfer workspace ownership
+        </AccordionTrigger>
+        <AccordionContent className="px-2">
+          <TransferWorkspaceOwnershipSection
+            workspace={workspace}
+            setIsOpen={setIsOpen}
+          />
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger className="rounded-xl border-neutral-400 px-2  text-neutral-600">
+          Delete workspace
+        </AccordionTrigger>
+        <AccordionContent className="px-2">
+          <DeleteWorkspaceSection workspace={workspace} setIsOpen={setIsOpen} />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 

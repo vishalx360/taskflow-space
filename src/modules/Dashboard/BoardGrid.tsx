@@ -34,7 +34,9 @@ export default function BoardGrid({ workspace }: { workspace: Workspace }) {
 }
 
 export function RecentBoardGrid() {
-  const { data: boards, isLoading } = api.board.getRecentBoards.useQuery();
+  const { data: boards, isLoading } = api.board.getRecentBoards.useQuery(null, {
+    staleTime: 1000 * 2,
+  });
   const [parent] = useAutoAnimate();
 
   if (isLoading) {
@@ -105,7 +107,7 @@ export function BoardBox({
         </div>
 
         <div className="absolute bottom-0 flex h-full w-full items-end overflow-hidden whitespace-nowrap rounded-xl bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
-          <div className="flex w-full flex-col  items-start justify-between ">
+          <div className="flex w-full flex-col items-start justify-between ">
             <h2 className="font-medium">{board.name}</h2>
             <TimeAgo
               className="mt-1 text-xs text-neutral-400"
@@ -119,14 +121,19 @@ export function BoardBox({
   );
 }
 
-export function BoardGridSkeleton() {
+export function BoardGridSkeleton({
+  NumberOfBoards = 4,
+}: {
+  NumberOfBoards: number;
+}) {
+  const Boards = [];
+  for (let i = 0; i < NumberOfBoards; i++) {
+    Boards.push(<BoardBoxSkeleton key={`boardBox-skeleton:${i}`} />);
+  }
+
   return (
     <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-5">
-      <BoardBoxSkeleton />
-      <BoardBoxSkeleton />
-      <BoardBoxSkeleton />
-      <BoardBoxSkeleton />
-      <BoardBoxSkeleton />
+      {Boards}
     </div>
   );
 }

@@ -26,8 +26,8 @@ function RenameWorkspaceSection({
       });
     },
     onSuccess: async () => {
-      await utils.workspace.getAllWorkspace
-        .invalidate()
+      await utils.workspace.getWorkspaceMembers
+        .invalidate({ workspaceId: workspace.id })
         .catch((err) => console.log(err));
       toast({
         title: "Workspace transfered successfully!",
@@ -40,9 +40,9 @@ function RenameWorkspaceSection({
 
   return (
     <div className="mt-2 space-y-3">
-      <p className="text-md font-medium text-neutral-600 dark:text-white">
+      {/* <p className="text-md font-medium text-neutral-600 dark:text-white">
         Transfer Workspace Ownership
-      </p>
+      </p> */}
       <p className="">After transfer you will become admin of the workspace.</p>
       <Formik
         initialValues={{ email: "", workspaceId: workspace.id }}

@@ -26,12 +26,13 @@ export default function WorkspaceMembersModal({
       {
         workspaceId: workspace?.id,
       },
-      { enabled: isOpen }
+      { enabled: isOpen, staleTime: 1000 * 60 * 5 }
     );
-  function openModal() {
+  function openModal(e) {
+    console.log(e);
     setIsOpen(true);
   }
-  function closeModal() {
+  function closeModal(e) {
     setIsOpen(false);
   }
   const CurrentUserRole = members?.find(
@@ -107,7 +108,6 @@ export default function WorkspaceMembersModal({
                   )}
                   {CurrentUserRole !== "OWNER" && (
                     <>
-                      <Divider />
                       <LeaveWorkspaceSection
                         setIsOpen={setIsOpen}
                         workspace={workspace}

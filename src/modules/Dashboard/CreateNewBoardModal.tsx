@@ -4,36 +4,28 @@ import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import random from "lodash.random";
 
-import { type Workspace } from "@prisma/client";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import {
-  FormInput,
-  FormInputIcon,
-  Plus,
-  RefreshCcw,
-  Table2,
-} from "lucide-react";
-import { Fragment, type ReactNode, useRef, useState } from "react";
-import { FaPlusCircle } from "react-icons/fa";
-import { FiX } from "react-icons/fi";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { Button } from "../ui/button";
-import UpdateBoardBackgroundSection from "../Board/BoardSettingsModal/UpdateBoardBackgroundSection";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/modules/ui/accordion";
+import { type Workspace } from "@prisma/client";
+import { Field, Form, Formik, type FieldProps } from "formik";
+import { Plus, RefreshCcw, Table2 } from "lucide-react";
+import { Fragment, useRef, useState, type ReactNode } from "react";
+import { FaPlusCircle } from "react-icons/fa";
+import { FiX } from "react-icons/fi";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import UpdateBoardBackgroundSection from "../Board/BoardSettingsModal/UpdateBoardBackgroundSection";
+import { Button } from "../ui/button";
 
-import { Textarea } from "../ui/text-area";
-import { Input } from "../ui/input";
-import { BoardBox } from "./BoardGrid";
-import { LucideFormInput } from "lucide-react";
 import Backgrounds from "../../utils/BoardBackgrounds.json";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/text-area";
+import { BoardBox } from "./BoardGrid";
 
 import { RandomWordOptions, generateSlug } from "random-word-slugs";
-import { MdGeneratingTokens } from "react-icons/md";
 
 const slugOption: RandomWordOptions<3> = {
   format: "title",
@@ -205,7 +197,9 @@ export default function CreateNewBoardModal({
                             collapsible
                           >
                             <AccordionItem value="item-1">
-                              <AccordionTrigger>Board details</AccordionTrigger>
+                              <AccordionTrigger className="px-2">
+                                Board details
+                              </AccordionTrigger>
                               <AccordionContent className="p-1">
                                 <Field name="name">
                                   {({ form, field, meta }: FieldProps) => (
@@ -262,7 +256,6 @@ export default function CreateNewBoardModal({
                                         id="description"
                                         placeholder="Board description"
                                         {...field}
-                                        className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
                                       />
                                       {meta.touched && meta.error && (
                                         <p className="ml-2 mt-2 text-sm text-red-500">
@@ -276,7 +269,7 @@ export default function CreateNewBoardModal({
                             </AccordionItem>
 
                             <AccordionItem value="item-3">
-                              <AccordionTrigger>
+                              <AccordionTrigger className="px-2">
                                 Board backgorund
                               </AccordionTrigger>
                               <AccordionContent className="p-1">

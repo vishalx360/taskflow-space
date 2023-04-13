@@ -11,6 +11,14 @@ import {
 } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import UpdateBoardBackgroundSection from "./UpdateBoardBackgroundSection";
+import { Textarea } from "@/modules/ui/text-area";
+import { Input } from "@/modules/ui/input";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
 
 function UpdateBoardSection({
   board,
@@ -45,72 +53,99 @@ function UpdateBoardSection({
   });
 
   return (
-    <div className="mt-2">
-      <p className="text-md mb-3 font-semibold text-neutral-500 dark:text-white">
-        Board Name
-      </p>
+    <Formik
+      initialValues={{
+        name: board?.name || "",
+        description: board?.description || "",
+        boardId: board?.id || "",
+        background: board?.background || "",
+      }}
+      validationSchema={toFormikValidationSchema(UpdateBoardSchema)}
+      onSubmit={(values) => {
+        mutation.mutate(values);
+      }}
+    >
+      <Form>
+        <AccordionItem value="board-details">
+          <AccordionTrigger className="px-2">Board details</AccordionTrigger>
+          <AccordionContent className="p-1">
+            <Field name="name">
+              {({ field, form, meta }: FieldProps) => (
+                <>
+                  <label
+                    htmlFor="description"
+                    className="mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
+                  >
+                    Board name
+                  </label>
 
-      <Formik
-        initialValues={{
-          name: board?.name || "",
-          boardId: board?.id || "",
-          background: board?.background || "",
-        }}
-        validationSchema={toFormikValidationSchema(UpdateBoardSchema)}
-        onSubmit={(values) => {
-          mutation.mutate(values);
-        }}
-      >
-        <Form>
-          <Field name="name">
-            {({ field, form, meta }: FieldProps) => (
-              <>
-                {/* <label
-                  htmlFor="name"
-                  className="mt-3 mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
-                >
-                  Board Name
-                </label> */}
-                <div className="flex flex-row items-center justify-center gap-2">
-                  <input
-                    type="text"
-                    id="name"
-                    required
-                    placeholder="Board name"
+                  <div className="flex flex-row items-center justify-center gap-2">
+                    <Input
+                      type="text"
+                      id="name"
+                      required
+                      placeholder="Board name"
+                      {...field}
+                    />
+                  </div>
+                  {meta.touched && meta.error && (
+                    <p className="ml-2 mt-2 text-sm text-red-500">
+                      {meta.error}
+                    </p>
+                  )}
+                </>
+              )}
+            </Field>
+            <Field name="description">
+              {({ field, meta }: FieldProps) => (
+                <div className="mt-5">
+                  <label
+                    htmlFor="description"
+                    className="mb-2 block text-sm font-medium text-neutral-500 dark:text-white"
+                  >
+                    Board description
+                  </label>
+                  <Textarea
+                    id="description"
+                    placeholder="Board description"
                     {...field}
-                    className="text-md  block w-full rounded-xl   p-3 text-neutral-800 transition-all focus:outline-none focus:outline"
                   />
+                  {meta.touched && meta.error && (
+                    <p className="ml-2 mt-2 text-sm text-red-500">
+                      {meta.error}
+                    </p>
+                  )}
                 </div>
-                {meta.touched && meta.error && (
-                  <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
-                )}
-              </>
-            )}
-          </Field>
+              )}
+            </Field>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger className="px-2">Board backgorund</AccordionTrigger>
+          <AccordionContent className="p-1">
+            <UpdateBoardBackgroundSection
+              UpdatelocalBackground={UpdatelocalBackground}
+            />
+          </AccordionContent>
+        </AccordionItem>
 
-          <UpdateBoardBackgroundSection
-            UpdatelocalBackground={UpdatelocalBackground}
-          />
-          <Field name="submit">
-            {({ field, form, meta }: FieldProps) => (
-              <div className="mt-5 ">
-                <Button
-                  isLoading={mutation.isLoading}
-                  loadingText="Saving Changes..."
-                  disabled={
-                    !form.dirty || Object.keys(form.errors).length !== 0
-                  }
-                  type="submit"
-                  className="w-full rounded-xl md:w-fit"
-                >
-                  Save Changes
-                </Button>
-              </div>
-            )}
-          </Field>
-        </Form>
-      </Formik>
-    </div>
+        <Field name="submit">
+          {({ field, form, meta }: FieldProps) => (
+            <div className="mt-5 ">
+              <Button
+                isLoading={mutation.isLoading}
+                loadingText="Saving Changes..."
+                disabled={!form.dirty || Object.keys(form.errors).length !== 0}
+                type="submit"
+                className="w-full rounded-xl "
+              >
+                Save Changes
+              </Button>
+            </div>
+          )}
+        </Field>
+      </Form>
+    </Formik>
   );
 }
 

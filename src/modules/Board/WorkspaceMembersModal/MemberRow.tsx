@@ -26,7 +26,7 @@ export default function MemberRow({
       <Image
         height={20}
         width={20}
-        className="h-14 w-14 rounded-full border-2 border-white dark:border-gray-800"
+        className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800 lg:h-14 lg:w-14"
         src={
           user?.image ||
           (user.email && getGravatar(user.email)) ||
@@ -34,7 +34,7 @@ export default function MemberRow({
         }
         alt=""
       />
-      <div className="flex w-full items-center justify-between ">
+      <div className="md:text-md flex w-full items-center justify-between text-sm lg:text-lg ">
         <div>
           <h1>
             {user.name} {user.email === session?.user.email && "(You)"}

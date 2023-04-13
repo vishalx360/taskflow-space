@@ -113,7 +113,7 @@ function BoardRow({ board }: { board: Board }): JSX.Element {
 
       <div className="w-full ">
         <div className="flex w-full flex-col  items-start justify-between ">
-          <h2 className="font-medium">{board.name}</h2>
+          <h2 className="font-medium line-clamp-1">{board.name}</h2>
           <TimeAgo
             className="mt-1 text-xs text-neutral-400"
             date={board.updatedAt}

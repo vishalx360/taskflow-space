@@ -22,8 +22,7 @@ export const CreateNewBoardSchema = z.object({
     .max(50, "Must contain less than 50 characters"),
   description: z
     .string()
-    .min(4, "Must contain at least 4 characters")
-    .max(50, "Must contain less than 50 characters")
+    .max(120, "Must contain less than 120 characters")
     .optional(),
   background: z.string().optional(),
   workspaceId: z.string(),

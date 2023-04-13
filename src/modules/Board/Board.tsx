@@ -158,7 +158,7 @@ function BoardSkeleton(): JSX.Element {
     <div className="relative h-screen ">
       <BoardBackground background={background} />
       <nav className="fixed left-0 top-0 z-50 w-full  px-4 text-white shadow sm:px-4">
-        <div className="container mx-auto flex  items-center justify-between">
+        <div className="container relative mx-auto  flex flex-wrap items-center justify-between md:max-w-[90vw]">
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
@@ -180,7 +180,12 @@ function BoardSkeleton(): JSX.Element {
               )}
             </span>
           </div>
-          <Link href="/" className="hidden  items-center md:flex">
+
+          <Link
+            href="/"
+            // className="hidden  items-center md:flex"
+            className="absolute left-[50%] hidden -translate-x-[50%] md:inline"
+          >
             <LogoImage dark={!Boolean(background)} />
           </Link>
 

@@ -37,9 +37,9 @@ function DeleteWorkspaceSection({
 
   return (
     <div className="space-y-3">
-      <p className="text-md font-medium text-neutral-600 dark:text-white">
+      {/* <p className="text-md font-medium text-neutral-600 dark:text-white">
         Delete Workspace
-      </p>
+      </p> */}
       <p className="">
         Deleting a workspace deletes all of the board it contains.
       </p>
@@ -47,7 +47,7 @@ function DeleteWorkspaceSection({
         initialValues={{ confirmation: "", workspaceId: workspace.id }}
         validationSchema={toFormikValidationSchema(
           z.object({
-            confirmation: z.literal(`delete ${workspace.name}`),
+            confirmation: z.literal(`${workspace.name}`),
             workspaceId: z.string(),
           })
         )}
@@ -63,10 +63,8 @@ function DeleteWorkspaceSection({
                   htmlFor="confirmation"
                   className="mb-2 mt-3 block text-sm font-medium text-neutral-500 dark:text-white"
                 >
-                  Please type
-                  <span className="px-2 font-semibold">
-                    delete {workspace.name}
-                  </span>
+                  Please type the workspace name
+                  <span className="px-2 font-medium">{workspace.name}</span>
                   to confirm deletion.
                 </label>
                 <div className="flex flex-row items-center justify-center gap-2">
@@ -74,7 +72,7 @@ function DeleteWorkspaceSection({
                     type="text"
                     id="confirmation"
                     required
-                    placeholder="delete [WORKSPACE NAME]"
+                    placeholder="workspace name"
                     {...field}
                     className="text-md  block w-full rounded-xl   p-2.5 text-neutral-800 transition-all focus:outline-none focus:outline"
                   />

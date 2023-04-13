@@ -9,11 +9,7 @@ function UpdateBoardBackgroundSection({
   UpdatelocalBackground: (background: string) => void;
 }) {
   return (
-    <div className="mt-5">
-      <p className="text-md mb-3 font-semibold text-neutral-500 dark:text-white">
-        Board Background
-      </p>
-
+    <div>
       <Field name="background">
         {({ field, form, meta }: FieldProps) => (
           <>

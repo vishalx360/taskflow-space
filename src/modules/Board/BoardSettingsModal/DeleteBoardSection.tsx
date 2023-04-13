@@ -2,14 +2,16 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";
 import { api } from "@/utils/api";
 import { type Board } from "@prisma/client";
+import { Field, Form, Formik, type FieldProps } from "formik";
 import { useRouter } from "next/router";
-import { MdDelete } from "react-icons/md";
+import { z } from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 function DeleteBoardSection({
   board,
   closeModal,
 }: {
-  board: Board | null;
+  board: Board;
   closeModal: () => void;
 }) {
   const router = useRouter();
@@ -34,23 +36,66 @@ function DeleteBoardSection({
 
   return (
     <div className="space-y-3">
-      <p className="text-md font-medium text-neutral-600 dark:text-white">
-        Delete Board
-      </p>
       <p className="">
         By deleting this board it will delete all the lists as well as all the
         tasks it contains.
       </p>
-      <Button
-        isLoading={mutation.isLoading}
-        onClick={() => mutation.mutate({ boardId: board?.id || "" })}
-        LeftIcon={MdDelete}
-        disabled={mutation.isLoading}
-        loadingText="Deleting Board"
-        variant="destructiveOutline"
+      <Formik
+        initialValues={{
+          confirmation: "",
+          boardId: board.id,
+        }}
+        validationSchema={toFormikValidationSchema(
+          z.object({
+            confirmation: z.literal(`${board.name}`),
+            boardId: z.string(),
+          })
+        )}
+        onSubmit={() => {
+          mutation.mutate({ boardId: board.id });
+        }}
       >
-        Delete this Board
-      </Button>
+        <Form>
+          <Field name="confirmation">
+            {({ field, form, meta }: FieldProps) => (
+              <>
+                <label
+                  htmlFor="confirmation"
+                  className="text-md mb-2 block font-normal text-neutral-500 dark:text-white"
+                >
+                  Please type board name
+                  <span className="px-2 font-bold">{board.name}</span>
+                  to confirm deletion.
+                </label>
+
+                <div className="flex flex-row items-center justify-center gap-2">
+                  <input
+                    type="text"
+                    id="confirmation"
+                    required
+                    placeholder="board name"
+                    {...field}
+                    className="text-md  block w-full rounded-xl   p-2.5 text-neutral-800 transition-all focus:outline-none focus:outline"
+                  />
+                  <Button
+                    isLoading={mutation.isLoading}
+                    disabled={
+                      !form.dirty || Object.keys(form.errors).length !== 0
+                    }
+                    loadingText="Deleting Board.."
+                    variant="destructiveOutline"
+                  >
+                    Delete
+                  </Button>
+                </div>
+                {meta.touched && meta.error && (
+                  <p className="ml-2 mt-2 text-sm text-red-500">{meta.error}</p>
+                )}
+              </>
+            )}
+          </Field>
+        </Form>
+      </Formik>
     </div>
   );
 }

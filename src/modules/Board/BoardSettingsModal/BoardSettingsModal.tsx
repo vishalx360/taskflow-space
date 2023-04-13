@@ -1,5 +1,11 @@
 import Divider from "@/modules/Global/Divider";
 import IconButton from "@/modules/Global/IconButton";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { type Board } from "@prisma/client";
@@ -8,6 +14,13 @@ import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
+import {
+  LucideDelete,
+  LucideRemoveFormatting,
+  LucideTrash,
+  LucideTrash2,
+} from "lucide-react";
+import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
 export default function BoardSettingsModal({ board }: { board: Board | null }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,15 +97,30 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
                       <FiX size="2em" />
                     </button>
                   </Dialog.Title>
-
-                  <UpdateBoardSection
-                    currentBackground={currentBackground}
-                    UpdatelocalBackground={UpdatelocalBackground}
-                    board={board}
-                    setIsOpen={setIsOpen}
-                  />
-                  <Divider />
-                  <DeleteBoardSection board={board} closeModal={closeModal} />
+                  <Accordion
+                    type="single"
+                    defaultValue="board-details"
+                    collapsible
+                  >
+                    <UpdateBoardSection
+                      currentBackground={currentBackground}
+                      UpdatelocalBackground={UpdatelocalBackground}
+                      board={board}
+                      setIsOpen={setIsOpen}
+                    />
+                    {/* <Divider /> */}
+                    <AccordionItem value="delete-section">
+                      <AccordionTrigger className="px-2">
+                        Delete board
+                      </AccordionTrigger>
+                      <AccordionContent className="p-2">
+                        <DeleteBoardSection
+                          board={board}
+                          closeModal={closeModal}
+                        />
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

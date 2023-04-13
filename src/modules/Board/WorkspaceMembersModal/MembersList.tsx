@@ -27,7 +27,7 @@ export function MemberListSkeleton({
 }) {
   const Rows = [];
   for (let i = 0; i < numberOfMembers; i++) {
-    Rows.push(<MemberRowSkeleton />);
+    Rows.push(<MemberRowSkeleton key={i} />);
   }
   return (
     <div>

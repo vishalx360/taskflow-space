@@ -1,17 +1,21 @@
 import { useToast } from "@/hooks/use-toast";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
 import { Button } from "@/modules/ui/button";
 import { ALLOWED_ROLES_TO_INVITE } from "@/utils/AllowedRolesToInvite";
 import { CreateWorkspaceInvitation } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
-import { Disclosure, Listbox, Transition } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import { type WorkspaceMemberRoles } from "@prisma/client";
 import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
 import { Fragment } from "react";
 import { BiCheck, BiChevronDown } from "react-icons/bi";
-import { FaCaretRight } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import PendingInviteRow, { PendingInviteRowSkeleton } from "./PendingInviteRow";
-
 export default function InviteSection({
   CurrentUserRole,
   workspaceId,
@@ -35,7 +39,6 @@ export default function InviteSection({
       await utils.workspace.getAllPendingInvitations
         .invalidate({ workspaceId })
         .catch((err) => console.log(err));
-      // TODO: invalidate pending invites list
       toast({ title: "Succesfully sent invite" });
     },
   });
@@ -109,91 +112,67 @@ export default function InviteSection({
           </div>
         </Form>
       </Formik>
-      <PendingInvitationsList workspaceId={workspaceId} />
+      <PendingInvitationSection workspaceId={workspaceId} />
     </div>
   );
 }
 
+function PendingInvitationSection({
+  workspaceId,
+}: {
+  workspaceId: string | undefined;
+}) {
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger className="rounded-xl border-neutral-400 px-2 text-neutral-600">
+          Pending Invitations
+        </AccordionTrigger>
+        <AccordionContent className="p-1">
+          <PendingInvitationsList workspaceId={workspaceId} />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+}
 function PendingInvitationsList({
   workspaceId,
 }: {
   workspaceId: string | undefined;
 }) {
-  function Panel() {
-    const { data: pendingInvitations, isLoading } =
-      api.workspace.getAllPendingInvitations.useQuery(
-        { workspaceId: workspaceId ? workspaceId : "" },
-        { enabled: Boolean(workspaceId) }
-      );
-
-    if (isLoading) {
-      return <PendingInvitationsListSkeleton numberOfItems={2} />;
-    }
-    return (
-      <div className="flex flex-col gap-5">
-        {pendingInvitations?.length !== 0 ? (
-          <>
-            {pendingInvitations?.map((invitation) => {
-              return (
-                <PendingInviteRow key={invitation.id} invitation={invitation} />
-              );
-            })}
-          </>
-        ) : (
-          <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
-            No pending invitations found
-          </div>
-        )}
-      </div>
+  const { data: pendingInvitations, isLoading } =
+    api.workspace.getAllPendingInvitations.useQuery(
+      { workspaceId: workspaceId ? workspaceId : "" },
+      { enabled: Boolean(workspaceId), staleTime: 1000 * 60 * 5 }
     );
-  }
 
   return (
-    <div>
-      {/*  */}
-
-      <Disclosure defaultOpen={false}>
-        {({ open }) => (
-          <>
-            <div className="my-5 flex items-center gap-5">
-              <Disclosure.Button className="w-full ">
-                <div className="flex w-full items-center justify-between gap-10 rounded-xl rounded-t-xl border border-gray-200 px-5  hover:bg-neutral-100  ">
-                  <div className="flex items-center gap-5">
-                    <p className="text-md my-4">Pending Invitations</p>
-                    {/* {isRefetching && (
-                        <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-500" />
-                      )} */}
-                  </div>
-                  <FaCaretRight
-                    className={`${
-                      open ? "rotate-90 transform" : ""
-                    } h-5 w-5 text-inherit`}
+    <>
+      {isLoading ? (
+        <PendingInvitationsListSkeleton numberOfItems={2} />
+      ) : (
+        <div className="flex flex-col gap-5">
+          {pendingInvitations?.length !== 0 ? (
+            <>
+              {pendingInvitations?.map((invitation) => {
+                return (
+                  <PendingInviteRow
+                    key={invitation.id}
+                    invitation={invitation}
                   />
-                </div>
-              </Disclosure.Button>
+                );
+              })}
+            </>
+          ) : (
+            <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
+              No pending invitations found
             </div>
-
-            <Transition
-              enter="transition duration-150 ease-in"
-              enterFrom="transform  -translate-y-3 opacity-0"
-              enterTo="transform translate-y-0  opacity-100"
-              leave="transition duration-150 ease-out"
-              leaveFrom="transform translate-y-0 opacity-100"
-              leaveTo="transform -translate-y-3 opacity-0"
-            >
-              <Disclosure.Panel>
-                <Panel />
-              </Disclosure.Panel>
-            </Transition>
-          </>
-        )}
-      </Disclosure>
-
-      {/*  */}
-    </div>
+          )}
+        </div>
+      )}
+    </>
   );
 }
-
 export function PendingInvitationsListSkeleton({
   numberOfItems = 2,
 }: {
