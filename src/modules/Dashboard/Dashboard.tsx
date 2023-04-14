@@ -13,6 +13,7 @@ import Workspaces from "./Workspaces";
 
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import CommandCenter from "./CommandCenter";
 
 const NavlinkVariants = cva(
   "flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
@@ -91,12 +92,7 @@ function Dashboard() {
               <LogoImage short dark />
             </Link>
           </div>
-          <button className="w-full rounded-full border  border-neutral-300/50 bg-neutral-300/40 p-3 px-4 text-neutral-500 hover:bg-neutral-200/80 md:max-w-[70%]">
-            <div className="flex items-center gap-8">
-              <LucideSearch />
-              <h1>Search</h1>
-            </div>
-          </button>
+          <CommandCenter />
           <div className="md:hidden">
             <UserMenu />
           </div>
