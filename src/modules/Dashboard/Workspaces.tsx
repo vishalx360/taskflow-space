@@ -30,16 +30,16 @@ function Workspaces() {
       <h1 className="px-5 pb-2 pt-5 font-medium uppercase tracking-wider text-neutral-500">
         Your Workspaces
       </h1>
-      <div className="relative space-y-5">
+      <div className=" space-y-5">
         <Accordion defaultValue={["0", "1"]} type="multiple">
           {workspaces?.map((workspace, index) => {
             return (
               <AccordionItem
-                className="relative"
+                className=""
                 key={workspace.id}
                 value={String(index)}
               >
-                <div className="sticky top-16 z-10  bg-white">
+                <div className="sticky top-16 z-10  bg-neutral-100">
                   <AccordionTrigger className="flex-8  w-full rounded-xl border-neutral-400 px-2  text-neutral-600">
                     <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 pt-2 text-xl font-normal   md:rounded-l-md">
                       <div className="flex items-center gap-3 md:gap-5">

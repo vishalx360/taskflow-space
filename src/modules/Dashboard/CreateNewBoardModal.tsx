@@ -2,6 +2,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
+import geopattern from "geopattern";
 import random from "lodash.random";
 
 import {
@@ -23,14 +24,14 @@ import { Button } from "../ui/button";
 import Backgrounds from "../../utils/BoardBackgrounds.json";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/text-area";
-import { BoardBox } from "./BoardGrid";
 
+import Image from "next/image";
 import { RandomWordOptions, generateSlug } from "random-word-slugs";
 
 const slugOption: RandomWordOptions<3> = {
   format: "title",
   categories: {
-    noun: ["time", "business", "thing", "technology", "place"],
+    noun: ["time", "business", "thing", "technology"],
     adjective: ["color", "time", "condition"],
   },
   partsOfSpeech: ["adjective", "noun", "noun"],
@@ -62,6 +63,8 @@ export default function CreateNewBoardModal({
   function openModal() {
     setIsOpen(true);
   }
+
+  const defaultBackground = geopattern.generate(workspace.id).toDataUri();
 
   const utils = api.useContext();
   const { toast } = useToast();
@@ -107,7 +110,7 @@ export default function CreateNewBoardModal({
         <Dialog
           initialFocus={initailFocusRef}
           as="div"
-          className="relative z-10"
+          className="relative z-[80]"
           onClose={closeModal}
         >
           <Transition.Child
@@ -172,22 +175,72 @@ export default function CreateNewBoardModal({
                         <div>
                           <Field name="name">
                             {({ form, meta }: FieldProps) => (
-                              <div className="mb-5 ">
-                                <BoardBox
-                                  fill
-                                  board={{ ...form.values, id: "preview" }}
-                                />{" "}
+                              <div className="mb-5 flex items-center justify-center">
+                                <div
+                                  className={`group relative w-fit  transition-all hover:-translate-y-1 hover:shadow-xl `}
+                                >
+                                  <div
+                                    className={`md:h-40md:w-[18rem] h-36 w-[18rem] overflow-hidden rounded-xl`}
+                                  >
+                                    {form.values?.background &&
+                                      form.values?.background.startsWith(
+                                        "wallpaper:"
+                                      ) && (
+                                        <Image
+                                          className="h-30 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]"
+                                          alt="background"
+                                          fill
+                                          src={form.values?.background.slice(
+                                            10
+                                          )}
+                                        />
+                                      )}
+                                    {form.values?.background &&
+                                      form.values?.background.startsWith(
+                                        "gradient:"
+                                      ) && (
+                                        <div
+                                          className="h-full w-full"
+                                          style={{
+                                            backgroundImage:
+                                              form.values?.background.slice(9),
+                                          }}
+                                        />
+                                      )}
+                                    {!form.values?.background && (
+                                      <Image
+                                        height="50"
+                                        width="150"
+                                        src={defaultBackground}
+                                        alt=""
+                                        className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
+                                      />
+                                    )}
+                                  </div>
+
+                                  <div className="absolute bottom-0 flex h-full w-full items-end overflow-hidden whitespace-nowrap rounded-xl bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
+                                    <div className="flex w-full flex-col items-start justify-between ">
+                                      <h2 className="font-medium">
+                                        {form.values?.name}
+                                      </h2>
+                                      <p className="mt-1 text-xs text-neutral-400">
+                                        {workspace.name}{" "}
+                                        {!workspace.personal && " workspace"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             )}
                           </Field>
-                          <div className="flex items-center gap-3">
+                          {/* <div className="flex items-center gap-3">
                             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
                               {workspace.name[0]}
                             </div>
                             <span className=" text-start line-clamp-1">
                               {workspace.name}
                             </span>
-                          </div>
+                          </div> */}
                         </div>
 
                         <div className="flex flex-col gap-2">
@@ -198,7 +251,7 @@ export default function CreateNewBoardModal({
                           >
                             <AccordionItem value="item-1">
                               <AccordionTrigger className="px-2">
-                                Board details
+                                Basic details
                               </AccordionTrigger>
                               <AccordionContent className="p-1">
                                 <Field name="name">
@@ -270,7 +323,7 @@ export default function CreateNewBoardModal({
 
                             <AccordionItem value="item-3">
                               <AccordionTrigger className="px-2">
-                                Board backgorund
+                                Backgorund
                               </AccordionTrigger>
                               <AccordionContent className="p-1">
                                 <UpdateBoardBackgroundSection

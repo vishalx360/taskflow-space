@@ -1,9 +1,10 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
-
 import { cn } from "@/lib/utils";
+
+import React from "react";
+
 import { Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
