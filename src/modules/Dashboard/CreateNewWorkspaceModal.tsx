@@ -53,7 +53,7 @@ export default function CreateNewWorkspaceModal() {
         </div>
       </button> */}
 
-      <div className="my-8 mb-5 flex items-center gap-5 border-b-2 border-t-2 py-5">
+      <div className="my-8 mb-5 flex items-center gap-5 border-b-2 border-t-2 px-2 py-5">
         <button
           onClick={openModal}
           className="sticky top-20 z-10 w-full  transition-all "

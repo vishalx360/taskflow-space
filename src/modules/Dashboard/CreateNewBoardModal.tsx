@@ -28,13 +28,13 @@ import { Textarea } from "../ui/text-area";
 import Image from "next/image";
 import { RandomWordOptions, generateSlug } from "random-word-slugs";
 
-const slugOption: RandomWordOptions<3> = {
+const slugOption: RandomWordOptions<2> = {
   format: "title",
   categories: {
     noun: ["time", "business", "thing", "technology"],
-    adjective: ["color", "time", "condition"],
+    adjective: ["color", "time", "quantity", "size", "sounds", "taste"],
   },
-  partsOfSpeech: ["adjective", "noun", "noun"],
+  partsOfSpeech: ["adjective", "noun"],
 };
 
 const GetRandomBackgroundGradient = () => {
@@ -97,7 +97,7 @@ export default function CreateNewBoardModal({
       ) : (
         <button
           onClick={openModal}
-          className="relative  flex h-full w-full items-center rounded-xl border-neutral-300 bg-neutral-100 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-300/50 hover:ring-2  md:h-40 md:w-[18rem] md:text-lg"
+          className="relative  flex h-full w-full items-center rounded-xl border border-neutral-300 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200/50 hover:ring-2  md:h-40 md:w-[18rem] md:text-lg"
         >
           <div className="flex w-full items-center justify-center gap-3">
             <FaPlusCircle />
@@ -159,7 +159,7 @@ export default function CreateNewBoardModal({
                   <div className="mt-2">
                     <Formik
                       initialValues={{
-                        name: generateSlug(3, slugOption),
+                        name: generateSlug(2, slugOption),
                         description: "",
                         workspaceId: workspace.id,
                         background: GetRandomBackgroundGradient(),

@@ -7,7 +7,6 @@ import {
   TooltipTrigger,
 } from "@/modules/ui/tooltip";
 import { type Board } from "@prisma/client";
-import { ChevronsRight } from "lucide-react";
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import WorkspaceMembersModal from "./WorkspaceMembersModal/WorkspaceMembersModal";
@@ -24,23 +23,24 @@ function BoardNavbar({ board }: { board: Board }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div className="flex items-center gap-2 md:gap-4">
+            <span className=" lg:text-md max-w-[90%] text-sm font-medium text-white  line-clamp-1 md:max-w-[20vw] md:text-xl lg:max-w-[20vw]">
+              {board?.name}
+            </span>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="flex items-center gap-2">
-                  <span className="md:text-md flex h-6 w-6 items-center justify-center rounded-md bg-neutral-200 p-3 text-sm font-bold uppercase text-neutral-900 md:h-6 md:w-6  lg:text-lg  xl:h-8 xl:w-8">
+                  <span className="md:text-md flex h-6 w-6 items-center justify-center rounded-md bg-neutral-100/10 p-3 text-sm font-bold uppercase text-neutral-100 md:h-6 md:w-6 lg:text-lg  xl:hidden  xl:h-8 xl:w-8">
                     {board?.Workspace.name[0]}
                   </span>
-                  <ChevronsRight />
+                  <span className="md:text-md hidden rounded-md bg-neutral-100/10 p-1 px-3 text-sm font-medium uppercase text-neutral-100 lg:text-xs xl:flex  ">
+                    {board?.Workspace.name}
+                  </span>
                 </TooltipTrigger>
                 <TooltipContent>
                   {board?.Workspace.name} Workspace
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
-            <span className=" lg:text-md max-w-[30vw] text-sm font-medium text-white  line-clamp-1 md:max-w-[20vw] md:text-xl lg:max-w-[20vw]">
-              {board?.name}
-            </span>
           </div>
         </div>
         <Link

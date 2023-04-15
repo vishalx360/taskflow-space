@@ -13,6 +13,7 @@ import Workspaces from "./Workspaces";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import CommandCenter from "./CommandCenter";
+import { useSession } from "next-auth/react";
 
 const NavlinkVariants = cva(
   "flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
@@ -53,6 +54,7 @@ const Navlinks = [
 
 function Dashboard() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   return (
     <div className="relative flex flex-row bg-neutral-100 ">
       {/* <DashboardSidebar /> */}
@@ -83,8 +85,20 @@ function Dashboard() {
       </div>
 
       <main className="container mx-auto  md:ml-[22em] md:px-5">
+        <div className="m-5 mt-10 hidden  text-black md:block  lg:flex-row">
+          {/* header */}
+          <h1 className="text-2xl font-bold md:text-4xl">
+            Hello,{" "}
+            <span className="text-primary-500 ">{session?.user.name}</span>
+            <span className="ml-2">👋</span>
+          </h1>
+          <h1 className="mt-5 text-sm text-neutral-500 md:text-lg">
+            Welcome to your dashboard, here you can manage your tasks,
+            workspaces and more.
+          </h1>
+        </div>
         {/* search bar */}
-        <div className="sticky top-0 z-20 flex items-center justify-between gap-4 bg-neutral-100 px-4 py-4 md:px-2 ">
+        <div className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b bg-neutral-100 px-4 py-4 md:border-b-0 md:px-2 ">
           <div className="md:hidden">
             <Link href="/" className="">
               <LogoImage short dark />
@@ -94,14 +108,6 @@ function Dashboard() {
           <div className="md:hidden">
             <UserMenu />
           </div>
-        </div>
-        <div className="m-5 mt-10 hidden text-black md:block  lg:flex-row">
-          {/* header */}
-          <h1 className="text-2xl font-bold md:text-4xl">Dashboard</h1>
-          <h1 className="mt-5 text-sm text-neutral-500 md:text-lg">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Asperiores, repellat.
-          </h1>
         </div>
         <Workspaces />
       </main>
