@@ -2,8 +2,8 @@ import Image from "next/image";
 import FULL_DARK_LOGO_URL from "../../../public/logo/taskflow-full-logo-dark.png";
 import FULL_LOGO_URL from "../../../public/logo/taskflow-full-logo.png";
 
-import SHORT_LOGO_URL from "../../../public/logo/taskflow-short-logo.png";
 import SHORT_DARK_LOGO_URL from "../../../public/logo/taskflow-short-logo-dark.png";
+import SHORT_LOGO_URL from "../../../public/logo/taskflow-short-logo.png";
 
 function LogoImage({
   width,

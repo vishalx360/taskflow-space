@@ -1,4 +1,3 @@
-import Divider from "@/modules/Global/Divider";
 import IconButton from "@/modules/Global/IconButton";
 import {
   Accordion,
@@ -14,13 +13,6 @@ import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
-import {
-  LucideDelete,
-  LucideRemoveFormatting,
-  LucideTrash,
-  LucideTrash2,
-} from "lucide-react";
-import { FaTrash, FaTrashAlt } from "react-icons/fa";
 
 export default function BoardSettingsModal({ board }: { board: Board | null }) {
   const [isOpen, setIsOpen] = useState(false);

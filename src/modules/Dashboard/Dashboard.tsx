@@ -2,7 +2,6 @@ import {
   LucideAlignLeft,
   LucideHome,
   LucideLayout,
-  LucideSearch,
   LucideSettings2,
 } from "lucide-react";
 import Link from "next/link";
@@ -56,9 +55,8 @@ function Dashboard() {
   const pathname = usePathname();
   return (
     <div className="relative flex flex-row bg-neutral-100 ">
-      {/* <DashboardNavbar /> */}
-      {/* notion dashboard sidebar in tailwind css */}
-      <div className="sticky left-0 top-0 hidden h-screen w-[20em] bg-neutral-200 md:block">
+      {/* <DashboardSidebar /> */}
+      <div className="fixed left-0 top-0 hidden h-screen w-[20em] bg-neutral-200 md:block">
         <div className="flex h-20 flex-col items-center justify-center bg-neutral-500/5">
           <Link href="/" className="p-5">
             <LogoImage dark width={220} />
@@ -84,7 +82,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <main className=" container mx-auto md:px-5">
+      <main className="container mx-auto  md:ml-[22em] md:px-5">
         {/* search bar */}
         <div className="sticky top-0 z-20 flex items-center justify-between gap-4 bg-neutral-100 px-4 py-4 md:px-2 ">
           <div className="md:hidden">

@@ -9,7 +9,6 @@ import { api } from "@/utils/api";
 import { Toaster } from "@/modules/ui/toaster";
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
-import { Button } from "@/modules/ui/button";
 import { MdArrowUpward } from "react-icons/md";
 
 // If loading a variable font, you don't need to specify the font weight

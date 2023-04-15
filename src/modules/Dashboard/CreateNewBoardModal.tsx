@@ -177,10 +177,10 @@ export default function CreateNewBoardModal({
                             {({ form, meta }: FieldProps) => (
                               <div className="mb-5 flex items-center justify-center">
                                 <div
-                                  className={`group relative w-fit  transition-all hover:-translate-y-1 hover:shadow-xl `}
+                                  className={`group relative w-full overflow-hidden rounded-xl  transition-all  hover:shadow-xl md:w-fit`}
                                 >
                                   <div
-                                    className={`md:h-40md:w-[18rem] h-36 w-[18rem] overflow-hidden rounded-xl`}
+                                    className={`h-28 w-full overflow-hidden rounded-xl transition-all group-hover:scale-110 md:h-40 md:w-[15rem] lg:w-[18rem]`}
                                   >
                                     {form.values?.background &&
                                       form.values?.background.startsWith(

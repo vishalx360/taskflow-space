@@ -100,4 +100,4 @@ import {
   Smile,
   User,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";

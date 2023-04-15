@@ -39,37 +39,35 @@ function Workspaces() {
                 key={workspace.id}
                 value={String(index)}
               >
-                <div className="sticky top-16 z-10  bg-neutral-100">
-                  <AccordionTrigger className="flex-8  w-full rounded-xl border-neutral-400 px-2  text-neutral-600">
-                    <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 pt-2 text-xl font-normal   md:rounded-l-md">
-                      <div className="flex items-center gap-3 md:gap-5">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
-                          {workspace.name[0]}
-                        </div>
-                        <span className=" text-start line-clamp-1">
-                          {workspace.name}
-                        </span>
-                        {isRefetching && (
-                          <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-500" />
-                        )}
+                <AccordionTrigger className="flex-8 sticky top-16  z-10 w-full rounded-xl border-neutral-400 bg-neutral-100 px-2  text-neutral-600  transition-colors hover:bg-neutral-200  focus:bg-neutral-200">
+                  <div className="flex w-full items-center justify-between gap-10 rounded-l-none rounded-t-xl border-gray-600 px-5 pt-2 text-xl font-normal   md:rounded-l-md">
+                    <div className="flex items-center gap-3 md:gap-5">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase text-white  md:h-10 md:w-10 md:text-xl">
+                        {workspace.name[0]}
                       </div>
+                      <span className=" text-start line-clamp-1">
+                        {workspace.name}
+                      </span>
+                      {isRefetching && (
+                        <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-500" />
+                      )}
                     </div>
-                    {!workspace.personal && (
-                      <div
-                        onClick={(e) => e.stopPropagation()}
-                        className=" flex-2 flex items-center gap-3 px-2"
-                      >
-                        <WorkspaceMembersModal hideText workspace={workspace} />
-                        {workspace.members[0]?.role === "OWNER" && (
-                          <WorkspaceSettingsModal
-                            hideText
-                            workspace={workspace}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </AccordionTrigger>
-                </div>
+                  </div>
+                  {!workspace.personal && (
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className=" flex-2 flex items-center gap-3 px-2"
+                    >
+                      <WorkspaceMembersModal hideText workspace={workspace} />
+                      {workspace.members[0]?.role === "OWNER" && (
+                        <WorkspaceSettingsModal
+                          hideText
+                          workspace={workspace}
+                        />
+                      )}
+                    </div>
+                  )}
+                </AccordionTrigger>
 
                 <AccordionContent className="p-2 md:px-4">
                   <div className="hidden md:block">

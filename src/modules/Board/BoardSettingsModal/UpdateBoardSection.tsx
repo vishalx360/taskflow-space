@@ -1,5 +1,12 @@
 import { useToast } from "@/hooks/use-toast";
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
 import { Button } from "@/modules/ui/button";
+import { Input } from "@/modules/ui/input";
+import { Textarea } from "@/modules/ui/text-area";
 import { UpdateBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { type Board } from "@prisma/client";
@@ -11,14 +18,6 @@ import {
 } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import UpdateBoardBackgroundSection from "./UpdateBoardBackgroundSection";
-import { Textarea } from "@/modules/ui/text-area";
-import { Input } from "@/modules/ui/input";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/modules/ui/accordion";
 
 function UpdateBoardSection({
   board,
