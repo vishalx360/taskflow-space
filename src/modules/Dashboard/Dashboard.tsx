@@ -89,7 +89,7 @@ function Dashboard() {
           {/* header */}
           <h1 className="text-2xl font-bold md:text-4xl">
             Hello,{" "}
-            <span className="text-primary-500 ">{session?.user.name}</span>
+            <span className="text-primary-500">{session?.user.name}</span>
             <span className="ml-2">👋</span>
           </h1>
           <h1 className="mt-5 text-sm text-neutral-500 md:text-lg">

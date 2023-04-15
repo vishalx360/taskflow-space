@@ -51,7 +51,7 @@ export default function CreateNewBoardModal({
   children,
   workspace,
 }: {
-  children: ReactNode;
+  children?: ReactNode;
   workspace: Workspace;
 }) {
   const [isOpen, setIsOpen] = useState(false);
