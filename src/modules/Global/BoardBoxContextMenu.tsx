@@ -6,10 +6,10 @@ import {
 } from "@/modules/ui/context-menu";
 import { type ReactNode } from "react";
 
+import { useBoardSettingsModal } from "@/contexts/BoardSettingsModalProviderContext";
 import { ContextMenuShortcut } from "@/modules/ui/context-menu";
 import { type Board } from "@prisma/client";
 import { useRouter } from "next/router";
-import BoardSettingsModal from "../Board/BoardSettingsModal/BoardSettingsModal";
 
 export function BoardBoxContextMenu({
   children,
@@ -19,16 +19,20 @@ export function BoardBoxContextMenu({
   children: ReactNode;
 }): JSX.Element {
   const router = useRouter();
+  const { openModal } = useBoardSettingsModal();
 
   function openBoard(e) {
+    e.stopPropagation();
     void router.push(`/board/${board.id}`);
   }
 
   function openBoardInNewTab(e) {
+    e.stopPropagation();
     window.open(`/board/${board.id}`, "_blank");
   }
   function openGlobalBoardSettingsModal(e) {
-    // SetGlobalBoardModal && SetGlobalBoardModal(board);
+    e.stopPropagation();
+    openModal(board);
   }
 
   return (

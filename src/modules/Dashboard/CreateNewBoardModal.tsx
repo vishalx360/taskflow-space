@@ -26,7 +26,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/text-area";
 
 import Image from "next/image";
-import { RandomWordOptions, generateSlug } from "random-word-slugs";
+import { generateSlug, type RandomWordOptions } from "random-word-slugs";
 
 const slugOption: RandomWordOptions<2> = {
   format: "title",
@@ -172,77 +172,64 @@ export default function CreateNewBoardModal({
                       }}
                     >
                       <Form>
-                        <div>
-                          <Field name="name">
-                            {({ form, meta }: FieldProps) => (
-                              <div className="mb-5 flex items-center justify-center">
+                        <Field name="name">
+                          {({ form, meta }: FieldProps) => (
+                            <div className="mb-5 flex items-center justify-center">
+                              <div
+                                className={`group relative w-full overflow-hidden rounded-xl  transition-all  hover:shadow-xl md:w-fit`}
+                              >
                                 <div
-                                  className={`group relative w-full overflow-hidden rounded-xl  transition-all  hover:shadow-xl md:w-fit`}
+                                  className={`h-28 w-full overflow-hidden rounded-xl transition-all group-hover:scale-110 md:h-40 md:w-[15rem] lg:w-[18rem]`}
                                 >
-                                  <div
-                                    className={`h-28 w-full overflow-hidden rounded-xl transition-all group-hover:scale-110 md:h-40 md:w-[15rem] lg:w-[18rem]`}
-                                  >
-                                    {form.values?.background &&
-                                      form.values?.background.startsWith(
-                                        "wallpaper:"
-                                      ) && (
-                                        <Image
-                                          className="h-30 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]"
-                                          alt="background"
-                                          fill
-                                          src={form.values?.background.slice(
-                                            10
-                                          )}
-                                        />
-                                      )}
-                                    {form.values?.background &&
-                                      form.values?.background.startsWith(
-                                        "gradient:"
-                                      ) && (
-                                        <div
-                                          className="h-full w-full"
-                                          style={{
-                                            backgroundImage:
-                                              form.values?.background.slice(9),
-                                          }}
-                                        />
-                                      )}
-                                    {!form.values?.background && (
+                                  {form.values?.background &&
+                                    form.values?.background.startsWith(
+                                      "wallpaper:"
+                                    ) && (
                                       <Image
-                                        height="50"
-                                        width="150"
-                                        src={defaultBackground}
-                                        alt=""
-                                        className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
+                                        className="h-30 w-full overflow-hidden rounded-xl object-cover md:h-40 md:w-[18rem]"
+                                        alt="background"
+                                        fill
+                                        src={form.values?.background.slice(10)}
                                       />
                                     )}
-                                  </div>
+                                  {form.values?.background &&
+                                    form.values?.background.startsWith(
+                                      "gradient:"
+                                    ) && (
+                                      <div
+                                        className="h-full w-full"
+                                        style={{
+                                          backgroundImage:
+                                            form.values?.background.slice(9),
+                                        }}
+                                      />
+                                    )}
+                                  {!form.values?.background && (
+                                    <Image
+                                      height="50"
+                                      width="150"
+                                      src={defaultBackground}
+                                      alt=""
+                                      className="h-28 w-full object-cover md:h-40 md:w-[18rem]"
+                                    />
+                                  )}
+                                </div>
 
-                                  <div className="absolute bottom-0 flex h-full w-full items-end overflow-hidden whitespace-nowrap rounded-xl bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
-                                    <div className="flex w-full flex-col items-start justify-between ">
-                                      <h2 className="font-medium">
-                                        {form.values?.name}
-                                      </h2>
-                                      <p className="mt-1 text-xs text-neutral-400">
-                                        {workspace.name}{" "}
-                                        {!workspace.personal && " workspace"}
-                                      </p>
-                                    </div>
+                                <div className="absolute bottom-0 flex h-full w-full items-end overflow-hidden whitespace-nowrap rounded-xl bg-gradient-to-t from-black to-black/20 p-3 text-sm font-medium  text-white md:p-5 md:text-lg ">
+                                  <div className="flex w-full flex-col items-start justify-between ">
+                                    <h2 className="font-medium">
+                                      {form.values?.name}
+                                    </h2>
+                                    <p className="mt-1 text-xs text-neutral-400">
+                                      {workspace.name}{" "}
+                                      {!workspace.personal && " workspace"}
+                                    </p>
                                   </div>
                                 </div>
                               </div>
-                            )}
-                          </Field>
-                          {/* <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-4 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
-                              {workspace.name[0]}
                             </div>
-                            <span className=" text-start line-clamp-1">
-                              {workspace.name}
-                            </span>
-                          </div> */}
-                        </div>
-
+                          )}
+                        </Field>
                         <div className="flex flex-col gap-2">
                           <Accordion
                             type="single"

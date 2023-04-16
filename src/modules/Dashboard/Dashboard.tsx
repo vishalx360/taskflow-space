@@ -10,6 +10,7 @@ import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 import Workspaces from "./Workspaces";
 
+import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalProviderContext";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import { useSession } from "next-auth/react";
@@ -79,7 +80,7 @@ function Dashboard() {
           ))}
         </div>
         {/* account section */}
-        <div className="absolute bottom-0 w-full p-5">
+        <div className="absolute bottom-6 w-full p-5">
           <UserMenu withDetails />
         </div>
       </div>
@@ -109,7 +110,9 @@ function Dashboard() {
             <UserMenu />
           </div>
         </div>
-        <Workspaces />
+        <BoardSettingsModalProvider>
+          <Workspaces />
+        </BoardSettingsModalProvider>
       </main>
     </div>
   );

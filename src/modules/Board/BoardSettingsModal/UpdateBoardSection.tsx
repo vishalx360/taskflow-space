@@ -22,11 +22,11 @@ import UpdateBoardBackgroundSection from "./UpdateBoardBackgroundSection";
 function UpdateBoardSection({
   board,
   setIsOpen,
-  currentBackground,
+  originalBgRef,
   UpdatelocalBackground,
 }: {
   board: Board | null;
-  currentBackground: MutableRefObject<string | undefined>;
+  originalBgRef: MutableRefObject<string | undefined>;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   UpdatelocalBackground: (background: string) => void;
 }) {
@@ -46,7 +46,7 @@ function UpdateBoardSection({
         .invalidate({ boardId: board?.id })
         .catch((err) => console.log(err));
       toast({ title: "Board updated successfully!" });
-      currentBackground.current = data.background;
+      originalBgRef.current = data.background;
       setIsOpen(false);
     },
   });

@@ -26,9 +26,12 @@ export default function BoardGrid({ workspace }: { workspace: Workspace }) {
 }
 
 export function RecentBoardGrid() {
-  const { data: boards, isLoading } = api.board.getRecentBoards.useQuery(null, {
-    staleTime: 1000 * 2,
-  });
+  const { data: boards, isLoading } = api.board.getRecentBoards.useQuery(
+    undefined,
+    {
+      staleTime: 1000 * 2,
+    }
+  );
   const [parent] = useAutoAnimate();
 
   if (isLoading) {

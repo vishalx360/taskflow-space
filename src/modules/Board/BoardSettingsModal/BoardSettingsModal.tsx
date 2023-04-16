@@ -8,46 +8,126 @@ import {
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { type Board } from "@prisma/client";
-import { Fragment, useRef, useState } from "react";
+import {
+  Children,
+  Fragment,
+  cloneElement,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
 
-export default function BoardSettingsModal({ board }: { board: Board | null }) {
+export default function BoardSettingsModal({
+  board,
+  children,
+  closeGlobalModal,
+  isGlobal = false,
+}: {
+  board: Board | null;
+  children?: ReactNode;
+  isGlobal?: boolean;
+  closeGlobalModal?: () => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const currentBackground = useRef(board?.background);
+  const originalBgRef = useRef(board?.background);
+  const currentBgRef = useRef(board?.background);
+
+  useEffect(() => {
+    if (isGlobal) {
+      originalBgRef.current = board?.background;
+      currentBgRef.current = board?.background;
+    }
+  }, [board]);
+
   const utils = api.useContext();
   // update board background
   const UpdatelocalBackground = (background: string) => {
-    utils.board.getBoard.setData({ boardId: board.id || "" }, (prev) => {
+    utils.board.getBoard.setData({ boardId: board?.id || "" }, (prev) => {
       if (prev) {
         return { ...prev, background };
       }
       return prev;
     });
+    currentBgRef.current = background;
   };
+  const UpdateGlobalBackground = (background: string) => {
+    utils.board.getAllBoards.setData(
+      { workspaceId: board?.workspaceId },
+      (prev) => {
+        if (prev) {
+          return prev.map((currentBoard) => {
+            if (currentBoard.id === board?.id) {
+              return { ...currentBoard, background };
+            }
+            return currentBoard;
+          });
+        }
+        return prev;
+      }
+    );
+    utils.board.getRecentBoards.setData(undefined, (prev) => {
+      if (prev) {
+        return prev.map((currentBoard) => {
+          if (currentBoard.id === board?.id) {
+            return { ...currentBoard, background };
+          }
+          return currentBoard;
+        });
+      }
+      return prev;
+    });
+    currentBgRef.current = background;
+  };
+
   function openModal() {
     setIsOpen(true);
   }
   function closeModal() {
-    if (currentBackground.current !== board?.background) {
-      UpdatelocalBackground(currentBackground.current);
+    console.log("closing modal");
+    if (currentBgRef.current !== originalBgRef.current) {
+      if (isGlobal) {
+        UpdateGlobalBackground(originalBgRef.current);
+      } else {
+        UpdatelocalBackground(originalBgRef.current);
+      }
     }
     setIsOpen(false);
+    closeGlobalModal && closeGlobalModal();
   }
 
   return (
     <>
-      <IconButton
-        onClick={openModal}
-        Icon={MdSettings}
-        className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
+      {!isGlobal && (
+        <>
+          {children ? (
+            <>
+              {Children.map(children, (child: ReactNode) =>
+                cloneElement(child, { onClick: openModal })
+              )}
+            </>
+          ) : (
+            <IconButton
+              onClick={openModal}
+              Icon={MdSettings}
+              className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
+            >
+              <p className="hidden lg:inline">Settings</p>
+            </IconButton>
+          )}
+        </>
+      )}
+
+      <Transition
+        appear
+        show={isGlobal ? Boolean(board) : isOpen}
+        as={Fragment}
       >
-        <p className="hidden lg:inline">Settings</p>
-      </IconButton>
-      <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
@@ -95,8 +175,12 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
                     collapsible
                   >
                     <UpdateBoardSection
-                      currentBackground={currentBackground}
-                      UpdatelocalBackground={UpdatelocalBackground}
+                      originalBgRef={originalBgRef}
+                      UpdatelocalBackground={
+                        isGlobal
+                          ? UpdateGlobalBackground
+                          : UpdatelocalBackground
+                      }
                       board={board}
                       setIsOpen={setIsOpen}
                     />
@@ -106,10 +190,12 @@ export default function BoardSettingsModal({ board }: { board: Board | null }) {
                         Delete board
                       </AccordionTrigger>
                       <AccordionContent className="p-2">
-                        <DeleteBoardSection
-                          board={board}
-                          closeModal={closeModal}
-                        />
+                        {board && (
+                          <DeleteBoardSection
+                            board={board}
+                            closeModal={closeModal}
+                          />
+                        )}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>

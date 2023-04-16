@@ -15,6 +15,7 @@ function DeleteBoardSection({
   closeModal: () => void;
 }) {
   const router = useRouter();
+  const utils = api.useContext();
   const { toast } = useToast();
   const mutation = api.board.deleteBoard.useMutation({
     onError(error) {
@@ -28,8 +29,29 @@ function DeleteBoardSection({
 
     onSuccess: async () => {
       toast({ title: "Board deleted successfully!" });
+      // remove board from cache
+      utils.board.getAllBoards.setData(
+        { workspaceId: board?.workspaceId },
+        (prev) => {
+          if (prev) {
+            return prev.filter((currentBoard) => {
+              return currentBoard.id !== board?.id;
+            });
+          }
+          return prev;
+        }
+      );
+      // remove board from recent if it exists
+      utils.board.getRecentBoards.setData(undefined, (prev) => {
+        if (prev) {
+          return prev.filter((currentBoard) => {
+            return currentBoard.id !== board?.id;
+          });
+        }
+        return prev;
+      });
       // redirect to dashboard
-      await router.push("/dashboard");
+      if (router.pathname !== "/dashboard") await router.push("/dashboard");
       closeModal();
     },
   });
@@ -82,7 +104,7 @@ function DeleteBoardSection({
                     disabled={
                       !form.dirty || Object.keys(form.errors).length !== 0
                     }
-                    loadingText="Deleting Board.."
+                    loadingText="Deleting.."
                     variant="destructiveOutline"
                   >
                     Delete

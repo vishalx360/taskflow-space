@@ -1,4 +1,4 @@
-import { Board as BoardBox } from "@prisma/client";
+import { type Board as BoardBox } from "@prisma/client";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
