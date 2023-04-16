@@ -8,6 +8,8 @@ import { type ReactNode } from "react";
 
 import { ContextMenuShortcut } from "@/modules/ui/context-menu";
 import { type Board } from "@prisma/client";
+import { useRouter } from "next/router";
+import BoardSettingsModal from "../Board/BoardSettingsModal/BoardSettingsModal";
 
 export function BoardBoxContextMenu({
   children,
@@ -16,23 +18,32 @@ export function BoardBoxContextMenu({
   board: Board;
   children: ReactNode;
 }): JSX.Element {
+  const router = useRouter();
+
+  function openBoard(e) {
+    void router.push(`/board/${board.id}`);
+  }
+
+  function openBoardInNewTab(e) {
+    window.open(`/board/${board.id}`, "_blank");
+  }
+  function openGlobalBoardSettingsModal(e) {
+    // SetGlobalBoardModal && SetGlobalBoardModal(board);
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-64">
-        <ContextMenuItem inset>
+        <ContextMenuItem onClick={openBoard} inset>
           Open
-          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+          <ContextMenuShortcut>⌘{"["}</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem inset>
+        <ContextMenuItem onClick={openBoardInNewTab} inset>
           Open in new tab
-          <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+          <ContextMenuShortcut>⌘{"]"}</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem inset>
-          Delete
-          <ContextMenuShortcut>⌘D</ContextMenuShortcut>
-        </ContextMenuItem>
-        <ContextMenuItem inset>
+        <ContextMenuItem onClick={openGlobalBoardSettingsModal} inset>
           Settings
           <ContextMenuShortcut>⌘S</ContextMenuShortcut>
         </ContextMenuItem>

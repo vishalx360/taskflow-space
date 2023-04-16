@@ -279,7 +279,7 @@ export default function CreateNewBoardModal({
                                           onClick={() => {
                                             form.setFieldValue(
                                               "name",
-                                              generateSlug(3, slugOption)
+                                              generateSlug(2, slugOption)
                                             );
                                           }}
                                           variant={"subtle"}

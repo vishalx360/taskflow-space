@@ -1,7 +1,7 @@
 import {
-  LucideAlignLeft,
   LucideHome,
   LucideLayout,
+  LucideMails,
   LucideSettings2,
 } from "lucide-react";
 import Link from "next/link";
@@ -12,8 +12,8 @@ import Workspaces from "./Workspaces";
 
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-import CommandCenter from "./CommandCenter";
 import { useSession } from "next-auth/react";
+import CommandCenter from "./CommandCenter";
 
 const NavlinkVariants = cva(
   "flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
@@ -36,8 +36,8 @@ const Navlinks = [
     href: "/dashboard",
   },
   {
-    name: "Tasks",
-    Icon: LucideAlignLeft,
+    name: "Invitations",
+    Icon: LucideMails,
     href: "/tasks",
   },
   {
