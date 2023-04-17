@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../Global/InvitationDrawer/InvitationRow";
-import { MyInvitationsList } from "../Global/InvitationDrawer/InvitationsDrawer";
-import ViewInvitationModal from "../Global/ViewInvitaionModal/ViewInvitaionModal";
+import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../../Global/InvitationDrawer/InvitationRow";
+import { MyInvitationsList } from "../../Global/InvitationDrawer/InvitationsDrawer";
+import ViewInvitationModal from "../../Global/ViewInvitaionModal/ViewInvitaionModal";
 
 function Invitations() {
   const [currentInvitation, setCurrentInvitation] =

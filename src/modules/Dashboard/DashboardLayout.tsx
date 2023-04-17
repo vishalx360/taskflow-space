@@ -7,10 +7,13 @@ import { UserMenu } from "../Global/UserMenu";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode } from "react";
+import { useState } from "react";
+import Settings from "../Settings/Settings";
+import Invitations from "./Invitations/Invitations";
+import OverviewPage from "./OverViewPage";
 
 const NavlinkVariants = cva(
-  "flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
+  "relative flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
   {
     variants: {
       active: {
@@ -28,21 +31,57 @@ const Navlinks = [
     name: "Overview",
     Icon: LucideHome,
     href: "/dashboard",
+    component: OverviewPage,
   },
   {
     name: "Invitations",
     Icon: LucideMails,
     href: "/dashboard/invitations",
+    component: Invitations,
   },
   {
     name: "Settings",
     Icon: LucideSettings2,
     href: "/dashboard/settings",
+    component: Settings,
   },
 ];
+const Sections = {
+  "/dashboard": OverviewPage,
+  "/dashboard/invitations": Invitations,
+  "/dashboard/settings": Settings,
+};
+const SectionIndex = {
+  "/dashboard": 0,
+  "/dashboard/invitations": 1,
+  "/dashboard/settings": 2,
+};
 
-function DashboardLayout({ children }: { children: ReactNode }) {
+const variants = {
+  enter: (direction: number) => {
+    return {
+      y: direction > 0 ? 100 : -100,
+      opacity: 0,
+    };
+  },
+  center: {
+    y: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => {
+    return {
+      y: direction < 0 ? 100 : -100,
+      opacity: 0,
+    };
+  },
+};
+
+function Dashboard() {
   const pathname = usePathname();
+  const [[currentPath, direction], setcurrentPath] = useState([pathname, 0]);
+
+  const Section = Sections[currentPath] ? Sections[currentPath] : OverviewPage;
+
   return (
     <div className="relative flex flex-row bg-neutral-100 ">
       {/* <DashboardSidebar /> */}
@@ -55,15 +94,24 @@ function DashboardLayout({ children }: { children: ReactNode }) {
         {/* links */}
 
         <div className="ml-2 mt-10 flex h-full flex-col gap-5 ">
-          {Navlinks.map(({ href, name, Icon }) => (
-            <Link
-              href={href}
+          {Navlinks.map(({ href, name, Icon }, index) => (
+            <button
+              // href={href}
+              onClick={() => {
+                setcurrentPath([
+                  href,
+                  SectionIndex[currentPath] < index ? 1 : -1,
+                ]);
+                // update the url without reloading the page not using nextjs router
+                // because it will reload the page
+                window.history.pushState({}, "", href);
+              }}
               key={href}
-              className={cn(NavlinkVariants({ active: pathname === href }))}
+              className={cn(NavlinkVariants({ active: currentPath === href }))}
             >
               <Icon className="text-inherit" />
               <span className="font-medium">{name}</span>
-            </Link>
+            </button>
           ))}
         </div>
         {/* account section */}
@@ -72,19 +120,28 @@ function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
       </div>
       {/* Main Section */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" custom={direction}>
         <motion.main
-          key={pathname}
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.5 }}
+          className="h-screen flex-1"
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          custom={direction}
+          transition={{
+            x: { type: "inertia", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          key={currentPath}
+          // initial={{ opacity: 0, y: !fadeToTop.current ? -100 : 100 }}
+          // animate={{ opacity: 1, y: 0 }}
+          // exit={{ opacity: 0, y: fadeToTop.current ? 100 : -100 }}
         >
-          {children}
+          {<Section />}
         </motion.main>
       </AnimatePresence>
     </div>
   );
 }
 
-export default DashboardLayout;
+export default Dashboard;
