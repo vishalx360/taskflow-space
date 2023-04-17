@@ -11,7 +11,6 @@ function Settings() {
 
   return (
     <>
-      <DashboardNavbar />
       <div className="container mx-auto mt-20 min-h-[90vh] space-y-10 border-l-2 border-r-2">
         <div className="flex w-full flex-col items-center justify-center gap-10 ">
           {/* account intro */}

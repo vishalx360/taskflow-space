@@ -5,10 +5,10 @@ import { Mails } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import Divider from "../Divider";
 import ViewInvitationModal from "../ViewInvitaionModal/ViewInvitaionModal";
-import InviteNotificationRow, {
-  InviteNotificationRowSkeleton,
+import InvitationRow, {
+  InvitationRowSkeleton,
   type WorkspaceMemberInvitationWithSenderAndRecevier,
-} from "./InviteNotificationRow";
+} from "./InvitationRow";
 
 function InvitationDrawer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +47,7 @@ function InvitationDrawer() {
 
 export default InvitationDrawer;
 
-function MyInvitationsList({
+export function MyInvitationsList({
   setCurrentInvitation,
 }: {
   setCurrentInvitation: Dispatch<
@@ -71,7 +71,7 @@ function MyInvitationsList({
       {myInvitations?.length !== 0 ? (
         <>
           {myInvitations?.map((invitation) => (
-            <InviteNotificationRow
+            <InvitationRow
               setCurrentInvitation={setCurrentInvitation}
               key={invitation.id}
               invitation={invitation}
@@ -95,7 +95,7 @@ export function InvitationDrawerSkeleton({
   return (
     <div className="space-y-2">
       {Array.from({ length: numberOfItems }).map((_, index) => {
-        return <InviteNotificationRowSkeleton key={index} />;
+        return <InvitationRowSkeleton key={index} />;
       })}
     </div>
   );

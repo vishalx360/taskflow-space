@@ -7,7 +7,7 @@ import Image from "next/image";
 import { type Dispatch, type SetStateAction } from "react";
 import { MdViewDay } from "react-icons/md";
 import Timeago from "react-timeago";
-
+// short type name
 export type WorkspaceMemberInvitationWithSenderAndRecevier =
   WorkspaceMemberInvitation & {
     recepient: UserType;
@@ -15,7 +15,7 @@ export type WorkspaceMemberInvitationWithSenderAndRecevier =
     Workspace: { name: string };
   };
 
-function InviteNotificationRow({
+function InvitationRow({
   invitation,
   setCurrentInvitation,
 }: {
@@ -80,9 +80,9 @@ function InviteNotificationRow({
   );
 }
 
-export default InviteNotificationRow;
+export default InvitationRow;
 
-export function InviteNotificationRowSkeleton() {
+export function InvitationRowSkeleton() {
   return (
     <div className="flex items-start justify-start  gap-5 ">
       <div className="h-10 w-10   animate-pulse rounded-full bg-neutral-400 " />

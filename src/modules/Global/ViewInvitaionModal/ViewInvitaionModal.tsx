@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import { FiX } from "react-icons/fi";
-import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../InvitationDrawer/InviteNotificationRow";
+import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../InvitationDrawer/InvitationRow";
 
 export default function ViewInvitationModal({
   currentInvitation,
