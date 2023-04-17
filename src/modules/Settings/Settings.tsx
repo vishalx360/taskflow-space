@@ -3,15 +3,21 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FaGoogle } from "react-icons/fa";
 import { MdDevices } from "react-icons/md";
-import DashboardNavbar from "../Global/DashboardNavbar";
 import { Button } from "../ui/button";
 
 function Settings() {
   const { data: session } = useSession();
 
   return (
-    <>
-      <div className="container mx-auto mt-20 min-h-[90vh] space-y-10 border-l-2 border-r-2">
+    <main className="container mx-auto  md:ml-[22em] md:px-5">
+      <div className="m-5 mt-10 hidden  text-black md:block  lg:flex-row">
+        {/* header */}
+        <h1 className="text-2xl font-bold md:text-4xl">Settings</h1>
+        <h1 className="mt-5 text-sm text-neutral-500 md:text-lg">
+          Here you can manage your settings.
+        </h1>
+      </div>
+      <div className="container space-y-10 ">
         <div className="flex w-full flex-col items-center justify-center gap-10 ">
           {/* account intro */}
           <div className="mt-10 flex flex-row items-center justify-center gap-5">
@@ -103,7 +109,7 @@ function Settings() {
           </div>
         </div>
       </div>
-    </>
+    </main>
   );
 }
 

@@ -6,6 +6,7 @@ import { UserMenu } from "../Global/UserMenu";
 
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode } from "react";
 
 const NavlinkVariants = cva(
@@ -71,7 +72,17 @@ function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
       </div>
       {/* Main Section */}
-      {children}
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={pathname}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.5 }}
+        >
+          {children}
+        </motion.main>
+      </AnimatePresence>
     </div>
   );
 }

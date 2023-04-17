@@ -50,6 +50,7 @@
     "fastify": "^4.15.0",
     "fastify-next-auth": "^0.3.0",
     "formik": "^2.2.9",
+    "framer-motion": "^10.12.2",
     "geopattern": "^1.2.3",
     "googleapis": "^114.0.0",
     "jose": "^4.13.1",
