@@ -53,7 +53,7 @@ export default function CreateNewWorkspaceModal() {
         </div>
       </button> */}
 
-      <div className="my-8 mb-5 flex items-center gap-5 rounded-xl border-b border-t bg-neutral-100 px-2 py-2 transition-colors  hover:bg-neutral-200 focus:bg-neutral-200">
+      <div className="my-8 mb-5 flex items-center gap-5 rounded-xl border-b border-t bg-neutral-50 px-2 py-2 transition-colors  hover:bg-neutral-200 focus:bg-neutral-200">
         <button
           onClick={openModal}
           className="sticky top-20 z-10 w-full  transition-all "
@@ -63,7 +63,7 @@ export default function CreateNewWorkspaceModal() {
               <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 p-2 uppercase  text-white md:h-10 md:w-10 md:text-xl">
                 <Plus />
               </div>
-              <span className=" text-start line-clamp-1">
+              <span className=" line-clamp-1 text-start">
                 Create new workspace
               </span>
             </div>

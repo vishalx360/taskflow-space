@@ -45,8 +45,8 @@ function Workspaces() {
                 value={String(index)}
               >
                 <div
-                  className="sticky top-[80px] z-10  rounded-xl
-                bg-neutral-100 transition-colors  hover:bg-neutral-200 focus:bg-neutral-200
+                  className="sticky top-[75px] z-10  rounded-xl
+                bg-neutral-50 transition-colors  hover:bg-neutral-200 focus:bg-neutral-200
                 "
                 >
                   <AccordionTrigger className="flex-8  w-full rounded-xl border-neutral-400 px-2  text-neutral-600">
@@ -55,7 +55,7 @@ function Workspaces() {
                         <div className="flex h-8 w-8 items-center justify-center rounded-md bg-neutral-900 text-sm uppercase  text-white md:h-10 md:w-10 md:text-xl">
                           {workspace.name[0]}
                         </div>
-                        <span className=" text-start line-clamp-1">
+                        <span className=" line-clamp-1 text-start">
                           {workspace.name}
                         </span>
                         {isRefetching && (

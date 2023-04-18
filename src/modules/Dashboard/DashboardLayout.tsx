@@ -83,7 +83,7 @@ function Dashboard() {
   const Section = Sections[currentPath] ? Sections[currentPath] : OverviewPage;
 
   return (
-    <div className="relative flex flex-row bg-neutral-100 ">
+    <div className="relative flex flex-row  ">
       {/* <DashboardSidebar /> */}
       <div className="fixed left-0 top-0 hidden h-screen w-[20em] bg-neutral-200 md:block">
         <div className="flex h-20 flex-col items-center justify-center bg-neutral-500/5">

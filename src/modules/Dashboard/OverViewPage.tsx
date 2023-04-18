@@ -10,7 +10,7 @@ import CommandCenter from "./CommandCenter";
 function OverviewPage() {
   const { data: session } = useSession();
   return (
-    <main className="container mx-auto  md:ml-[22em] md:px-5">
+    <main className="container mx-auto p-0 md:ml-[22em] md:px-5">
       <div className="m-5 mt-10 hidden  text-black md:block  lg:flex-row">
         {/* header */}
         <h1 className="text-2xl font-bold md:text-4xl">
@@ -23,7 +23,7 @@ function OverviewPage() {
         </h1>
       </div>
       {/* search bar */}
-      <div className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b bg-neutral-100 px-4 py-4 md:border-b-0 md:px-2 ">
+      <div className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b bg-neutral-50 px-4 py-4 md:border-b-0 md:px-2 ">
         <div className="md:hidden">
           <Link href="/" className="">
             <LogoImage short dark />
