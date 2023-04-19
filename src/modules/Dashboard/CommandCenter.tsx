@@ -71,11 +71,13 @@ function CommandCenter() {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Create">
-            <CommandItem>
-              <Layout className="mr-2 h-4 w-4" />
-              <span>Create New Board</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
+            <CreateNewBoardModal>
+              <CommandItem>
+                <Layout className="mr-2 h-4 w-4" />
+                <span>Create New Board</span>
+                <CommandShortcut>⌘P</CommandShortcut>
+              </CommandItem>
+            </CreateNewBoardModal>
             <CommandItem>
               <LayoutDashboard className="mr-2 h-4 w-4" />
               <span>Create New Workspace</span>
@@ -111,3 +113,5 @@ function CommandCenter() {
 export default CommandCenter;
 
 import { useEffect, useMemo, useState } from "react";
+import CreateNewBoardModal from "./CreateNewBoardModal";
+import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";

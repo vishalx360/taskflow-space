@@ -24,7 +24,7 @@ export default function BoardList({ workspace }: { workspace: Workspace }) {
         <BoardRow key={board.id} board={board} />
       ))}
       {workspace?.members[0]?.role !== "MEMBER" && (
-        <CreateNewBoardModal workspace={workspace}>
+        <CreateNewBoardModal workspaceId={workspace.id}>
           <div
             className={`group relative flex w-full items-center gap-5 p-3 transition-all hover:-translate-y-[2px] hover:bg-neutral-200/50`}
           >
@@ -113,7 +113,7 @@ function BoardRow({ board }: { board: Board }): JSX.Element {
 
       <div className="w-full ">
         <div className="flex w-full flex-col  items-start justify-between ">
-          <h2 className="font-medium line-clamp-1">{board.name}</h2>
+          <h2 className="line-clamp-1 font-medium">{board.name}</h2>
           <TimeAgo
             className="mt-1 text-xs text-neutral-400"
             date={board.updatedAt}

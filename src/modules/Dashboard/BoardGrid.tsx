@@ -19,7 +19,7 @@ export default function BoardGrid({ workspace }: { workspace: Workspace }) {
         <BoardBox key={board.id} board={board} />
       ))}
       {workspace?.members[0]?.role !== "MEMBER" && (
-        <CreateNewBoardModal workspace={workspace} />
+        <CreateNewBoardModal workspaceId={workspace.id} />
       )}
     </div>
   );
