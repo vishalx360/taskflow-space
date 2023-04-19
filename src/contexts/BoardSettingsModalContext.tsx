@@ -8,7 +8,7 @@ type ModalContextType = {
   closeModal: () => void;
 };
 
-export const BoardSettingsModalModalContext = createContext<ModalContextType>({
+export const BoardSettingsModalContext = createContext<ModalContextType>({
   isOpen: false,
   openModal: () => console.warn("No modal provider"),
   closeModal: () => console.warn("No modal provider"),
@@ -30,7 +30,7 @@ export const BoardSettingsModalProvider = ({
   };
 
   return (
-    <BoardSettingsModalModalContext.Provider
+    <BoardSettingsModalContext.Provider
       value={{ isOpen: Boolean(board), openModal: openModal, closeModal }}
     >
       <BoardSettingsModal
@@ -39,10 +39,10 @@ export const BoardSettingsModalProvider = ({
         isGlobal
       />
       {children}
-    </BoardSettingsModalModalContext.Provider>
+    </BoardSettingsModalContext.Provider>
   );
 };
 
 export const useBoardSettingsModal = () => {
-  return useContext(BoardSettingsModalModalContext);
+  return useContext(BoardSettingsModalContext);
 };

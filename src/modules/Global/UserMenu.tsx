@@ -31,6 +31,8 @@ import getGravatar from "@/utils/getGravatar";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { FiChevronDown } from "react-icons/fi";
+import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
+import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
@@ -110,10 +112,19 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
             </DropdownMenuPortal>
           </DropdownMenuSub>
           <DropdownMenuItem>
-            <Plus className="mr-2 h-4 w-4" />
-            <span>New Workspace</span>
-            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+            <CreateNewBoardModal>
+              <Plus className="mr-2 h-4 w-4" />
+              <span>New Board</span>
+              <DropdownMenuShortcut>⌘+B</DropdownMenuShortcut>
+            </CreateNewBoardModal>
           </DropdownMenuItem>
+          <CreateNewWorkspaceModal>
+            <DropdownMenuItem>
+              <Plus className="mr-2 h-4 w-4" />
+              <span>New Workspace</span>
+              <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </CreateNewWorkspaceModal>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

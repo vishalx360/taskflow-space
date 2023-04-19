@@ -1,3 +1,4 @@
+import { useBoardSettingsModal } from "@/contexts/BoardSettingsModalContext";
 import IconButton from "@/modules/Global/IconButton";
 import {
   Accordion,
@@ -5,19 +6,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/modules/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
-import { Dialog, Transition } from "@headlessui/react";
 import { type Board } from "@prisma/client";
+import { Layout } from "lucide-react";
 import {
   Children,
-  Fragment,
   cloneElement,
   useEffect,
   useRef,
-  useState,
   type ReactNode,
 } from "react";
-import { FiX } from "react-icons/fi";
 import { MdSettings } from "react-icons/md";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
@@ -33,7 +38,7 @@ export default function BoardSettingsModal({
   isGlobal?: boolean;
   closeGlobalModal?: () => void;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const { closeModal, isOpen, openModal } = useBoardSettingsModal();
 
   const originalBgRef = useRef(board?.background);
   const currentBgRef = useRef(board?.background);
@@ -84,11 +89,15 @@ export default function BoardSettingsModal({
     });
     currentBgRef.current = background;
   };
-
-  function openModal() {
-    setIsOpen(true);
+  function setIsOpen(value: boolean) {
+    if (value) {
+      openModal(board);
+    } else {
+      closeModalSideEffect();
+    }
   }
-  function closeModal() {
+
+  function closeModalSideEffect() {
     console.log("closing modal");
     if (currentBgRef.current !== originalBgRef.current) {
       if (isGlobal) {
@@ -97,114 +106,65 @@ export default function BoardSettingsModal({
         UpdatelocalBackground(originalBgRef.current);
       }
     }
-    setIsOpen(false);
+    closeModal();
     closeGlobalModal && closeGlobalModal();
   }
 
   return (
     <>
-      {!isGlobal && (
-        <>
-          {children ? (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          {!isGlobal && (
             <>
-              {Children.map(children, (child: ReactNode) =>
-                cloneElement(child, { onClick: openModal })
+              {children ? (
+                <>
+                  {Children.map(children, (child: ReactNode) =>
+                    cloneElement(child, { onClick: openModal })
+                  )}
+                </>
+              ) : (
+                <IconButton
+                  onClick={openModal}
+                  Icon={MdSettings}
+                  className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
+                >
+                  <p className="hidden lg:inline">Settings</p>
+                </IconButton>
               )}
             </>
-          ) : (
-            <IconButton
-              onClick={openModal}
-              Icon={MdSettings}
-              className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
-            >
-              <p className="hidden lg:inline">Settings</p>
-            </IconButton>
           )}
-        </>
-      )}
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Layout /> Board Settings
+            </DialogTitle>
+          </DialogHeader>
 
-      <Transition
-        appear
-        show={isGlobal ? Boolean(board) : isOpen}
-        as={Fragment}
-      >
-        <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
-                  >
-                    Board Settings
-                    <button
-                      onClick={closeModal}
-                      type="button"
-                      className="rounded-lg p-2 text-xs text-inherit transition-all  hover:bg-neutral-500 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-10"
-                      aria-controls="navbar-default"
-                      aria-expanded="false"
-                    >
-                      <span className="sr-only">Close Image Preview</span>
-                      <FiX size="2em" />
-                    </button>
-                  </Dialog.Title>
-                  <Accordion
-                    type="single"
-                    defaultValue="board-details"
-                    collapsible
-                  >
-                    <UpdateBoardSection
-                      originalBgRef={originalBgRef}
-                      UpdatelocalBackground={
-                        isGlobal
-                          ? UpdateGlobalBackground
-                          : UpdatelocalBackground
-                      }
-                      board={board}
-                      setIsOpen={setIsOpen}
-                    />
-                    {/* <Divider /> */}
-                    <AccordionItem value="delete-section">
-                      <AccordionTrigger className="px-2">
-                        Delete board
-                      </AccordionTrigger>
-                      <AccordionContent className="p-2">
-                        {board && (
-                          <DeleteBoardSection
-                            board={board}
-                            closeModal={closeModal}
-                          />
-                        )}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
-          </div>
-        </Dialog>
-      </Transition>
+          <Accordion type="single" defaultValue="board-details" collapsible>
+            <UpdateBoardSection
+              originalBgRef={originalBgRef}
+              UpdatelocalBackground={
+                isGlobal ? UpdateGlobalBackground : UpdatelocalBackground
+              }
+              board={board}
+              setIsOpen={setIsOpen}
+            />
+            {/* <Divider /> */}
+            <AccordionItem value="delete-section">
+              <AccordionTrigger className="px-2">Delete board</AccordionTrigger>
+              <AccordionContent className="p-2">
+                {board && (
+                  <DeleteBoardSection
+                    board={board}
+                    closeModal={closeModalSideEffect}
+                  />
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

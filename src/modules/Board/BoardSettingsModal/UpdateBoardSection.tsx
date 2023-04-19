@@ -66,8 +66,8 @@ function UpdateBoardSection({
     >
       <Form>
         <AccordionItem value="board-details">
-          <AccordionTrigger className="px-2">Board details</AccordionTrigger>
-          <AccordionContent className="p-1">
+          <AccordionTrigger className="px-2">Basic details</AccordionTrigger>
+          <AccordionContent className="px-2">
             <Field name="name">
               {({ field, form, meta }: FieldProps) => (
                 <>
@@ -121,7 +121,7 @@ function UpdateBoardSection({
         </AccordionItem>
         <AccordionItem value="item-3">
           <AccordionTrigger className="px-2">Board backgorund</AccordionTrigger>
-          <AccordionContent className="p-1">
+          <AccordionContent className="px-2">
             <UpdateBoardBackgroundSection
               UpdatelocalBackground={UpdatelocalBackground}
             />
