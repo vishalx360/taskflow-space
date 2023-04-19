@@ -10,6 +10,10 @@ import { MdPeople } from "react-icons/md";
 import InviteSection from "./InviteSection";
 import LeaveWorkspaceSection from "./LeaveWorkspaceSection";
 import MembersList, { MemberListSkeleton } from "./MembersList";
+import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
+import { getGravatarUrl } from "react-awesome-gravatar";
+import getGravatar from "@/utils/getGravatar";
+import { Separator } from "@/modules/ui/separator";
 
 export default function WorkspaceMembersModal({
   workspace,
@@ -25,8 +29,8 @@ export default function WorkspaceMembersModal({
     api.workspace.getWorkspaceMembers.useQuery(
       {
         workspaceId: workspace?.id,
-      },
-      { enabled: isOpen, staleTime: 1000 * 60 * 5 }
+      }
+      // { enabled: isOpen }
     );
   function openModal(e) {
     console.log(e);
@@ -40,14 +44,33 @@ export default function WorkspaceMembersModal({
   )?.role;
 
   return (
-    <>
-      <IconButton
+    <div>
+      <button onClick={openModal} className="flex items-center gap-2">
+        <div className="flex items-center -space-x-3">
+          {members?.slice(0, 3)?.map((member) => {
+            return (
+              <Avatar
+                className="h-6 w-6 border-2 sm:h-8 sm:w-8"
+                key={member.id}
+              >
+                <AvatarImage
+                  src={member.user.image || getGravatar(member?.user?.email)}
+                />
+                <AvatarFallback>{member.user.name[0]}</AvatarFallback>
+              </Avatar>
+            );
+          })}
+        </div>
+        <h1 className="hidden lg:inline">Members</h1>
+      </button>
+      {/* <IconButton
         onClick={openModal}
         Icon={MdPeople}
         className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
       >
+        {members?.length}
         <p className={hideText ? "hidden lg:inline" : ""}>Members</p>
-      </IconButton>
+      </IconButton> */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
           <Transition.Child
@@ -120,6 +143,6 @@ export default function WorkspaceMembersModal({
           </div>
         </Dialog>
       </Transition>
-    </>
+    </div>
   );
 }

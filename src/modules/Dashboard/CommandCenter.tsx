@@ -8,12 +8,26 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/modules/ui/command";
-import { LayoutDashboard, PlusCircle } from "lucide-react";
+import { api } from "@/utils/api";
+import { LayoutDashboard } from "lucide-react";
 
 import { Layout, LucideSearch } from "lucide-react";
 
 function CommandCenter() {
   const [open, setOpen] = useState(false);
+  const utils = api.useContext();
+  const workspaces = utils.workspace.getAllWorkspace.getData();
+
+  const boards = useMemo(() => {
+    let all = [];
+    workspaces?.map((workspace) => {
+      const currentBoardList = utils.board.getAllBoards.getData({
+        workspaceId: workspace.id,
+      });
+      if (currentBoardList) all = [...all, ...currentBoardList];
+    });
+    return all;
+  }, [workspaces]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -34,11 +48,13 @@ function CommandCenter() {
         className="w-full rounded-full border  border-neutral-300/50 bg-neutral-300/40 p-2.5 px-4 text-neutral-500 hover:bg-neutral-200/80 md:max-w-[80%]"
       >
         <div className="flex items-center justify-between gap-8">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-1 sm:gap-5">
             <LucideSearch />
-            <h1 className="line-clamp-1 w-10 md:w-fit">Search for anything</h1>
+            <h1 className="line-clamp-1 sm:w-20 md:w-fit">
+              Type a command or search...
+            </h1>
           </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="hidden text-sm text-slate-500 dark:text-slate-400 md:inline">
             Press{" "}
             <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-slate-100 bg-slate-100 px-1.5 font-mono text-[10px] font-medium text-slate-600 opacity-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
               <span className="text-xs">⌘</span>M
@@ -54,21 +70,6 @@ function CommandCenter() {
         />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Search">
-            <CommandItem>
-              <Layout className="mr-2 h-4 w-4" />
-              <span>Search Board</span>
-            </CommandItem>
-            <CommandItem>
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Search Workspace</span>
-            </CommandItem>
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Search Team Member</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
           <CommandGroup heading="Create">
             <CommandItem>
               <Layout className="mr-2 h-4 w-4" />
@@ -80,11 +81,26 @@ function CommandCenter() {
               <span>Create New Workspace</span>
               <CommandShortcut>⌘P</CommandShortcut>
             </CommandItem>
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Workspace Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+
+          <CommandGroup heading="Search Boards">
+            {boards?.map((board) => {
+              let boardUrl = `/board/${board?.id}`;
+              const newParams = new URLSearchParams();
+              newParams.append("boardName", board?.name);
+              newParams.append("background", board?.background || "");
+              boardUrl = boardUrl + "?" + newParams.toString();
+
+              return (
+                <a key={board?.id} href={boardUrl}>
+                  <CommandItem>
+                    <Layout className="mr-2 h-4 w-4" />
+                    <span className="line-clamp-1"> {board?.name} </span>
+                  </CommandItem>
+                </a>
+              );
+            })}
           </CommandGroup>
         </CommandList>
       </CommandDialog>
@@ -94,5 +110,4 @@ function CommandCenter() {
 
 export default CommandCenter;
 
-import { Settings, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";

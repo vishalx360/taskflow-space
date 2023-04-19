@@ -1,4 +1,4 @@
-import Dashboard from "@/modules/Dashboard/DashboardLayout";
+import Dashboard from "@/modules/Dashboard/Dashboard";
 
 function DashboardPage() {
   return <Dashboard />;

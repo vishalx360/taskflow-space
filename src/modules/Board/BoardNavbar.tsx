@@ -23,7 +23,7 @@ function BoardNavbar({ board }: { board: Board }) {
             <FiArrowLeft className="text-xl" />
           </Link>
           <div className="flex items-center gap-2 md:gap-4">
-            <span className=" lg:text-md max-w-[90%] text-sm font-medium text-white  line-clamp-1 md:max-w-[20vw] md:text-xl lg:max-w-[20vw]">
+            <span className=" lg:text-md line-clamp-1 max-w-[90%] text-sm font-medium  text-white md:max-w-[20vw] md:text-xl lg:max-w-[20vw]">
               {board?.name}
             </span>
             <TooltipProvider>
