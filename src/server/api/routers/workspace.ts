@@ -146,6 +146,86 @@ export const WorkspaceRouter = createTRPCRouter({
             return ctx.sendEmail(mailOptions);
 
         }),
+    cancelInvite: protectedProcedure
+        .input(z.object({ workspaceInvitaionId: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            // check if the user is already a member of the workspace
+            const invitation = await ctx.prisma.workspaceMemberInvitation.findUnique({
+                where: {
+                    id: input.workspaceInvitaionId,
+                },
+            });
+            if (!invitation) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Invitation not found.",
+                });
+            }
+            if (invitation.senderId !== ctx.session.user.id) {
+                throw new TRPCError({
+                    code: "FORBIDDEN",
+                    message: "You are not the sender of this invite.",
+                });
+            }
+            return ctx.prisma.workspaceMemberInvitation.delete({
+                where: { id: input.workspaceInvitaionId }
+            });
+        }),
+
+    inviteResponse: protectedProcedure
+        .input(WorksapceInviteResponse)
+        .mutation(async ({ ctx, input }) => {
+            // check if the user is already a member of the workspace
+            const invitation = await ctx.prisma.workspaceMemberInvitation.findUnique({
+                where: {
+                    id: input.workspaceInvitaionId,
+                },
+            });
+            if (!invitation) {
+                throw new TRPCError({
+                    code: "NOT_FOUND",
+                    message: "Invitation not found.",
+                });
+            }
+            if (invitation.recepientId !== ctx.session.user.id) {
+                throw new TRPCError({
+                    code: "FORBIDDEN",
+                    message: "You are not the recepient of this invite.",
+                });
+            }
+
+            const isAlreadyMember = await ctx.prisma.workspaceMember.count({
+                where: {
+                    workspaceId: invitation.workspaceId,
+                    userId: invitation.recepientId,
+                },
+            });
+
+            const transactions = [];
+            const createWorkspaceMember = ctx.prisma.workspaceMember.create({
+                data: {
+                    workspaceId: invitation.workspaceId,
+                    role: invitation.role,
+                    userId: invitation.recepientId,
+                },
+            });
+            input.accept && transactions.push(createWorkspaceMember);
+
+            const deleteWorkspaceInvitation = ctx.prisma.workspaceMemberInvitation.delete({
+                where: { id: input.workspaceInvitaionId }
+            })
+            transactions.push(deleteWorkspaceInvitation);
+
+            if (isAlreadyMember) {
+                await deleteWorkspaceInvitation;
+                throw new TRPCError({
+                    code: "CONFLICT",
+                    message: "You are already a member of the workspace.",
+                });
+            }
+            await ctx.prisma.$transaction(transactions);
+            return input.accept;
+        }),
 
     getAllPendingInvitations: protectedProcedure
         .input(z.object({ workspaceId: z.string() }))
@@ -192,7 +272,7 @@ export const WorkspaceRouter = createTRPCRouter({
             });
         }),
 
-    getAllMyInvites: protectedProcedure
+    getAllMyReceviedInvites: protectedProcedure
         .query(async ({ ctx }) => {
             return ctx.prisma.workspaceMemberInvitation.findMany({
                 where: {
@@ -220,7 +300,34 @@ export const WorkspaceRouter = createTRPCRouter({
                 }
             });
         }),
-
+    getAllMySentInvites: protectedProcedure
+        .query(async ({ ctx }) => {
+            return ctx.prisma.workspaceMemberInvitation.findMany({
+                where: {
+                    senderId: ctx.session.user.id,
+                },
+                include: {
+                    Workspace: { select: { name: true, } },
+                    sender: {
+                        select: {
+                            name: true,
+                            email: true,
+                            image: true
+                        }
+                    },
+                    recepient: {
+                        select: {
+                            name: true,
+                            email: true,
+                            image: true
+                        }
+                    }
+                },
+                orderBy: {
+                    createdAt: "desc"
+                }
+            });
+        }),
     createNewWorkspace: protectedProcedure
         .input(CreateNewWorkspaceSchema)
         .mutation(async ({ ctx, input }) => {
@@ -438,59 +545,5 @@ export const WorkspaceRouter = createTRPCRouter({
             });
         }),
 
-    // accept invite or decline invite to join workspace
-    inviteResponse: protectedProcedure
-        .input(WorksapceInviteResponse)
-        .mutation(async ({ ctx, input }) => {
-            // check if the user is already a member of the workspace
-            const invitation = await ctx.prisma.workspaceMemberInvitation.findUnique({
-                where: {
-                    id: input.workspaceInvitaionId,
-                },
-            });
-            if (!invitation) {
-                throw new TRPCError({
-                    code: "NOT_FOUND",
-                    message: "Invitation not found.",
-                });
-            }
-            if (invitation.recepientId !== ctx.session.user.id) {
-                throw new TRPCError({
-                    code: "FORBIDDEN",
-                    message: "You are not the recepient of this invite.",
-                });
-            }
 
-            const isAlreadyMember = await ctx.prisma.workspaceMember.count({
-                where: {
-                    workspaceId: invitation.workspaceId,
-                    userId: invitation.recepientId,
-                },
-            });
-
-            const transactions = [];
-            const createWorkspaceMember = ctx.prisma.workspaceMember.create({
-                data: {
-                    workspaceId: invitation.workspaceId,
-                    role: invitation.role,
-                    userId: invitation.recepientId,
-                },
-            });
-            input.accept && transactions.push(createWorkspaceMember);
-
-            const deleteWorkspaceInvitation = ctx.prisma.workspaceMemberInvitation.delete({
-                where: { id: input.workspaceInvitaionId }
-            })
-            transactions.push(deleteWorkspaceInvitation);
-
-            if (isAlreadyMember) {
-                await deleteWorkspaceInvitation;
-                throw new TRPCError({
-                    code: "CONFLICT",
-                    message: "You are already a member of the workspace.",
-                });
-            }
-            await ctx.prisma.$transaction(transactions);
-            return input.accept;
-        }),
 })

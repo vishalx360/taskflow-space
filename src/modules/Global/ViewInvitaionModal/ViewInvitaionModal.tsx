@@ -20,7 +20,8 @@ export default function ViewInvitationModal({
   currentInvitation: null | WorkspaceMemberInvitationWithSenderAndRecevier;
 }) {
   const { data: session } = useSession();
-
+  const recepientEmail =
+    currentInvitation?.recepient?.email || currentInvitation?.recepientEmail;
   function closeModal() {
     setCurrentInvitation(null);
   }
@@ -28,7 +29,7 @@ export default function ViewInvitationModal({
   const utils = api.useContext();
   const { toast } = useToast();
 
-  const mutation = api.workspace.inviteResponse.useMutation({
+  const recepientMutation = api.workspace.inviteResponse.useMutation({
     onError(error) {
       toast({
         variant: "destructive",
@@ -49,11 +50,32 @@ export default function ViewInvitationModal({
       closeModal();
     },
   });
+  const senderMutation = api.workspace.cancelInvite.useMutation({
+    onError(error) {
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    },
+    onSuccess: async () => {
+      await utils.workspace.getAllMySentInvites
+        .invalidate()
+        .catch((err) => console.log(err));
+      toast({
+        title: "Canceled invitation",
+        // description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      closeModal();
+    },
+  });
 
   async function AcceptInvitation() {
     if (currentInvitation) {
       try {
-        await mutation.mutateAsync({
+        await recepientMutation.mutateAsync({
           workspaceInvitaionId: currentInvitation.id,
           accept: true,
         });
@@ -66,9 +88,23 @@ export default function ViewInvitationModal({
     if (currentInvitation) {
       try {
         setIsRejecting(true);
-        await mutation.mutateAsync({
+        await recepientMutation.mutateAsync({
           workspaceInvitaionId: currentInvitation.id,
           accept: false,
+        });
+        setIsRejecting(false);
+      } catch (err) {
+        console.log(err);
+        setIsRejecting(false);
+      }
+    }
+  }
+  async function CancelInvitation() {
+    if (currentInvitation) {
+      try {
+        setIsRejecting(true);
+        await senderMutation.mutateAsync({
+          workspaceInvitaionId: currentInvitation.id,
         });
         setIsRejecting(false);
       } catch (err) {
@@ -140,8 +176,7 @@ export default function ViewInvitationModal({
                     className="h-14 w-14 rounded-full border-2 border-white dark:border-gray-800"
                     src={
                       currentInvitation?.recepient?.image ||
-                      (currentInvitation?.recepient?.email &&
-                        getGravatar(currentInvitation?.recepient?.email)) ||
+                      (recepientEmail && getGravatar(recepientEmail)) ||
                       getGravatar("default")
                     }
                     alt=""
@@ -149,52 +184,77 @@ export default function ViewInvitationModal({
                 </div>
                 <div className="my-8 text-neutral-600">
                   <h1>
-                    <span className="font-semibold">
+                    <span className="font-medium">
                       {currentInvitation?.sender?.email === session?.user.email
                         ? "You "
                         : currentInvitation?.sender?.name}
                     </span>
                     {"  "}
                     invited{" "}
-                    {currentInvitation?.recepient?.email === session?.user.email
-                      ? "you "
-                      : currentInvitation?.recepient?.name}{" "}
+                    <span
+                      className="font-medium underline underline-offset-2
+                    
+                    
+                    "
+                    >
+                      {recepientEmail === session?.user.email
+                        ? "you "
+                        : currentInvitation?.recepient?.name || recepientEmail}
+                    </span>{" "}
                     to join{" "}
-                    <span className="font-semibold">
+                    <span className="font-medium">
                       {currentInvitation?.Workspace?.name}
                     </span>{" "}
                     workspace as a {currentInvitation?.role.toLowerCase()}
                   </h1>
                   <h2 className="mt-5">
-                    If you accept, you will be added as a member of the
+                    If accepted, recepient will be added as a member of the
                     workspace and will get access to all the boards.
                   </h2>
                 </div>
-                <div className="mt-2 flex items-center gap-5">
-                  <Button
-                    onClick={AcceptInvitation}
-                    isLoading={mutation.isLoading}
-                    loadingText="Accepting..."
-                    disabled={mutation.isLoading}
-                    type="submit"
-                    // className="w-full bg-green-200 text-green-700 hover:bg-green-300"
-                    className="w-full"
-                    LeftIcon={Check}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    onClick={RejectInvitation}
-                    isLoading={isRejecting}
-                    disabled={mutation.isLoading}
-                    loadingText="Rejecting..."
-                    type="submit"
-                    LeftIcon={FiX}
-                    variant="destructiveOutline"
-                  >
-                    Reject
-                  </Button>
-                </div>
+                {recepientEmail === session?.user.email && (
+                  <div className="mt-2 flex items-center gap-5">
+                    <Button
+                      onClick={AcceptInvitation}
+                      isLoading={recepientMutation.isLoading}
+                      loadingText="Accepting..."
+                      disabled={recepientMutation.isLoading}
+                      type="submit"
+                      // className="w-full bg-green-200 text-green-700 hover:bg-green-300"
+                      className="w-full"
+                      LeftIcon={Check}
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                      onClick={RejectInvitation}
+                      isLoading={isRejecting}
+                      disabled={recepientMutation.isLoading}
+                      loadingText="Rejecting..."
+                      type="submit"
+                      LeftIcon={FiX}
+                      variant="destructiveOutline"
+                    >
+                      Reject
+                    </Button>
+                  </div>
+                )}
+                {currentInvitation?.sender?.email === session?.user.email && (
+                  <div className="mt-2 ">
+                    <Button
+                      onClick={CancelInvitation}
+                      isLoading={isRejecting}
+                      disabled={recepientMutation.isLoading}
+                      loadingText="Rejecting..."
+                      type="submit"
+                      LeftIcon={FiX}
+                      className="w-full"
+                      variant="destructiveOutline"
+                    >
+                      Cancel Invitation
+                    </Button>
+                  </div>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>

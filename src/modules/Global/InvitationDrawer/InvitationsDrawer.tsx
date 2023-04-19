@@ -33,7 +33,7 @@ function InvitationDrawer() {
           Invitations
         </h1>
         <Divider className="my-2" />
-        <MyInvitationsList setCurrentInvitation={setCurrentInvitation} />
+        <ReceviedInvitationsList setCurrentInvitation={setCurrentInvitation} />
         {/* <a
             href="#"
             className="block bg-neutral-800 py-2 text-center font-bold text-white hover:underline dark:bg-gray-700"
@@ -47,7 +47,7 @@ function InvitationDrawer() {
 
 export default InvitationDrawer;
 
-export function MyInvitationsList({
+export function ReceviedInvitationsList({
   setCurrentInvitation,
 }: {
   setCurrentInvitation: Dispatch<
@@ -55,7 +55,7 @@ export function MyInvitationsList({
   >;
 }) {
   const { data: myInvitations, isLoading } =
-    api.workspace.getAllMyInvites.useQuery();
+    api.workspace.getAllMyReceviedInvites.useQuery();
 
   if (isLoading) {
     return (
@@ -80,7 +80,47 @@ export function MyInvitationsList({
         </>
       ) : (
         <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
-          No Invites found
+          No Invitations recevied
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function SentInvitationsList({
+  setCurrentInvitation,
+}: {
+  setCurrentInvitation: Dispatch<
+    SetStateAction<WorkspaceMemberInvitationWithSenderAndRecevier | null>
+  >;
+}) {
+  const { data: myInvitations, isLoading } =
+    api.workspace.getAllMySentInvites.useQuery();
+
+  if (isLoading) {
+    return (
+      <div className="">
+        <div className="p-4">
+          <InvitationDrawerSkeleton numberOfItems={4} />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="space-y-2">
+      {myInvitations?.length !== 0 ? (
+        <>
+          {myInvitations?.map((invitation) => (
+            <InvitationRow
+              setCurrentInvitation={setCurrentInvitation}
+              key={invitation.id}
+              invitation={invitation}
+            />
+          ))}
+        </>
+      ) : (
+        <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
+          No Invitations sent
         </div>
       )}
     </div>

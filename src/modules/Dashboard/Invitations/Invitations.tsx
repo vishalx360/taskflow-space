@@ -1,7 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/modules/ui/tabs";
+import { LucideArrowDown, LucideArrowUp } from "lucide-react";
 import { useState } from "react";
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../../Global/InvitationDrawer/InvitationRow";
-import { MyInvitationsList } from "../../Global/InvitationDrawer/InvitationsDrawer";
+import {
+  ReceviedInvitationsList,
+  SentInvitationsList,
+} from "../../Global/InvitationDrawer/InvitationsDrawer";
 import ViewInvitationModal from "../../Global/ViewInvitaionModal/ViewInvitaionModal";
 
 function Invitations() {
@@ -23,19 +27,22 @@ function Invitations() {
       />
       <Tabs defaultValue="recevied" className="w-full px-3">
         <TabsList>
-          <TabsTrigger value="recevied">Recevied</TabsTrigger>
-          <TabsTrigger disabled value="sent">
+          <TabsTrigger value="recevied">
+            <LucideArrowDown width={20} className="mr-2" />
+            Recevied
+          </TabsTrigger>
+          <TabsTrigger value="sent">
+            <LucideArrowUp width={20} className="mr-2" />
             Sent
           </TabsTrigger>
         </TabsList>
         <TabsContent value="recevied">
-          <MyInvitationsList setCurrentInvitation={setCurrentInvitation} />
+          <ReceviedInvitationsList
+            setCurrentInvitation={setCurrentInvitation}
+          />
         </TabsContent>
         <TabsContent value="sent">
-          <div>
-            <h1 className="text-2xl font-bold">Sent Invitations</h1>
-          </div>
-          {/* <MyInvitationsList setCurrentInvitation={setCurrentInvitation} /> */}
+          <SentInvitationsList setCurrentInvitation={setCurrentInvitation} />
         </TabsContent>
       </Tabs>
 
