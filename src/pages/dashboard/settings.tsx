@@ -1,10 +1,10 @@
 import DashboardLayout from "@/modules/Dashboard/DashboardLayout";
-import Overview from "@/modules/Dashboard/OverView";
+import Settings from "@/modules/Settings/Settings";
 
 function DashboardPage() {
   return (
     <DashboardLayout>
-      <Overview />
+      <Settings />
     </DashboardLayout>
   );
 }

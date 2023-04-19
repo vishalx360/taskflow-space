@@ -7,7 +7,7 @@ import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext
 import { useSession } from "next-auth/react";
 import CommandCenter from "./CommandCenter";
 
-function OverviewPage() {
+function Overview() {
   const { data: session } = useSession();
   return (
     <main className="container mx-auto p-0  md:px-5">
@@ -41,4 +41,4 @@ function OverviewPage() {
   );
 }
 
-export default OverviewPage;
+export default Overview;

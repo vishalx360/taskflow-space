@@ -10,7 +10,7 @@ import { CreateNewWorkspaceSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { LayoutDashboard, Plus } from "lucide-react";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";
 
@@ -27,7 +27,8 @@ export default function CreateNewWorkspaceModal({
   function closeModal() {
     setIsOpen(false);
   }
-  function openModal() {
+  function openModal(e) {
+    e.stopPropagation();
     setIsOpen(true);
   }
 

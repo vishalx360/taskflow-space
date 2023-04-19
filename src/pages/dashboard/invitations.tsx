@@ -1,10 +1,10 @@
 import DashboardLayout from "@/modules/Dashboard/DashboardLayout";
-import Overview from "@/modules/Dashboard/OverView";
+import Invitations from "@/modules/Dashboard/Invitations/Invitations";
 
 function DashboardPage() {
   return (
     <DashboardLayout>
-      <Overview />
+      <Invitations />
     </DashboardLayout>
   );
 }

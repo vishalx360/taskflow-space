@@ -78,7 +78,8 @@ export default function CreateNewBoardModal({
   function closeModal() {
     setIsOpen(false);
   }
-  function openModal() {
+  function openModal(e) {
+    e.stopPropagation();
     setIsOpen(true);
   }
 

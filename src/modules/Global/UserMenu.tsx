@@ -113,18 +113,22 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
           </DropdownMenuSub>
           <DropdownMenuItem>
             <CreateNewBoardModal>
-              <Plus className="mr-2 h-4 w-4" />
-              <span>New Board</span>
-              <DropdownMenuShortcut>⌘+B</DropdownMenuShortcut>
+              <div className="flex items-center">
+                <Plus className="mr-2 h-4 w-4" />
+                <span>New Board</span>
+                <DropdownMenuShortcut>⌘+B</DropdownMenuShortcut>
+              </div>
             </CreateNewBoardModal>
           </DropdownMenuItem>
-          <CreateNewWorkspaceModal>
-            <DropdownMenuItem>
-              <Plus className="mr-2 h-4 w-4" />
-              <span>New Workspace</span>
-              <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </CreateNewWorkspaceModal>
+          <DropdownMenuItem>
+            <CreateNewWorkspaceModal>
+              <div className="flex items-center">
+                <Plus className="mr-2 h-4 w-4" />
+                <span>New Workspace</span>
+                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+              </div>
+            </CreateNewWorkspaceModal>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
