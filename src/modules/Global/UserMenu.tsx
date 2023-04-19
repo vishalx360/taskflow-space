@@ -33,6 +33,7 @@ import Image from "next/image";
 import { FiChevronDown } from "react-icons/fi";
 import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
 import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
+import Link from "next/link";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
@@ -75,21 +76,27 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Home className="mr-2 h-4 w-4" />
-            <span>Overview</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Mails className="mr-2 h-4 w-4" />
-            <span>Invitations</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <Link href="/dashboard/overview">
+            <DropdownMenuItem>
+              <Home className="mr-2 h-4 w-4" />
+              Overview
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/dashboard/invitations">
+            <DropdownMenuItem>
+              <Mails className="mr-2 h-4 w-4" />
+              Invitations
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/dashboard/settings">
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

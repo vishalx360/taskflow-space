@@ -7,6 +7,7 @@ import {
   SentInvitationsList,
 } from "../../Global/InvitationDrawer/InvitationsDrawer";
 import ViewInvitationModal from "../../Global/ViewInvitaionModal/ViewInvitaionModal";
+import DashboardNavbar from "@/modules/Global/DashboardNavbar";
 
 function Invitations() {
   const [currentInvitation, setCurrentInvitation] =

@@ -11,23 +11,19 @@ import {
 import { api } from "@/utils/api";
 import { LayoutDashboard } from "lucide-react";
 
+import { useEffect, useState } from "react";
+import CreateNewBoardModal from "./CreateNewBoardModal";
+import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
+
+import { Workspace } from "@prisma/client";
 import { Layout, LucideSearch } from "lucide-react";
+import Link from "next/link";
 
 function CommandCenter() {
   const [open, setOpen] = useState(false);
-  const utils = api.useContext();
-  const workspaces = utils.workspace.getAllWorkspace.getData();
-
-  const boards = useMemo(() => {
-    let all = [];
-    workspaces?.map((workspace) => {
-      const currentBoardList = utils.board.getAllBoards.getData({
-        workspaceId: workspace.id,
-      });
-      if (currentBoardList) all = [...all, ...currentBoardList];
-    });
-    return all;
-  }, [workspaces]);
+  const workspaces = api.workspace.getAllWorkspace.useQuery(undefined, {
+    enabled: open,
+  });
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -48,11 +44,9 @@ function CommandCenter() {
         className="w-full rounded-full border  border-neutral-300/50 bg-neutral-300/40 p-2.5 px-4 text-neutral-500 hover:bg-neutral-200/80 md:max-w-[80%]"
       >
         <div className="flex items-center justify-between gap-8">
-          <div className="flex items-center gap-1 sm:gap-5">
+          <div className="flex items-center gap-3 sm:gap-5">
             <LucideSearch />
-            <h1 className="line-clamp-1 sm:w-20 md:w-fit">
-              Type a command or search...
-            </h1>
+            <h1 className="line-clamp-1 ">Type a command or search...</h1>
           </div>
           <p className="hidden text-sm text-slate-500 dark:text-slate-400 md:inline">
             Press{" "}
@@ -89,22 +83,12 @@ function CommandCenter() {
           <CommandSeparator />
 
           <CommandGroup heading="Search Boards">
-            {boards?.map((board) => {
-              let boardUrl = `/board/${board?.id}`;
-              const newParams = new URLSearchParams();
-              newParams.append("boardName", board?.name);
-              newParams.append("background", board?.background || "");
-              boardUrl = boardUrl + "?" + newParams.toString();
-
-              return (
-                <a key={board?.id} href={boardUrl}>
-                  <CommandItem>
-                    <Layout className="mr-2 h-4 w-4" />
-                    <span className="line-clamp-1"> {board?.name} </span>
-                  </CommandItem>
-                </a>
-              );
-            })}
+            {workspaces.data?.map((workspace) => (
+              <WorkspaceBoardsCommandItem
+                key={workspace.id}
+                workspace={workspace}
+              />
+            ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>
@@ -114,6 +98,28 @@ function CommandCenter() {
 
 export default CommandCenter;
 
-import { useEffect, useMemo, useState } from "react";
-import CreateNewBoardModal from "./CreateNewBoardModal";
-import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
+function WorkspaceBoardsCommandItem({ workspace }: { workspace: Workspace }) {
+  const { data: boards } = api.board.getAllBoards.useQuery({
+    workspaceId: workspace.id,
+  });
+  return (
+    <>
+      {boards?.map((board) => {
+        let boardUrl = `/board/${board?.id}`;
+        const newParams = new URLSearchParams();
+        newParams.append("boardName", board?.name);
+        newParams.append("background", board?.background || "");
+        boardUrl = boardUrl + "?" + newParams.toString();
+
+        return (
+          <Link key={board?.id} href={boardUrl}>
+            <CommandItem>
+              <Layout className="mr-2 h-4 w-4" />
+              <span className="line-clamp-1"> {board?.name} </span>
+            </CommandItem>
+          </Link>
+        );
+      })}
+    </>
+  );
+}

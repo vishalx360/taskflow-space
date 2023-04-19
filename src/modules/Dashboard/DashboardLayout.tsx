@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 import Settings from "../Settings/Settings";
+import DashboardNavbar from "./DashboardNavbar";
 import Invitations from "./Invitations/Invitations";
 import Overview from "./OverView";
 
@@ -93,21 +94,25 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       </div>
       {/* Main Section */}
       <AnimatePresence mode="wait">
-        <motion.main
-          className="h-screen w-full overflow-y-auto"
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          // custom={direction}
-          transition={{
-            x: { type: "inertia", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-          key={pathname}
-        >
-          {children}
-        </motion.main>
+        <div className="h-screen w-full overflow-y-auto">
+          {pathname !== "/dashboard/overview" && pathname !== "/dashboard" && (
+            <DashboardNavbar />
+          )}
+          <motion.main
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            // custom={direction}
+            transition={{
+              x: { type: "inertia", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            key={pathname}
+          >
+            {children}
+          </motion.main>
+        </div>
       </AnimatePresence>
     </div>
   );

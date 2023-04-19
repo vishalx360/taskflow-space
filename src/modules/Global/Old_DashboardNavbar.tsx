@@ -15,7 +15,7 @@ const Items = [
   { title: "Settings", link: "/settings", isExternal: false },
 ];
 
-function DashboardNavbar() {
+function Old_DashboardNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   function toggel() {
     setIsOpen((prev) => !prev);
@@ -95,8 +95,8 @@ function DashboardNavbar() {
                     <Link
                       href={item.link}
                       {...externalProps}
-                      className={`decoration-accent md:hover:text-accent block scroll-smooth rounded py-2 pl-3 pr-4 text-lg text-gray-50 decoration-2 underline-offset-8 hover:bg-gray-100 
-                                md:border-0 md:p-0 md:hover:bg-transparent ${
+                      className={`block scroll-smooth rounded py-2 pl-3 pr-4 text-lg text-gray-50 decoration-accent decoration-2 underline-offset-8 hover:bg-gray-100 md:border-0 
+                                md:p-0 md:hover:bg-transparent md:hover:text-accent ${
                                   item.link === pathname ? "underline" : ""
                                 }`}
                     >
@@ -121,7 +121,7 @@ function DashboardNavbar() {
   );
 }
 
-export default DashboardNavbar;
+export default Old_DashboardNavbar;
 
 function AccountMenu() {
   const { data: session } = useSession();

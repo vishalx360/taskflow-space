@@ -107,7 +107,7 @@ export default function CreateNewBoardModal({
   });
 
   return (
-    <>
+    <div className="w-full" onClick={(e) => e.stopPropagation()}>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           {children ? (
@@ -362,6 +362,6 @@ export default function CreateNewBoardModal({
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 }
