@@ -83,9 +83,9 @@ function Dashboard() {
   const Section = Sections[currentPath] ? Sections[currentPath] : OverviewPage;
 
   return (
-    <div className="relative flex flex-row  ">
+    <div className="relative flex items-center  overflow-hidden ">
       {/* <DashboardSidebar /> */}
-      <div className="fixed left-0 top-0 hidden h-screen w-[20em] bg-neutral-200 md:block">
+      <div className=" left-0 top-0 hidden h-screen w-[25em] bg-neutral-200 md:block">
         <div className="flex h-20 flex-col items-center justify-center bg-neutral-500/5">
           <Link href="/" className="p-5">
             <LogoImage dark width={220} />
@@ -115,14 +115,14 @@ function Dashboard() {
           ))}
         </div>
         {/* account section */}
-        <div className="absolute bottom-6 w-full p-5">
+        <div className="sticky bottom-6 w-full  p-5">
           <UserMenu withDetails />
         </div>
       </div>
       {/* Main Section */}
       <AnimatePresence mode="wait" custom={direction}>
         <motion.main
-          className="h-screen flex-1"
+          className="h-screen w-full overflow-y-auto"
           variants={variants}
           initial="enter"
           animate="center"

@@ -3,14 +3,13 @@ import { useState } from "react";
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../../Global/InvitationDrawer/InvitationRow";
 import { MyInvitationsList } from "../../Global/InvitationDrawer/InvitationsDrawer";
 import ViewInvitationModal from "../../Global/ViewInvitaionModal/ViewInvitaionModal";
-import DashboardMobileNavBar from "../DashboardMobileNavBar";
 
 function Invitations() {
   const [currentInvitation, setCurrentInvitation] =
     useState<null | WorkspaceMemberInvitationWithSenderAndRecevier>(null);
 
   return (
-    <main className="container mx-auto p-0 md:ml-[22em] md:px-5">
+    <main className="container mx-auto p-0 md:px-5">
       <div className="m-5 mt-10 text-black md:block  lg:flex-row">
         {/* header */}
         <h1 className="text-2xl font-bold md:text-4xl">Invitations</h1>
