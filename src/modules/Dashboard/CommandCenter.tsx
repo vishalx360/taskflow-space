@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
 
-import { Workspace } from "@prisma/client";
+import { type Workspace } from "@prisma/client";
 import { Layout, LucideSearch } from "lucide-react";
 import Link from "next/link";
 

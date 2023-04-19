@@ -1,5 +1,4 @@
 import {
-  Github,
   Home,
   LifeBuoy,
   LogOut,
@@ -8,7 +7,6 @@ import {
   Mails,
   MessageSquare,
   Plus,
-  PlusCircle,
   Settings,
   UserPlus,
 } from "lucide-react";
@@ -30,10 +28,10 @@ import {
 import getGravatar from "@/utils/getGravatar";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { FiChevronDown } from "react-icons/fi";
 import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
 import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
-import Link from "next/link";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();

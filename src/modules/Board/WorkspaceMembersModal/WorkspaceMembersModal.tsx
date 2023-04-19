@@ -1,19 +1,15 @@
 import Divider from "@/modules/Global/Divider";
-import IconButton from "@/modules/Global/IconButton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
 import { api } from "@/utils/api";
+import getGravatar from "@/utils/getGravatar";
 import { Dialog, Transition } from "@headlessui/react";
 import { type Workspace } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import { Fragment, useState } from "react";
 import { FiX } from "react-icons/fi";
-import { MdPeople } from "react-icons/md";
 import InviteSection from "./InviteSection";
 import LeaveWorkspaceSection from "./LeaveWorkspaceSection";
 import MembersList, { MemberListSkeleton } from "./MembersList";
-import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
-import { getGravatarUrl } from "react-awesome-gravatar";
-import getGravatar from "@/utils/getGravatar";
-import { Separator } from "@/modules/ui/separator";
 
 export default function WorkspaceMembersModal({
   workspace,

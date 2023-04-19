@@ -13,7 +13,6 @@ import { type DropResult } from "react-beautiful-dnd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { FiArrowLeft } from "react-icons/fi";
 import { useDebouncedCallback } from "use-debounce";
-import { BoardContextMenu } from "../Global/BoardContextMenu";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";

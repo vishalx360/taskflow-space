@@ -32,14 +32,14 @@ export function TaskCard({ task, index }: { task: Task; index: number }) {
                 }`}
               >
                 <p
-                  className={`md:text-md text-sm font-medium text-black line-clamp-2 ${
+                  className={`md:text-md line-clamp-2 text-sm font-medium text-black ${
                     task?.pending ? "text-neutral-600" : "text-black"
                   }`}
                 >
                   {task?.title}
                 </p>
                 {task?.description && (
-                  <p className="mt-3 text-sm text-neutral-500 line-clamp-2">
+                  <p className="mt-3 line-clamp-2 text-sm text-neutral-500">
                     {task?.description}
                   </p>
                 )}
