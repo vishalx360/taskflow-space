@@ -78,11 +78,13 @@ function CommandCenter() {
                 <CommandShortcut>⌘P</CommandShortcut>
               </CommandItem>
             </CreateNewBoardModal>
-            <CommandItem>
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Create New Workspace</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
+            <CreateNewWorkspaceModal>
+              <CommandItem>
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Create New Workspace</span>
+                <CommandShortcut>⌘P</CommandShortcut>
+              </CommandItem>
+            </CreateNewWorkspaceModal>
           </CommandGroup>
           <CommandSeparator />
 

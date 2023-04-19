@@ -17,7 +17,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/modules/ui/accordion";
-import { type Workspace } from "@prisma/client";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { Plus, RefreshCcw, Table2 } from "lucide-react";
 import { useRef, useState, type ReactNode } from "react";
