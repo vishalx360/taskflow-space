@@ -10,7 +10,7 @@ import CommandCenter from "./CommandCenter";
 function Overview() {
   const { data: session } = useSession();
   return (
-    <main className="container mx-auto p-0  md:px-5">
+    <>
       <div className="m-5 mt-10 hidden  text-black md:block  lg:flex-row">
         {/* header */}
         <h1 className="text-2xl font-bold md:text-4xl">
@@ -37,7 +37,7 @@ function Overview() {
       <BoardSettingsModalProvider>
         <Workspaces />
       </BoardSettingsModalProvider>
-    </main>
+    </>
   );
 }
 

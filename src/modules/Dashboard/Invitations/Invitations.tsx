@@ -13,7 +13,7 @@ function Invitations() {
     useState<null | WorkspaceMemberInvitationWithSenderAndRecevier>(null);
 
   return (
-    <main className="container mx-auto p-0 md:px-5">
+    <>
       <div className="m-5 mt-10 text-black md:block  lg:flex-row">
         {/* header */}
         <h1 className="text-2xl font-bold md:text-4xl">Invitations</h1>
@@ -26,7 +26,7 @@ function Invitations() {
         currentInvitation={currentInvitation}
       />
       <Tabs defaultValue="recevied" className="w-full px-3">
-        <TabsList>
+        <TabsList className="mb-5">
           <TabsTrigger value="recevied">
             <LucideArrowDown width={20} className="mr-2" />
             Recevied
@@ -47,7 +47,7 @@ function Invitations() {
       </Tabs>
 
       {/* List of all invitations with open invitsaton */}
-    </main>
+    </>
   );
 }
 
