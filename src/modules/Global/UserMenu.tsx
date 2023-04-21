@@ -33,6 +33,7 @@ import { FiChevronDown } from "react-icons/fi";
 import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
 import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
 import { AboutModal } from "./AboutModal";
+import { SupportModal } from "./SupportModal";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
@@ -144,8 +145,10 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
           </AboutModal>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <LifeBuoy className="mr-2 h-4 w-4" />
-          <span>Support</span>
+          <SupportModal>
+            <LifeBuoy className="mr-2 h-4 w-4" />
+            <span>Support</span>
+          </SupportModal>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
