@@ -1,4 +1,3 @@
-import Divider from "@/modules/Global/Divider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
 import {
   Dialog,
@@ -10,13 +9,12 @@ import {
 import { api } from "@/utils/api";
 import getGravatar from "@/utils/getGravatar";
 import { type Workspace } from "@prisma/client";
-import { LucideNetwork, LucideUserMinus, LucideUsers } from "lucide-react";
+import { LucideUsers } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import InviteSection from "./InviteSection";
 import LeaveWorkspaceSection from "./LeaveWorkspaceSection";
 import MembersList, { MemberListSkeleton } from "./MembersList";
-import { MdOutlinePeopleAlt, MdPeople, MdPeopleAlt } from "react-icons/md";
 
 export default function WorkspaceMembersModal({
   workspace,

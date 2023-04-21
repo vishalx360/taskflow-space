@@ -136,7 +136,7 @@ export default function BoardSettingsModal({
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex items-center gap-4 font-medium">
               <Layout /> Board Settings
             </DialogTitle>
           </DialogHeader>

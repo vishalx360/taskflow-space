@@ -84,7 +84,7 @@ export default function CreateNewWorkspaceModal({
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+            <DialogTitle className="flex items-center gap-4 font-medium">
               <LayoutDashboard />
               Create new workspace
             </DialogTitle>

@@ -5,6 +5,7 @@ import TaskList, {
 } from "@/modules/Board/TaskList";
 import { api } from "@/utils/api";
 import { type Board, type Task } from "@prisma/client";
+import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Error from "next/error";
 import Link from "next/link";
@@ -16,7 +17,6 @@ import { useDebouncedCallback } from "use-debounce";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
-import { AnimatePresence, motion } from "framer-motion";
 
 const DragDropContext = dynamic(
   () =>

@@ -1,12 +1,17 @@
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
 import getGravatar from "@/utils/getGravatar";
-import { Dialog, Transition } from "@headlessui/react";
-import { Check } from "lucide-react";
+import { Check, LucideMail } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { FiX } from "react-icons/fi";
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../InvitationDrawer/InvitationRow";
 
@@ -115,151 +120,128 @@ export default function ViewInvitationModal({
   }
 
   return (
-    <Transition appear show={Boolean(currentInvitation)} as={Fragment}>
-      <Dialog as="div" className="relative z-[80]" onClose={closeModal}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
-        </Transition.Child>
+    <Dialog
+      open={Boolean(currentInvitation)}
+      // className="relative z-[80]"
+      onOpenChange={(open) => {
+        if (!open) {
+          closeModal();
+        }
+      }}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-4 font-medium">
+            <LucideMail width={20} />
+            Workspace Invitation
+          </DialogTitle>
+        </DialogHeader>
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <Dialog.Title
-                  as="h3"
-                  className="flex items-center justify-between gap-5 text-lg font-medium leading-6 text-gray-900 "
-                >
-                  Workspace Invite
-                  <button
-                    onClick={closeModal}
-                    type="button"
-                    className="rounded-lg p-2 text-xs text-inherit transition-all  hover:bg-neutral-500 hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-10"
-                    aria-controls="navbar-default"
-                    aria-expanded="false"
-                  >
-                    <span className="sr-only">Close Image Preview</span>
-                    <FiX size="2em" />
-                  </button>
-                </Dialog.Title>
-                <div className="my-5 flex items-center justify-center -space-x-4">
-                  <Image
-                    height={20}
-                    width={20}
-                    className="h-14 w-14 rounded-full border-2 border-white dark:border-gray-800"
-                    src={
-                      currentInvitation?.sender?.image ||
-                      (currentInvitation?.sender?.email &&
-                        getGravatar(currentInvitation?.sender?.email)) ||
-                      getGravatar("default")
-                    }
-                    alt=""
-                  />
-                  <Image
-                    height={20}
-                    width={20}
-                    className="h-14 w-14 rounded-full border-2 border-white dark:border-gray-800"
-                    src={
-                      currentInvitation?.recepient?.image ||
-                      (recepientEmail && getGravatar(recepientEmail)) ||
-                      getGravatar("default")
-                    }
-                    alt=""
-                  />
-                </div>
-                <div className="my-8 text-neutral-600">
-                  <h1>
-                    <span className="font-medium">
-                      {currentInvitation?.sender?.email === session?.user.email
-                        ? "You "
-                        : currentInvitation?.sender?.name}
-                    </span>
-                    {"  "}
-                    invited{" "}
-                    <span
-                      className="font-medium underline underline-offset-2
+        <div className="my-5 flex items-center justify-center -space-x-4">
+          <Image
+            height={20}
+            width={20}
+            className="h-14 w-14 rounded-full border-2 border-white dark:border-gray-800"
+            src={
+              currentInvitation?.sender?.image ||
+              (currentInvitation?.sender?.email &&
+                getGravatar(currentInvitation?.sender?.email)) ||
+              getGravatar("default")
+            }
+            alt=""
+          />
+          <Image
+            height={20}
+            width={20}
+            className="h-14 w-14 rounded-full border-2 border-white dark:border-gray-800"
+            src={
+              currentInvitation?.recepient?.image ||
+              (recepientEmail && getGravatar(recepientEmail)) ||
+              getGravatar("default")
+            }
+            alt=""
+          />
+        </div>
+        <div className="my-2 text-neutral-600">
+          <div className="mb-2 flex items-center gap-2">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-neutral-900 text-sm uppercase  text-white">
+              {currentInvitation?.Workspace.name[0]}
+            </div>
+            <div>{currentInvitation?.Workspace.name}</div>
+          </div>
+          <h1>
+            <span className="font-medium">
+              {currentInvitation?.sender?.email === session?.user.email
+                ? "You "
+                : currentInvitation?.sender?.name}
+            </span>
+            {"  "}
+            invited{" "}
+            <span
+              className="font-medium underline underline-offset-2
                     
                     
                     "
-                    >
-                      {recepientEmail === session?.user.email
-                        ? "you "
-                        : currentInvitation?.recepient?.name || recepientEmail}
-                    </span>{" "}
-                    to join{" "}
-                    <span className="font-medium">
-                      {currentInvitation?.Workspace?.name}
-                    </span>{" "}
-                    workspace as a {currentInvitation?.role.toLowerCase()}
-                  </h1>
-                  <h2 className="mt-5">
-                    If accepted, recepient will be added as a member of the
-                    workspace and will get access to all the boards.
-                  </h2>
-                </div>
-                {recepientEmail === session?.user.email && (
-                  <div className="mt-2 flex items-center gap-5">
-                    <Button
-                      onClick={AcceptInvitation}
-                      isLoading={recepientMutation.isLoading}
-                      loadingText="Accepting..."
-                      disabled={recepientMutation.isLoading}
-                      type="submit"
-                      // className="w-full bg-green-200 text-green-700 hover:bg-green-300"
-                      className="w-full"
-                      LeftIcon={Check}
-                    >
-                      Accept
-                    </Button>
-                    <Button
-                      onClick={RejectInvitation}
-                      isLoading={isRejecting}
-                      disabled={recepientMutation.isLoading}
-                      loadingText="Rejecting..."
-                      type="submit"
-                      LeftIcon={FiX}
-                      variant="destructiveOutline"
-                    >
-                      Reject
-                    </Button>
-                  </div>
-                )}
-                {currentInvitation?.sender?.email === session?.user.email && (
-                  <div className="mt-2 ">
-                    <Button
-                      onClick={CancelInvitation}
-                      isLoading={isRejecting}
-                      disabled={recepientMutation.isLoading}
-                      loadingText="Rejecting..."
-                      type="submit"
-                      LeftIcon={FiX}
-                      className="w-full"
-                      variant="destructiveOutline"
-                    >
-                      Cancel Invitation
-                    </Button>
-                  </div>
-                )}
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
+            >
+              {recepientEmail === session?.user.email
+                ? "you "
+                : currentInvitation?.recepient?.name || recepientEmail}
+            </span>{" "}
+            to join{" "}
+            <span className="font-medium">
+              {currentInvitation?.Workspace?.name}
+            </span>{" "}
+            workspace as a {currentInvitation?.role.toLowerCase()}
+          </h1>
+          <h2 className="mt-5">
+            If accepted, recepient will be added as a member of the workspace
+            and will get access to all the boards.
+          </h2>
         </div>
-      </Dialog>
-    </Transition>
+        {recepientEmail === session?.user.email && (
+          <div className="mt-2 flex items-center gap-5">
+            <Button
+              onClick={AcceptInvitation}
+              isLoading={recepientMutation.isLoading}
+              loadingText="Accepting..."
+              disabled={recepientMutation.isLoading}
+              type="submit"
+              // className="w-full bg-green-200 text-green-700 hover:bg-green-300"
+              className="w-full"
+              LeftIcon={Check}
+            >
+              Accept
+            </Button>
+            <Button
+              onClick={RejectInvitation}
+              isLoading={isRejecting}
+              disabled={recepientMutation.isLoading}
+              loadingText="Rejecting..."
+              type="submit"
+              LeftIcon={FiX}
+              variant="destructiveOutline"
+            >
+              Reject
+            </Button>
+          </div>
+        )}
+        {currentInvitation?.sender?.email === session?.user.email && (
+          <div className="mt-2 ">
+            <Button
+              onClick={CancelInvitation}
+              isLoading={isRejecting}
+              disabled={recepientMutation.isLoading}
+              loadingText="Rejecting..."
+              type="submit"
+              LeftIcon={FiX}
+              className="w-full"
+              variant="destructiveOutline"
+            >
+              Cancel Invitation
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
