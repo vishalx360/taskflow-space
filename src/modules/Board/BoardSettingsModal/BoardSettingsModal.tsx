@@ -126,11 +126,11 @@ export default function BoardSettingsModal({
               ) : (
                 <Button
                   onClick={openModal}
-                  Icon={MdSettings}
+                  LeftIcon={MdSettings}
                   variant="default"
                   className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
                 >
-                  <p className="hidden lg:inline">Settings</p>
+                  <p>Settings</p>
                 </Button>
               )}
             </>
