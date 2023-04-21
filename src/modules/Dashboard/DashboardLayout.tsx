@@ -11,6 +11,7 @@ import DashboardNavbar from "./DashboardNavbar";
 import Invitations from "./Invitations/Invitations";
 import Overview from "./OverView";
 import { simpleVariants } from "../Global/Fade";
+import { Scrollbars } from "react-custom-scrollbars-2";
 
 const NavlinkVariants = cva(
   "relative flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
@@ -81,24 +82,26 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main Section */}
       <AnimatePresence mode="wait">
         <div className="h-screen w-full overflow-y-auto">
-          <div className="container mx-auto p-0  md:px-5">
-            {pathname !== "/dashboard/overview" &&
-              pathname !== "/dashboard" && <DashboardNavbar />}
-            <motion.main
-              variants={simpleVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              // custom={direction}
-              transition={{
-                x: { type: "inertia", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
-              }}
-              key={pathname}
-            >
-              {children}
-            </motion.main>
-          </div>
+          <Scrollbars>
+            <div className="container mx-auto p-0  md:px-5">
+              {pathname !== "/dashboard/overview" &&
+                pathname !== "/dashboard" && <DashboardNavbar />}
+              <motion.main
+                variants={simpleVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                // custom={direction}
+                transition={{
+                  x: { type: "inertia", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 },
+                }}
+                key={pathname}
+              >
+                {children}
+              </motion.main>
+            </div>
+          </Scrollbars>
         </div>
       </AnimatePresence>
     </div>
