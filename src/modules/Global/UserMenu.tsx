@@ -32,6 +32,7 @@ import Link from "next/link";
 import { FiChevronDown } from "react-icons/fi";
 import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
 import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
+import { AboutModal } from "./AboutModal";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
@@ -137,8 +138,10 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <LucideInfo className="mr-2 h-4 w-4" />
-          <span>About</span>
+          <AboutModal>
+            <LucideInfo className="mr-2 h-4 w-4" />
+            <span>About</span>
+          </AboutModal>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <LifeBuoy className="mr-2 h-4 w-4" />
