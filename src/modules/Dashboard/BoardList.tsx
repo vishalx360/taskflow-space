@@ -136,7 +136,6 @@ export function BoardListSkeleton() {
       <BoardSkeleton />
       <BoardSkeleton />
       <BoardSkeleton />
-      <BoardSkeleton />
     </div>
   );
 }

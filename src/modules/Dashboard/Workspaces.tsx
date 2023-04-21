@@ -127,6 +127,13 @@ function WorkspaceListSkeleton() {
   return (
     <div className="">
       <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
+        Recent Boards
+      </h1>
+      <div className="px-4">
+        <WorkspaceSkeleton showHeader={false} />
+      </div>
+
+      <h1 className="p-5 font-medium uppercase tracking-wider text-neutral-500">
         Your Workspaces
       </h1>
       <div className="px-4">
@@ -137,12 +144,19 @@ function WorkspaceListSkeleton() {
   );
 }
 
-function WorkspaceSkeleton(): JSX.Element {
+function WorkspaceSkeleton({
+  showHeader = true,
+}: {
+  showHeader?: boolean;
+}): JSX.Element {
   return (
     <div>
-      <div className="border-b-2 border-gray-200 p-2 text-xl font-semibold">
-        <div className="my-3 h-10 w-28 animate-pulse rounded-xl bg-gray-300"></div>
-      </div>
+      {showHeader && (
+        <div className="flex items-center gap-5 border-b-2 border-gray-200 p-2 text-xl font-semibold">
+          <div className="my-3 h-10 w-10 animate-pulse rounded-xl bg-gray-300"></div>
+          <div className="my-3 h-10 w-52 animate-pulse rounded-xl bg-gray-300"></div>
+        </div>
+      )}
       <div className="mt-3">
         <BoardListSkeleton />
       </div>
