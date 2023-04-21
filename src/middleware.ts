@@ -14,4 +14,4 @@ export async function middleware(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-export const config = { matcher: ["/dashboard/:path*", "/board/:path*", "/settings/:path*"] };
+export const config = { matcher: ["/dashboard/:path*", "/board/:path*",] };

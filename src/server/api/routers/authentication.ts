@@ -1,9 +1,9 @@
 import { TRPCError } from "@trpc/server";
-import { hash } from "argon2";
+import { hash, verify } from "argon2";
 import { z } from "zod";
 import NewUserSideEffects from "../../../utils/NewUserSideEffects";
-import { SignUpSchema } from "../../../utils/ValidationSchema";
-import { createTRPCRouter, publicProcedure } from "../fastify_trpc";
+import { SignUpSchema, UpdatePasswordSchema } from "../../../utils/ValidationSchema";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../fastify_trpc";
 
 export const AuthenticationRouter = createTRPCRouter({
   signup: publicProcedure
@@ -34,7 +34,44 @@ export const AuthenticationRouter = createTRPCRouter({
         result: result.email,
       };
     }),
+  updatePassword: protectedProcedure
+    .input(UpdatePasswordSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { currentPassword, newPassword } = input;
+      const user = await ctx.prisma.user.findFirst({
+        where: { id: ctx.session.user?.id },
+        select: { password: true },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not found.",
 
+        });
+      }
+      if (!user.password) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No password found.",
+        });
+      }
+      const isValidPassword = await verify(user.password, currentPassword);
+
+      if (!isValidPassword) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid credentials",
+        });
+      }
+
+      const hashedPassword = await hash(newPassword);
+
+      return await ctx.prisma.user.update({
+        where: { id: ctx.session.user?.id },
+        data: { password: hashedPassword },
+      });
+
+    }),
   forgotPassword: publicProcedure
     .input(z.object({
       email: z.string()

@@ -1,19 +1,48 @@
 import { z } from "zod";
 
+const passwordSchema = z
+  .string()
+  .min(8, "Must contain at least 8 characters")
+  .max(16, "Must contain less than 16 characters")
+  .regex(
+    /^\S*$/,
+    { message: "Password must not contain whitespace" }
+  )
+// .regex(
+//   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/,
+//   { message: "Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character" }
+// );
 export const SigninSchema = z.object({
   email: z.string().email(),
-  password: z
-    .string()
-    .min(4, "Must contain at least 4 characters")
-    .max(16, "Must contain less than 16 characters"),
+  password: passwordSchema
 });
 
-export const SignUpSchema = SigninSchema.extend({
+export const SignUpSchema = z.object({
+  email: z.string().email(),
   name: z
     .string()
     .min(4, "Must contain at least 4 characters")
     .max(50, "Must contain less than 50 characters"),
+  password: z
+    .string()
+    .regex(
+      /^\S*$/,
+      { message: "Password must not contain whitespace" }
+    )
 });
+
+export const UpdatePasswordSchema = z.object({
+  currentPassword: passwordSchema,
+  newPassword: passwordSchema,
+  confirmPassword: passwordSchema
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"], // path of error
+}).refine((data) => data.currentPassword !== data.newPassword, {
+  message: "New password must be different from current password",
+  path: ["newPassword"], // path of error
+});
+
 
 export const CreateNewBoardSchema = z.object({
   name: z
