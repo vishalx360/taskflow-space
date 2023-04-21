@@ -39,6 +39,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/modules/ui/select";
+import { motion } from "framer-motion";
+import { BoardBoxMotionVariants } from "./BoardBox";
 
 const slugOption: RandomWordOptions<2> = {
   format: "title",
@@ -107,7 +109,7 @@ export default function CreateNewBoardModal({
   });
 
   return (
-    <div className="w-full" onClick={(e) => e.stopPropagation()}>
+    <div className="w-full md:w-auto" onClick={(e) => e.stopPropagation()}>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           {children ? (
@@ -115,15 +117,17 @@ export default function CreateNewBoardModal({
               {children}
             </button>
           ) : (
-            <button
+            <motion.button
+              key={"createboard"}
+              variants={BoardBoxMotionVariants}
               onClick={openModal}
-              className="relative  flex h-full w-full items-center rounded-xl border border-neutral-300 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200/50 hover:ring-2  md:h-40 md:w-[18rem] md:text-lg"
+              className="relative  flex h-full w-full items-center rounded-xl border border-neutral-300 p-5 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-200/50 hover:ring-2  md:h-40 md:w-[15rem] md:text-lg lg:w-[18rem]"
             >
               <div className="flex w-full items-center justify-center gap-3">
                 <FaPlusCircle />
                 <h2>New board</h2>
               </div>
-            </button>
+            </motion.button>
           )}
         </DialogTrigger>
         <DialogContent>

@@ -8,6 +8,8 @@ import TimeAgo from "react-timeago";
 import { api } from "@/utils/api";
 import { Plus } from "lucide-react";
 import CreateNewBoardModal from "./CreateNewBoardModal";
+import { BoardBoxMotionVariants } from "./BoardBox";
+import { motion } from "framer-motion";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
@@ -77,50 +79,52 @@ function BoardRow({ board }: { board: Board }): JSX.Element {
   boardUrl = boardUrl + "?" + newParams.toString();
 
   return (
-    <Link
-      prefetch={false}
-      href={boardUrl}
-      className={`group relative flex w-full items-center gap-5 p-3 transition-all hover:-translate-y-[2px] hover:bg-neutral-200/50`}
-    >
-      <div className="relative w-32">
-        {board?.background && board.background.startsWith("wallpaper:") && (
-          <Image
-            className="aspect-video w-full rounded-xl bg-gray-200 object-cover "
-            alt="background"
-            width={90}
-            height={40}
-            src={board.background.slice(10)}
-          />
-        )}
-        {board?.background && board.background.startsWith("gradient:") && (
-          <div
-            className={`aspect-video rounded-xl`}
-            style={{ backgroundImage: board.background.slice(9) }}
-          />
-        )}
-        {!board?.background && (
-          <Image
-            height="50"
-            width="80"
-            src={background}
-            alt=""
-            className={`aspect-video rounded-xl`}
+    <Link prefetch={false} href={boardUrl} className="w-full">
+      <motion.div
+        key={board.id}
+        variants={BoardBoxMotionVariants}
+        className={`group relative flex w-full items-center gap-5 p-3 transition-all hover:-translate-y-[2px] hover:bg-neutral-200/50`}
+      >
+        <div className="relative w-32">
+          {board?.background && board.background.startsWith("wallpaper:") && (
+            <Image
+              className="aspect-video w-full rounded-xl bg-gray-200 object-cover "
+              alt="background"
+              width={90}
+              height={40}
+              src={board.background.slice(10)}
+            />
+          )}
+          {board?.background && board.background.startsWith("gradient:") && (
+            <div
+              className={`aspect-video rounded-xl`}
+              style={{ backgroundImage: board.background.slice(9) }}
+            />
+          )}
+          {!board?.background && (
+            <Image
+              height="50"
+              width="80"
+              src={background}
+              alt=""
+              className={`aspect-video rounded-xl`}
 
-            // className="aspect-video h-28 w-full object-cover md:h-40 md:w-[18rem]"
-          />
-        )}
-      </div>
-
-      <div className="w-full ">
-        <div className="flex w-full flex-col  items-start justify-between ">
-          <h2 className="line-clamp-1 font-medium">{board.name}</h2>
-          <TimeAgo
-            className="mt-1 text-xs text-neutral-400"
-            date={board.updatedAt}
-            live={false}
-          />
+              // className="aspect-video h-28 w-full object-cover md:h-40 md:w-[18rem]"
+            />
+          )}
         </div>
-      </div>
+
+        <div className="w-full ">
+          <div className="flex w-full flex-col  items-start justify-between ">
+            <h2 className="line-clamp-1 font-medium">{board.name}</h2>
+            <TimeAgo
+              className="mt-1 text-xs text-neutral-400"
+              date={board.updatedAt}
+              live={false}
+            />
+          </div>
+        </div>
+      </motion.div>
     </Link>
   );
 }

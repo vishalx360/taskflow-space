@@ -16,6 +16,7 @@ import { useDebouncedCallback } from "use-debounce";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
+import { AnimatePresence, motion } from "framer-motion";
 
 const DragDropContext = dynamic(
   () =>
@@ -134,12 +135,29 @@ function Board() {
       {/* <BoardContextMenu board={board}> */}
       <DragDropContext onDragEnd={onDragEnd}>
         <Scrollbars>
-          <div className="flex w-fit items-start gap-5 p-5  pt-20">
-            {board?.lists.map((list) => {
-              return <TaskList key={list.id} list={list} />;
-            })}
-            <CreateList boardId={boardId || ""} />
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                    when: "beforeChildren",
+                  },
+                },
+              }}
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+              className="flex w-fit items-start gap-5 p-5  pt-20"
+            >
+              {board?.lists.map((list) => {
+                return <TaskList key={list.id} list={list} />;
+              })}
+              <CreateList boardId={boardId || ""} />
+            </motion.div>
+          </AnimatePresence>
         </Scrollbars>
       </DragDropContext>
       {/* </BoardContextMenu> */}

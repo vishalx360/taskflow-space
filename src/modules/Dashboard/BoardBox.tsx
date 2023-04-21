@@ -1,10 +1,21 @@
 import { type Board as BoardBox } from "@prisma/client";
+import { motion } from "framer-motion";
 import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from "react-timeago";
-
 import { BoardBoxContextMenu } from "../Global/BoardBoxContextMenu";
+
+export const BoardBoxMotionVariants = {
+  hidden: {
+    y: 10,
+    opacity: 0,
+  },
+  show: {
+    y: 0,
+    opacity: 1,
+  },
+};
 
 export function BoardBox({
   board,
@@ -22,7 +33,11 @@ export function BoardBox({
 
   return (
     <Link className="group rounded-xl" href={boardUrl}>
-      <div className={`relative w-full rounded-xl md:w-fit`}>
+      <motion.div
+        key={board.id}
+        variants={BoardBoxMotionVariants}
+        className={`relative w-full rounded-xl md:w-fit`}
+      >
         {/* highlighter */}
         <div className=" group-hoverborder-none absolute left-[50%] right-[50%] h-1 w-[10%] translate-x-[-50%] rounded-full transition-all duration-300 group-hover:-bottom-2 group-hover:w-[90%] group-hover:bg-black/50 " />
         <div className="overflow-hidden rounded-xl">
@@ -70,7 +85,7 @@ export function BoardBox({
             </div>
           </BoardBoxContextMenu>
         </div>
-      </div>
+      </motion.div>
     </Link>
   );
 }

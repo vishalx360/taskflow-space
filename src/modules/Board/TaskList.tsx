@@ -8,6 +8,7 @@ import { api } from "@/utils/api";
 import { Menu, Transition } from "@headlessui/react";
 import { type Board, type List, type Task } from "@prisma/client";
 import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { Fragment, memo, useRef, type RefObject } from "react";
 import { BiDotsHorizontalRounded, BiLoaderAlt } from "react-icons/bi";
@@ -46,54 +47,69 @@ function TaskList({ list }: { list: List }) {
 
   return (
     // <ListContextMenu list={list}>
-    <Droppable droppableId={list.id}>
-      {(provided) => (
-        <div
-          className="prevent-select relative h-fit max-h-[79vh] w-[300px]  max-w-[70vw] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
-          key={`main:${list.name}`}
-        >
-          <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pb-2 pt-3 text-black">
-            <div className="relative flex items-center  justify-start">
-              <div className="max-w-[200px]">
-                <UpdateListName list={list} />
-              </div>
-              <Transition
-                show={isRefetching || isLoading}
-                enter="transition-opacity duration-200"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="transition-opacity duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <div className="absolute right-4 top-0">
-                  <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-400" />
+    <motion.div
+      key={list.id}
+      variants={{
+        hidden: {
+          y: 10,
+          opacity: 0,
+        },
+        show: {
+          y: 0,
+          opacity: 1,
+        },
+      }}
+    >
+      <Droppable droppableId={list.id}>
+        {(provided) => (
+          <div
+            className="prevent-select relative h-fit max-h-[79vh] w-[300px]  max-w-[70vw] overflow-hidden  rounded-2xl bg-[#ebecf0] ring-black md:w-[320px]"
+            key={`main:${list.name}`}
+          >
+            <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-xl bg-[#ebecf0] px-3 pb-2 pt-3 text-black">
+              <div className="relative flex items-center  justify-start">
+                <div className="max-w-[200px]">
+                  <UpdateListName list={list} />
                 </div>
-              </Transition>
+                <Transition
+                  show={isRefetching || isLoading}
+                  enter="transition-opacity duration-200"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="transition-opacity duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute right-4 top-0">
+                    <BiLoaderAlt className="h-5 w-5 animate-spin text-neutral-400" />
+                  </div>
+                </Transition>
+              </div>
+
+              <ListActionMenu list={list} />
+            </div>
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="taskListScroll mt-0 max-h-[75vh] space-y-2 overflow-x-hidden overflow-y-scroll px-2"
+            >
+              {Tasks?.length !== 0 ? (
+                Tasks?.map((task: Task, index: number) => (
+                  <TaskCard key={task.id} index={index} task={task} />
+                ))
+              ) : (
+                <EmptyListCard />
+              )}
+              <div ref={listEndRef} className="h-[130px]" />
             </div>
 
-            <ListActionMenu list={list} />
+            {provided.placeholder}
+            <AddToListForm listEndRef={listEndRef} list={list} />
           </div>
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="taskListScroll mt-0 max-h-[75vh] space-y-2 overflow-x-hidden overflow-y-scroll px-2"
-          >
-            {Tasks?.length !== 0 ? (
-              Tasks?.map((task: Task, index: number) => (
-                <TaskCard key={task.id} index={index} task={task} />
-              ))
-            ) : (
-              <EmptyListCard />
-            )}
-            <div ref={listEndRef} className="h-[130px]" />
-          </div>
+        )}
+      </Droppable>
+    </motion.div>
 
-          {provided.placeholder}
-          <AddToListForm listEndRef={listEndRef} list={list} />
-        </div>
-      )}
-    </Droppable>
     // </ListContextMenu>
   );
 }
@@ -316,7 +332,20 @@ export function CreateList({ boardId }: { boardId: string }) {
   });
 
   return (
-    <div className="pr-10">
+    <motion.div
+      key={"createlist"}
+      variants={{
+        hidden: {
+          y: 10,
+          opacity: 0,
+        },
+        show: {
+          y: 0,
+          opacity: 1,
+        },
+      }}
+      className="pr-10"
+    >
       <div className="h-fit min-w-[310px] rounded-xl border-2 bg-white/90">
         <div className="sticky bottom-0 z-10 rounded-b-xl p-1">
           <Formik
@@ -376,7 +405,7 @@ export function CreateList({ boardId }: { boardId: string }) {
           </Formik>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
