@@ -4,11 +4,13 @@ import fastify from 'fastify';
 import type { FastifyCookieOptions } from '@fastify/cookie';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
+import FastifyRateLimit from '@fastify/rate-limit';
+import dotenv from "dotenv";
+import superjson from "superjson";
 import { env } from '../../env.mjs';
 import { createTRPCContext } from './fastify_trpc.js';
 import { appRouter } from './root';
 
-import dotenv from "dotenv";
 dotenv.config();
 
 export interface ServerOptions {
@@ -17,11 +19,31 @@ export interface ServerOptions {
     prefix?: string;
 }
 
+
 export function createServer(opts: ServerOptions) {
     const dev = opts.dev ?? true;
     const port = opts.port ?? 3000;
     const prefix = opts.prefix ?? '/trpc';
     const server = fastify({ maxParamLength: 5000, logger: dev });
+
+    void server.register(FastifyRateLimit, {
+        max: 150,
+        timeWindow: '1 minute',
+        errorResponseBuilder: function (request, context) {
+            return [{
+                error: superjson.serialize({
+                    "message": "Too Many Requests",
+                    "code": 32009,
+                    "data": {
+                        "code": "TOO_MANY_REQUESTS",
+                        "httpStatus": 429,
+                        "stack": "...",
+                        "path": request.url,
+                    }
+                })
+            }]
+        }
+    })
 
     // void server.register(ws);
 
