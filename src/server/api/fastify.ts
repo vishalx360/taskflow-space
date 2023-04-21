@@ -46,7 +46,6 @@ export function createServer(opts: ServerOptions) {
         prefix,
         // useWSS: true,
         trpcOptions: { router: appRouter, createContext: createTRPCContext },
-
     });
 
     server.get('/', (req) => {

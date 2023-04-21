@@ -149,3 +149,10 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+// custom authentication schema
+model ResetPasswordToken {
+    id      String   @id @default(cuid())
+    expires DateTime
+    email   String
+}

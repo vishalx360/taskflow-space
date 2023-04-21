@@ -3,7 +3,6 @@ import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 import Workspaces from "./Workspaces";
 
-import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext";
 import { useSession } from "next-auth/react";
 import CommandCenter from "./CommandCenter";
 

@@ -2,7 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { hash, verify } from "argon2";
 import { z } from "zod";
 import NewUserSideEffects from "../../../utils/NewUserSideEffects";
-import { SignUpSchema, UpdatePasswordSchema } from "../../../utils/ValidationSchema";
+import { SignUpSchema, UpdatePasswordSchema, newPasswordSchema } from "../../../utils/ValidationSchema";
+import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../fastify_trpc";
 
 export const AuthenticationRouter = createTRPCRouter({
@@ -72,26 +73,120 @@ export const AuthenticationRouter = createTRPCRouter({
       });
 
     }),
-  forgotPassword: publicProcedure
+  sendResetPasswordLink: publicProcedure
     .input(z.object({
       email: z.string()
     }))
     .mutation(async ({ ctx, input }) => {
-      const { name, email, password } = input;
+      const { email } = input;
       const user = await ctx.prisma.user.findFirst({
         where: { email },
       });
       if (!user) {
-        // not actually sending any email.
-        return {
-          status: 200,
-          message: "Verification OTP sent on email."
-        }
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "No account found.",
+        });
       }
-
-      return {
-        status: 200,
-        message: "Verification OTP sent on email.",
-      };
+      // delete existing reset token
+      await ctx.prisma.resetPasswordToken.deleteMany({
+        where: { email },
+      });
+      // create new reset token save token to db
+      const newToken = await ctx.prisma.resetPasswordToken.create({
+        data: {
+          email: email,
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 1),
+        },
+      })
+      const mailOptions = await BASIC_EMAIL({
+        recevierEmail: input.email,
+        subject: "Reset Password",
+        body: ` ${user?.name ? user.name : "You"} have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
+        <br/>
+        https://taskflow.space/newPassword/${newToken?.id}
+        <br/>
+        This link will expire in 1 hour.
+        <br/>
+        Regards
+        <br/>
+`,
+      });
+      return await ctx.sendEmail(mailOptions);
     }),
+
+  checkResetPasswordLink: publicProcedure
+    .input(z.object({
+      token: z.string()
+    }))
+    .query(async ({ ctx, input }) => {
+      // verify token
+      const token = await ctx.prisma.resetPasswordToken.findUnique({
+        where: { id: input.token },
+      })
+      if (!token) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid Reset Link.",
+        });
+      }
+      if (token.expires < new Date()) {
+        // delete token
+        await ctx.prisma.resetPasswordToken.delete({
+          where: { id: input.token },
+        });
+
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Reset Link has expired.",
+        });
+      }
+      return token;
+    }),
+
+  newPassword: publicProcedure
+    .input(newPasswordSchema)
+    .mutation(async ({ ctx, input }) => {
+      // verify token
+      const token = await ctx.prisma.resetPasswordToken.findUnique({
+        where: { id: input.token },
+      })
+      if (!token) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid Reset Link.",
+        });
+      }
+      if (token.expires < new Date()) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Reset Link has expired.",
+        });
+      }
+      // update user password
+      const hashedPassword = await hash(input.newPassword);
+      await ctx.prisma.user.update({
+        where: { email: token.email },
+        data: { password: hashedPassword },
+      });
+
+      // delete token
+      await ctx.prisma.resetPasswordToken.delete({
+        where: { id: input.token },
+      });
+
+      // send confirmation email
+      const mailOptions = await BASIC_EMAIL({
+        recevierEmail: token.email,
+        subject: "Your Password has been reset",
+        body: ` Your password has been reset. If you did not make this request, please contact us immediately. 
+        <br/>
+        Regards
+        <br/>
+        `,
+      });
+
+      return ctx.sendEmail(mailOptions);
+    })
 });
+

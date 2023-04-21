@@ -138,7 +138,7 @@ export default function SignInPage() {
                   >
                     Sign Up With Google
                   </Button>
-                  <p className="text-sm font-light text-neutral-500 dark:text-neutral-400">
+                  <p className="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                     Already have an account ?{" "}
                     <Link
                       href="/signin"

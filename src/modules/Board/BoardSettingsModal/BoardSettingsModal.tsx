@@ -1,11 +1,11 @@
 import { useBoardSettingsModal } from "@/contexts/BoardSettingsModalContext";
-import IconButton from "@/modules/Global/IconButton";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/modules/ui/accordion";
+import { Button } from "@/modules/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,6 @@ import {
 import { MdSettings } from "react-icons/md";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
-import { Button } from "@/modules/ui/button";
 
 export default function BoardSettingsModal({
   board,

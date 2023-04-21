@@ -1,53 +1,39 @@
 import { useToast } from "@/hooks/use-toast";
 import LogoImage from "@/modules/Global/LogoImage";
-import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
 import { authOptions } from "@/server/auth";
-import { SigninSchema } from "@/utils/ValidationSchema";
+import { resetPasswordSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
+import { LucideArrowLeft } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
-import { FaGoogle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-export default function SignInPage() {
+export default function ResetPasswordPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const handelCredentialSignin = useCallback(
-    async (credentails: { email: string; password: string }) => {
-      setIsLoading(true);
-      const result = await signIn("credentials", {
-        email: credentails.email,
-        password: credentails.password,
-        redirect: false,
-      });
-      setIsLoading(false);
-      if (result?.ok) {
-        toast({
-          title: "Login successful!",
-          description: "Taking you to your dashboard",
-        });
-        await router.push("/dashboard").catch((err) => console.log(err));
-      } else {
-        toast({
-          variant: "destructive",
-          title: result?.error || "Uh oh! Something went wrong.",
-          description: "There was a problem with your request.",
-          // action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-      }
-    },
-    [router]
-  );
 
-  async function handelGoogleSignin() {
-    await signIn("google");
-  }
+  const mutation = api.authentication.sendResetPasswordLink.useMutation({
+    onError(error) {
+      toast({
+        variant: "destructive",
+        title: error.message || "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        // action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    },
+    onSuccess: async () => {
+      toast({
+        title: "Reset Link Generated Successfully!",
+        description: "Please check your email for the reset link.",
+      });
+      await router.push("/signin");
+    },
+  });
+
   return (
     <>
       <section className="bg-neutral-100 dark:bg-neutral-900">
@@ -60,16 +46,24 @@ export default function SignInPage() {
           </div>
           <div className="w-full rounded-xl bg-white shadow-lg dark:border dark:border-neutral-700 dark:bg-neutral-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
+              <Link
+                href="/signin"
+                className="flex items-center gap-3 text-sm font-medium text-black hover:underline  "
+              >
+                <LucideArrowLeft width={20} /> <span>Sign in</span>
+              </Link>
               <h1 className="text-xl font-medium leading-tight tracking-tight text-neutral-900 dark:text-white md:text-2xl">
-                Sign in to your account
+                Reset Password
               </h1>
+              <p className="text-neutral-700">
+                Enter your email address and we will send you a link to reset
+              </p>
               <Formik
-                initialValues={{
-                  email: "",
-                  password: "",
+                initialValues={{ email: "" }}
+                validationSchema={toFormikValidationSchema(resetPasswordSchema)}
+                onSubmit={(values) => {
+                  mutation.mutate(values);
                 }}
-                validationSchema={toFormikValidationSchema(SigninSchema)}
-                onSubmit={handelCredentialSignin}
               >
                 <Form className="space-y-4 md:space-y-6">
                   <Field name="email">
@@ -79,7 +73,7 @@ export default function SignInPage() {
                           htmlFor="email"
                           className="mb-2 block text-sm font-medium text-neutral-900 dark:text-white"
                         >
-                          Your email
+                          Email
                         </label>
                         <input
                           type="email"
@@ -97,55 +91,17 @@ export default function SignInPage() {
                       </div>
                     )}
                   </Field>
-                  <PasswordInput />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-start">
-                      <div className="flex h-5 items-center">
-                        <input
-                          id="remember"
-                          aria-describedby="remember"
-                          type="checkbox"
-                          className="focus:ring-3 h-4 w-4 rounded border border-neutral-300 bg-neutral-50 checked:bg-black focus:ring-black dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-black"
-                        />
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label
-                          htmlFor="remember"
-                          className="text-neutral-500 dark:text-neutral-300"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                    </div>
-                    <Link
-                      href="/resetPassword"
-                      className="text-sm font-medium text-black hover:underline dark:text-black"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
                   <Button
                     type="submit"
                     className="text-md w-full"
                     size="lg"
-                    isLoading={isLoading}
-                    loadingText="Signing in..."
+                    isLoading={mutation.isLoading}
+                    loadingText="Submit..."
                   >
-                    Sign in
+                    Submit
                   </Button>
                 </Form>
               </Formik>
-              <Button
-                onClick={() => {
-                  void handelGoogleSignin();
-                }}
-                variant="outline"
-                className="text-md flex w-full items-center justify-center gap-4"
-                size="lg"
-                LeftIcon={FaGoogle}
-              >
-                Sign In With Google
-              </Button>
               <p className="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                 Don’t have an account yet?{" "}
                 <Link

@@ -6,11 +6,11 @@ import ScrollToTop from "react-scroll-to-top";
 
 import { api } from "@/utils/api";
 
+import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext";
 import { Toaster } from "@/modules/ui/toaster";
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { MdArrowUpward } from "react-icons/md";
-import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext";
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
