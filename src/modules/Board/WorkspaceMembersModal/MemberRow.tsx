@@ -26,7 +26,7 @@ export default function MemberRow({
       <Image
         height={20}
         width={20}
-        className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800 lg:h-14 lg:w-14"
+        className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800 lg:h-12 lg:w-12"
         src={
           user?.image ||
           (user.email && getGravatar(user.email)) ||
@@ -34,12 +34,14 @@ export default function MemberRow({
         }
         alt=""
       />
-      <div className="md:text-md flex w-full items-center justify-between text-sm lg:text-lg ">
+      <div className=" flex w-full items-center justify-between  ">
         <div>
-          <h1>
+          <h1 className="md:text-md text-sm lg:text-lg">
             {user.name} {user.email === session?.user.email && "(You)"}
           </h1>
-          <h2 className="text-neutral-600">{user.email}</h2>
+          <h2 className="text-sm text-neutral-600 md:text-sm  ">
+            {user.email}
+          </h2>
         </div>
         <div className="w-fit rounded-xl border-2 bg-neutral-200/80 p-1 px-3 text-xs capitalize">
           {member.role.toLowerCase()}
