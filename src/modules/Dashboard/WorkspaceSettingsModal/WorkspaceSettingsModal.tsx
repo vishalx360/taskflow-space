@@ -43,7 +43,6 @@ export default function WorkspaceSettingsModal({
               Workspace Settings
             </DialogTitle>
           </DialogHeader>
-
           <RenameWorkspaceSection workspace={workspace} setIsOpen={setIsOpen} />
           <DangerZone workspace={workspace} setIsOpen={setIsOpen} />
         </DialogContent>

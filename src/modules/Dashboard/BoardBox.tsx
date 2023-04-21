@@ -38,8 +38,6 @@ export function BoardBox({
         variants={BoardBoxMotionVariants}
         className={`relative w-full rounded-xl md:w-fit`}
       >
-        {/* highlighter */}
-        <div className=" group-hoverborder-none absolute left-[50%] right-[50%] h-1 w-[10%] translate-x-[-50%] rounded-full transition-all duration-300 group-hover:-bottom-2 group-hover:w-[90%] group-hover:bg-black/50 " />
         <div className="overflow-hidden rounded-xl">
           <BoardBoxContextMenu key={board.id} board={board}>
             <div

@@ -20,7 +20,7 @@ function DangerZone({
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
         <AccordionTrigger className="rounded-xl border-neutral-400 px-2  text-neutral-600">
-          Transfer workspace ownership
+          Transfer Workspace Ownership
         </AccordionTrigger>
         <AccordionContent className="px-2">
           <TransferWorkspaceOwnershipSection
@@ -31,7 +31,7 @@ function DangerZone({
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger className="rounded-xl border-neutral-400 px-2  text-neutral-600">
-          Delete workspace
+          Delete Workspace
         </AccordionTrigger>
         <AccordionContent className="px-2">
           <DeleteWorkspaceSection workspace={workspace} setIsOpen={setIsOpen} />

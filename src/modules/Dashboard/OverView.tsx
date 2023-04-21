@@ -34,9 +34,7 @@ function Overview() {
           <UserMenu />
         </div>
       </div>
-      <BoardSettingsModalProvider>
-        <Workspaces />
-      </BoardSettingsModalProvider>
+      <Workspaces />
     </>
   );
 }

@@ -10,6 +10,7 @@ import { Toaster } from "@/modules/ui/toaster";
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { MdArrowUpward } from "react-icons/md";
+import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext";
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
@@ -32,7 +33,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         height={3}
       />
       <main className={`${inter.variable} font-sans`}>
-        <Component {...pageProps} />
+        <BoardSettingsModalProvider>
+          <Component {...pageProps} />
+        </BoardSettingsModalProvider>
       </main>
       <ScrollToTop
         component={<ScrollToTopButton />}

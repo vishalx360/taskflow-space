@@ -26,6 +26,7 @@ import {
 import { MdSettings } from "react-icons/md";
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
+import { Button } from "@/modules/ui/button";
 
 export default function BoardSettingsModal({
   board,
@@ -123,13 +124,14 @@ export default function BoardSettingsModal({
                   )}
                 </>
               ) : (
-                <IconButton
+                <Button
                   onClick={openModal}
                   Icon={MdSettings}
+                  variant="default"
                   className=" bg-neutral-400/20 transition-opacity hover:bg-neutral-400/40"
                 >
                   <p className="hidden lg:inline">Settings</p>
-                </IconButton>
+                </Button>
               )}
             </>
           )}
