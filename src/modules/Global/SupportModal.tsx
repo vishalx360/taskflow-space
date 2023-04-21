@@ -67,12 +67,19 @@ export function SupportModal({ children }: { children?: ReactNode }) {
                       support@taskflow.space
                     </h2>
                   </div>
-                  <Button variant="subtle" className="flex gap-4">
+                  <Button variant="subtle" className="hidden gap-4 md:flex">
                     <LucideMail width={20} />
                     <span>Write Email</span>
                   </Button>
                 </div>
               </div>
+              <Button
+                variant="subtle"
+                className="my-2 flex w-full gap-4 md:hidden"
+              >
+                <LucideMail width={20} />
+                <span>Write Email</span>
+              </Button>
             </Link>
 
             <div className="md:text-md mt-5 space-y-3 text-neutral-700">
