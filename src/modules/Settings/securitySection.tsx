@@ -1,6 +1,6 @@
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import { Button } from "../ui/button";
 import Divider from "../Global/Divider";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 function SecuritySection() {

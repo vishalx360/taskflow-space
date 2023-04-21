@@ -1,7 +1,6 @@
 import CreatorLogo from "@/../public/vishalAvatar.png";
 import { Button } from "@/modules/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/modules/ui/dialog";
-import { LucideExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Children, cloneElement, useState, type ReactNode } from "react";

@@ -6,10 +6,10 @@ import Link from "next/link";
 import TimeAgo from "react-timeago";
 
 import { api } from "@/utils/api";
-import { Plus } from "lucide-react";
-import CreateNewBoardModal from "./CreateNewBoardModal";
-import { BoardBoxMotionVariants } from "./BoardBox";
 import { motion } from "framer-motion";
+import { Plus } from "lucide-react";
+import { BoardBoxMotionVariants } from "./BoardBox";
+import CreateNewBoardModal from "./CreateNewBoardModal";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
   const { data: boards, isLoading } = api.board.getAllBoards.useQuery({

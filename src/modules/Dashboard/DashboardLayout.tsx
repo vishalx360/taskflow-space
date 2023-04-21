@@ -4,14 +4,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Scrollbars } from "react-custom-scrollbars-2";
+import { simpleVariants } from "../Global/Fade";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 import Settings from "../Settings/Settings";
 import DashboardNavbar from "./DashboardNavbar";
 import Invitations from "./Invitations/Invitations";
 import Overview from "./OverView";
-import { simpleVariants } from "../Global/Fade";
-import { Scrollbars } from "react-custom-scrollbars-2";
 
 const NavlinkVariants = cva(
   "relative flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",

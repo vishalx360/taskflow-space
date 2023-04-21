@@ -1,12 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/modules/ui/tabs";
+import { AnimatePresence } from "framer-motion";
 import { LucideGem, LucideLock, LucideUser } from "lucide-react";
+import { usePathname } from "next/navigation";
+import Fade from "../Global/Fade";
 import ProfileSection from "./profileSection";
 import SecuritySection from "./securitySection";
 import SubscriptionSection from "./subscriptionSection";
-import { usePathname } from "next/navigation";
-import { simpleVariants } from "../Dashboard/DashboardLayout";
-import { AnimatePresence, motion } from "framer-motion";
-import Fade from "../Global/Fade";
 
 const TabsPathMap = [
   "/dashboard/settings/profile",
