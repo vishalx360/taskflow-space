@@ -49,7 +49,14 @@ export function createServer(opts: ServerOptions) {
 
     void server.register(cookie, {
         secret: env.NEXTAUTH_SECRET, // for cookies signature
-        parseOptions: {
+        parseOptions: env.NODE_ENV === 'development' ? {
+            // signed: true,
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/',
+            secure: false,
+            domain: "localhost"
+        } : {
             signed: true,
             httpOnly: true,
             sameSite: 'lax',
@@ -60,7 +67,9 @@ export function createServer(opts: ServerOptions) {
     } as FastifyCookieOptions)
 
     void server.register(cors, {
-        origin: new RegExp(`(\https://\.${env.DOMAIN_NAME}|${env.DOMAIN_NAME})$`),
+        origin:
+            env.NODE_ENV === 'development' ? "http://localhost:3000" :
+                new RegExp(`(\https://\.${env.DOMAIN_NAME}|${env.DOMAIN_NAME})$`),
         credentials: true,
     })
 

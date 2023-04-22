@@ -53,13 +53,7 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         // seed personal workspace with default board with list and taks
         if (isNewUser) {
-          // check if account doesnt exist with same email
-          const emailExist = await prisma.user.count({
-            where: { email: user.email },
-          });
-          if (emailExist === 0) {
-            await NewUserSideEffects(user.id, user.email);
-          }
+          await NewUserSideEffects(user.id, user.email);
         }
       }
       return token;
@@ -120,9 +114,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  cookies: {
+  cookies: env.NODE_ENV === 'development' ? {} : {
     sessionToken: {
-      name: `__Secure-next-auth.session-token`,
+      name: `next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: 'lax',

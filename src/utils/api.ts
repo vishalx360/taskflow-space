@@ -50,7 +50,7 @@ export const api = createTRPCNext<AppRouter>({
         //     (opts.direction === "down" && opts.result instanceof Error),
         // }),
         httpBatchLink({
-          url: `https://${env.NEXT_PUBLIC_TRPC_SEREVR_URL}/trpc`,
+          url: `${env.NEXT_PUBLIC_TRPC_SEREVR_URL}/trpc`,
           fetch(url, options) {
             return fetch(url, {
               ...options,

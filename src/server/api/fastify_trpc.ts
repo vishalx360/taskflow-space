@@ -69,7 +69,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 
 export async function getAuthSession({ req, res }: CreateFastifyContextOptions): Promise<Session | null> {
-    const token = req.cookies["__Secure-next-auth.session-token"]
+    const token = req.cookies["next-auth.session-token"]
     if (token) {
         try {
             const decoded = await verifyJWT(token, env.NEXTAUTH_SECRET);

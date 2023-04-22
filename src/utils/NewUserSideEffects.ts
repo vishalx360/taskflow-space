@@ -3,6 +3,14 @@ import { prisma } from "../server/db";
 import DefaultData from "./PersonalWorkspaceData.json";
 
 export default async function NewUserSideEffects(userId: string, email: string) {
+
+  // check if user has existing personal workspace
+  const existingPersonalWorkspace = await prisma.workspace.count({
+    where: { personal: true, members: { every: { userId } } },
+  });
+  if (existingPersonalWorkspace > 0) {
+    return;
+  }
   // connect existing invitations
   await prisma.workspaceMemberInvitation.updateMany({
     where: { recepientEmail: email },
