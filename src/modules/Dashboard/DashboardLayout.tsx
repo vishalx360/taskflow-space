@@ -14,12 +14,12 @@ import Invitations from "./Invitations/Invitations";
 import Overview from "./OverView";
 
 const NavlinkVariants = cva(
-  "relative flex items-center space-x-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors hover:bg-neutral-500/10",
+  "relative flex items-center gap-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors group",
   {
     variants: {
       active: {
-        true: "bg-neutral-100 text-neutral-700 hover:bg-neutral-100",
-        false: "",
+        true: "text-neutral-700 ",
+        false: "hover:bg-neutral-500/10 ",
       },
     },
     defaultVariants: {
@@ -61,18 +61,26 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
           </Link>
         </div>
         {/* links */}
-
-        <div className="ml-2 mt-10 flex h-full flex-col gap-5 ">
-          {Navlinks.map(({ href, name, Icon }, index) => (
-            <Link
-              href={href}
-              key={href}
-              className={cn(NavlinkVariants({ active: pathname === href }))}
-            >
-              <Icon className="text-inherit" />
-              <span className="font-medium">{name}</span>
-            </Link>
-          ))}
+        <div className="ml-2 mt-10 h-full">
+          <div className="space-y-5">
+            {Navlinks.map(({ href, name, Icon }, index) => (
+              <Link
+                href={href}
+                key={href}
+                className={cn(NavlinkVariants({ active: pathname === href }))}
+              >
+                <Icon className="z-20 text-inherit" />
+                <span className="z-20 font-medium">{name}</span>
+                {pathname === href && (
+                  <motion.span
+                    transition={{ duration: 0.2 }}
+                    layoutId="incicator"
+                    className="absolute left-0 top-0 z-10 h-full w-full rounded-l-full bg-neutral-100 "
+                  />
+                )}
+              </Link>
+            ))}
+          </div>
         </div>
         {/* account section */}
         <div className="sticky bottom-6 w-full  p-5">
