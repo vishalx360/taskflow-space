@@ -1,6 +1,6 @@
-import { FaGithub, FaGoogle } from "react-icons/fa";
 import Divider from "../Global/Divider";
 import { Button } from "../ui/button";
+import ConnectedAccountSection from "./ConnectedAccountSection";
 import UpdatePasswordSection from "./UpdatePasswordSection";
 
 function SecuritySection() {
@@ -8,60 +8,8 @@ function SecuritySection() {
     <div className="w-full max-w-2xl space-y-10  px-5 pb-10">
       <UpdatePasswordSection />
       <Divider />
-      {/* linked social account manager */}
-      <div>
-        <h2 className="text-xl font-medium">Social Accounts</h2>
-        <p className="my-5 text-neutral-700">
-          Link your social accounts to your account.
-        </p>
-        <div className="space-y-3">
-          {/* google */}
-          <div className="rounded-md border p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="mr-5">
-                  <FaGoogle className="h-10 w-10" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">Google</span>
-                  <span className="text-xs text-neutral-500">Connected</span>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                  <Button
-                    size="sm"
-                    variant="destructiveOutline"
-                    className="px-4 text-xs"
-                  >
-                    Disconnect
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="rounded-md border p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="mr-5">
-                  <FaGithub className="h-10 w-10" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">Github</span>
-                  <span className="text-xs ">Not Connected</span>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <Button size="sm" variant="outline" className="px-4 text-xs">
-                  Connect
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ConnectedAccountSection />
       <Divider />
-
       {/* delete account manager */}
       <div>
         <h2 className="text-xl font-medium">Danger Zone</h2>

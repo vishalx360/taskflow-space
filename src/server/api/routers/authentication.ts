@@ -187,6 +187,63 @@ export const AuthenticationRouter = createTRPCRouter({
       });
 
       return ctx.sendEmail(mailOptions);
+    }),
+  // oauth ---------------
+  fetchConnectedAccounts: protectedProcedure
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.account.findMany({
+        where: {
+          userId: ctx.session.user?.id
+        },
+        select: {
+          provider: true,
+        }
+      });
+    }),
+  disconnectOauthProvider: protectedProcedure
+    .input(z.object({ provider: z.enum(["GOOGLE"]) }))
+    .mutation(async ({ ctx, input }) => {
+      //  check 
+      // verify token
+      const token = await ctx.prisma.resetPasswordToken.findUnique({
+        where: { id: input.token },
+      })
+      if (!token) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid Reset Link.",
+        });
+      }
+      if (token.expires < new Date()) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Reset Link has expired.",
+        });
+      }
+      // update user password
+      const hashedPassword = await hash(input.newPassword);
+      await ctx.prisma.user.update({
+        where: { email: token.email },
+        data: { password: hashedPassword },
+      });
+
+      // delete token
+      await ctx.prisma.resetPasswordToken.delete({
+        where: { id: input.token },
+      });
+
+      // send confirmation email
+      const mailOptions = await BASIC_EMAIL({
+        recevierEmail: token.email,
+        subject: "Your Password has been reset",
+        body: ` Your password has been reset. If you did not make this request, please contact us immediately. 
+        <br/>
+        Regards
+        <br/>
+        `,
+      });
+
+      return ctx.sendEmail(mailOptions);
     })
 });
 
