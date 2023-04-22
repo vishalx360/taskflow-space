@@ -44,7 +44,12 @@ export default function ViewInvitationModal({
       });
     },
     onSuccess: async (accepted) => {
-      await utils.workspace.getAllWorkspace
+      if (accepted) {
+        await utils.workspace.getAllWorkspace
+          .invalidate()
+          .catch((err) => console.log(err));
+      }
+      await utils.workspace.getAllMyReceviedInvites
         .invalidate()
         .catch((err) => console.log(err));
       toast({
