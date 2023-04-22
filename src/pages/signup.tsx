@@ -11,7 +11,7 @@ import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaGoogle } from "react-icons/fa";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 export default function SignInPage() {
@@ -37,8 +37,8 @@ export default function SignInPage() {
     },
   });
 
-  async function handelGoogleSignUp() {
-    await signIn("google");
+  async function handelOauthSignUp(provider: string) {
+    await signIn(provider);
   }
   return (
     <>
@@ -129,7 +129,7 @@ export default function SignInPage() {
                   </Button>
                   <Button
                     onClick={() => {
-                      void handelGoogleSignUp();
+                      void handelOauthSignUp("google");
                     }}
                     variant="outline"
                     className="text-md flex w-full items-center justify-center gap-4"
@@ -137,6 +137,17 @@ export default function SignInPage() {
                     LeftIcon={FaGoogle}
                   >
                     Sign Up With Google
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      void handelOauthSignUp("github");
+                    }}
+                    variant="outline"
+                    className="text-md flex w-full items-center justify-center gap-4"
+                    size="lg"
+                    LeftIcon={FaGithub}
+                  >
+                    Sign Up With Github
                   </Button>
                   <p className="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                     Already have an account ?{" "}

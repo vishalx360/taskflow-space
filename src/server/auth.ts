@@ -13,6 +13,8 @@ import {
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
+
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -98,6 +100,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
+          image: user.image,
         };
       },
     }),
@@ -113,6 +116,11 @@ export const authOptions: NextAuthOptions = {
         },
       },
     }),
+    GithubProvider({
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
+    })
   ],
   cookies: env.NODE_ENV === 'development' ? {} : {
     sessionToken: {

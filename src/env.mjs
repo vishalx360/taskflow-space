@@ -22,6 +22,10 @@ const server = z.object({
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
 
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
+
+
   DOMAIN_NAME: z.string(),
   // NM Nodemailer
   NM_DEFAULT_FROM_EMAIL: z.string(),
@@ -57,6 +61,10 @@ const processEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+
+  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+
   DOMAIN_NAME: process.env.DOMAIN_NAME,
   // NM Nodemailer
   NM_DEFAULT_FROM_EMAIL: process.env.NM_DEFAULT_FROM_EMAIL,

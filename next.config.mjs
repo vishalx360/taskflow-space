@@ -14,6 +14,7 @@ const config = {
       "lh3.googleusercontent.com",
       "www.gravatar.com",
       "images.unsplash.com",
+      "avatars.githubusercontent.com"
     ],
   },
   /**
