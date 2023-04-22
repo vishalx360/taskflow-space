@@ -201,49 +201,21 @@ export const AuthenticationRouter = createTRPCRouter({
       });
     }),
   disconnectOauthProvider: protectedProcedure
-    .input(z.object({ provider: z.enum(["GOOGLE"]) }))
+    .input(z.object({ provider: z.enum(["google", "github"]) }))
     .mutation(async ({ ctx, input }) => {
-      //  check 
-      // verify token
-      const token = await ctx.prisma.resetPasswordToken.findUnique({
-        where: { id: input.token },
+      const account = await ctx.prisma.account.findFirst({
+        where: { userId: ctx.session.user?.id, provider: input.provider },
       })
-      if (!token) {
+      if (!account) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Invalid Reset Link.",
+          message: "No account found.",
         });
       }
-      if (token.expires < new Date()) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Reset Link has expired.",
-        });
-      }
-      // update user password
-      const hashedPassword = await hash(input.newPassword);
-      await ctx.prisma.user.update({
-        where: { email: token.email },
-        data: { password: hashedPassword },
+      await ctx.prisma.account.delete({
+        where: { id: account.id },
       });
-
-      // delete token
-      await ctx.prisma.resetPasswordToken.delete({
-        where: { id: input.token },
-      });
-
-      // send confirmation email
-      const mailOptions = await BASIC_EMAIL({
-        recevierEmail: token.email,
-        subject: "Your Password has been reset",
-        body: ` Your password has been reset. If you did not make this request, please contact us immediately. 
-        <br/>
-        Regards
-        <br/>
-        `,
-      });
-
-      return ctx.sendEmail(mailOptions);
+      return input.provider;
     })
 });
 

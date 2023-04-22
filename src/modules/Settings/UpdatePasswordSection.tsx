@@ -50,7 +50,8 @@ function UpdatePasswordSection() {
     <div>
       <h2 className="text-xl font-medium">Password</h2>
       <p className="my-5 text-neutral-700">
-        Set a new password for your account.
+        Set a new password for your account. If password is forgotten or not
+        set, a new password can be set by using the email.
       </p>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
@@ -58,16 +59,20 @@ function UpdatePasswordSection() {
             Change your password
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-xl">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center font-medium">
               <LucideKey className="mr-2 h-6 w-6" />
               Change your password
             </DialogTitle>
           </DialogHeader>
-          <p className="my-5 text-neutral-700">
-            Set a new password for your account.
-          </p>
+          <div className="my-5 space-y-2  text-neutral-700">
+            <p className="text-sm">
+              <LucideInfo className="mr-2 inline" width={20} />
+              Note: If password is forgotten or not set, a new password can be
+              set by using the email.
+            </p>
+          </div>
 
           <Formik
             initialValues={{
