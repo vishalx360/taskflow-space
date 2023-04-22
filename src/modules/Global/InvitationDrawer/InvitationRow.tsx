@@ -7,6 +7,7 @@ import Image from "next/image";
 import { type Dispatch, type SetStateAction } from "react";
 import { MdViewDay } from "react-icons/md";
 import Timeago from "react-timeago";
+import { motion } from "framer-motion";
 // short type name
 export type WorkspaceMemberInvitationWithSenderAndRecevier =
   WorkspaceMemberInvitation & {
@@ -27,7 +28,17 @@ function InvitationRow({
   const { data: session } = useSession();
   const { recepient, sender } = invitation;
   return (
-    <div
+    <motion.div
+      variants={{
+        hidden: {
+          y: 10,
+          opacity: 0,
+        },
+        show: {
+          y: 0,
+          opacity: 1,
+        },
+      }}
       key={invitation?.id}
       className="flex items-start gap-3 border-b px-4 py-2 hover:bg-neutral-100"
     >
@@ -80,7 +91,7 @@ function InvitationRow({
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

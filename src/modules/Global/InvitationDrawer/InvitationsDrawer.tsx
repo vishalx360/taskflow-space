@@ -9,6 +9,7 @@ import InvitationRow, {
   InvitationRowSkeleton,
   type WorkspaceMemberInvitationWithSenderAndRecevier,
 } from "./InvitationRow";
+import { AnimatePresence, motion } from "framer-motion";
 
 function InvitationDrawer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,23 +68,41 @@ export function ReceviedInvitationsList({
     );
   }
   return (
-    <div className="space-y-2">
-      {myInvitations?.length !== 0 ? (
-        <>
-          {myInvitations?.map((invitation) => (
-            <InvitationRow
-              setCurrentInvitation={setCurrentInvitation}
-              key={invitation.id}
-              invitation={invitation}
-            />
-          ))}
-        </>
-      ) : (
-        <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
-          No Invitations recevied
-        </div>
-      )}
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              duration: 0.2,
+              staggerChildren: 0.05,
+              // when: "",
+            },
+          },
+        }}
+        initial="hidden"
+        animate="show"
+        exit="hidden"
+        className="space-y-2 pb-10"
+      >
+        {myInvitations?.length !== 0 ? (
+          <>
+            {myInvitations?.map((invitation) => (
+              <InvitationRow
+                setCurrentInvitation={setCurrentInvitation}
+                key={invitation.id}
+                invitation={invitation}
+              />
+            ))}
+          </>
+        ) : (
+          <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
+            No Invitations recevied
+          </div>
+        )}
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
@@ -107,23 +126,41 @@ export function SentInvitationsList({
     );
   }
   return (
-    <div className="space-y-2">
-      {myInvitations?.length !== 0 ? (
-        <>
-          {myInvitations?.map((invitation) => (
-            <InvitationRow
-              setCurrentInvitation={setCurrentInvitation}
-              key={invitation.id}
-              invitation={invitation}
-            />
-          ))}
-        </>
-      ) : (
-        <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
-          No Invitations sent
-        </div>
-      )}
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              duration: 0.2,
+              staggerChildren: 0.05,
+              // when: "",
+            },
+          },
+        }}
+        initial="hidden"
+        animate="show"
+        exit="hidden"
+        className="space-y-2 pb-10"
+      >
+        {myInvitations?.length !== 0 ? (
+          <>
+            {myInvitations?.map((invitation) => (
+              <InvitationRow
+                setCurrentInvitation={setCurrentInvitation}
+                key={invitation.id}
+                invitation={invitation}
+              />
+            ))}
+          </>
+        ) : (
+          <div className="rounded-xl bg-gray-100 px-4 py-4 text-center text-neutral-500">
+            No Invitations sent
+          </div>
+        )}
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
