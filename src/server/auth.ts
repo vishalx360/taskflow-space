@@ -14,6 +14,7 @@ import {
 import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
+import { TRPCError } from "@trpc/server";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -89,8 +90,11 @@ export const authOptions: NextAuthOptions = {
         const user = await prisma.user.findFirst({
           where: { email: creds.email },
         });
-        if (!user || !user.password) {
-          throw new Error("User not found");
+        if (!user) {
+          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+        }
+        if (!user.password) {
+          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Password not set, please use other login method" })
         }
         const isValidPassword = await verify(user.password, creds.password);
         if (!isValidPassword) {

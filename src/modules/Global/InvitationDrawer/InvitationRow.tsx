@@ -47,7 +47,7 @@ function InvitationRow({
         width={20}
         className="h-10 w-10 rounded-full border-2 border-white dark:border-gray-800"
         src={
-          recepient.email === session?.user.email
+          recepient?.email === session?.user.email
             ? sender?.image ||
               (sender?.email && getGravatar(sender?.email)) ||
               getGravatar("default")

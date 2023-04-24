@@ -217,5 +217,76 @@ export const AuthenticationRouter = createTRPCRouter({
       });
       return input.provider;
     })
+  ,
+  fetchDeleteConsequences: protectedProcedure
+    .query(async ({ ctx }) => {
+      const user = await ctx.prisma.user.findFirst({
+        where: { id: ctx.session.user?.id },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not found.",
+        });
+      }
+      // delete all workspaces where user is owner
+      return ctx.prisma.workspace.findMany({
+        where: {
+          members: {
+            some: {
+              role: "OWNER",
+              userId: ctx.session.user?.id
+            },
+          }
+        },
+        select: {
+          id: true,
+          name: true,
+          personal: true,
+          createdAt: true,
+          _count: {
+            select: {
+              members: true,
+              boards: true,
+            }
+          }
+        },
+      })
+    }),
+
+  deleteAccount: protectedProcedure
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findFirst({
+        where: { id: ctx.session.user?.id },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not found.",
+        });
+      }
+
+      const transactions = [
+        // delete all workspaces where user is owner
+        ctx.prisma.workspace.deleteMany({
+          where: {
+            members: {
+              some: {
+                role: "OWNER",
+                userId: ctx.session.user?.id
+              },
+            }
+          }
+        }),
+        ctx.prisma.user.delete({
+          where: {
+            id: ctx.session.user?.id
+          }
+        })
+      ];
+
+      // promote next owner
+      return Promise.all(transactions);
+    })
 });
 
