@@ -8,29 +8,22 @@ import {
 } from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { LucideInfo, LucideKey, LucideUserMinus } from "lucide-react";
+import { LucideInfo, LucideUserMinus } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import Timeago from "react-timeago";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";
-import Timeago from "react-timeago";
 import { Input } from "../ui/input";
 
 function DeleteAccountSection() {
   const [isOpen, setIsOpen] = useState(false);
-  function closeModal() {
-    setIsOpen(false);
-  }
-  function openModal(e) {
-    e.stopPropagation();
-    setIsOpen(true);
-  }
 
-  const formRef = useRef(null);
   const { toast } = useToast();
   const { data: deleteConsequences, isLoading } =
     api.authentication.fetchDeleteConsequences.useQuery(undefined, {
+      enabled: isOpen,
       staleTime: 5000, // 1 second
     });
   const mutation = api.authentication.deleteAccount.useMutation({
@@ -56,13 +49,7 @@ function DeleteAccountSection() {
       </p>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button
-            isLoading={isLoading}
-            variant="destructive"
-            loadingText="Deleting Workspace"
-          >
-            Delete My Account
-          </Button>
+          <Button variant="destructive">Delete My Account</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>

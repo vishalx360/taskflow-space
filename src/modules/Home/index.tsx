@@ -19,9 +19,9 @@ function Home() {
             </p>
             <Link
               href="/signup"
-              className="text-md mt-6 inline-block  rounded-lg bg-black px-8 py-3 text-center font-bold capitalize leading-5 text-white hover:bg-black/80 focus:outline-none lg:mx-0 lg:w-auto"
+              className="text-md mt-6 inline-block  rounded-lg bg-black px-8 py-3 text-center font-bold  leading-5 text-white hover:bg-black/80 focus:outline-none lg:mx-0 lg:w-auto"
             >
-              Get Started
+              Get Started for free
             </Link>
           </div>
 

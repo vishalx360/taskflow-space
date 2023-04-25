@@ -20,7 +20,7 @@ function Workspaces() {
     isRefetching,
   } = api.workspace.getAllWorkspace.useQuery();
 
-  if (isLoading || isRefetching) {
+  if (isLoading) {
     return <WorkspaceListSkeleton />;
   }
   return (

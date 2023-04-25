@@ -9,6 +9,7 @@ import { Field, Form, Formik, type FieldProps } from "formik";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaGithub, FaGoogle } from "react-icons/fa";
@@ -42,6 +43,9 @@ export default function SignInPage() {
   }
   return (
     <>
+      <Head>
+        <title>Taskflow | Sign-up</title>
+      </Head>
       <section className="bg-neutral-100 dark:bg-neutral-900">
         <div className="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8 lg:py-0">
           <div className="my-10 block dark:hidden lg:my-20">

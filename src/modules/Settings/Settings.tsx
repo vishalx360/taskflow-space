@@ -50,21 +50,21 @@ function Settings() {
           </TabsTrigger>
           <TabsTrigger
             onClick={handelClick}
-            data-value="/dashboard/settings/subscription"
-            className="md:px-5"
-            value="/dashboard/settings/subscription"
-          >
-            <LucideGem width={20} className="mr-4" />
-            Subscription
-          </TabsTrigger>
-          <TabsTrigger
-            onClick={handelClick}
             data-value="/dashboard/settings/security"
             className="md:px-5"
             value="/dashboard/settings/security"
           >
             <LucideLock width={20} className="mr-4" />
             Security
+          </TabsTrigger>
+          <TabsTrigger
+            onClick={handelClick}
+            data-value="/dashboard/settings/subscription"
+            className="md:px-5"
+            value="/dashboard/settings/subscription"
+          >
+            <LucideGem width={20} className="mr-4" />
+            Subscription
           </TabsTrigger>
           {/* <TabsTrigger className="md:px-5" value="activity">
             <LucideActivity width={20} className="mr-4" />
@@ -77,15 +77,15 @@ function Settings() {
               <ProfileSection />
             </Fade>
           </TabsContent>
-          <TabsContent value="/dashboard/settings/subscription">
-            <Fade>
-              <SubscriptionSection />
-            </Fade>
-          </TabsContent>
           <TabsContent value="/dashboard/settings/security">
             <Fade>
               {" "}
               <SecuritySection />
+            </Fade>
+          </TabsContent>
+          <TabsContent value="/dashboard/settings/subscription">
+            <Fade>
+              <SubscriptionSection />
             </Fade>
           </TabsContent>
           <TabsContent value="loading">

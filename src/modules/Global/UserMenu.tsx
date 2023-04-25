@@ -62,7 +62,7 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
             {withDetails && (
               <div className="text-start">
                 <h2 className="text-md font-medium ">{session?.user?.name}</h2>
-                <h2 className="text-sm text-gray-500">
+                <h2 className="line-clamp-1 text-sm text-gray-500">
                   {session?.user?.email}
                 </h2>
               </div>
