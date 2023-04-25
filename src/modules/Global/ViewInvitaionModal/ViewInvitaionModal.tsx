@@ -168,11 +168,13 @@ export default function ViewInvitationModal({
           />
         </div>
         <div className="my-2 text-neutral-600">
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2  flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-neutral-900 text-sm uppercase  text-white">
               {currentInvitation?.Workspace.name[0]}
             </div>
-            <div>{currentInvitation?.Workspace.name}</div>
+            <div className="w-52 overflow-clip text-ellipsis">
+              {currentInvitation?.Workspace.name}
+            </div>
           </div>
           <h1>
             <span className="font-medium">
@@ -182,12 +184,7 @@ export default function ViewInvitationModal({
             </span>
             {"  "}
             invited{" "}
-            <span
-              className="font-medium underline underline-offset-2
-                    
-                    
-                    "
-            >
+            <span className="font-medium underline underline-offset-2">
               {recepientEmail === session?.user.email
                 ? "you "
                 : currentInvitation?.recepient?.name || recepientEmail}
@@ -199,8 +196,12 @@ export default function ViewInvitationModal({
             workspace as a {currentInvitation?.role.toLowerCase()}
           </h1>
           <h2 className="mt-5">
-            If accepted, recepient will be added as a member of the workspace
-            and will get access to all the boards.
+            If accepted,{" "}
+            {recepientEmail === session?.user.email
+              ? "you "
+              : currentInvitation?.recepient?.name || recepientEmail}{" "}
+            will be added as a member of the workspace and will get access to
+            all the boards.
           </h2>
         </div>
         {recepientEmail === session?.user.email && (
@@ -236,7 +237,6 @@ export default function ViewInvitationModal({
               onClick={CancelInvitation}
               isLoading={isRejecting}
               disabled={recepientMutation.isLoading}
-              loadingText="Rejecting..."
               type="submit"
               LeftIcon={FiX}
               className="w-full"

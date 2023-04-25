@@ -10,6 +10,7 @@ import InvitationRow, {
   InvitationRowSkeleton,
   type WorkspaceMemberInvitationWithSenderAndRecevier,
 } from "./InvitationRow";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 function InvitationDrawer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,6 +58,7 @@ export function ReceviedInvitationsList({
 }) {
   const { data: myInvitations, isLoading } =
     api.workspace.getAllMyReceviedInvites.useQuery();
+  const [parent] = useAutoAnimate();
 
   if (isLoading) {
     return (
@@ -70,6 +72,7 @@ export function ReceviedInvitationsList({
   return (
     <AnimatePresence mode="wait">
       <motion.div
+        ref={parent}
         variants={{
           hidden: { opacity: 0 },
           show: {
@@ -115,6 +118,7 @@ export function SentInvitationsList({
 }) {
   const { data: myInvitations, isLoading } =
     api.workspace.getAllMySentInvites.useQuery();
+  const [parent] = useAutoAnimate();
 
   if (isLoading) {
     return (
@@ -128,6 +132,7 @@ export function SentInvitationsList({
   return (
     <AnimatePresence mode="wait">
       <motion.div
+        ref={parent}
         variants={{
           hidden: { opacity: 0 },
           show: {
