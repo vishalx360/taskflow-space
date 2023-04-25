@@ -20,9 +20,6 @@
 - Milestone Views (Goals)
 - Task View (Kanban)
 
-## Rules
+## System Architecture Diagram
 
-- Each task can be assigned to a milestone.
-- By default each task will have 1 day of time to finish.
-- Collective time to finish all task of a milestone makes the deadline of a milestone.
-- Milestone will have a defined deadline.
+![Taskflow.Space System Architecture](/arch-diagram.png?raw=true "Taskflow.space")
