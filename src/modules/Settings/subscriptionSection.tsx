@@ -3,6 +3,7 @@ import { LucideCheckCircle } from "lucide-react";
 import Image from "next/image";
 import { FaBan } from "react-icons/fa";
 import { Badge } from "../ui/badge";
+import Script from "next/script";
 
 const bgMap = {
   hobby: "awdaawwwaddwdawawdwda",
@@ -102,7 +103,7 @@ const PlansData = [
   },
 ];
 
-export default function SubscriptionSection() {
+export function SubscriptionSection() {
   return (
     <div className="bg-white dark:bg-gray-900">
       <div className="container  px-6 py-8 pb-20">
@@ -217,6 +218,18 @@ export default function SubscriptionSection() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+export default function StripeSubcription() {
+  return (
+    <div>
+      <Script async src="https://js.stripe.com/v3/pricing-table.js"></Script>
+      <stripe-pricing-table
+        pricing-table-id="prctbl_1N0ij8SBAltn7fnNQ5L5FuTy"
+        publishable-key="pk_test_51N0UECSBAltn7fnNvgoHpvhsZ75ickfwKHbfAREQBOUCWYAHyEk2Rs2zHjIqj3GF9qDlaPUPsZeYWlPSvVp0oliU00dpzzIQiP"
+      ></stripe-pricing-table>
     </div>
   );
 }
