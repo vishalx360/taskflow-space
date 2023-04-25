@@ -1,5 +1,4 @@
 import { useToast } from "@/hooks/use-toast";
-import Divider from "@/modules/Global/Divider";
 import LogoImage from "@/modules/Global/LogoImage";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";

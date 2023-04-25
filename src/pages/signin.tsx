@@ -1,5 +1,4 @@
 import { useToast } from "@/hooks/use-toast";
-import Divider from "@/modules/Global/Divider";
 import LogoImage from "@/modules/Global/LogoImage";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
@@ -14,9 +13,8 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { FiArrowLeft } from "react-icons/fi";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 export default function SignInPage() {

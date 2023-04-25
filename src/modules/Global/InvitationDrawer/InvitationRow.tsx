@@ -2,12 +2,12 @@ import { type UserType } from "@/modules/Board/WorkspaceMembersModal/MemberRow";
 import { Button } from "@/modules/ui/button";
 import getGravatar from "@/utils/getGravatar";
 import { type WorkspaceMemberInvitation } from "@prisma/client";
+import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { type Dispatch, type SetStateAction } from "react";
 import { MdViewDay } from "react-icons/md";
 import Timeago from "react-timeago";
-import { motion } from "framer-motion";
 // short type name
 export type WorkspaceMemberInvitationWithSenderAndRecevier =
   WorkspaceMemberInvitation & {

@@ -1,9 +1,9 @@
+import { useToast } from "@/hooks/use-toast";
 import { api } from "@/utils/api";
 import { LucideLock } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { Button } from "../ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { signIn } from "next-auth/react";
 
 function ConnectedAccountSection() {
   const { data: connectedAccounts, isLoading } =

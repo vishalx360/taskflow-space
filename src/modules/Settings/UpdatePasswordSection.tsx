@@ -14,7 +14,7 @@ import {
 import { UpdatePasswordSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
-import { LifeBuoy, LucideInfo, LucideKey } from "lucide-react";
+import { LucideInfo, LucideKey } from "lucide-react";
 import { useRef, useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";

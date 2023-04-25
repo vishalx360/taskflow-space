@@ -4,6 +4,7 @@ import NewUserSideEffects from "@/utils/NewUserSideEffects";
 import { SigninSchema } from "@/utils/ValidationSchema";
 import { signJTW, verifyJWT } from "@/utils/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -12,9 +13,8 @@ import {
   type NextAuthOptions
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
-import { TRPCError } from "@trpc/server";
+import GoogleProvider from "next-auth/providers/google";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
