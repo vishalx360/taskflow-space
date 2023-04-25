@@ -14,10 +14,9 @@ import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
 
 export const WorkspaceRouter = createTRPCRouter({
     getAllWorkspace: protectedProcedure.query(({ ctx }) => {
-        console.log("getAllWorkspace", ctx.session.user.id)
         return ctx.prisma.workspace.findMany({
             where: { members: { some: { userId: ctx.session.user.id } } },
-            orderBy: { personal: "desc" },
+            orderBy: { createdAt: "asc" },
             include: { members: { where: { userId: ctx.session.user.id }, select: { role: true } } },
         });
     }),
