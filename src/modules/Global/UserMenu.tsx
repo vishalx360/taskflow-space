@@ -38,9 +38,8 @@ import { SupportModal } from "./SupportModal";
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
 
-  async function handelLogout() {
-    await signOut();
-    return;
+  function handelLogout() {
+    void signOut();
   }
   return (
     <DropdownMenu>
@@ -73,89 +72,69 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
         {/* <Button variant="outline">Open</Button> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>Account Menu</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link href="/dashboard/overview">
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               <Home className="mr-2 h-4 w-4" />
               Overview
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
           <Link href="/dashboard/invitations">
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               <Mails className="mr-2 h-4 w-4" />
               Invitations
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
           <Link href="/dashboard/settings">
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               <Settings className="mr-2 h-4 w-4" />
               Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger>
-              <UserPlus className="mr-2 h-4 w-4" />
-              <span>Invite users</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>
-                  <Mail className="mr-2 h-4 w-4" />
-                  <span>Email</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  <span>Message</span>
-                </DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <CreateNewBoardModal>
-              <div className="flex items-center">
+              <div className="flex w-full items-center px-2 py-1 text-sm">
                 <Plus className="mr-2 h-4 w-4" />
                 <span>New Board</span>
-                <DropdownMenuShortcut>⌘+B</DropdownMenuShortcut>
               </div>
             </CreateNewBoardModal>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild className="cursor-pointer">
             <CreateNewWorkspaceModal>
-              <div className="flex items-center">
+              <div className="flex w-full items-center px-2 py-1 text-sm">
                 <Plus className="mr-2 h-4 w-4" />
                 <span>New Workspace</span>
-                <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
               </div>
             </CreateNewWorkspaceModal>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <AboutModal>
-            <LucideInfo className="mr-2 h-4 w-4" />
-            <span>About</span>
-          </AboutModal>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <SupportModal>
-            <LifeBuoy className="mr-2 h-4 w-4" />
-            <span>Support</span>
-          </SupportModal>
-        </DropdownMenuItem>
-
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="cursor-pointer">
+            <AboutModal>
+              <LucideInfo className="mr-2 h-4 w-4" />
+              <span className="w-full">About</span>
+            </AboutModal>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <SupportModal>
+              <LifeBuoy className="mr-2 h-4 w-4" />
+              <span className="w-full">Support</span>
+            </SupportModal>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handelLogout}>
+        <DropdownMenuItem
+          className="cursor-pointer text-red-600"
+          onClick={handelLogout}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

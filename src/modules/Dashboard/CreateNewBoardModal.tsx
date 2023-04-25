@@ -109,7 +109,7 @@ export default function CreateNewBoardModal({
   });
 
   return (
-    <div className="w-full md:w-auto" onClick={(e) => e.stopPropagation()}>
+    <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           {children ? (
@@ -211,7 +211,14 @@ export default function CreateNewBoardModal({
                   )}
                 </Field>
                 <div className="flex flex-col gap-2 overflow-visible">
-                  <Accordion type="single" defaultValue="item-1" collapsible>
+                  <Accordion
+                    onFocusCapture={() => {
+                      initailFocusRef?.current?.focus();
+                    }}
+                    type="single"
+                    defaultValue="item-1"
+                    collapsible
+                  >
                     <AccordionItem className="px-2" value="item-1">
                       <AccordionTrigger>Basic details</AccordionTrigger>
                       <AccordionContent className="px-1">
@@ -277,9 +284,9 @@ export default function CreateNewBoardModal({
                               </label>
                               <div className="flex gap-2">
                                 <Input
+                                  ref={initailFocusRef}
                                   type="text"
                                   id="name"
-                                  ref={initailFocusRef}
                                   required
                                   placeholder="Board name"
                                   {...field}
@@ -366,6 +373,6 @@ export default function CreateNewBoardModal({
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

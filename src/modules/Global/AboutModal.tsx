@@ -18,7 +18,10 @@ export function AboutModal({ children }: { children?: ReactNode }) {
   }
 
   return (
-    <div className="flex" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="flex w-full items-center"
+      onClick={(e) => e.stopPropagation()}
+    >
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           {children ? (

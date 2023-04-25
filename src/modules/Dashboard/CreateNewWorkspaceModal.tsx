@@ -55,7 +55,7 @@ export default function CreateNewWorkspaceModal({
   });
 
   return (
-    <div className="w-full" onClick={(e) => e.stopPropagation()}>
+    <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           {children ? (
@@ -146,6 +146,6 @@ export default function CreateNewWorkspaceModal({
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
