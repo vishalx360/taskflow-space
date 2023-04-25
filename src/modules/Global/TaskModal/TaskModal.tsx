@@ -12,12 +12,14 @@ import { UpdateTaskSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Transition } from "@headlessui/react";
 import { type Task } from "@prisma/client";
-import { format } from "date-fns";
+import { format, isSameDay } from "date-fns";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import isEqual from "lodash.isequal";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { MdDelete } from "react-icons/md";
+import Timeago from "react-timeago";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+
 export default function TaskModal({
   children,
   task,
@@ -92,7 +94,7 @@ export default function TaskModal({
                 <DialogTitle className="pr-3 font-medium">
                   <Field name="title">
                     {({ field, meta }: FieldProps) => (
-                      <div classasfcawcsName="w-full">
+                      <div className="w-full">
                         <Textarea
                           id="title"
                           required
@@ -111,9 +113,15 @@ export default function TaskModal({
                   </Field>
                 </DialogTitle>
               </DialogHeader>
-              <div className="my-4 px-3">
-                <p className="text-sm text-gray-500">
-                  {format(task?.createdAt, "PPPP")}
+              <div className="my-4 flex items-center gap-5 px-3">
+                <p className="text-sm text-gray-600">
+                  {" "}
+                  Created{" "}
+                  {isSameDay(task?.createdAt, new Date()) ? (
+                    <Timeago live={false} date={task?.createdAt} />
+                  ) : (
+                    format(task?.createdAt, "PPPP")
+                  )}
                 </p>
               </div>
               <Field name="description">
