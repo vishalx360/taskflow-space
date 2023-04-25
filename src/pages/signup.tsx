@@ -1,4 +1,5 @@
 import { useToast } from "@/hooks/use-toast";
+import Divider from "@/modules/Global/Divider";
 import LogoImage from "@/modules/Global/LogoImage";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
@@ -6,13 +7,15 @@ import { authOptions } from "@/server/auth";
 import { SignUpSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
+import { LucideArrowLeft } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FaGithub, FaGoogle } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 export default function SignInPage() {
@@ -38,7 +41,7 @@ export default function SignInPage() {
     },
   });
 
-  async function handelOauthSignUp(provider: string) {
+  async function handelOauthSignin(provider: string) {
     await signIn(provider);
   }
   return (
@@ -48,11 +51,19 @@ export default function SignInPage() {
       </Head>
       <section className="bg-neutral-100 dark:bg-neutral-900">
         <div className="mx-auto flex h-screen flex-col items-center justify-center px-6 py-8 lg:py-0">
-          <div className="my-10 block dark:hidden lg:my-20">
-            <LogoImage dark width={300} />
-          </div>
-          <div className="my-10 hidden dark:block lg:my-20">
-            <LogoImage width={300} />
+          <div className="flex items-center  gap-5">
+            <Link
+              href="/"
+              className="flex items-center gap-5 rounded-full border-neutral-400 p-2 transition duration-200 ease-in-out hover:bg-neutral-500/20 "
+            >
+              <LucideArrowLeft className="text-2xl" />
+            </Link>
+            <div className="my-10 block dark:hidden lg:my-20">
+              <LogoImage dark width={300} />
+            </div>
+            <div className="my-10 hidden dark:block lg:my-20">
+              <LogoImage width={300} />
+            </div>
           </div>
           <div className="w-full rounded-xl bg-white shadow-lg dark:border dark:border-neutral-700 dark:bg-neutral-800 sm:max-w-md md:mt-0 xl:p-0">
             <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
@@ -131,28 +142,31 @@ export default function SignInPage() {
                   >
                     Sign up
                   </Button>
-                  <Button
-                    onClick={() => {
-                      void handelOauthSignUp("google");
-                    }}
-                    variant="outline"
-                    className="text-md flex w-full items-center justify-center gap-4"
-                    size="lg"
-                    LeftIcon={FaGoogle}
-                  >
-                    Sign Up With Google
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      void handelOauthSignUp("github");
-                    }}
-                    variant="outline"
-                    className="text-md flex w-full items-center justify-center gap-4"
-                    size="lg"
-                    LeftIcon={FaGithub}
-                  >
-                    Sign Up With Github
-                  </Button>
+                  <div className="flex flex-col items-center gap-2 md:flex-row">
+                    <Button
+                      onClick={() => {
+                        void handelOauthSignin("google");
+                      }}
+                      variant="outline"
+                      className="text-md flex w-full items-center justify-center gap-4"
+                      size="lg"
+                      LeftIcon={FcGoogle}
+                    >
+                      Google
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        void handelOauthSignin("github");
+                      }}
+                      variant="outline"
+                      className="text-md flex w-full items-center justify-center gap-4"
+                      size="lg"
+                      LeftIcon={FaGithub}
+                    >
+                      Github
+                    </Button>
+                  </div>
+
                   <p className="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                     Already have an account ?{" "}
                     <Link

@@ -224,7 +224,7 @@ export function SubscriptionSection() {
 
 export default function StripeSubcription() {
   return (
-    <div>
+    <div className="pb-10">
       <Script async src="https://js.stripe.com/v3/pricing-table.js"></Script>
       <stripe-pricing-table
         pricing-table-id="prctbl_1N0ij8SBAltn7fnNQ5L5FuTy"

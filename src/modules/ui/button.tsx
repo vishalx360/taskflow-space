@@ -73,7 +73,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <Loader2 className="mr-2 h-4 w-4 animate-spin text-inherit" />
         )}
         {LeftIcon && !isLoading && (
-          <LeftIcon className="mr-2 h-4 w-4  text-inherit" />
+          <LeftIcon className="mr-2 h-5 w-5  text-inherit" />
         )}
         {isLoading && loadingText ? loadingText : children}
         {RightIcon && <RightIcon className="mr-2 h-4 w-4  text-inherit" />}
