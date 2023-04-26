@@ -9,14 +9,14 @@ import { api } from "@/utils/api";
 import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext";
 import { Toaster } from "@/modules/ui/toaster";
 import "@/styles/globals.css";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { MdArrowUpward } from "react-icons/md";
 import Head from "next/head";
 
 // If loading a variable font, you don't need to specify the font weight
-const inter = Inter({
+const pjs = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-pjs",
 });
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -36,7 +36,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Head>
         <title>Taskflow</title>
       </Head>
-      <main className={`${inter.variable} font-sans`}>
+      <main className={`${pjs.variable} font-pjs`}>
         <BoardSettingsModalProvider>
           <Component {...pageProps} />
         </BoardSettingsModalProvider>
