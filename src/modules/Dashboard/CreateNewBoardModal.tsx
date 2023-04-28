@@ -61,7 +61,7 @@ const GetRandomBackgroundGradient = () => {
   }
 };
 const getWorkspaceName = (workspaceId, workspaces) => {
-  const workspace = workspaces.find(
+  const workspace = workspaces?.find(
     (workspace) => workspace.id === workspaceId
   );
   return workspace?.name;
@@ -87,7 +87,7 @@ export default function CreateNewBoardModal({
 
   const utils = api.useContext();
   const { toast } = useToast();
-  const workspaces = utils.workspace.getAllWorkspace.getData();
+  const { data: workspaces } = api.workspace.getAllWorkspace.useQuery();
 
   const mutation = api.board.createNewBoard.useMutation({
     onError(error) {

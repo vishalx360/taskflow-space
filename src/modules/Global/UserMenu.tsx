@@ -71,7 +71,7 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
         </button>
         {/* <Button variant="outline">Open</Button> */}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="z-[110] w-56">
         <DropdownMenuLabel>Account Menu</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
