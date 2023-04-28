@@ -12,6 +12,7 @@ import "@/styles/globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { MdArrowUpward } from "react-icons/md";
 import Head from "next/head";
+import Scrollbars from "react-custom-scrollbars-2";
 
 // If loading a variable font, you don't need to specify the font weight
 const pjs = Plus_Jakarta_Sans({

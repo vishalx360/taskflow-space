@@ -7,7 +7,7 @@ function Home() {
     <>
       <HomeNavbar />
       <HeroSection />
-      {/* <BenifitsSection /> */}
+      <BenifitsSection />
     </>
   );
 }

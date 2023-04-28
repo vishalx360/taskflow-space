@@ -7,7 +7,7 @@ import BOARD_3_URL from "../../../public/board2.jpeg";
 
 function HeroSection() {
   return (
-    <section className="h-screen bg-gradient-to-t from-black/10 to-white md:h-[110vh] ">
+    <section className="h-screen overflow-x-hidden bg-gradient-to-t from-black/10 to-white md:h-[110vh] md:overflow-x-visible ">
       <div className=" mx-auto py-16 text-center">
         <div className="container  mx-auto max-w-2xl px-5">
           <motion.div
@@ -49,7 +49,7 @@ function HeroSection() {
           </motion.div>
         </div>
 
-        <div className="relative mt-20 flex w-full items-end justify-center overflow-hidden md:mt-[10vh] md:overflow-visible">
+        <div className="relative mt-20 flex w-full items-end justify-center overflow-visible md:mt-[10vh] ">
           <motion.div
             initial={{ opacity: 0, x: 0, y: 0, scale: 0.9 }}
             animate={{ opacity: 1, x: "-50%", y: -10, scale: 1 }}

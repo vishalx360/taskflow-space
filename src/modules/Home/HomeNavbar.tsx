@@ -34,7 +34,7 @@ function HomeNavbar() {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 0.5, ease: "anticipate" }}
-      className=" sticky top-0 z-[100]  bg-neutral-100/90  backdrop-blur-md"
+      className="sticky top-0 z-[100] mb-10 bg-neutral-100/90  shadow  backdrop-blur-md"
     >
       <div className="container mx-auto max-w-[100em] p-6  lg:flex lg:items-center lg:justify-between">
         <div className="flex items-center justify-between">
