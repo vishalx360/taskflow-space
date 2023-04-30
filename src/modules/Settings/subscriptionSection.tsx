@@ -91,7 +91,7 @@ const PlansData = [
 
 export function SubscriptionSection() {
   return (
-    <div className="bg-white dark:bg-gray-900">
+    <div className="">
       <div className="container  px-6 py-8 pb-20">
         <div className="">
           {/* <div className="flex flex-col items-center xl:mx-8 xl:items-start">
@@ -134,7 +134,7 @@ export function SubscriptionSection() {
               {PlansData.map((plan) => (
                 <div
                   key={plan.plan}
-                  className="relative mx-auto max-w-sm rounded-lg border dark:border-gray-700 md:mx-4"
+                  className="relative mx-auto max-w-sm rounded-lg border bg-white md:mx-4"
                 >
                   <div className="min-w-sm  relative h-20 w-full max-w-md overflow-hidden rounded-t-xl  md:h-20 md:max-w-md">
                     <Image

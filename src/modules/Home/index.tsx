@@ -1,7 +1,11 @@
-import { SubscriptionSection } from "../Settings/subscriptionSection";
+import StripeSubcription, {
+  SubscriptionSection,
+} from "../Settings/subscriptionSection";
 import BenifitsSection from "./BenifitsSection";
+import FeaturesSection from "./FeaturesSection";
 import HeroSection from "./HeroSection";
 import HomeNavbar from "./HomeNavbar";
+import PricingSection from "./PricingSection";
 
 function Home() {
   return (
@@ -9,7 +13,8 @@ function Home() {
       <HomeNavbar />
       <HeroSection />
       <BenifitsSection />
-      <SubscriptionSection />
+      <FeaturesSection />
+      <PricingSection />
     </>
   );
 }
