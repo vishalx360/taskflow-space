@@ -1,6 +1,7 @@
 import StripeSubcription, {
   SubscriptionSection,
 } from "../Settings/subscriptionSection";
+import AboutSection from "./AboutSection";
 import BenifitsSection from "./BenifitsSection";
 import FeaturesSection from "./FeaturesSection";
 import HeroSection from "./HeroSection";
@@ -15,6 +16,7 @@ function Home() {
       <BenifitsSection />
       <FeaturesSection />
       <PricingSection />
+      <AboutSection />
     </>
   );
 }

@@ -32,25 +32,25 @@ const FeatureListData = [
   },
   {
     image: BENIFIT_2_IMG,
-    title: "Lorem ipsum dolor sit",
+    title: "Lorem ipsum dolor sita",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
   },
   {
     image: BENIFIT_3_IMG,
-    title: "Lorem ipsum dolor sit",
+    title: "Lorem ipsum dolor sitb",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
   },
   {
     image: BENIFIT_2_IMG,
-    title: "Lorem ipsum dolor sit",
+    title: "Lorem ipsum dolor sitc",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
   },
   {
     image: BENIFIT_2_IMG,
-    title: "Lorem ipsum dolor sit",
+    title: "Lorem ipsum dolor sitd",
     description:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
   },
