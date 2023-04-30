@@ -31,7 +31,7 @@ const benifits = [
 
 function BenifitsSection() {
   return (
-    <section className="h-screen bg-gradient-to-b from-black/10 to-white ">
+    <section className="min-h-screen bg-gradient-to-b from-black/10 to-white ">
       <div className="container mx-auto px-6 py-16 ">
         <div className="space-y-4">
           <h1 className="whitespace-nowrap text-sm font-semibold text-blue-500">

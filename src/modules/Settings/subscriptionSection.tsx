@@ -6,7 +6,7 @@ import { FaBan } from "react-icons/fa";
 import { Badge } from "../ui/badge";
 
 const bgMap = {
-  hobby: "awdaawwwaddwdawawdwda",
+  individual: "awdaawwwaddwdawawdwda",
   startup: "free-plasdasan-subscription",
   enterprise: "asdterpris-plan-subscription",
 };
@@ -51,7 +51,7 @@ const bgMap = {
 
 const PlansData = [
   {
-    plan: "hobby",
+    plan: "individual",
     isCurrentPlan: true,
     price: 0,
     description: "For individuals who want to get things done",
@@ -61,13 +61,6 @@ const PlansData = [
       "4 Boards per Workspace",
       "5 Lists per Board",
       "1000 Tasks per List",
-    ],
-    missingFeatures: [
-      "Email Support",
-      "Priority Support",
-      "Custom Domain",
-      "Custom Branding",
-      "Custom Integrations",
     ],
   },
   {
@@ -80,13 +73,6 @@ const PlansData = [
       "50 Boards per Workspace",
       "100 Lists per Board",
       "Unlimited Tasks per List",
-      "Email Support",
-      "Priority Support",
-    ],
-    missingFeatures: [
-      "Custom Domain",
-      "Custom Branding",
-      "Custom Integrations",
     ],
   },
   {
@@ -94,11 +80,11 @@ const PlansData = [
     price: 99,
     description: "For large teams who want to get things done",
     features: [
-      "10 Workspaces",
-      "8 Members per Workspace",
-      "5 Boards per Workspace",
-      "5 Lists per Board",
-      "1000 Tasks per List",
+      "Everything of Startup Plan",
+      "Email Support",
+      "Custom Domain",
+      "Custom Branding",
+      "Custom Integrations",
     ],
   },
 ];

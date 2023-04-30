@@ -3,12 +3,9 @@ import {
   LifeBuoy,
   LogOut,
   LucideInfo,
-  Mail,
   Mails,
-  MessageSquare,
   Plus,
   Settings,
-  UserPlus,
 } from "lucide-react";
 
 import {
@@ -17,19 +14,14 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/modules/ui/dropdown-menu";
 import getGravatar from "@/utils/getGravatar";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiChevronDown } from "react-icons/fi";
+import { RxCaretSort } from "react-icons/rx";
 import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
 import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
 import { AboutModal } from "./AboutModal";
@@ -67,11 +59,11 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
               </div>
             )}
           </div>
-          {withDetails && <FiChevronDown className="text-xl text-inherit " />}
+          {withDetails && <RxCaretSort className="text-xl text-inherit " />}
         </button>
         {/* <Button variant="outline">Open</Button> */}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="z-[110] w-56">
+      <DropdownMenuContent className="z-[50] w-56">
         <DropdownMenuLabel>Account Menu</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
