@@ -2,7 +2,6 @@ import CreatorLogo from "@/../public/vishalAvatar.png";
 import Image from "next/image";
 import Link from "next/link";
 import Divider from "../Global/Divider";
-import LogoImage from "../Global/LogoImage";
 
 function AboutSection() {
   return (
@@ -89,9 +88,6 @@ function AboutSection() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="container border-t border-neutral-300 bg-neutral-200 p-5 text-center text-sm text-gray-600  ">
-        All rights reserverd &copy; Vishal Kumar 2023
       </div>
     </section>
   );
