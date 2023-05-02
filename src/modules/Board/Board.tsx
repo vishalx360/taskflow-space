@@ -153,7 +153,13 @@ function Board() {
               className="flex w-fit items-start gap-5 p-5  pt-20"
             >
               {board?.lists.map((list) => {
-                return <TaskList key={list.id} list={list} />;
+                return (
+                  <TaskList
+                    workspaceId={board.workspaceId}
+                    key={list.id}
+                    list={list}
+                  />
+                );
               })}
               <CreateList boardId={boardId || ""} />
             </motion.div>

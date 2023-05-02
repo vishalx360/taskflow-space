@@ -27,7 +27,7 @@ const Droppable = dynamic(
   { ssr: false }
 );
 
-function TaskList({ list }: { list: List }) {
+function TaskList({ list, workspaceId }: { list: List; workspaceId: string }) {
   const {
     data: Tasks,
     isLoading,
@@ -95,7 +95,12 @@ function TaskList({ list }: { list: List }) {
             >
               {Tasks?.length !== 0 ? (
                 Tasks?.map((task: Task, index: number) => (
-                  <TaskCard key={task.id} index={index} task={task} />
+                  <TaskCard
+                    key={task.id}
+                    index={index}
+                    task={task}
+                    workspaceId={workspaceId}
+                  />
                 ))
               ) : (
                 <EmptyListCard />

@@ -113,6 +113,12 @@ export const MoveTaskSchema = z.object({
   newNextTaskId: z.string().optional(),
 });
 
+export const UpdateTaskMemberSchema = z.object({
+  taskId: z.string(),
+  userId: z.string(),
+  isMember: z.boolean()
+});
+
 export const UpdateListSchema = z.object({
   listId: z.string(),
   name: z

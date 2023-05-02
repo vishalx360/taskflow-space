@@ -153,8 +153,10 @@ model Task {
 model TaskMember {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    Task      Task     @relation(fields: [taskId], references: [id])
+    Task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
     taskId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user      User     @relation(fields: [userId], references: [id])
     userId    String
+
+    @@index([userId, taskId])
 }

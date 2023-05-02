@@ -10,9 +10,17 @@ const Draggable = dynamic(
   { ssr: false }
 );
 
-export function TaskCard({ task, index }: { task: Task; index: number }) {
+export function TaskCard({
+  task,
+  index,
+  workspaceId,
+}: {
+  task: Task;
+  index: number;
+  workspaceId: string;
+}) {
   return (
-    <TaskModal task={task}>
+    <TaskModal workspaceId={workspaceId} defaultTaskData={task}>
       <TaskContextMenu task={task}>
         <Draggable
           isDragDisabled={task?.pending}

@@ -1,4 +1,5 @@
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
 import { Button } from "@/modules/ui/button";
 import {
   Dialog,
@@ -7,25 +8,36 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/modules/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/modules/ui/popover";
 import { Textarea } from "@/modules/ui/text-area";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/modules/ui/tooltip";
 import { UpdateTaskSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
+import getGravatar from "@/utils/getGravatar";
 import { Transition } from "@headlessui/react";
 import { type Task } from "@prisma/client";
 import { format, isSameDay } from "date-fns";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import isEqual from "lodash.isequal";
+import { LucideUserPlus } from "lucide-react";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { MdDelete } from "react-icons/md";
 import Timeago from "react-timeago";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import TaskMemberSelector from "./TaskMemberSelector";
 
 export default function TaskModal({
   children,
-  task,
+  defaultTaskData,
+  workspaceId,
 }: {
   children: React.ReactNode;
-  task: Task;
+  defaultTaskData: Task;
+  workspaceId: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,6 +50,15 @@ export default function TaskModal({
   }
   const utils = api.useContext();
   const { toast } = useToast();
+
+  const { data: task } = api.task.getTask.useQuery(
+    {
+      taskId: defaultTaskData.id,
+    },
+    {
+      placeholderData: defaultTaskData,
+    }
+  );
 
   const UpdateMutation = api.task.updateTask.useMutation({
     onError(error) {
@@ -54,13 +75,13 @@ export default function TaskModal({
         .invalidate({ listId: task.listId })
         .catch((err) => console.log(err));
       toast({ title: "Task updated successfully!" });
-      // setIsOpen(false);
+      setIsOpen(false);
     },
   });
   const initialValues = {
-    taskId: task.id,
-    title: task.title,
-    description: task.description || "",
+    taskId: task?.id,
+    title: task?.title,
+    description: task?.description || "",
   };
 
   return (
@@ -114,13 +135,71 @@ export default function TaskModal({
                 </DialogTitle>
               </DialogHeader>
               <div className="my-4 flex items-center gap-5 px-3">
+                <div className="flex gap-1">
+                  <TooltipProvider>
+                    <div className="flex items-center -space-x-3">
+                      {task?.members?.slice(0, 3)?.map((member) => {
+                        return (
+                          <Tooltip key={member?.userId}>
+                            <TooltipTrigger
+                              type="button"
+                              className="flex items-center gap-2"
+                            >
+                              <Avatar className="h-6 w-6 border-2 sm:h-8 sm:w-8">
+                                <AvatarImage
+                                  src={
+                                    member?.user?.image ||
+                                    getGravatar(member?.user?.email)
+                                  }
+                                />
+                                <AvatarFallback>
+                                  {member?.user?.name[0]}
+                                </AvatarFallback>
+                              </Avatar>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {member?.user?.name}
+                            </TooltipContent>
+                          </Tooltip>
+                        );
+                      })}
+                    </div>
+                    <Popover>
+                      <Tooltip>
+                        <TooltipTrigger
+                          type="button"
+                          className="flex items-center gap-2"
+                        >
+                          <PopoverTrigger asChild>
+                            <Button
+                              className="rounded-full p-2"
+                              variant="subtle"
+                              size="sm"
+                            >
+                              <LucideUserPlus className="p-0.5" />
+                            </Button>
+                          </PopoverTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent>Add Member</TooltipContent>
+                      </Tooltip>
+
+                      <PopoverContent className="w-fit">
+                        <TaskMemberSelector
+                          workspaceId={workspaceId}
+                          task={task}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </TooltipProvider>
+                </div>
+
                 <p className="text-sm text-gray-600">
                   {" "}
                   Created{" "}
                   {isSameDay(task?.createdAt, new Date()) ? (
                     <Timeago live={false} date={task?.createdAt} />
                   ) : (
-                    format(task?.createdAt, "PPPP")
+                    task?.createdAt && format(task?.createdAt, "PPPP")
                   )}
                 </p>
               </div>
@@ -150,9 +229,7 @@ export default function TaskModal({
                   {({ form }: FieldProps) => (
                     <>
                       <Transition
-                        show={
-                          form.dirty && !isEqual(form.values, initialValues)
-                        }
+                        show={form.dirty}
                         enter="transition-opacity duration-75"
                         enterFrom="opacity-0"
                         enterTo="opacity-100"
