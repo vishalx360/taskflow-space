@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import NextNprogress from "nextjs-progressbar";
 import ScrollToTop from "react-scroll-to-top";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { api } from "@/utils/api";
 
@@ -26,6 +27,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <ReactQueryDevtools initialIsOpen={false} />
+
       <Toaster />
       {/* black color  */}
       <NextNprogress
