@@ -5,7 +5,10 @@ import Divider from "../Global/Divider";
 
 function AboutSection() {
   return (
-    <section className="min-h-[50vh] bg-gradient-to-b from-white to-black/10 ">
+    <section
+      id="aboutus"
+      className="min-h-[50vh] bg-gradient-to-b from-white to-black/10 "
+    >
       <div className="container mx-auto max-w-[900px] px-6 py-16 ">
         <div className="p-2">
           <h1 className="my-5 text-center text-[2.5rem] font-bold">About us</h1>

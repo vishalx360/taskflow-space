@@ -264,7 +264,7 @@ export default function CreateNewBoardModal({
                                 </SelectContent>
                               </Select>
 
-                              {meta.error && (
+                              {meta.error && form.dirty && (
                                 <p className="ml-2 mt-2 text-sm text-red-500">
                                   {meta.error}
                                 </p>

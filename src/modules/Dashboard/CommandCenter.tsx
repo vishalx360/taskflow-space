@@ -27,7 +27,7 @@ function CommandCenter() {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === "m" && (e.metaKey || e.ctrlKey)) {
+      if (e.key === " " && (e.metaKey || e.ctrlKey)) {
         setOpen((open) => !open);
       }
     };
@@ -51,7 +51,7 @@ function CommandCenter() {
           <p className="hidden text-sm text-slate-500 dark:text-slate-400 md:inline">
             Press{" "}
             <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-slate-100 bg-slate-100 px-1.5 font-mono text-[10px] font-medium text-slate-600 opacity-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-              <span className="text-xs">⌘</span>M
+              <span className="text-xs">⌘</span>space
             </kbd>
           </p>
         </div>

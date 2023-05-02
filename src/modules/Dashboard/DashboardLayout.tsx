@@ -101,7 +101,6 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                 exit="exit"
                 // custom={direction}
                 transition={{
-                  x: { type: "inertia", stiffness: 300, damping: 30 },
                   opacity: { duration: 0.2 },
                 }}
                 key={pathname}
