@@ -10,12 +10,23 @@ import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { BoardBoxMotionVariants } from "./BoardBox";
 import CreateNewBoardModal from "./CreateNewBoardModal";
+import { BoardListGridError } from "./BoardGrid";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
-  const { data: boards, isLoading } = api.board.getAllBoards.useQuery({
+  const {
+    data: boards,
+    isLoading,
+    isError,
+    refetch,
+    isRefetching,
+  } = api.board.getAllBoards.useQuery({
     workspaceId: workspace.id,
   });
   const [parent] = useAutoAnimate();
+
+  if (isError) {
+    return <BoardListGridError isRefetching={isRefetching} refetch={refetch} />;
+  }
 
   if (isLoading) {
     return <BoardListSkeleton />;
@@ -136,6 +147,17 @@ export function BoardListSkeleton() {
       <BoardSkeleton />
       <BoardSkeleton />
       <BoardSkeleton />
+    </div>
+  );
+}
+
+export function BoardListError() {
+  return (
+    <div
+      className={` h-28 w-full animate-pulse rounded-xl bg-gray-300 object-cover md:h-40 md:w-[18rem]`}
+    >
+      asd
+      <div className="h-40 w-full md:w-[18rem]" />
     </div>
   );
 }
