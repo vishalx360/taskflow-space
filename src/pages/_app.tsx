@@ -1,9 +1,9 @@
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import NextNprogress from "nextjs-progressbar";
 import ScrollToTop from "react-scroll-to-top";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { api } from "@/utils/api";
 
@@ -11,9 +11,8 @@ import { BoardSettingsModalProvider } from "@/contexts/BoardSettingsModalContext
 import { Toaster } from "@/modules/ui/toaster";
 import "@/styles/globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { MdArrowUpward } from "react-icons/md";
 import Head from "next/head";
-import Scrollbars from "react-custom-scrollbars-2";
+import { MdArrowUpward } from "react-icons/md";
 
 // If loading a variable font, you don't need to specify the font weight
 const pjs = Plus_Jakarta_Sans({

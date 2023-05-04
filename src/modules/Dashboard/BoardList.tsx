@@ -9,8 +9,8 @@ import { api } from "@/utils/api";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { BoardBoxMotionVariants } from "./BoardBox";
-import CreateNewBoardModal from "./CreateNewBoardModal";
 import { BoardListGridError } from "./BoardGrid";
+import CreateNewBoardModal from "./CreateNewBoardModal";
 
 export default function BoardList({ workspace }: { workspace: Workspace }) {
   const {

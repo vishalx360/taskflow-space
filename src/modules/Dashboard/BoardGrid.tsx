@@ -1,9 +1,9 @@
 import { api } from "@/utils/api";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { type Workspace } from "@prisma/client";
+import { Button } from "../ui/button";
 import { BoardBox, BoardBoxSkeleton } from "./BoardBox";
 import CreateNewBoardModal from "./CreateNewBoardModal";
-import { Button } from "../ui/button";
 
 export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   const {
