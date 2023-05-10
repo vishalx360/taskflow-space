@@ -17,6 +17,7 @@ import { useDebouncedCallback } from "use-debounce";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
+import Head from "next/head";
 
 const DragDropContext = dynamic(
   () =>
@@ -130,6 +131,9 @@ function Board() {
 
   return (
     <main className="relative h-screen">
+      <Head>
+        <title>Taskflow | {board?.name}</title>
+      </Head>
       <BoardBackground background={board?.background} />
       <BoardNavbar board={board} />
       {/* <BoardContextMenu board={board}> */}

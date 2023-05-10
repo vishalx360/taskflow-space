@@ -15,10 +15,10 @@ async function handelLogout() {
 }
 
 const NavLinks = [
-  { title: "Benefit", href: "/home#benifits" },
-  { title: "Features", href: "/home#features" },
-  { title: "Pricing", href: "/home#pricing" },
-  { title: "About us", href: "/home#aboutus" },
+  { title: "Benefit", href: "/#benifits" },
+  { title: "Features", href: "/#features" },
+  { title: "Pricing", href: "/#pricing" },
+  { title: "About us", href: "/#aboutus" },
 ];
 
 function HomeNavbar() {
@@ -166,7 +166,7 @@ function HomeNavbar() {
             {NavLinks.map((navlink) => (
               <Link
                 key={navlink.href}
-                className="mx-8 border-black  text-gray-700  duration-300  hover:border-b-2"
+                className="mx-8 scroll-smooth border-black  text-gray-700  duration-300  hover:border-b-2"
                 href={navlink.href}
               >
                 {navlink.title}

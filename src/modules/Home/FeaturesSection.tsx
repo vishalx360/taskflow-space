@@ -1,6 +1,9 @@
 function FeaturesSection() {
   return (
-    <section id="features" className="min-h-screen bg-neutral-900 text-white ">
+    <section
+      id="features"
+      className="min-h-screen scroll-mt-16 bg-neutral-900 text-white "
+    >
       <div className="container mx-auto px-6 py-16 ">
         <div className="mb-10 flex flex-col items-center justify-center ">
           <h1 className="my-5 text-[2.5rem] font-bold">Features</h1>

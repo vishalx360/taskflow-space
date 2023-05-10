@@ -7,7 +7,7 @@ function AboutSection() {
   return (
     <section
       id="aboutus"
-      className="min-h-[50vh] bg-gradient-to-b from-white to-black/10 "
+      className="min-h-[50vh] scroll-mt-16 scroll-smooth bg-gradient-to-b from-white to-black/10 "
     >
       <div className="container mx-auto max-w-[900px] px-6 py-16 ">
         <div className="p-2">

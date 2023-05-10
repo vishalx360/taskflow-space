@@ -41,7 +41,7 @@ function HeroSection() {
               Sign up now
             </Link>
             <Link
-              href="/signup"
+              href="/#pricing"
               className="text-md  inline-block   w-full rounded-lg bg-gray-300/30 px-8 py-3 text-center font-bold  leading-5 text-neutral-700 transition-colors hover:bg-gray-400/30 focus:outline-none lg:mx-0 lg:w-auto"
             >
               See pricing
