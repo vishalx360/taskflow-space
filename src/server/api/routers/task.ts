@@ -28,7 +28,7 @@ export const TaskRouter = createTRPCRouter({
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, },
+        select: { workspaceId: true, id: true },
       });
       if (!board) {
         throw new TRPCError({
@@ -69,6 +69,12 @@ export const TaskRouter = createTRPCRouter({
           listId: input.listId,
           rank,
         },
+      });
+      // send pusher event to board channel 
+      await ctx.pusher.trigger(`board-${board.id}`, "task:created", {
+        task: newTask,
+        listId: input.listId,
+        initiatorId: ctx.session.user.id,
       });
       return newTask;
     }),
@@ -213,7 +219,7 @@ export const TaskRouter = createTRPCRouter({
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true },
+        select: { workspaceId: true, id: true },
       });
 
       if (!board) {
@@ -237,13 +243,22 @@ export const TaskRouter = createTRPCRouter({
         });
       }
 
-      return ctx.prisma.task.update({
+
+      const updatedTask = await ctx.prisma.task.update({
         where: { id: input.taskId },
         data: {
           title: input.title,
           description: input.description,
         },
       });
+      console.log(updatedTask)
+      // send pusher event to board channel 
+      await ctx.pusher.trigger(`board-${board.id}`, "task:updated", {
+        task: updatedTask,
+        listId: task.listId,
+        initiatorId: ctx.session.user.id,
+      });
+      return updatedTask;
     }),
 
   moveTask: protectedProcedure
@@ -336,6 +351,12 @@ export const TaskRouter = createTRPCRouter({
         },
       });
       // send lists to update
+      // send pusher event to board channel 
+      await ctx.pusher.trigger(`board-${list.boardId}`, "task:moved", {
+        lists: [task.listId, input.newListId],
+        initiatorId: ctx.session.user.id,
+      });
+
       return [task.listId, input.newListId];
     }),
 
@@ -389,10 +410,16 @@ export const TaskRouter = createTRPCRouter({
           message: "You dont have permission to delete this task.",
         });
       }
-
-      return ctx.prisma.task.delete({
+      await ctx.prisma.task.delete({
         where: { id: input.taskId },
       });
+      // send pusher event to board channel 
+      await ctx.pusher.trigger(`board-${list.boardId}`, "task:deleted", {
+        task: { id: input.taskId },
+        listId: task.listId,
+        initiatorId: ctx.session.user.id,
+      });
+      return;
     }),
 
   // Task member
@@ -460,16 +487,22 @@ export const TaskRouter = createTRPCRouter({
             message: "User is not a member this task.",
           });
         }
-        return ctx.prisma.taskMember.delete({
+        await ctx.prisma.taskMember.delete({
           where: { id: taskMember.id }
         });
+
       } else {
-        return ctx.prisma.taskMember.create({
+        await ctx.prisma.taskMember.create({
           data: {
             taskId: input.taskId,
             userId: input.userId,
           },
         });
       }
+      // send pusher event to board channel 
+      return ctx.pusher.trigger(`board-${list.boardId}`, "task-member:updated", {
+        task: { id: input.taskId },
+        initiatorId: ctx.session.user.id,
+      });
     }),
 });

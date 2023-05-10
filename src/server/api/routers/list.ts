@@ -46,12 +46,19 @@ export const ListRouter = createTRPCRouter({
         throw new Error("List name already exist");
       }
 
-      return ctx.prisma.list.create({
+      const newList = await ctx.prisma.list.create({
         data: {
           boardId: input.boardId,
           name: input.name,
         },
       });
+
+      await ctx.pusher.trigger(`board-${input.boardId}`, "board:update", {
+        boardId: input.boardId,
+        initiatorId: ctx.session.user.id,
+      });
+
+      return newList;
     }),
 
   updateList: protectedProcedure
@@ -94,6 +101,10 @@ export const ListRouter = createTRPCRouter({
           message: "You dont have permission to update list.",
         });
       }
+      await ctx.pusher.trigger(`board-${list.boardId}`, "board:update", {
+        boardId: list.boardId,
+        initiatorId: ctx.session.user.id,
+      });
 
       return ctx.prisma.list.update({
         where: { id: input.listId },
@@ -143,7 +154,10 @@ export const ListRouter = createTRPCRouter({
           message: "You dont have permission to delete list.",
         });
       }
-
+      await ctx.pusher.trigger(`board-${list.boardId}`, "board:update", {
+        boardId: list.boardId,
+        initiatorId: ctx.session.user.id,
+      });
       return ctx.prisma.list.delete({
         where: { id: input.listId },
       });
@@ -189,6 +203,10 @@ export const ListRouter = createTRPCRouter({
           message: "You dont have permission to clear list.",
         });
       }
+      await ctx.pusher.trigger(`board-${list.boardId}`, "list:update", {
+        listId: input.listId,
+        initiatorId: ctx.session.user.id,
+      });
 
       return ctx.prisma.task.deleteMany({
         where: { listId: input.listId },

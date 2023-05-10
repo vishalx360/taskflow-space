@@ -13,6 +13,7 @@ import {
   AccordionTrigger,
 } from "@/modules/ui/accordion";
 import { AnimatePresence, motion } from "framer-motion";
+
 function Workspaces() {
   const {
     data: workspaces,

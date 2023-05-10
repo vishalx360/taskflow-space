@@ -75,8 +75,13 @@ export const BoardRouter = createTRPCRouter({
       }
 
 
-      return ctx.prisma.board.delete({
+      await ctx.prisma.board.delete({
         where: { id: input.boardId },
+      });
+
+      return ctx.pusher.trigger(`workspace-${board.workspaceId}`, "workspace:update", {
+        workspaceId: board.workspaceId,
+        initiatorId: ctx.session.user.id,
       });
     }),
 
@@ -116,6 +121,10 @@ export const BoardRouter = createTRPCRouter({
           background: input.background || GetRandomBackgroundGradient(),
           description: input.description,
         },
+      });
+      await ctx.pusher.trigger(`workspace-${input.workspaceId}`, "workspace:update", {
+        workspaceId: input.workspaceId,
+        initiatorId: ctx.session.user.id,
       });
       return newBoard;
     }),
@@ -199,6 +208,17 @@ export const BoardRouter = createTRPCRouter({
           background: input.background,
         },
       });
+
+      await ctx.pusher.trigger(`board-${input.boardId}`, "board:update", {
+        boardId: input.boardId,
+        initiatorId: ctx.session.user.id,
+      });
+
+      await ctx.pusher.trigger(`workspace-${board.workspaceId}`, "workspace:update", {
+        workspaceId: board.workspaceId,
+        initiatorId: ctx.session.user.id,
+      });
+
       return {
         name: input.name,
         background: input.background,

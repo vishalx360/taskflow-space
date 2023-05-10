@@ -12,6 +12,15 @@ import Settings from "../Settings/Settings";
 import DashboardNavbar from "./DashboardNavbar";
 import Invitations from "./Invitations/Invitations";
 import Overview from "./OverView";
+import { api } from "@/utils/api";
+import { useEffect } from "react";
+import { pusherClient } from "@/lib/pusherClient";
+import { useSession } from "next-auth/react";
+import Pusher from "pusher";
+import { Channel } from "pusher-js";
+import { useToast } from "@/hooks/use-toast";
+import { Toast } from "react-hot-toast";
+import { ToastProps } from "../ui/toast";
 
 const NavlinkVariants = cva(
   "relative flex items-center gap-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors group",
@@ -27,29 +36,65 @@ const NavlinkVariants = cva(
     },
   }
 );
+
+const InvitationCount = () => {
+  const { data: myInvitations, isLoading } =
+    api.workspace.getAllMyReceviedInvites.useQuery();
+  if (isLoading) {
+    <p className="rounded bg-neutral-100 p-2 text-black">#</p>;
+  }
+  return (
+    <p className="z-20 rounded-full bg-neutral-200 px-2 py-1 text-sm text-black">
+      {myInvitations?.length}
+    </p>
+  );
+};
 const Navlinks = [
   {
     name: "Overview",
     Icon: LucideHome,
     href: "/dashboard",
-    component: Overview,
   },
   {
     name: "Invitations",
     Icon: LucideMails,
     href: "/dashboard/invitations",
-    component: Invitations,
+    Child: InvitationCount,
   },
   {
     name: "Settings",
     Icon: LucideSettings2,
     href: "/dashboard/settings",
-    component: Settings,
   },
 ];
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const utils = api.useContext();
+  const { toast } = useToast();
+  // await ctx.pusher.trigger(`workspace-${input.workspaceId}`, "workspace:update", {
+  useEffect(() => {
+    let userChannel: Channel | null = null;
+    if (session?.user.id) {
+      userChannel = pusherClient.subscribe(`user-${session?.user.id}`);
+      userChannel.bind(`invitation:update`, async () => {
+        await utils.workspace.getAllMyReceviedInvites.invalidate();
+      });
+      userChannel.bind(`invitation:response`, async () => {
+        await utils.workspace.getAllMySentInvites.invalidate();
+      });
+      userChannel.bind(`notification`, async (data: ToastProps) => {
+        toast(data);
+      });
+    }
+    return () => {
+      if (userChannel) {
+        userChannel.unbind_all();
+        pusherClient.unsubscribe(`user-${session?.user.id}`);
+      }
+    };
+  }, [session?.user.id]);
 
   return (
     <div className="relative flex items-center  overflow-hidden ">
@@ -63,7 +108,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         {/* links */}
         <div className="ml-2 mt-10 h-full">
           <div className="space-y-5">
-            {Navlinks.map(({ href, name, Icon }, index) => (
+            {Navlinks.map(({ href, name, Icon, Child }, index) => (
               <Link
                 href={href}
                 key={href}
@@ -71,6 +116,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
               >
                 <Icon className="z-20 text-inherit" />
                 <span className="z-20 font-medium">{name}</span>
+                {Child && <Child />}
+
                 {pathname === href && (
                   <motion.span
                     transition={{ duration: 0.2 }}

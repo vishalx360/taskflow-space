@@ -5,6 +5,7 @@ import { z } from "zod";
  * built with invalid env vars.
  */
 const server = z.object({
+  PORT: z.string().optional(),
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   NEXTAUTH_SECRET:
@@ -35,9 +36,9 @@ const server = z.object({
   NM_REDIRECT_URI: z.string(),
   NM_REFRESH_TOKEN: z.string(),
   NM_DKIM_PRIVATE_KEY: z.string(),
-  PORT: z.string().optional(),
-
-
+  // PUSHER
+  PUSHER_APP_ID: z.string(),
+  PUSHER_SECRET: z.string(),
 });
 
 /**
@@ -46,6 +47,8 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_TRPC_SEREVR_URL: z.string(),
+  NEXT_PUBLIC_PUSHER_KEY: z.string(),
+  NEXT_PUBLIC_PUSHER_CLUSTER: z.string(),
 });
 
 /**
@@ -76,6 +79,11 @@ const processEnv = {
   NM_DKIM_PRIVATE_KEY: process.env.NM_DKIM_PRIVATE_KEY,
   PORT: process.env.PORT,
   NEXT_PUBLIC_TRPC_SEREVR_URL: process.env.NEXT_PUBLIC_TRPC_SEREVR_URL,
+
+  NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
+  NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
+  PUSHER_APP_ID: process.env.PUSHER_APP_ID,
+  PUSHER_SECRET: process.env.PUSHER_SECRET,
 };
 
 // Don't touch the part below

@@ -57,6 +57,7 @@ export default function TaskModal({
     },
     {
       placeholderData: defaultTaskData,
+      cacheTime: 1000,
     }
   );
 
@@ -70,9 +71,11 @@ export default function TaskModal({
       });
     },
     onSuccess: async () => {
-      // TODO: optimistically update the UI
       await utils.task.getTasks
-        .invalidate({ listId: task.listId })
+        .invalidate({ listId: task?.listId })
+        .catch((err) => console.log(err));
+      await utils.task.getTask
+        .invalidate({ taskId: task?.id })
         .catch((err) => console.log(err));
       toast({ title: "Task updated successfully!" });
       setIsOpen(false);
@@ -199,7 +202,7 @@ export default function TaskModal({
                   {isSameDay(task?.createdAt, new Date()) ? (
                     <Timeago live={false} date={task?.createdAt} />
                   ) : (
-                    task?.createdAt && format(task?.createdAt, "PPPP")
+                    task?.createdAt && format(new Date(task?.createdAt), "PPPP")
                   )}
                 </p>
               </div>

@@ -128,7 +128,7 @@ export function AddToListForm({
   listEndRef: RefObject<HTMLDivElement>;
 }) {
   // createTask mutation
-  const toast = useToast();
+  const { toast } = useToast();
   const utils = api.useContext();
   const syncListDebounced = useDebouncedCallback(
     // function
@@ -152,6 +152,7 @@ export function AddToListForm({
         // action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
     },
+    // TODO: onSuccess: remove isPending and update id with new id
     onSettled: async () => {
       await syncListDebounced(list.id);
     },

@@ -18,6 +18,9 @@ import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
 import Head from "next/head";
+import { useEffect } from "react";
+import { pusherClient } from "@/lib/pusherClient";
+import { useSession } from "next-auth/react";
 
 const DragDropContext = dynamic(
   () =>
@@ -29,6 +32,7 @@ const DragDropContext = dynamic(
 
 function Board() {
   const { toast } = useToast();
+  const { data: session } = useSession();
   const boardId = useSearchParams().get("boardId");
   // fetch board details from boardId.
   const utils = api.useContext();
@@ -48,6 +52,73 @@ function Board() {
     // delay in ms
     3000
   );
+
+  useEffect(() => {
+    const boardChannel = pusherClient.subscribe(`board-${boardId}`);
+
+    // pusherClient.bind(`list:created`, async (data: ) => {
+    boardChannel.bind(`task:created`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        utils.task.getTasks.setData({ listId: data.listId }, (oldData) => {
+          if (oldData) {
+            return [...oldData, data.task];
+          }
+        });
+      }
+    });
+    boardChannel.bind(`task:updated`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        utils.task.getTasks.setData({ listId: data.listId }, (oldData) => {
+          const index = oldData.findIndex((task) => task.id === data.task.id);
+          const newData = [...oldData];
+          newData[index] = data.task;
+          return newData;
+        });
+        utils.task.getTask.setData({ taskId: data.task.id }, (oldData) => {
+          return data.task;
+        });
+      }
+    });
+    boardChannel.bind(`task:moved`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        await Promise.all(
+          data.lists.map((listId) => {
+            return utils.task.getTasks.invalidate({ listId });
+          })
+        );
+      }
+    });
+    boardChannel.bind(`task:deleted`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        utils.task.getTasks.setData({ listId: data.listId }, (oldData) => {
+          const index = oldData.findIndex((task) => task.id === data.task.id);
+          const newData = [...oldData];
+          newData.splice(index, 1);
+          return newData;
+        });
+      }
+    });
+    boardChannel.bind(`task-member:updated`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        await utils.task.getTask.invalidate({ taskId: data.task.id });
+      }
+    });
+    boardChannel.bind(`board:update`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        await utils.board.getBoard.invalidate({ boardId: data.boardId });
+      }
+    });
+    boardChannel.bind(`list:update`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        await utils.task.getTasks.invalidate({ listId: data.listId });
+      }
+    });
+
+    return () => {
+      boardChannel.unbind_all();
+      pusherClient.unsubscribe(`board-${boardId}`);
+    };
+  }, [boardId, session?.user.id]);
 
   const mutation = api.task.moveTask.useMutation({
     onError(error) {

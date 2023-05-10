@@ -4,6 +4,9 @@ import { type Workspace } from "@prisma/client";
 import { Button } from "../ui/button";
 import { BoardBox, BoardBoxSkeleton } from "./BoardBox";
 import CreateNewBoardModal from "./CreateNewBoardModal";
+import { useEffect } from "react";
+import { pusherClient } from "@/lib/pusherClient";
+import { useSession } from "next-auth/react";
 
 export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   const {
@@ -16,6 +19,26 @@ export default function BoardGrid({ workspace }: { workspace: Workspace }) {
     workspaceId: workspace.id,
   });
   const [parent] = useAutoAnimate();
+  const { data: session } = useSession();
+  const utils = api.useContext();
+
+  // await ctx.pusher.trigger(`workspace-${input.workspaceId}`, "workspace:update", {
+  useEffect(() => {
+    const workspaceChannel = pusherClient.subscribe(
+      `workspace-${workspace.id}`
+    );
+    workspaceChannel.bind(`workspace:update`, async (data) => {
+      if (session?.user.id && data.initiatorId !== session?.user.id) {
+        await utils.board.getAllBoards.invalidate({
+          workspaceId: data.workspaceId,
+        });
+      }
+    });
+    return () => {
+      workspaceChannel.unbind_all();
+      pusherClient.unsubscribe(`workspace-${workspace.id}`);
+    };
+  }, [session?.user.id]);
 
   if (isError) {
     return <BoardListGridError isRefetching={isRefetching} refetch={refetch} />;

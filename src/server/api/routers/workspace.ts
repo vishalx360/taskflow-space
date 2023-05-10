@@ -2,12 +2,12 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { ALLOWED_ROLES_TO_INVITE } from "../../../utils/AllowedRolesToInvite";
-import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import {
     CreateNewWorkspaceSchema, CreateWorkspaceInvitation, RenameWorkspaceSchema,
     TransferWorkspaceOwnershipSchema,
     WorksapceInviteResponse
 } from "../../../utils/ValidationSchema";
+import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
 
 
@@ -142,6 +142,11 @@ export const WorkspaceRouter = createTRPCRouter({
         <br/>
         `,
             });
+            // send pusher event to board channel
+            if (recepientUser?.id) {
+                await ctx.pusher.trigger(`user-${recepientUser?.id}`, "invitation:update", {});
+            }
+
             return ctx.sendEmail(mailOptions);
 
         }),
@@ -166,9 +171,13 @@ export const WorkspaceRouter = createTRPCRouter({
                     message: "You are not the sender of this invite.",
                 });
             }
-            return ctx.prisma.workspaceMemberInvitation.delete({
+            await ctx.prisma.workspaceMemberInvitation.delete({
                 where: { id: input.workspaceInvitaionId }
             });
+            if (invitation.recepientId) {
+                await ctx.pusher.trigger(`user-${invitation.recepientId}`, "invitation:update", {});
+            }
+            return;
         }),
 
     inviteResponse: protectedProcedure
@@ -223,6 +232,12 @@ export const WorkspaceRouter = createTRPCRouter({
                 });
             }
             await ctx.prisma.$transaction(transactions);
+
+            await ctx.pusher.trigger(`user-${invitation.senderId}`, "invitation:response", {});
+
+
+
+
             return input.accept;
         }),
 
