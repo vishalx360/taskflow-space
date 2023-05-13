@@ -7,7 +7,7 @@ import {
   LucideAlertCircle,
   LucideCheck,
   LucideEdit,
-  LucideKey,
+  LucidePlus,
   LucideTrash2,
   LucideX,
 } from "lucide-react";
@@ -82,7 +82,11 @@ function PasskeySection() {
       </p>
       <div className="my-5 flex items-center justify-between">
         <h2 className="text-gray-500">Your passkeys</h2>
-        <Button LeftIcon={LucideKey} onClick={HandelRegister} variant="outline">
+        <Button
+          LeftIcon={LucidePlus}
+          onClick={HandelRegister}
+          variant="outline"
+        >
           Register a new key
         </Button>
       </div>
