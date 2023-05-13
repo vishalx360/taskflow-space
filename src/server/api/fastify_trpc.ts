@@ -8,7 +8,7 @@ import { prisma } from "../db";
 import { pusherServer } from '../../lib/pusherServer';
 import ioredis from "ioredis"
 // ioredis
-const redisClient = new ioredis({
+export const redisClient = new ioredis({
     host: env.REDIS_HOST,
     password: env.REDIS_PASSWORD,
     port: 13014

@@ -11,9 +11,12 @@ import {
   verifyRegistrationResponse,
   type GenerateRegistrationOptionsOpts,
   VerifiedRegistrationResponse,
-  VerifyRegistrationResponseOpts
+  VerifyRegistrationResponseOpts,
+  generateAuthenticationOptions,
+  verifyAuthenticationResponse
 } from '@simplewebauthn/server';
-import { AuthenticatorDevice, AuthenticatorTransportFuture, CredentialDeviceType, PublicKeyCredentialDescriptorFuture, RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
+import { AuthenticationResponseJSON, AuthenticatorDevice, AuthenticatorTransportFuture, CredentialDeviceType, PublicKeyCredentialDescriptorFuture, RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
+import { randomUUID } from "crypto";
 
 
 export const AuthenticationRouter = createTRPCRouter({
@@ -347,6 +350,108 @@ export const AuthenticationRouter = createTRPCRouter({
         data: { name: input.name },
       });
     }),
+  passkeyGenAuthOpts: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ ctx, input }) => {
+      // check if user exists
+      const user = await ctx.prisma.user.findFirst({
+        where: { email: input.email },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No user found.",
+        });
+      }
+      // fetch list of already registered passkeys
+      const passkeys = await ctx.prisma.passkey.findMany({
+        where: {
+          userId: user.id
+        },
+      })
+      if (passkeys.length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No registred passkeys found.",
+        });
+      }
+      const options = generateAuthenticationOptions({
+        // Require users to use a previously-registered authenticator
+        allowCredentials: passkeys.map(passkey => ({
+          id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64url')),
+          type: 'public-key',
+        })),
+        rpID: "localhost",
+        timeout: 60000,
+        userVerification: 'preferred',
+      });
+      // Remember this challenge for this user
+      await ctx.redis.set(`passkey-auth-challange:${input.email}`, options.challenge, "EX", 60);
+      return options;
+    }),
+  // passkeyVerifyAuth: publicProcedure
+  //   .input(z.any())
+  //   .mutation(async ({ ctx, input }) => {
+  //     const body: AuthenticationResponseJSON = input;
+  //     const user = await ctx.prisma.user.findFirst({
+  //       where: { email: input.email },
+  //     });
+  //     if (!user) {
+  //       throw new TRPCError({
+  //         code: "BAD_REQUEST",
+  //         message: "No user found.",
+  //       });
+  //     }
+  //     const expectedChallenge = await ctx.redis.get(`passkey-auth-challange:${input.email}`)
+
+  //     if (!expectedChallenge) {
+  //       throw new TRPCError({
+  //         code: "UNAUTHORIZED",
+  //         message: "Error authenticating passkey. Please try again.",
+  //       })
+  //     }
+  //     // (Pseudocode) Get `options.challenge` that was saved above
+  //     // (Pseudocode} Retrieve an authenticator from the DB that
+  //     // should match the `id` in the returned credential
+  //     const authenticator = await ctx.prisma.passkey.count({
+  //       where: {
+  //         credentialID: Buffer.from(body.id).toString('base64url'),
+  //       },
+  //     });
+
+  //     if (!authenticator) {
+  //       throw new Error(`Could not find authenticator ${body.id} for user ${user.id}`);
+  //     }
+
+  //     let verification;
+  //     try {
+  //       verification = await verifyAuthenticationResponse({
+  //         response: body,
+  //         expectedChallenge,
+  //         expectedOrigin: "http://localhost:3000",
+  //         expectedRPID: "localhost",
+  //         authenticator,
+  //       });
+  //     } catch (error) {
+  //       const _error = error as Error;
+  //       console.error(_error);
+  //       throw new TRPCError({
+  //         code: "UNAUTHORIZED",
+  //         message: _error.message,
+  //       })
+  //     }
+  //     const { verified } = verification;
+  //     if (verified) {
+  //       // generate signin token
+  //       const SigninToken = await ctx.redis.set(`signin-token:${randomUUID()}`, user.id, "EX", 60);
+  //       return SigninToken;
+  //     } else {
+  //       throw new TRPCError({
+  //         code: "UNAUTHORIZED",
+  //         message: "Error authenticating passkey. Please try again.",
+  //       })
+  //     }
+  //   }),
   passkeyGenRegOpts: protectedProcedure
     .query(async ({ ctx, input }) => {
       // fetch list of already registered passkeys
@@ -370,7 +475,7 @@ export const AuthenticationRouter = createTRPCRouter({
          * on it.
          */
         excludeCredentials: passkeys.map(passkey => ({
-          id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64')),
+          id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64url')),
           type: 'public-key',
           transports: passkey.transports,
         } satisfies PublicKeyCredentialDescriptorFuture)),
@@ -386,7 +491,7 @@ export const AuthenticationRouter = createTRPCRouter({
        * The server needs to temporarily remember this value for verification, so don't lose it until
        * after you verify an authenticator response.
        */
-      await ctx.redis.set(`passkey-challange:${ctx.session.user.id}`, options.challenge);
+      await ctx.redis.set(`passkey-reg-challange:${ctx.session.user.id}`, options.challenge, "EX", 60);
 
       return options;
     }),
@@ -394,23 +499,22 @@ export const AuthenticationRouter = createTRPCRouter({
   passkeyVerifyReg: protectedProcedure
     .input(z.any())
     .mutation(async ({ ctx, input }) => {
-      console.log(input)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const body: RegistrationResponseJSON = input;
       const user = ctx.session.user;
-      const expectedChallenge = await ctx.redis.get(`passkey-challange:${ctx.session.user.id}`);
+      const expectedChallenge = await ctx.redis.get(`passkey-reg-challange:${ctx.session.user.id}`);
 
       if (!expectedChallenge) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Error registering device. Please try again.",
+          message: "Error registering passkey. Please try again.",
         })
       }
       let verification: VerifiedRegistrationResponse;
       try {
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
-          expectedChallenge: `${expectedChallenge}`,
+          expectedChallenge,
           expectedOrigin: "http://localhost:3000",
           expectedRPID: "localhost",
           requireUserVerification: true,
@@ -430,26 +534,29 @@ export const AuthenticationRouter = createTRPCRouter({
         // check for passkey in db
         const existingDevice = await ctx.prisma.passkey.count({
           where: {
-            credentialID: credentialID.toString(),
+            credentialID: Buffer.from(credentialID).toString('base64url'),
           },
         });
         if (!existingDevice) {
           // Add the returned device to the user's list of devices
           await ctx.prisma.passkey.create({
             data: {
-              name: `New Passkey ${body.response.transports[0]} (rename me)`,
-              credentialPublicKey:
-                Buffer.from(credentialPublicKey).toString('base64'),
+              name: `New Passkey (rename me)`,
+              credentialPublicKey: Buffer.from(credentialPublicKey).toString('base64url'),
               credentialID:
-                Buffer.from(credentialID).toString('base64'),
+                Buffer.from(credentialID).toString('base64url'),
               counter,
               transports: body.response.transports,
-              userId: user.id,
+              user: {
+                connect: {
+                  id: user.id
+                }
+              }
             }
           });
         }
       }
-      await ctx.redis.del(`passkey-challange:${ctx.session.user.id}`);
+      await ctx.redis.del(`passkey-reg-challange:${ctx.session.user.id}`);
       return { verified };
     })
 });

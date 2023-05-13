@@ -35,7 +35,6 @@ function PasskeySection() {
       });
     },
     onSuccess: (data) => {
-      console.log("Server Response", JSON.stringify(data, null, 2));
       if (data && data.verified) {
         toast({
           title: "Passkey registered!",
@@ -93,11 +92,11 @@ function PasskeySection() {
           <>
             {passkeys?.map((passkey) => (
               <PasskeyRow
+                key={passkey.id}
                 name={passkey.name}
                 id={passkey.id}
                 type="securitykey"
                 createdAt={passkey.createdAt}
-                key={passkey.id}
               />
             ))}
           </>

@@ -1,11 +1,14 @@
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
 import NewUserSideEffects from "@/utils/NewUserSideEffects";
-import { SigninSchema } from "@/utils/ValidationSchema";
+import { PasskeySigninSchema, SigninSchema, SigninTokenSchema } from "@/utils/ValidationSchema";
 import { signJTW, verifyJWT } from "@/utils/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { verifyAuthenticationResponse } from "@simplewebauthn/server";
+import { AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
 import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
+import ioredis from "ioredis";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -15,6 +18,12 @@ import {
 import Credentials from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+
+export const redisClient = new ioredis({
+  host: env.REDIS_HOST,
+  password: env.REDIS_PASSWORD,
+  port: 13014
+})
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -108,6 +117,120 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    Credentials({
+      name: "passkey",
+      id: "passkey",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: ""
+        },
+        passkey: {
+          label: "Passkey",
+          type: "text",
+          placeholder: "Passkey",
+        },
+      },
+      authorize: async (credentials, req) => {
+        await PasskeySigninSchema.parseAsync(req.body);
+
+        const user = await prisma.user.findUnique({
+          where: { email: req?.body?.email },
+        });
+        if (!user) {
+          throw new TRPCError({ code: "UNAUTHORIZED", "message": "No user found" })
+        }
+        const passkey: AuthenticationResponseJSON = JSON.parse(req?.body?.passkey);
+        const expectedChallenge = await redisClient.get(`passkey-auth-challange:${req.body.email}`)
+
+        if (!expectedChallenge) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Error:A authenticating passkey. Please try again.",
+          })
+        }
+        const registeredPasskey = await prisma.passkey.findFirst({
+          where: {
+            user: {
+              email: req.body.email,
+            },
+            credentialID: passkey.id,
+          },
+        });
+
+        if (!registeredPasskey) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Error:B authenticating passkey.",
+          })
+        }
+
+        let verification;
+        try {
+          verification = await verifyAuthenticationResponse({
+            response: passkey,
+            expectedChallenge,
+            expectedOrigin: "http://localhost:3000",
+            expectedRPID: "localhost",
+            authenticator: {
+              counter: registeredPasskey.counter,
+              credentialID: Uint8Array.from(Buffer.from(registeredPasskey.credentialID, 'base64url')),
+              credentialPublicKey: Uint8Array.from(Buffer.from(registeredPasskey.credentialPublicKey, 'base64url')),
+            },
+          });
+        } catch (error) {
+          const _error = error as Error;
+          console.error(_error);
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: _error.message,
+          })
+        }
+        const { verified } = verification;
+        if (verified) {
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          };
+
+        } else {
+          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+        }
+      },
+    }),
+    Credentials({
+      name: "signin-token",
+      credentials: {
+        token: {
+          label: "Signin Token",
+          type: "text",
+          placeholder: "signin token",
+        },
+      },
+      authorize: async (credentials) => {
+        const creds = await SigninTokenSchema.parseAsync(credentials);
+        const SigninToken = await redisClient.get(creds.token);
+        if (!SigninToken) {
+          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+        }
+        const user = await prisma.user.findUnique({
+          where: { id: SigninToken },
+        });
+        if (!user) {
+          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+        }
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+        };
+      },
+    }),
+    // oauth providers
     GoogleProvider({
       allowDangerousEmailAccountLinking: true,
       clientId: env.GOOGLE_CLIENT_ID,
@@ -124,7 +247,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
-    })
+    }),
   ],
   cookies: env.NODE_ENV === 'development' ? {} : {
     sessionToken: {

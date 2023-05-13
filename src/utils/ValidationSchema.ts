@@ -12,10 +12,21 @@ const passwordSchema = z
 //   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/,
 //   { message: "Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character" }
 // );
+export const SigninTokenSchema = z.object({
+  token: z.string(),
+});
+
+export const PasskeySigninSchema = z.object({
+  email: z.string().email(),
+  passkey: z.string(),
+
+}).nonstrict();
+
 export const SigninSchema = z.object({
   email: z.string().email(),
   password: passwordSchema
 });
+
 
 export const resetPasswordSchema = z.object({
   email: z.string().email(),

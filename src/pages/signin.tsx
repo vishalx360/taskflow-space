@@ -2,10 +2,18 @@ import { useToast } from "@/hooks/use-toast";
 import LogoImage from "@/modules/Global/LogoImage";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/modules/ui/hover-card";
 import { authOptions } from "@/server/auth";
 import { SigninSchema } from "@/utils/ValidationSchema";
+import { api } from "@/utils/api";
+import { startAuthentication } from "@simplewebauthn/browser";
 import { Field, Form, Formik, type FieldProps } from "formik";
-import { LucideArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
+import { LucideArrowLeft, LucideArrowRight, LucideInfo } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
@@ -14,14 +22,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { FcGoogle, FcKey } from "react-icons/fc";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { motion } from "framer-motion";
 
 export default function SignInPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const utils = api.useContext();
   const handelCredentialSignin = useCallback(
     async (credentails: { email: string; password: string }) => {
       setIsLoading(true);
@@ -49,6 +57,40 @@ export default function SignInPage() {
     [router]
   );
 
+  async function handelPasskeySignin(email: string) {
+    try {
+      const options = await utils.authentication.passkeyGenAuthOpts.fetch({
+        email,
+      });
+      const GetCredentialResponse = await startAuthentication(options);
+      const result = await signIn("passkey", {
+        email: email,
+        passkey: JSON.stringify(GetCredentialResponse),
+        redirect: false,
+      });
+      if (result?.ok) {
+        toast({
+          title: "Login successful!",
+          description: "Taking you to your dashboard",
+        });
+        await router.push("/dashboard").catch((err) => console.log(err));
+      } else {
+        toast({
+          title: result?.error || "Uh oh! Something went wrong.",
+          variant: "destructive",
+          description: "There was a problem with your request.",
+          // action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+      }
+      // passkey
+    } catch (error) {
+      toast({
+        title: "Some error occured authenticating.",
+        description: error?.message,
+        variant: "destructive",
+      });
+    }
+  }
   async function handelOauthSignin(provider: string) {
     await signIn(provider);
   }
@@ -153,11 +195,51 @@ export default function SignInPage() {
                     type="submit"
                     className="text-md w-full"
                     size="lg"
+                    LeftIcon={LucideArrowRight}
                     isLoading={isLoading}
                     loadingText="Checking credentials..."
                   >
                     Sign in
                   </Button>
+                  <div className="flex items-center gap-5">
+                    <Button
+                      type="button"
+                      className="text-md w-full"
+                      size="lg"
+                      LeftIcon={FcKey}
+                      variant={"outline"}
+                      isLoading={isLoading}
+                      loadingText="Checking credentials..."
+                      onClick={() => {
+                        handelPasskeySignin("vishalx360@gmail.com");
+                      }}
+                    >
+                      Sign in with passkey
+                    </Button>
+                    <HoverCard>
+                      <HoverCardTrigger>
+                        <LucideInfo width={20} />
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        {/* password rules list */}
+                        <h2>What is a passkey?</h2>
+                        <p className="my-2 text-sm text-neutral-600">
+                          Passkeys are a secure replacement for passwords that
+                          provide faster and easier sign-ins, based on FIDO
+                          standards. They are always strong and
+                          phishing-resistant, making them more secure than
+                          traditional passwords.
+                        </p>
+                        <Link
+                          className="text-xs text-blue-500 hover:underline"
+                          href="https://blog.google/technology/safety-security/the-beginning-of-the-end-of-the-password/"
+                        >
+                          Learn more{" "}
+                          <LucideArrowRight className="inline" width={16} />
+                        </Link>
+                      </HoverCardContent>
+                    </HoverCard>
+                  </div>
                 </Form>
               </Formik>
               <div className="flex flex-col items-center gap-2 md:flex-row">
