@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import BENIFIT_1_IMG from "../../../public/benifit_1.png";
 import BENIFIT_2_IMG from "../../../public/benifit_2.png";

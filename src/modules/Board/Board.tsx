@@ -1,4 +1,5 @@
 import { useToast } from "@/hooks/use-toast";
+import { pusherClient } from "@/lib/pusherClient";
 import TaskList, {
   CreateList,
   TaskListSkeleton,
@@ -6,10 +7,13 @@ import TaskList, {
 import { api } from "@/utils/api";
 import { type Board, type Task } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Error from "next/error";
+import Head from "next/head";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { type DropResult } from "react-beautiful-dnd";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { FiArrowLeft } from "react-icons/fi";
@@ -17,10 +21,6 @@ import { useDebouncedCallback } from "use-debounce";
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
-import Head from "next/head";
-import { useEffect } from "react";
-import { pusherClient } from "@/lib/pusherClient";
-import { useSession } from "next-auth/react";
 
 const DragDropContext = dynamic(
   () =>

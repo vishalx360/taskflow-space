@@ -40,7 +40,6 @@ function DeleteAccountSection() {
       await signOut();
     },
   });
-  console.log({ deleteConsequences });
   return (
     <div>
       <h2 className="text-xl font-medium">Danger Zone</h2>

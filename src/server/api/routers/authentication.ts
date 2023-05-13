@@ -7,16 +7,14 @@ import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../fastify_trpc";
 
 import {
+  generateAuthenticationOptions,
   generateRegistrationOptions,
   verifyRegistrationResponse,
   type GenerateRegistrationOptionsOpts,
-  VerifiedRegistrationResponse,
-  VerifyRegistrationResponseOpts,
-  generateAuthenticationOptions,
-  verifyAuthenticationResponse
+  type VerifiedRegistrationResponse,
+  type VerifyRegistrationResponseOpts
 } from '@simplewebauthn/server';
-import { AuthenticationResponseJSON, AuthenticatorDevice, AuthenticatorTransportFuture, CredentialDeviceType, PublicKeyCredentialDescriptorFuture, RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
-import { randomUUID } from "crypto";
+import { type PublicKeyCredentialDescriptorFuture, type RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
 
 
 export const AuthenticationRouter = createTRPCRouter({

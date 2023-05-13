@@ -15,10 +15,10 @@ import { useState } from "react";
 import { BiKey, BiMobile } from "react-icons/bi";
 import ReactTimeago from "react-timeago";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import { ConfirmDialog } from "../Global/ConfirmDialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { ConfirmDialog } from "../Global/ConfirmDialog";
 
 function PasskeySection() {
   const { toast } = useToast();

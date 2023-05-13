@@ -1,12 +1,12 @@
 import { type CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 // import ws from '@fastify/websocket';
+import ioredis from "ioredis";
 import { type Session } from "next-auth";
+import { env } from '../../env.mjs';
+import { pusherServer } from '../../lib/pusherServer';
 import { verifyJWT } from "../../utils/jwt";
 import { SendEmail } from '../../utils/SendEmail';
-import { env } from '../../env.mjs';
 import { prisma } from "../db";
-import { pusherServer } from '../../lib/pusherServer';
-import ioredis from "ioredis"
 // ioredis
 export const redisClient = new ioredis({
     host: env.REDIS_HOST,
@@ -52,10 +52,10 @@ export async function createTRPCContext({ req, res }: CreateFastifyContextOption
 }
 
 
+import { ToastProps } from '@/modules/ui/toast';
 import { initTRPC, TRPCError } from '@trpc/server';
 import { type FastifyReplyType, type FastifyRequestType } from 'fastify/types/type-provider.js';
 import superjson from "superjson";
-import { ToastProps } from '@/modules/ui/toast';
 
 const t = initTRPC.context<typeof createTRPCContext>().create(
     {

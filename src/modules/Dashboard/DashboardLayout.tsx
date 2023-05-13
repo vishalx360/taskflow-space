@@ -1,26 +1,21 @@
+import { useToast } from "@/hooks/use-toast";
+import { pusherClient } from "@/lib/pusherClient";
 import { cn } from "@/lib/utils";
+import { api } from "@/utils/api";
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Channel } from "pusher-js";
+import { useEffect } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { simpleVariants } from "../Global/Fade";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
-import Settings from "../Settings/Settings";
-import DashboardNavbar from "./DashboardNavbar";
-import Invitations from "./Invitations/Invitations";
-import Overview from "./OverView";
-import { api } from "@/utils/api";
-import { useEffect } from "react";
-import { pusherClient } from "@/lib/pusherClient";
-import { useSession } from "next-auth/react";
-import Pusher from "pusher";
-import { Channel } from "pusher-js";
-import { useToast } from "@/hooks/use-toast";
-import { Toast } from "react-hot-toast";
 import { ToastProps } from "../ui/toast";
+import DashboardNavbar from "./DashboardNavbar";
 
 const NavlinkVariants = cva(
   "relative flex items-center gap-5 rounded-l-full  px-8 py-5 text-xl text-neutral-700 transition-colors group",

@@ -1,12 +1,12 @@
+import { pusherClient } from "@/lib/pusherClient";
 import { api } from "@/utils/api";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { type Workspace } from "@prisma/client";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 import { Button } from "../ui/button";
 import { BoardBox, BoardBoxSkeleton } from "./BoardBox";
 import CreateNewBoardModal from "./CreateNewBoardModal";
-import { useEffect } from "react";
-import { pusherClient } from "@/lib/pusherClient";
-import { useSession } from "next-auth/react";
 
 export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   const {

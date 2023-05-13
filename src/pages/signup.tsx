@@ -6,6 +6,7 @@ import { authOptions } from "@/server/auth";
 import { SignUpSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
+import { motion } from "framer-motion";
 import { LucideArrowLeft } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
@@ -16,7 +17,6 @@ import { useRouter } from "next/router";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { motion } from "framer-motion";
 
 export default function SignInPage() {
   const router = useRouter();

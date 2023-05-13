@@ -14,12 +14,12 @@ import {
 import { UpdatePasswordSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
-import { LucideInfo, LucideKey, LucideText } from "lucide-react";
+import { LucideInfo, LucideKey } from "lucide-react";
 import { useRef, useState } from "react";
+import { MdPassword } from "react-icons/md";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { MdPassword } from "react-icons/md";
 
 function UpdatePasswordSection() {
   const [isOpen, setIsOpen] = useState(false);

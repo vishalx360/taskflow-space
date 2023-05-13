@@ -1,9 +1,9 @@
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import BOARD_1_URL from "../../../public/board1.jpeg";
-import BOARD_2_URL from "../../../public/board3.png";
 import BOARD_3_URL from "../../../public/board2.jpeg";
+import BOARD_2_URL from "../../../public/board3.png";
 
 function HeroSection() {
   return (
