@@ -95,6 +95,14 @@ export const CreateTaskSchema = z.object({
   listId: z.string(),
 });
 
+export const RenamePasskeySchema = z.object({
+  name: z
+    .string().trim()
+    .min(1, "Must contain at least 1 character")
+    .max(50, "Must contain less than 50 characters"),
+  id: z.string(),
+});
+
 export const UpdateTaskSchema = z.object({
   taskId: z.string(),
   title: z

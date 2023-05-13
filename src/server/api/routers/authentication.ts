@@ -2,9 +2,19 @@ import { TRPCError } from "@trpc/server";
 import { hash, verify } from "argon2";
 import { z } from "zod";
 import NewUserSideEffects from "../../../utils/NewUserSideEffects";
-import { SignUpSchema, UpdatePasswordSchema, newPasswordSchema } from "../../../utils/ValidationSchema";
+import { RenamePasskeySchema, SignUpSchema, UpdatePasswordSchema, newPasswordSchema } from "../../../utils/ValidationSchema";
 import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../fastify_trpc";
+
+import {
+  generateRegistrationOptions,
+  verifyRegistrationResponse,
+  type GenerateRegistrationOptionsOpts,
+  VerifiedRegistrationResponse,
+  VerifyRegistrationResponseOpts
+} from '@simplewebauthn/server';
+import { AuthenticatorDevice, AuthenticatorTransportFuture, CredentialDeviceType, PublicKeyCredentialDescriptorFuture, RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
+
 
 export const AuthenticationRouter = createTRPCRouter({
   signup: publicProcedure
@@ -287,6 +297,160 @@ export const AuthenticationRouter = createTRPCRouter({
 
       // promote next owner
       return Promise.all(transactions);
+    })
+  ,
+  // passkey ---------------
+  fethMyPasskeys: protectedProcedure
+    .query(async ({ ctx }) => {
+      return ctx.prisma.passkey.findMany({
+        where: {
+          userId: ctx.session.user?.id
+        },
+        select: {
+          id: true,
+          name: true,
+          createdAt: true,
+        }
+      })
+    }),
+  removePasskey: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const passkey = await ctx.prisma.passkey.findFirst({
+        where: { id: input.id, userId: ctx.session.user?.id },
+      })
+      if (!passkey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No passkey found.",
+        });
+      }
+      await ctx.prisma.passkey.delete({
+        where: { id: input.id },
+      });
+      return passkey.name;
+    }),
+  renamePasskey: protectedProcedure
+    .input(RenamePasskeySchema)
+    .mutation(async ({ ctx, input }) => {
+      const passkey = await ctx.prisma.passkey.findFirst({
+        where: { id: input.id, userId: ctx.session.user?.id },
+      })
+      if (!passkey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No passkey found.",
+        });
+      }
+      return ctx.prisma.passkey.update({
+        where: { id: input.id },
+        data: { name: input.name },
+      });
+    }),
+  passkeyGenRegOpts: protectedProcedure
+    .query(async ({ ctx, input }) => {
+      // fetch list of already registered passkeys
+      const passkeys = await ctx.prisma.passkey.findMany({
+        where: {
+          userId: ctx.session.user?.id
+        },
+      })
+      const opts: GenerateRegistrationOptionsOpts = {
+        rpName: 'taskflow.space',
+        rpID: "localhost",
+        userID: ctx.session.user?.id,
+        userName: ctx.session.user?.email,
+        userDisplayName: ctx.session.user?.name || ctx.session.user?.email,
+        timeout: 60000,
+        attestationType: 'none',
+        /**
+         * Passing in a user's list of already-registered authenticator IDs here prevents users from
+         * registering the same device multiple times. The authenticator will simply throw an error in
+         * the browser if it's asked to perform registration when one of these ID's already resides
+         * on it.
+         */
+        excludeCredentials: passkeys.map(passkey => ({
+          id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64')),
+          type: 'public-key',
+          transports: passkey.transports,
+        } satisfies PublicKeyCredentialDescriptorFuture)),
+        authenticatorSelection: {
+          residentKey: 'discouraged',
+        },
+        supportedAlgorithmIDs: [-7, -257],
+      };
+
+      const options = generateRegistrationOptions(opts);
+
+      /**
+       * The server needs to temporarily remember this value for verification, so don't lose it until
+       * after you verify an authenticator response.
+       */
+      await ctx.redis.set(`passkey-challange:${ctx.session.user.id}`, options.challenge);
+
+      return options;
+    }),
+
+  passkeyVerifyReg: protectedProcedure
+    .input(z.any())
+    .mutation(async ({ ctx, input }) => {
+      console.log(input)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const body: RegistrationResponseJSON = input;
+      const user = ctx.session.user;
+      const expectedChallenge = await ctx.redis.get(`passkey-challange:${ctx.session.user.id}`);
+
+      if (!expectedChallenge) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Error registering device. Please try again.",
+        })
+      }
+      let verification: VerifiedRegistrationResponse;
+      try {
+        const opts: VerifyRegistrationResponseOpts = {
+          response: body,
+          expectedChallenge: `${expectedChallenge}`,
+          expectedOrigin: "http://localhost:3000",
+          expectedRPID: "localhost",
+          requireUserVerification: true,
+        };
+        verification = await verifyRegistrationResponse(opts);
+      } catch (error) {
+        const _error = error as Error;
+        console.error(_error);
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: _error.message,
+        })
+      }
+      const { verified, registrationInfo } = verification;
+      if (verified && registrationInfo) {
+        const { credentialPublicKey, credentialID, counter } = registrationInfo;
+        // check for passkey in db
+        const existingDevice = await ctx.prisma.passkey.count({
+          where: {
+            credentialID: credentialID.toString(),
+          },
+        });
+        if (!existingDevice) {
+          // Add the returned device to the user's list of devices
+          await ctx.prisma.passkey.create({
+            data: {
+              name: `New Passkey ${body.response.transports[0]} (rename me)`,
+              credentialPublicKey:
+                Buffer.from(credentialPublicKey).toString('base64'),
+              credentialID:
+                Buffer.from(credentialID).toString('base64'),
+              counter,
+              transports: body.response.transports,
+              userId: user.id,
+            }
+          });
+        }
+      }
+      await ctx.redis.del(`passkey-challange:${ctx.session.user.id}`);
+      return { verified };
     })
 });
 

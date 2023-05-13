@@ -39,6 +39,9 @@ const server = z.object({
   // PUSHER
   PUSHER_APP_ID: z.string(),
   PUSHER_SECRET: z.string(),
+  // redis
+  REDIS_HOST: z.string(),
+  REDIS_PASSWORD: z.string(),
 });
 
 /**
@@ -84,6 +87,9 @@ const processEnv = {
   NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
   PUSHER_APP_ID: process.env.PUSHER_APP_ID,
   PUSHER_SECRET: process.env.PUSHER_SECRET,
+  // redis
+  REDIS_HOST: process.env.REDIS_HOST,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
 };
 
 // Don't touch the part below

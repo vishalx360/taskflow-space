@@ -6,7 +6,13 @@ import { SendEmail } from '../../utils/SendEmail';
 import { env } from '../../env.mjs';
 import { prisma } from "../db";
 import { pusherServer } from '../../lib/pusherServer';
-
+import ioredis from "ioredis"
+// ioredis
+const redisClient = new ioredis({
+    host: env.REDIS_HOST,
+    password: env.REDIS_PASSWORD,
+    port: 13014
+})
 
 async function notify({ channel, notification }: { channel: string, notification: ToastProps }) {
     await pusherServer.trigger(channel, "notification", notification);
@@ -31,7 +37,8 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
         prisma,
         pusher: pusherServer,
         notify,
-        sendEmail: SendEmail
+        sendEmail: SendEmail,
+        redis: redisClient,
     };
 };
 

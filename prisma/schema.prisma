@@ -25,6 +25,7 @@ model User {
     password                 String?
     accounts                 Account[]
     sessions                 Session[]
+    passkeys                 Passkey[]
     // extra fields
     tasks                    TaskMember[]
     workspaces               WorkspaceMember[]
@@ -72,6 +73,20 @@ model ResetPasswordToken {
     id      String   @id @default(cuid())
     expires DateTime
     email   String
+}
+
+model Passkey {
+    id                  String   @id @default(cuid())
+    name                String
+    user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId              String
+    createdAt           DateTime @default(now())
+    lastUsed            DateTime @default(now())
+    // core fields
+    counter             Int
+    credentialID        String   @db.Text
+    credentialPublicKey String   @db.Text
+    transports          String[]
 }
 
 // Custom schema -------------------------------------------------------------

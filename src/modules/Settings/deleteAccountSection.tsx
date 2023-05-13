@@ -49,7 +49,7 @@ function DeleteAccountSection() {
       </p>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button variant="destructive">Delete My Account</Button>
+          <Button variant="destructiveOutline">Delete My Account</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
