@@ -31,6 +31,8 @@ model User {
     workspaces               WorkspaceMember[]
     workspaceInvitations     WorkspaceMemberInvitation[] @relation("recepientRelation")
     sentWorkspaceInvitations WorkspaceMemberInvitation[] @relation("senderRelation")
+
+    @@index([email])
 }
 
 model Account {

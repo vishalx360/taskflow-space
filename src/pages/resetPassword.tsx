@@ -2,7 +2,7 @@ import { useToast } from "@/hooks/use-toast";
 import LogoImage from "@/modules/Global/LogoImage";
 import { Button } from "@/modules/ui/button";
 import { authOptions } from "@/server/auth";
-import { resetPasswordSchema } from "@/utils/ValidationSchema";
+import { emailSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { Field, Form, Formik, type FieldProps } from "formik";
 import { LucideArrowLeft } from "lucide-react";
@@ -15,7 +15,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 export default function ResetPasswordPage() {
   const router = useRouter();
   const { toast } = useToast();
-
+  const defaultEmail = router.query.email as string;
   const mutation = api.authentication.sendResetPasswordLink.useMutation({
     onError(error) {
       toast({
@@ -59,8 +59,8 @@ export default function ResetPasswordPage() {
                 Enter your email address and we will send you a link to reset
               </p>
               <Formik
-                initialValues={{ email: "" }}
-                validationSchema={toFormikValidationSchema(resetPasswordSchema)}
+                initialValues={{ email: defaultEmail || "" }}
+                validationSchema={toFormikValidationSchema(emailSchema)}
                 onSubmit={(values) => {
                   mutation.mutate(values);
                 }}

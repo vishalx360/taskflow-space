@@ -1,14 +1,14 @@
 import { env } from "@/env.mjs";
+import { redisClient } from "@/lib/redisClient";
 import { prisma } from "@/server/db";
 import NewUserSideEffects from "@/utils/NewUserSideEffects";
 import { PasskeySigninSchema, SigninSchema, SigninTokenSchema } from "@/utils/ValidationSchema";
 import { signJTW, verifyJWT } from "@/utils/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
-import { AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
+import { type AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
 import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
-import ioredis from "ioredis";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -19,11 +19,7 @@ import Credentials from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-export const redisClient = new ioredis({
-  host: env.REDIS_HOST,
-  password: env.REDIS_PASSWORD,
-  port: 13014
-})
+
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

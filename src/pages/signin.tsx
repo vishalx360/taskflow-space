@@ -1,96 +1,71 @@
-import { useToast } from "@/hooks/use-toast";
+import Divider from "@/modules/Global/Divider";
 import LogoImage from "@/modules/Global/LogoImage";
-import PasswordInput from "@/modules/Global/PasswordInput";
+import UserDetails from "@/modules/Signin/UserDetails";
+import { CredentialSection } from "@/modules/Signin/sections/CredentialSection";
+import { FetchSigninOptionsSection } from "@/modules/Signin/sections/FetchSigninOptionsSection";
+import { OauthSection } from "@/modules/Signin/sections/OauthSection";
+import { PasskeySection } from "@/modules/Signin/sections/PasskeySection";
 import { Button } from "@/modules/ui/button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/modules/ui/hover-card";
 import { authOptions } from "@/server/auth";
-import { SigninSchema } from "@/utils/ValidationSchema";
-import { api } from "@/utils/api";
-import { startAuthentication } from "@simplewebauthn/browser";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import { motion } from "framer-motion";
-import { LucideArrowLeft, LucideArrowRight, LucideInfo } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { LucideArrowLeft } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
-import { FcGoogle, FcKey } from "react-icons/fc";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { FcGoogle } from "react-icons/fc";
+
+export type SigninOptions = {
+  user: {
+    id: string;
+    name: string | null;
+    email: string | null;
+    image: string | null;
+  };
+  options: {
+    credentials: boolean;
+    passkey: boolean;
+  };
+};
+
+const SectionMap = {
+  fetchsigninoptions: FetchSigninOptionsSection,
+  credentials: CredentialSection,
+  passkey: PasskeySection,
+  oauth: OauthSection,
+};
+export type SectionMapKeys = keyof typeof SectionMap;
 
 export default function SignInPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  const utils = api.useContext();
-  const handelCredentialSignin = useCallback(
-    async (credentails: { email: string; password: string }) => {
-      setIsLoading(true);
-      const result = await signIn("credentials", {
-        email: credentails.email,
-        password: credentails.password,
-        redirect: false,
-      });
-      setIsLoading(false);
-      if (result?.ok) {
-        toast({
-          title: "Login successful!",
-          description: "Taking you to your dashboard",
-        });
-        await router.push("/dashboard").catch((err) => console.log(err));
-      } else {
-        toast({
-          variant: "destructive",
-          title: result?.error || "Uh oh! Something went wrong.",
-          description: "There was a problem with your request.",
-          // action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-      }
-    },
-    [router]
+  const [signinOptions, setSigninOptions] = useState<SigninOptions | null>(
+    null
   );
+  const [currentSection, setCurrentSection] =
+    useState<SectionMapKeys>("fetchsigninoptions");
 
-  async function handelPasskeySignin(email: string) {
-    try {
-      const options = await utils.authentication.passkeyGenAuthOpts.fetch({
-        email,
-      });
-      const GetCredentialResponse = await startAuthentication(options);
-      const result = await signIn("passkey", {
-        email: email,
-        passkey: JSON.stringify(GetCredentialResponse),
-        redirect: false,
-      });
-      if (result?.ok) {
-        toast({
-          title: "Login successful!",
-          description: "Taking you to your dashboard",
-        });
-        await router.push("/dashboard").catch((err) => console.log(err));
-      } else {
-        toast({
-          title: result?.error || "Uh oh! Something went wrong.",
-          variant: "destructive",
-          description: "There was a problem with your request.",
-          // action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
+  useEffect(() => {
+    if (signinOptions) {
+      switch (true) {
+        case signinOptions?.options.passkey:
+          setCurrentSection("passkey");
+          break;
+        case signinOptions?.options.credentials:
+          setCurrentSection("credentials");
+          break;
+        default:
+          setCurrentSection("oauth");
+          break;
       }
-      // passkey
-    } catch (error) {
-      toast({
-        title: "Some error occured authenticating.",
-        description: error?.message,
-        variant: "destructive",
-      });
+    } else {
+      setCurrentSection("fetchsigninoptions");
     }
-  }
+  }, [signinOptions]);
+
+  const CurrentSection = SectionMap[currentSection];
+
   async function handelOauthSignin(provider: string) {
     await signIn(provider);
   }
@@ -126,122 +101,51 @@ export default function SignInPage() {
             transition={{ duration: 1, ease: "anticipate" }}
             className="w-full rounded-xl bg-white shadow-lg dark:border dark:border-neutral-700 dark:bg-neutral-800 sm:max-w-md md:mt-0 xl:p-0"
           >
-            <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
+            <div className="space-y-6 p-6 sm:p-8 md:space-y-6">
               <h1 className="text-xl font-medium leading-tight tracking-tight text-neutral-900 dark:text-white md:text-2xl">
                 Sign in to your account
               </h1>
-              <Formik
-                initialValues={{
-                  email: "",
-                  password: "",
-                }}
-                validationSchema={toFormikValidationSchema(SigninSchema)}
-                onSubmit={handelCredentialSignin}
-              >
-                <Form className="space-y-4 md:space-y-6">
-                  <Field name="email">
-                    {({ field, meta }: FieldProps) => (
-                      <div>
-                        <label
-                          htmlFor="email"
-                          className="mb-2 block text-sm font-medium text-neutral-900 dark:text-white"
-                        >
-                          Your email
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          className="block w-full rounded-lg border border-neutral-300 bg-neutral-50 p-2.5  text-neutral-900 focus:border-black focus:ring-black dark:border-neutral-600 dark:bg-neutral-700 dark:text-white dark:placeholder-neutral-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
-                          placeholder="name@company.com"
-                          required
-                          {...field}
-                        />
-                        {meta.touched && meta.error && (
-                          <p className="ml-2 mt-2 text-sm text-red-500">
-                            {meta.error}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </Field>
-                  <PasswordInput />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-start">
-                      <div className="flex h-5 items-center">
-                        <input
-                          id="remember"
-                          aria-describedby="remember"
-                          type="checkbox"
-                          className="focus:ring-3 h-4 w-4 rounded border border-neutral-300 bg-neutral-50 checked:bg-black focus:ring-black dark:border-neutral-600 dark:bg-neutral-700 dark:ring-offset-neutral-800 dark:focus:ring-black"
-                        />
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label
-                          htmlFor="remember"
-                          className="text-neutral-500 dark:text-neutral-300"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                    </div>
-                    <Link
-                      href="/resetPassword"
-                      className="text-sm font-medium text-black hover:underline dark:text-black"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <Button
-                    type="submit"
-                    className="text-md w-full"
-                    size="lg"
-                    LeftIcon={LucideArrowRight}
-                    isLoading={isLoading}
-                    loadingText="Checking credentials..."
-                  >
-                    Sign in
-                  </Button>
-                  <div className="flex items-center gap-5">
-                    <Button
-                      type="button"
-                      className="text-md w-full"
-                      size="lg"
-                      LeftIcon={FcKey}
-                      variant={"outline"}
-                      isLoading={isLoading}
-                      loadingText="Checking credentials..."
-                      onClick={() => {
-                        handelPasskeySignin("vishalx360@gmail.com");
-                      }}
-                    >
-                      Sign in with passkey
-                    </Button>
-                    <HoverCard>
-                      <HoverCardTrigger>
-                        <LucideInfo width={20} />
-                      </HoverCardTrigger>
-                      <HoverCardContent>
-                        {/* password rules list */}
-                        <h2>What is a passkey?</h2>
-                        <p className="my-2 text-sm text-neutral-600">
-                          Passkeys are a secure replacement for passwords that
-                          provide faster and easier sign-ins, based on FIDO
-                          standards. They are always strong and
-                          phishing-resistant, making them more secure than
-                          traditional passwords.
-                        </p>
-                        <Link
-                          className="text-xs text-blue-500 hover:underline"
-                          href="https://blog.google/technology/safety-security/the-beginning-of-the-end-of-the-password/"
-                        >
-                          Learn more{" "}
-                          <LucideArrowRight className="inline" width={16} />
-                        </Link>
-                      </HoverCardContent>
-                    </HoverCard>
-                  </div>
-                </Form>
-              </Formik>
+              {signinOptions?.user && (
+                <UserDetails
+                  user={signinOptions?.user}
+                  setCurrentSection={setCurrentSection}
+                  setSigninOptions={setSigninOptions}
+                />
+              )}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  variants={{
+                    enter: {
+                      x: 10,
+                      opacity: 0,
+                    },
+                    center: {
+                      x: 0,
+                      opacity: 1,
+                    },
+                    exit: {
+                      x: -10,
+                      opacity: 0,
+                    },
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    duration: 0.3,
+                  }}
+                  key={currentSection}
+                >
+                  <CurrentSection
+                    signinOptions={signinOptions}
+                    setSigninOptions={setSigninOptions}
+                    setCurrentSection={setCurrentSection}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              <Divider />
+
               <div className="flex flex-col items-center gap-2 md:flex-row">
                 <Button
                   onClick={() => {

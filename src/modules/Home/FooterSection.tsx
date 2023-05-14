@@ -1,5 +1,3 @@
-import React from "react";
-
 function FooterSection() {
   return (
     <section className=" bg-neutral-400/40   ">

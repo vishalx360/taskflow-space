@@ -18,6 +18,62 @@ import { type PublicKeyCredentialDescriptorFuture, type RegistrationResponseJSON
 
 
 export const AuthenticationRouter = createTRPCRouter({
+  fetchSigninOptions: publicProcedure
+    .input(z.object({
+      email: z.string(),
+    }))
+    .query(async ({ ctx, input }) => {
+      const { email } = input;
+      const user = await ctx.prisma.user.findFirst({
+        where: { email },
+      });
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not found.",
+        });
+      }
+      const options = {
+        credentials: false,
+        passkey: false,
+        // google: false,
+        // github: false,
+      };
+
+      if (user.password) {
+        options.credentials = true;
+      }
+      // fetch passkey
+      const passkey = await ctx.prisma.passkey.count({
+        where: { userId: user.id },
+      });
+      if (passkey > 0) {
+        options.passkey = true;
+      }
+      // // fetch accounts
+      // const accounts = await ctx.prisma.account.findMany({
+      //   where: { userId: user.id },
+      // });
+      // if (accounts.length > 0) {
+      //   accounts.forEach((account) => {
+      //     if (account.type === "google") {
+      //       options.google = true;
+      //     }
+      //     if (account.type === "github") {
+      //       options.github = true;
+      //     }
+      //   });
+      // }
+      return {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        }, options
+      };
+    }),
+
   signup: publicProcedure
     .input(SignUpSchema)
     .mutation(async ({ ctx, input }) => {

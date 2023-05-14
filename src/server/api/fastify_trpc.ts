@@ -1,18 +1,18 @@
 import { type CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 // import ws from '@fastify/websocket';
-import ioredis from "ioredis";
+import { redisClient } from '../../lib/redisClient.js';
 import { type Session } from "next-auth";
 import { env } from '../../env.mjs';
 import { pusherServer } from '../../lib/pusherServer';
 import { verifyJWT } from "../../utils/jwt";
 import { SendEmail } from '../../utils/SendEmail';
 import { prisma } from "../db";
+import { type ToastProps } from '@/modules/ui/toast';
+import { initTRPC, TRPCError } from '@trpc/server';
+import { type FastifyReplyType, type FastifyRequestType } from 'fastify/types/type-provider.js';
+import superjson from "superjson";
 // ioredis
-export const redisClient = new ioredis({
-    host: env.REDIS_HOST,
-    password: env.REDIS_PASSWORD,
-    port: 13014
-})
+
 
 async function notify({ channel, notification }: { channel: string, notification: ToastProps }) {
     await pusherServer.trigger(channel, "notification", notification);
@@ -52,10 +52,6 @@ export async function createTRPCContext({ req, res }: CreateFastifyContextOption
 }
 
 
-import { ToastProps } from '@/modules/ui/toast';
-import { initTRPC, TRPCError } from '@trpc/server';
-import { type FastifyReplyType, type FastifyRequestType } from 'fastify/types/type-provider.js';
-import superjson from "superjson";
 
 const t = initTRPC.context<typeof createTRPCContext>().create(
     {

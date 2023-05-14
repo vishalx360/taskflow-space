@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { Input } from "@/modules/ui/input";
-import { ResetPasswordToken } from "@prisma/client";
+import { type ResetPasswordToken } from "@prisma/client";
 import { ErrorMessage } from "formik";
 
 export default function ResetPasswordPage() {

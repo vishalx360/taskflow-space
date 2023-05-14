@@ -28,7 +28,7 @@ export const SigninSchema = z.object({
 });
 
 
-export const resetPasswordSchema = z.object({
+export const emailSchema = z.object({
   email: z.string().email(),
 });
 

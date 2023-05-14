@@ -70,8 +70,9 @@ function UpdatePasswordSection() {
           <div className="my-5 space-y-2  text-neutral-700">
             <p className="text-sm">
               <LucideInfo className="mr-2 inline" width={20} />
-              Note: If password is forgotten or not set, a new password can be
-              set by using the email.
+              Please note that if you have forgotten your password or have not
+              set one, you can create a new password by resetting it from the
+              login page. This process will require email verification.
             </p>
           </div>
 

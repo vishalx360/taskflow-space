@@ -8,13 +8,13 @@ import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Channel } from "pusher-js";
+import { type Channel } from "pusher-js";
 import { useEffect } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { simpleVariants } from "../Global/Fade";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
-import { ToastProps } from "../ui/toast";
+import { type ToastProps } from "../ui/toast";
 import DashboardNavbar from "./DashboardNavbar";
 
 const NavlinkVariants = cva(
