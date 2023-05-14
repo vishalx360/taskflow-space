@@ -14,12 +14,13 @@ import {
 import { UpdatePasswordSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
-import { LucideInfo, LucideKey } from "lucide-react";
+import { LucideAlertCircle, LucideInfo, LucideKey } from "lucide-react";
 import { useRef, useState } from "react";
 import { MdPassword } from "react-icons/md";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 function UpdatePasswordSection() {
   const [isOpen, setIsOpen] = useState(false);
@@ -68,12 +69,16 @@ function UpdatePasswordSection() {
             </DialogTitle>
           </DialogHeader>
           <div className="my-5 space-y-2  text-neutral-700">
-            <p className="text-sm">
-              <LucideInfo className="mr-2 inline" width={20} />
-              Please note that if you have forgotten your password or have not
-              set one, you can create a new password by resetting it from the
-              login page. This process will require email verification.
-            </p>
+            <Alert>
+              <LucideAlertCircle className="h-4 w-4" />
+              <AlertTitle>
+                Forgotten your password or have not set one!
+              </AlertTitle>
+              <AlertDescription className="mt-2">
+                You can create a new password by resetting it from the login
+                page. This process will require email verification.
+              </AlertDescription>
+            </Alert>
           </div>
 
           <Formik

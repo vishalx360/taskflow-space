@@ -4,6 +4,7 @@ import { LucideLock } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import { Button } from "../ui/button";
+import { ConfirmDialog } from "../Global/ConfirmDialog";
 
 function ConnectedAccountSection() {
   const { data: connectedAccounts, isLoading } =
@@ -13,7 +14,7 @@ function ConnectedAccountSection() {
     <div>
       <h2 className="text-xl font-medium">Social Accounts</h2>
       <p className="my-5 text-neutral-700">
-        Link your social accounts to your account.
+        Connect your social accounts using the same email as your account.
       </p>
       <div className="space-y-3">
         {isLoading ? (
@@ -91,14 +92,19 @@ function AccountRow({ provider, isConnected }: AccountRowProps) {
           </div>
         </div>
         {isConnected ? (
-          <Button
-            size="sm"
-            variant="destructiveOutline"
-            onClick={() => disconnectAccount({ provider })}
-            className="px-4 text-xs"
+          <ConfirmDialog
+            description="Are you certain you want to disconnect this social account? Keep in mind that if it's your last login method, disconnecting it will lock you out of your account. In that case, you can use the forgot password feature to reset your password."
+            title={`Disconnect : ${provider} login`}
+            action={() => disconnectAccount({ provider })}
           >
-            Disconnect
-          </Button>
+            <Button
+              size="sm"
+              variant="destructiveOutline"
+              className="px-4 text-xs"
+            >
+              Disconnect
+            </Button>
+          </ConfirmDialog>
         ) : (
           <Button
             onClick={async () => await signIn(provider)}
