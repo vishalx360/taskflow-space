@@ -3,11 +3,7 @@ import { env } from '../env.mjs'
 
 const globalForRedis = global as unknown as { redisClient: ioredis }
 
-export const redisClient = globalForRedis.redisClient ?? new ioredis({
-    host: env.REDIS_HOST,
-    password: env.REDIS_PASSWORD,
-    port: 13014
-})
+export const redisClient = globalForRedis.redisClient ?? new ioredis(env.REDIS_URL)
 
 redisClient.on('error', (err) => {
     console.error('Redis error: ', err)
