@@ -168,7 +168,7 @@ export const authOptions: NextAuthOptions = {
             response: passkey,
             expectedChallenge,
             expectedOrigin: env.NEXTAUTH_URL,
-            expectedRPID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
+            expectedRPID: env.DOMAIN_NAME,
             authenticator: {
               counter: registeredPasskey.counter,
               credentialID: Uint8Array.from(Buffer.from(registeredPasskey.credentialID, 'base64url')),

@@ -436,7 +436,7 @@ export const AuthenticationRouter = createTRPCRouter({
           id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64url')),
           type: 'public-key',
         })),
-        rpID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
+        rpID: env.DOMAIN_NAME,
         timeout: 60000,
         userVerification: 'preferred',
       });
@@ -517,7 +517,7 @@ export const AuthenticationRouter = createTRPCRouter({
       })
       const opts: GenerateRegistrationOptionsOpts = {
         rpName: 'taskflow',
-        rpID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
+        rpID: env.DOMAIN_NAME,
         userID: ctx.session.user?.id,
         userName: ctx.session.user?.email,
         userDisplayName: ctx.session.user?.name || ctx.session.user?.email,
@@ -571,7 +571,7 @@ export const AuthenticationRouter = createTRPCRouter({
           response: body,
           expectedChallenge,
           expectedOrigin: env.NEXTAUTH_URL,
-          expectedRPID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
+          expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,
         };
         verification = await verifyRegistrationResponse(opts);
