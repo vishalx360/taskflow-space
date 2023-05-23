@@ -167,7 +167,7 @@ export const authOptions: NextAuthOptions = {
           verification = await verifyAuthenticationResponse({
             response: passkey,
             expectedChallenge,
-            expectedOrigin: env.NEXTAUTH_URL,
+            expectedOrigin: env.VERCEL_URL || env.NEXTAUTH_URL,
             expectedRPID: env.DOMAIN_NAME,
             authenticator: {
               counter: registeredPasskey.counter,
