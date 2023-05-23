@@ -32,7 +32,7 @@ function AboutSection() {
             <Link
               className="group"
               target="_blank"
-              href="https://www.vishalx360.codes/"
+              href="https://www.vishalx360.dev/"
             >
               <div className="flex items-center gap-5 rounded-lg p-2 group-hover:bg-neutral-100">
                 <Image
@@ -83,7 +83,7 @@ function AboutSection() {
               </Link>
               <Link
                 target="_blank"
-                href="https://www.vishalx360.codes/"
+                href="https://www.vishalx360.dev/"
                 className="underline hover:text-teal-700"
               >
                 Portfolio
