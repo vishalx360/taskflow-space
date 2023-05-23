@@ -167,8 +167,8 @@ export const authOptions: NextAuthOptions = {
           verification = await verifyAuthenticationResponse({
             response: passkey,
             expectedChallenge,
-            expectedOrigin: "http://localhost:3000",
-            expectedRPID: "localhost",
+            expectedOrigin: env.NEXTAUTH_URL,
+            expectedRPID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
             authenticator: {
               counter: registeredPasskey.counter,
               credentialID: Uint8Array.from(Buffer.from(registeredPasskey.credentialID, 'base64url')),

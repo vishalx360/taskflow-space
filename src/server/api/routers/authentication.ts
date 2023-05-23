@@ -15,6 +15,7 @@ import {
   type VerifyRegistrationResponseOpts
 } from '@simplewebauthn/server';
 import { type PublicKeyCredentialDescriptorFuture, type RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
+import { env } from "process";
 
 
 export const AuthenticationRouter = createTRPCRouter({
@@ -435,7 +436,7 @@ export const AuthenticationRouter = createTRPCRouter({
           id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64url')),
           type: 'public-key',
         })),
-        rpID: "localhost",
+        rpID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
         timeout: 60000,
         userVerification: 'preferred',
       });
@@ -515,8 +516,8 @@ export const AuthenticationRouter = createTRPCRouter({
         },
       })
       const opts: GenerateRegistrationOptionsOpts = {
-        rpName: 'taskflow.space',
-        rpID: "localhost",
+        rpName: 'taskflow',
+        rpID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
         userID: ctx.session.user?.id,
         userName: ctx.session.user?.email,
         userDisplayName: ctx.session.user?.name || ctx.session.user?.email,
@@ -569,8 +570,8 @@ export const AuthenticationRouter = createTRPCRouter({
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge,
-          expectedOrigin: "http://localhost:3000",
-          expectedRPID: "localhost",
+          expectedOrigin: env.NEXTAUTH_URL,
+          expectedRPID: env.NODE_ENV === 'production' ? 'taskflow.space' : 'localhost',
           requireUserVerification: true,
         };
         verification = await verifyRegistrationResponse(opts);
