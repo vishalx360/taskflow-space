@@ -6,11 +6,9 @@ import Backgrounds from "../../../utils/BoardBackgrounds.json";
 import {
   CreateNewBoardSchema, UpdateBoardSchema
 } from "../../../utils/ValidationSchema";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
+
+
 const GetRandomBackgroundGradient = () => {
   const background =
     Backgrounds["gradients"][random(0, Backgrounds["gradients"].length - 1)];

@@ -1,11 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import { LexoRank } from "lexorank";
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
+
 import {
   CreateTaskSchema, MoveTaskSchema, UpdateTaskMemberSchema, UpdateTaskSchema
 } from "../../../utils/ValidationSchema";

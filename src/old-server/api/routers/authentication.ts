@@ -4,11 +4,8 @@ import { z } from "zod";
 import NewUserSideEffects from "../../../utils/NewUserSideEffects";
 import { RenamePasskeySchema, SignUpSchema, UpdatePasswordSchema, newPasswordSchema } from "../../../utils/ValidationSchema";
 import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../fastify_trpc";
+
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,

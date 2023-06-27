@@ -4,12 +4,10 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { env } from "@/env.mjs";
-import { httpBatchLink } from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
-
 import { type AppRouter } from "@/server/api/root";
 
 const getBaseUrl = () => {
@@ -22,16 +20,6 @@ const getBaseUrl = () => {
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
-      queryClientConfig: {
-        defaultOptions: {
-          queries: {
-            refetchOnWindowFocus: false,
-            retry: false,
-            staleTime: 1000 * 30, // 30 seconds
-            networkMode: "always"
-          },
-        },
-      },
       /**
        * Transformer used for data de-serialization from the server.
        *
@@ -45,21 +33,14 @@ export const api = createTRPCNext<AppRouter>({
        * @see https://trpc.io/docs/links
        */
       links: [
-        // loggerLink({
-        //   enabled: (opts) =>
-        //     env.NODE_ENV === "development" ||
-        //     (opts.direction === "down" && opts.result instanceof Error),
-        // }),
-        httpBatchLink({
-          url: `${env.NEXT_PUBLIC_TRPC_SEREVR_URL}/trpc`,
-          fetch(url, options) {
-            return fetch(url, {
-              ...options,
-              credentials: 'include',
-            });
-          },
+        loggerLink({
+          enabled: (opts) =>
+            process.env.NODE_ENV === "development" ||
+            (opts.direction === "down" && opts.result instanceof Error),
         }),
-
+        httpBatchLink({
+          url: `${getBaseUrl()}/api/trpc`,
+        }),
       ],
     };
   },

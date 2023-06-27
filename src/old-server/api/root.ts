@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "@/server/api/trpc";
+import { createTRPCRouter } from "./fastify_trpc";
 import { AuthenticationRouter } from "./routers/authentication";
 import { BoardRouter } from "./routers/board";
 import { ListRouter } from "./routers/list";
@@ -17,5 +17,6 @@ export const appRouter = createTRPCRouter({
   task: TaskRouter,
   authentication: AuthenticationRouter,
 });
+
 // export type definition of API
 export type AppRouter = typeof appRouter;

@@ -20,6 +20,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
 
+
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -34,13 +35,8 @@ declare module "next-auth" {
       // role: UserRole;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
-
+// DECODE -> JWT -> SESSION -> ENCODE
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -249,6 +245,18 @@ export const authOptions: NextAuthOptions = {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
+  cookies: env.NODE_ENV === 'development' ? {} : {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true,
+        domain: `.${env.DOMAIN_NAME}`
+      }
+    },
+  },
   pages: {
     signIn: "/signin",
     newUser: "/signup",

@@ -7,18 +7,6 @@
  * need to use are documented accordingly near the end.
  */
 
-import { getServerAuthSession } from "@/server/auth";
-import { prisma } from "@/server/db";
-import { SendEmail } from "@/utils/SendEmail";
-import { initTRPC, TRPCError } from "@trpc/server";
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type Session } from "next-auth";
-import superjson from "superjson";
-import { ZodError } from "zod";
-// import ws from '@fastify/websocket';
-import { pusherServer } from '../../lib/pusherServer';
-import { redisClient } from '../../lib/redisClient';
-import { type ToastProps } from "@/modules/ui/toast";
 /**
  * 1. CONTEXT
  *
@@ -26,14 +14,16 @@ import { type ToastProps } from "@/modules/ui/toast";
  *
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
+import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { type Session } from "next-auth";
+
+import { getServerAuthSession } from "@/server/auth";
+import { prisma } from "@/server/db";
+import { SendEmail } from "@/utils/SendEmail";
 
 type CreateContextOptions = {
   session: Session | null;
 };
-
-async function notify({ channel, notification }: { channel: string, notification: ToastProps }) {
-  await pusherServer.trigger(channel, "notification", notification);
-}
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
@@ -43,16 +33,13 @@ async function notify({ channel, notification }: { channel: string, notification
  * - testing, so we don't have to mock Next.js' req/res
  * - tRPC's `createSSGHelpers`, where we don't have req/res
  *
- * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
+ * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
-    pusher: pusherServer,
-    notify,
-    sendEmail: SendEmail,
-    redis: redisClient,
+    sendEmail: SendEmail
   };
 };
 
@@ -67,6 +54,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
   // Get the session from the server using the getServerSession wrapper function
   const session = await getServerAuthSession({ req, res });
+
   return createInnerTRPCContext({
     session,
   });
@@ -75,22 +63,15 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 /**
  * 2. INITIALIZATION
  *
- * This is where the tRPC API is initialized, connecting the context and transformer. We also parse
- * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
- * errors on the backend.
+ * This is where the tRPC API is initialized, connecting the context and transformer.
  */
+import { initTRPC, TRPCError } from "@trpc/server";
+import superjson from "superjson";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
+  errorFormatter({ shape }) {
+    return shape;
   },
 });
 

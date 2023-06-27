@@ -8,11 +8,8 @@ import {
     WorksapceInviteResponse
 } from "../../../utils/ValidationSchema";
 import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
-import {
-    createTRPCRouter,
-    publicProcedure,
-    protectedProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
+
 
 
 export const WorkspaceRouter = createTRPCRouter({
