@@ -15,7 +15,7 @@ function ProfileSection() {
   const { data: session } = useSession();
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-2xl pb-20">
       <div className="flex flex-col items-center justify-center -space-y-10  ">
         {/* account intro */}
         <div className="relative -z-10 h-20 w-full overflow-hidden  rounded-xl md:h-32">
