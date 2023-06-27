@@ -14,8 +14,7 @@
     "postresetdb": "prisma db push",
     "updatedb": "DISABLE_ERD=true prisma db push",
     "start:server": "node dist/fastify.js",
-    "build:server": "esbuild src/server/api/fastify.ts --bundle --packages=external --platform=node --format=esm --outdir=dist --sourcemap",
-    "gcp-build": "npm run build:server"
+    "build:server": "esbuild src/server/api/fastify.ts --bundle --packages=external --platform=node --format=esm --outdir=dist --sourcemap"
   },
   "dependencies": {
     "@auth/core": "^0.5.1",
