@@ -11,10 +11,10 @@ import { WorkspaceRouter } from "./routers/workspace";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  workspace: WorkspaceRouter,
-  board: BoardRouter,
-  list: ListRouter,
-  task: TaskRouter,
+  // workspace: WorkspaceRouter,
+  // board: BoardRouter,
+  // list: ListRouter,
+  // task: TaskRouter,
   authentication: AuthenticationRouter,
 });
 
