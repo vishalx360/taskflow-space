@@ -1,17 +1,2 @@
-import { type NextApiRequest, type NextApiResponse } from "next";
-import { NextResponse } from "next/server";
-import { verifyJWT } from "./utils/jwt";
-
-
-export async function middleware(req: NextApiRequest, res: NextApiResponse) {
-    const token = req.cookies.get("next-auth.session-token")?.value;
-    const verifiedToken = token && (await verifyJWT(token).catch((err) => console.log(err)));
-
-    if (!verifiedToken) {
-        return NextResponse.redirect(new URL('/signin', req.url))
-    } else {
-        return NextResponse.next()
-    }
-}
-
+export { default } from "next-auth/middleware"
 export const config = { matcher: ["/dashboard/:path*", "/board/:path*",] };
