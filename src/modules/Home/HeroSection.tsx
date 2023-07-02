@@ -49,7 +49,7 @@ function HeroSection() {
           </motion.div>
         </div>
 
-        <div className="relative mt-20 flex w-full items-end justify-center overflow-visible md:mt-[10vh] ">
+        <div className="relative mt-20 flex w-full items-end justify-center overflow-hidden md:mt-[10vh] ">
           <motion.div
             initial={{ opacity: 0, x: 0, y: 0, scale: 0.9 }}
             animate={{ opacity: 1, x: "-50%", y: -10, scale: 1 }}
