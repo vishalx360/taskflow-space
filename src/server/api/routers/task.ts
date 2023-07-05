@@ -315,42 +315,11 @@ export const TaskRouter = createTRPCRouter({
         });
       }
 
-
-      let prevTask;
-      let nextTask;
-
-      if (input.newPrevTaskId) {
-        prevTask = await ctx.prisma.task.findUnique({
-          where: { id: input.newPrevTaskId },
-          select: { rank: true },
-        });
-      }
-      if (input.newNextTaskId) {
-        nextTask = await ctx.prisma.task.findUnique({
-          where: { id: input.newNextTaskId },
-          select: { rank: true },
-        });
-      }
-      // if putting on empty list
-      let rank = LexoRank.middle().toString();
-      // if putting in middle
-      if (prevTask && nextTask) {
-        rank = LexoRank.parse(prevTask?.rank).between(LexoRank.parse(nextTask?.rank)).toString();
-      }
-      // if putting on bottom and prev exist
-      if (prevTask && !nextTask) {
-        rank = LexoRank.parse(prevTask?.rank).genNext().toString();
-      }
-      // if putting on top and next exist
-      if (!prevTask && nextTask) {
-        rank = LexoRank.parse(nextTask?.rank).genPrev().toString();
-      }
-
       await ctx.prisma.task.update({
         where: { id: input.taskId },
         data: {
           listId: input.newListId,
-          rank,
+          rank: input.newRank,
         },
       });
       // send lists to update

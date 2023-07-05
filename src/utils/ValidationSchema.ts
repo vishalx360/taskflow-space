@@ -128,8 +128,7 @@ export const UpdateTaskSchema = z.object({
 export const MoveTaskSchema = z.object({
   newListId: z.string(),
   taskId: z.string(),
-  newPrevTaskId: z.string().optional(),
-  newNextTaskId: z.string().optional(),
+  newRank: z.string()
 });
 
 export const UpdateTaskMemberSchema = z.object({

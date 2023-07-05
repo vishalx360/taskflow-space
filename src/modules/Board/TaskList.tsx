@@ -298,7 +298,7 @@ export function UpdateListName({ list }: { list: List }) {
     <Formik
       initialValues={{ name: list.name, listId: list.id }}
       validationSchema={toFormikValidationSchema(UpdateListSchema)}
-      onSubmit={(values, {}) => {
+      onSubmit={(values) => {
         mutation.mutate(values);
       }}
     >
@@ -396,7 +396,7 @@ export function CreateList({ boardId }: { boardId: string }) {
                         }
                         type="submit"
                         className="flex-[2] rounded-xl"
-                        // LeftIcon={FaPlus}
+                      // LeftIcon={FaPlus}
                       >
                         Create
                       </Button>
@@ -461,7 +461,8 @@ export function DeleteListButton({
     },
   });
   return (
-    <button
+    <Button
+      isLoading={mutation.isLoading}
       disabled={mutation.isLoading}
       onClick={() => {
         mutation.mutate({ listId: list.id });
@@ -469,7 +470,7 @@ export function DeleteListButton({
       className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-red-100"
     >
       Delete list
-    </button>
+    </Button>
   );
 }
 
@@ -498,7 +499,8 @@ export function ClearListButton({
     },
   });
   return (
-    <button
+    <Button
+      isLoading={mutation.isLoading}
       disabled={mutation.isLoading}
       onClick={() => {
         mutation.mutate({ listId: list.id });
@@ -506,6 +508,6 @@ export function ClearListButton({
       className="flex w-full items-center rounded-md bg-white px-2 py-2 text-sm text-black hover:bg-red-100"
     >
       Clear list
-    </button>
+    </Button>
   );
 }

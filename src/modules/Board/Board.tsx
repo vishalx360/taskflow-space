@@ -22,6 +22,27 @@ import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
 
+import { LexoRank } from "lexorank";
+
+function getNewRank({ prevRank, nextRank }: { prevRank: string; nextRank: string }) {
+  // if putting in middle
+  if (prevRank && nextRank) {
+    if (prevRank == nextRank) {
+      return LexoRank.parse(nextRank).genNext().toString();
+    }
+    return LexoRank.parse(prevRank).between(LexoRank.parse(nextRank)).toString();
+  }
+  // if putting on bottom and prev exist
+  if (prevRank && !nextRank) {
+    return LexoRank.parse(prevRank).genNext().toString();
+  }
+  // if putting on top and next exist
+  if (!prevRank && nextRank) {
+    return LexoRank.parse(nextRank).genPrev().toString();
+  }
+}
+
+
 const DragDropContext = dynamic(
   () =>
     import("react-beautiful-dnd").then((mod) => {
@@ -138,56 +159,59 @@ function Board() {
   const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
     const { source, destination } = result;
-    // if different list
+
     let removed: Task | undefined;
+    let prevRank: string;
+    let nextRank: string;
+    let newRank: string;
 
-    let newPrevTaskId;
-    let newNextTaskId;
-
+    // OPTIMISTIC UPDATE ------------ START
+    // if different list
     if (source.droppableId !== destination.droppableId) {
+      // remove task from old list
       utils.task.getTasks.setData({ listId: source.droppableId }, (prev) => {
         removed = prev?.splice(source.index, 1)[0];
         return prev;
       });
-
+      // add task in new list
       utils.task.getTasks.setData(
         { listId: destination.droppableId },
         (prev) => {
-          // todo lookout for edge cases
-          newPrevTaskId =
-            destination.index > 0 ? prev[destination.index - 1].id : null;
+          prevRank =
+            destination.index > 0 ? prev[destination.index - 1].rank : "";
           removed && prev?.splice(destination.index, 0, removed);
-          // check if index is not out of bounds
-          console.log(destination.index + 1, prev?.length);
 
           if (destination.index + 1 <= prev.length - 1) {
-            newNextTaskId = prev[destination.index + 1].id;
+            nextRank = prev && prev[destination.index + 1].rank;
           }
+          newRank = getNewRank({ prevRank, nextRank })
+          prev[destination.index].rank = newRank;
+
           return prev;
         }
       );
     } else {
-      // if same list
       utils.task.getTasks.setData({ listId: source.droppableId }, (prev) => {
         removed = prev?.splice(source.index, 1)[0];
         removed && prev?.splice(destination.index, 0, removed);
-        // todo lookout for edge cases
-        newPrevTaskId =
-          destination.index > 0 ? prev[destination.index - 1].id : null;
+        prevRank =
+          destination.index > 0 ? prev && prev[destination.index - 1].rank : "";
         // check if index is not out of bounds
         if (destination.index + 1 <= prev.length - 1) {
-          newNextTaskId = prev[destination.index + 1].id;
+          nextRank = prev[destination.index + 1].rank;
         }
+        newRank = getNewRank({ prevRank, nextRank })
+        prev[destination.index].rank = newRank;
         return prev;
       });
     }
 
+
     // make api call to update task
-    await mutation.mutate({
+    mutation.mutate({
       taskId: removed?.id || "",
       newListId: destination.droppableId,
-      newPrevTaskId: newPrevTaskId || "",
-      newNextTaskId: newNextTaskId || "",
+      newRank: newRank
     });
     return;
   };
@@ -260,11 +284,10 @@ function BoardSkeleton(): JSX.Element {
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
-              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${
-                background
-                  ? "border-white/50 text-white"
-                  : "border-neutral-400 text-neutral-600"
-              }`}
+              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${background
+                ? "border-white/50 text-white"
+                : "border-neutral-400 text-neutral-600"
+                }`}
             >
               <FiArrowLeft className="text-xl" />
             </Link>
