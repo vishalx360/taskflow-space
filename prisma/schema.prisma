@@ -1,7 +1,5 @@
 generator client {
-    provider        = "prisma-client-js"
-    engineType      = "binary"
-    previewFeatures = ["jsonProtocol"]
+    provider = "prisma-client-js"
 }
 
 generator erd {
