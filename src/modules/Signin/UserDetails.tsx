@@ -1,9 +1,11 @@
+import { motion } from "framer-motion";
+import { RxCaretSort } from "react-icons/rx";
+
 import { Button } from "@/modules/ui/button";
 import { type SectionMapKeys, type SigninOptions } from "@/pages/signin";
 import getGravatar from "@/utils/getGravatar";
-import { RxCaretSort } from "react-icons/rx";
+
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { motion } from "framer-motion";
 
 function UserDetails({
   user,

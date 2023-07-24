@@ -1,11 +1,13 @@
+import { type Workspace } from "@prisma/client";
+import { type Dispatch, type SetStateAction } from "react";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/modules/ui/accordion";
-import { type Workspace } from "@prisma/client";
-import { type Dispatch, type SetStateAction } from "react";
+
 import DeleteWorkspaceSection from "./DeleteWorkspaceSection";
 import TransferWorkspaceOwnershipSection from "./TransferWorkspaceOwnershipSection";
 

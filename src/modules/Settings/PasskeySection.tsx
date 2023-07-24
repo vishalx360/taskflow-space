@@ -1,8 +1,5 @@
-import { useToast } from "@/hooks/use-toast";
-import { RenamePasskeySchema } from "@/utils/ValidationSchema";
-import { api } from "@/utils/api";
 import { startRegistration } from "@simplewebauthn/browser";
-import { Field, Form, Formik, type FieldProps } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import {
   LucideAlertCircle,
   LucideCheck,
@@ -15,6 +12,11 @@ import { useState } from "react";
 import { BiKey, BiMobile } from "react-icons/bi";
 import ReactTimeago from "react-timeago";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+
+import { useToast } from "@/hooks/use-toast";
+import { api } from "@/utils/api";
+import { RenamePasskeySchema } from "@/utils/ValidationSchema";
+
 import { ConfirmDialog } from "../Global/ConfirmDialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";

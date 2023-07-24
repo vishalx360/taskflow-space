@@ -1,10 +1,12 @@
-import { api } from "@/utils/api";
-// import { Popover, Transition } from "@headlessui/react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/modules/ui/popover";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Mails } from "lucide-react";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
+
+// import { Popover, Transition } from "@headlessui/react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/modules/ui/popover";
+import { api } from "@/utils/api";
+
 import Divider from "../Divider";
 import ViewInvitationModal from "../ViewInvitaionModal/ViewInvitaionModal";
 import InvitationRow, {

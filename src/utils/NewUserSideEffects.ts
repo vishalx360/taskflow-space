@@ -1,9 +1,12 @@
 import { LexoRank } from "lexorank";
+
 import { prisma } from "../server/db";
 import DefaultData from "./PersonalWorkspaceData.json";
 
-export default async function NewUserSideEffects(userId: string, email: string) {
-
+export default async function NewUserSideEffects(
+  userId: string,
+  email: string
+) {
   // check if user has existing personal workspace
   const existingPersonalWorkspace = await prisma.workspace.count({
     where: { personal: true, members: { every: { userId } } },
@@ -26,10 +29,10 @@ export default async function NewUserSideEffects(userId: string, email: string) 
           role: "OWNER",
           user: {
             connect: {
-              id: userId
-            }
-          }
-        }
+              id: userId,
+            },
+          },
+        },
       },
       personal: true,
     },

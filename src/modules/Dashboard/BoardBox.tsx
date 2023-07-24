@@ -4,6 +4,7 @@ import geopattern from "geopattern";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from "react-timeago";
+
 import { BoardBoxContextMenu } from "../Global/BoardBoxContextMenu";
 
 export const BoardBoxMotionVariants = {

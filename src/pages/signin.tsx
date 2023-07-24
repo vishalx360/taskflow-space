@@ -1,22 +1,21 @@
+import { AnimatePresence, motion } from "framer-motion";
+import { LucideArrowLeft } from "lucide-react";
+import { type GetServerSidePropsContext } from "next";
+import Head from "next/head";
+import Link from "next/link";
+import { getSession, signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+
 import Divider from "@/modules/Global/Divider";
 import LogoImage from "@/modules/Global/LogoImage";
-import UserDetails from "@/modules/Signin/UserDetails";
 import { CredentialSection } from "@/modules/Signin/sections/CredentialSection";
 import { FetchSigninOptionsSection } from "@/modules/Signin/sections/FetchSigninOptionsSection";
 import { OauthSection } from "@/modules/Signin/sections/OauthSection";
 import { PasskeySection } from "@/modules/Signin/sections/PasskeySection";
+import UserDetails from "@/modules/Signin/UserDetails";
 import { Button } from "@/modules/ui/button";
-import { authOptions } from "@/server/auth";
-import { AnimatePresence, motion } from "framer-motion";
-import { LucideArrowLeft } from "lucide-react";
-import { type GetServerSidePropsContext } from "next";
-import { getServerSession } from "next-auth";
-import { signIn } from "next-auth/react";
-import Head from "next/head";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 
 export type SigninOptions = {
   user: {
@@ -187,16 +186,16 @@ export default function SignInPage() {
   );
 }
 
-// if signin redirect to dashboard
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await getSession(context);
   if (session) {
     return {
       redirect: {
         destination: "/dashboard",
       },
     };
-  } else {
-    return { props: {} };
   }
+  return {
+    props: { session },
+  };
 }

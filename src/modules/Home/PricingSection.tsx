@@ -1,19 +1,20 @@
-import { SubscriptionSection } from "../Settings/subscriptionSection";
+import StripeSubcription, {
+  SubscriptionSection,
+} from "../Settings/subscriptionSection";
 
 function PricingSection() {
   return (
-    <section
-      id="pricing"
-      className="min-h-screen scroll-mt-16 bg-gradient-to-b from-white to-black/10 "
-    >
+    <section id="pricing" className="min-h-screen scroll-mt-16 bg-white ">
       <div className="container mx-auto px-6 py-16 ">
         <div className="mb-10 flex flex-col items-center justify-center ">
           <h1 className="my-5 text-[2.5rem] font-bold">Pricing</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+          <p className="text-center">
+            No matter the size of your team or the scale of your operations,
+            we&apos;ve got you covered.
           </p>
         </div>
-        <SubscriptionSection />
+        {/* <SubscriptionSection /> */}
+        <StripeSubcription />
       </div>
     </section>
   );

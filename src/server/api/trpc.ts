@@ -7,18 +7,20 @@
  * need to use are documented accordingly near the end.
  */
 
-import { getServerAuthSession } from "@/server/auth";
-import { prisma } from "@/server/db";
-import { SendEmail } from "@/utils/SendEmail";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
-// import ws from '@fastify/websocket';
-import { pusherServer } from '../../lib/pusherServer';
-import { redisClient } from '../../lib/redisClient';
+
 import { type ToastProps } from "@/modules/ui/toast";
+import { getServerAuthSession } from "@/server/auth";
+import { prisma } from "@/server/db";
+import { SendEmail } from "@/utils/SendEmail";
+
+// import ws from '@fastify/websocket';
+import { pusherServer } from "../../lib/pusherServer";
+import { redisClient } from "../../lib/redisClient";
 /**
  * 1. CONTEXT
  *
@@ -31,7 +33,13 @@ type CreateContextOptions = {
   session: Session | null;
 };
 
-async function notify({ channel, notification }: { channel: string, notification: ToastProps }) {
+async function notify({
+  channel,
+  notification,
+}: {
+  channel: string;
+  notification: ToastProps;
+}) {
   await pusherServer.trigger(channel, "notification", notification);
 }
 

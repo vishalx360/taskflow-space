@@ -1,16 +1,18 @@
+import { cva } from "class-variance-authority";
+import { AnimatePresence, motion } from "framer-motion";
+import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { type Channel } from "pusher-js";
+import { useEffect } from "react";
+import { Scrollbars } from "react-custom-scrollbars-2";
+
 import { useToast } from "@/hooks/use-toast";
 import { pusherClient } from "@/lib/pusherClient";
 import { cn } from "@/lib/utils";
 import { api } from "@/utils/api";
-import { cva } from "class-variance-authority";
-import { AnimatePresence, motion } from "framer-motion";
-import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { type Channel } from "pusher-js";
-import { useEffect } from "react";
-import { Scrollbars } from "react-custom-scrollbars-2";
+
 import { simpleVariants } from "../Global/Fade";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";

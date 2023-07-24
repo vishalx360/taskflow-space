@@ -1,13 +1,14 @@
-import { CreateTaskSchema } from "@/utils/ValidationSchema";
-import getGravatar from "@/utils/getGravatar";
-import { Field, Form, Formik, type FieldProps } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import geopattern from "geopattern";
 import Image from "next/image";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import { Button } from "../ui/button";
-
 import { useSession } from "next-auth/react";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
+import getGravatar from "@/utils/getGravatar";
+import { CreateTaskSchema } from "@/utils/ValidationSchema";
+
 import Divider from "../Global/Divider";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/text-area";
 

@@ -4,10 +4,7 @@ const passwordSchema = z
   .string()
   .min(8, "Must contain at least 8 characters")
   .max(16, "Must contain less than 16 characters")
-  .regex(
-    /^\S*$/,
-    { message: "Password must not contain whitespace" }
-  )
+  .regex(/^\S*$/, { message: "Password must not contain whitespace" });
 // .regex(
 //   /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/,
 //   { message: "Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character" }
@@ -16,30 +13,32 @@ export const SigninTokenSchema = z.object({
   token: z.string(),
 });
 
-export const PasskeySigninSchema = z.object({
-  email: z.string().email(),
-  passkey: z.string(),
-
-}).nonstrict();
+export const PasskeySigninSchema = z
+  .object({
+    email: z.string().email(),
+    passkey: z.string(),
+  })
+  .nonstrict();
 
 export const SigninSchema = z.object({
   email: z.string().email(),
-  password: passwordSchema
+  password: passwordSchema,
 });
-
 
 export const emailSchema = z.object({
   email: z.string().email(),
 });
 
-export const newPasswordSchema = z.object({
-  token: z.string(),
-  newPassword: passwordSchema,
-  confirmPassword: passwordSchema
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"], // path of error
-})
+export const newPasswordSchema = z
+  .object({
+    token: z.string(),
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // path of error
+  });
 
 export const SignUpSchema = z.object({
   email: z.string().email(),
@@ -49,24 +48,23 @@ export const SignUpSchema = z.object({
     .max(50, "Must contain less than 50 characters"),
   password: z
     .string()
-    .regex(
-      /^\S*$/,
-      { message: "Password must not contain whitespace" }
-    )
+    .regex(/^\S*$/, { message: "Password must not contain whitespace" }),
 });
 
-export const UpdatePasswordSchema = z.object({
-  currentPassword: passwordSchema,
-  newPassword: passwordSchema,
-  confirmPassword: passwordSchema
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"], // path of error
-}).refine((data) => data.currentPassword !== data.newPassword, {
-  message: "New password must be different from current password",
-  path: ["newPassword"], // path of error
-});
-
+export const UpdatePasswordSchema = z
+  .object({
+    currentPassword: passwordSchema,
+    newPassword: passwordSchema,
+    confirmPassword: passwordSchema,
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // path of error
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: "New password must be different from current password",
+    path: ["newPassword"], // path of error
+  });
 
 export const CreateNewBoardSchema = z.object({
   name: z
@@ -108,7 +106,8 @@ export const CreateTaskSchema = z.object({
 
 export const RenamePasskeySchema = z.object({
   name: z
-    .string().trim()
+    .string()
+    .trim()
     .min(1, "Must contain at least 1 character")
     .max(50, "Must contain less than 50 characters"),
   id: z.string(),
@@ -128,13 +127,13 @@ export const UpdateTaskSchema = z.object({
 export const MoveTaskSchema = z.object({
   newListId: z.string(),
   taskId: z.string(),
-  newRank: z.string()
+  newRank: z.string(),
 });
 
 export const UpdateTaskMemberSchema = z.object({
   taskId: z.string(),
   userId: z.string(),
-  isMember: z.boolean()
+  isMember: z.boolean(),
 });
 
 export const UpdateListSchema = z.object({
@@ -162,13 +161,11 @@ export const UpdateBoardSchema = z.object({
   background: z.string(),
 });
 
-
 export const CreateWorkspaceInvitation = z.object({
   email: z.string().email("Please enter valid email"),
   role: z.enum(["ADMIN", "MEMBER"]),
   workspaceId: z.string(),
 });
-
 
 export const WorksapceInviteResponse = z.object({
   accept: z.boolean(),

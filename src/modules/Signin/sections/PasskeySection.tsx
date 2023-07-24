@@ -1,18 +1,19 @@
+import { startAuthentication } from "@simplewebauthn/browser";
+import { LucideAlertCircle, LucideArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
+import { useRef, useState } from "react";
+import { FcInfo, FcKey, FcLock, FcUnlock } from "react-icons/fc";
+import { MdPassword } from "react-icons/md";
+
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/modules/ui/alert";
 import { Button } from "@/modules/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/modules/ui/popover";
 import { type SectionMapKeys, type SigninOptions } from "@/pages/signin";
 import { api } from "@/utils/api";
-import { startAuthentication } from "@simplewebauthn/browser";
-import { LucideAlertCircle, LucideArrowRight } from "lucide-react";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useRef, useState } from "react";
-import { MdPassword } from "react-icons/md";
 
-import { FcInfo, FcKey, FcLock, FcUnlock } from "react-icons/fc";
 export function PasskeySection({
   signinOptions,
   setCurrentSection,

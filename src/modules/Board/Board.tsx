@@ -1,3 +1,18 @@
+import { type Board, type Task } from "@prisma/client";
+import { AnimatePresence, motion } from "framer-motion";
+import { LexoRank } from "lexorank";
+import dynamic from "next/dynamic";
+import Error from "next/error";
+import Head from "next/head";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { type DropResult } from "react-beautiful-dnd";
+import { Scrollbars } from "react-custom-scrollbars-2";
+import { FiArrowLeft } from "react-icons/fi";
+import { useDebouncedCallback } from "use-debounce";
+
 import { useToast } from "@/hooks/use-toast";
 import { pusherClient } from "@/lib/pusherClient";
 import TaskList, {
@@ -5,32 +20,26 @@ import TaskList, {
   TaskListSkeleton,
 } from "@/modules/Board/TaskList";
 import { api } from "@/utils/api";
-import { type Board, type Task } from "@prisma/client";
-import { AnimatePresence, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
-import Error from "next/error";
-import Head from "next/head";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { type DropResult } from "react-beautiful-dnd";
-import { Scrollbars } from "react-custom-scrollbars-2";
-import { FiArrowLeft } from "react-icons/fi";
-import { useDebouncedCallback } from "use-debounce";
+
 import LogoImage from "../Global/LogoImage";
 import BoardBackground from "./BoardBackground";
 import BoardNavbar from "./BoardNavbar";
 
-import { LexoRank } from "lexorank";
-
-function getNewRank({ prevRank, nextRank }: { prevRank: string; nextRank: string }) {
+function getNewRank({
+  prevRank,
+  nextRank,
+}: {
+  prevRank: string;
+  nextRank: string;
+}) {
   // if putting in middle
   if (prevRank && nextRank) {
     if (prevRank == nextRank) {
       return LexoRank.parse(nextRank).genNext().toString();
     }
-    return LexoRank.parse(prevRank).between(LexoRank.parse(nextRank)).toString();
+    return LexoRank.parse(prevRank)
+      .between(LexoRank.parse(nextRank))
+      .toString();
   }
   // if putting on bottom and prev exist
   if (prevRank && !nextRank) {
@@ -41,7 +50,6 @@ function getNewRank({ prevRank, nextRank }: { prevRank: string; nextRank: string
     return LexoRank.parse(nextRank).genPrev().toString();
   }
 }
-
 
 const DragDropContext = dynamic(
   () =>
@@ -184,7 +192,7 @@ function Board() {
           if (destination.index + 1 <= prev.length - 1) {
             nextRank = prev && prev[destination.index + 1].rank;
           }
-          newRank = getNewRank({ prevRank, nextRank })
+          newRank = getNewRank({ prevRank, nextRank });
           prev[destination.index].rank = newRank;
 
           return prev;
@@ -200,18 +208,17 @@ function Board() {
         if (destination.index + 1 <= prev.length - 1) {
           nextRank = prev[destination.index + 1].rank;
         }
-        newRank = getNewRank({ prevRank, nextRank })
+        newRank = getNewRank({ prevRank, nextRank });
         prev[destination.index].rank = newRank;
         return prev;
       });
     }
 
-
     // make api call to update task
     mutation.mutate({
       taskId: removed?.id || "",
       newListId: destination.droppableId,
-      newRank: newRank
+      newRank: newRank,
     });
     return;
   };
@@ -284,10 +291,11 @@ function BoardSkeleton(): JSX.Element {
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
-              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${background
-                ? "border-white/50 text-white"
-                : "border-neutral-400 text-neutral-600"
-                }`}
+              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${
+                background
+                  ? "border-white/50 text-white"
+                  : "border-neutral-400 text-neutral-600"
+              }`}
             >
               <FiArrowLeft className="text-xl" />
             </Link>

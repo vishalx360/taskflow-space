@@ -1,10 +1,10 @@
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
-import Workspaces from "./Workspaces";
-
-import { useSession } from "next-auth/react";
 import CommandCenter from "./CommandCenter";
+import Workspaces from "./Workspaces";
 
 function Overview() {
   const { data: session } = useSession();

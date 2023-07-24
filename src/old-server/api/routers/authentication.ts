@@ -1,28 +1,41 @@
-import { TRPCError } from "@trpc/server";
-import { hash, verify } from "argon2";
-import { z } from "zod";
-import NewUserSideEffects from "../../../utils/NewUserSideEffects";
-import { RenamePasskeySchema, SignUpSchema, UpdatePasswordSchema, newPasswordSchema } from "../../../utils/ValidationSchema";
-import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../fastify_trpc";
-
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
-  verifyRegistrationResponse,
   type GenerateRegistrationOptionsOpts,
   type VerifiedRegistrationResponse,
-  type VerifyRegistrationResponseOpts
-} from '@simplewebauthn/server';
-import { type PublicKeyCredentialDescriptorFuture, type RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
+  verifyRegistrationResponse,
+  type VerifyRegistrationResponseOpts,
+} from "@simplewebauthn/server";
+import {
+  type PublicKeyCredentialDescriptorFuture,
+  type RegistrationResponseJSON,
+} from "@simplewebauthn/typescript-types";
+import { TRPCError } from "@trpc/server";
+import { hash, verify } from "argon2";
 import { env } from "process";
+import { z } from "zod";
 
+import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
+import NewUserSideEffects from "../../../utils/NewUserSideEffects";
+import {
+  newPasswordSchema,
+  RenamePasskeySchema,
+  SignUpSchema,
+  UpdatePasswordSchema,
+} from "../../../utils/ValidationSchema";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "../fastify_trpc";
 
 export const AuthenticationRouter = createTRPCRouter({
   fetchSigninOptions: publicProcedure
-    .input(z.object({
-      email: z.string(),
-    }))
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
     .query(async ({ ctx, input }) => {
       const { email } = input;
       const user = await ctx.prisma.user.findFirst({
@@ -71,7 +84,8 @@ export const AuthenticationRouter = createTRPCRouter({
           name: user.name,
           email: user.email,
           image: user.image,
-        }, options
+        },
+        options,
       };
     }),
 
@@ -115,7 +129,6 @@ export const AuthenticationRouter = createTRPCRouter({
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "User not found.",
-
         });
       }
       if (!user.password) {
@@ -139,12 +152,13 @@ export const AuthenticationRouter = createTRPCRouter({
         where: { id: ctx.session.user?.id },
         data: { password: hashedPassword },
       });
-
     }),
   sendResetPasswordLink: publicProcedure
-    .input(z.object({
-      email: z.string()
-    }))
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const { email } = input;
       const user = await ctx.prisma.user.findFirst({
@@ -166,11 +180,13 @@ export const AuthenticationRouter = createTRPCRouter({
           email: email,
           expires: new Date(Date.now() + 1000 * 60 * 60 * 1),
         },
-      })
+      });
       const mailOptions = await BASIC_EMAIL({
         recevierEmail: input.email,
         subject: "Reset Password",
-        body: ` ${user?.name ? user.name : "You"} have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
+        body: ` ${
+          user?.name ? user.name : "You"
+        } have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
         <br/>
         https://taskflow.space/newPassword/${newToken?.id}
         <br/>
@@ -184,14 +200,16 @@ export const AuthenticationRouter = createTRPCRouter({
     }),
 
   checkResetPasswordLink: publicProcedure
-    .input(z.object({
-      token: z.string()
-    }))
+    .input(
+      z.object({
+        token: z.string(),
+      })
+    )
     .query(async ({ ctx, input }) => {
       // verify token
       const token = await ctx.prisma.resetPasswordToken.findUnique({
         where: { id: input.token },
-      })
+      });
       if (!token) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -218,7 +236,7 @@ export const AuthenticationRouter = createTRPCRouter({
       // verify token
       const token = await ctx.prisma.resetPasswordToken.findUnique({
         where: { id: input.token },
-      })
+      });
       if (!token) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -257,23 +275,22 @@ export const AuthenticationRouter = createTRPCRouter({
       return ctx.sendEmail(mailOptions);
     }),
   // oauth ---------------
-  fetchConnectedAccounts: protectedProcedure
-    .query(async ({ ctx, input }) => {
-      return ctx.prisma.account.findMany({
-        where: {
-          userId: ctx.session.user?.id
-        },
-        select: {
-          provider: true,
-        }
-      });
-    }),
+  fetchConnectedAccounts: protectedProcedure.query(async ({ ctx, input }) => {
+    return ctx.prisma.account.findMany({
+      where: {
+        userId: ctx.session.user?.id,
+      },
+      select: {
+        provider: true,
+      },
+    });
+  }),
   disconnectOauthProvider: protectedProcedure
     .input(z.object({ provider: z.enum(["google", "github"]) }))
     .mutation(async ({ ctx, input }) => {
       const account = await ctx.prisma.account.findFirst({
         where: { userId: ctx.session.user?.id, provider: input.provider },
-      })
+      });
       if (!account) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -284,99 +301,94 @@ export const AuthenticationRouter = createTRPCRouter({
         where: { id: account.id },
       });
       return input.provider;
-    })
-  ,
-  fetchDeleteConsequences: protectedProcedure
-    .query(async ({ ctx }) => {
-      const user = await ctx.prisma.user.findFirst({
-        where: { id: ctx.session.user?.id },
+    }),
+  fetchDeleteConsequences: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findFirst({
+      where: { id: ctx.session.user?.id },
+    });
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User not found.",
       });
-      if (!user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User not found.",
-        });
-      }
+    }
+    // delete all workspaces where user is owner
+    return ctx.prisma.workspace.findMany({
+      where: {
+        members: {
+          some: {
+            role: "OWNER",
+            userId: ctx.session.user?.id,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        personal: true,
+        createdAt: true,
+        _count: {
+          select: {
+            members: true,
+            boards: true,
+          },
+        },
+      },
+    });
+  }),
+
+  deleteAccount: protectedProcedure.mutation(async ({ ctx, input }) => {
+    const user = await ctx.prisma.user.findFirst({
+      where: { id: ctx.session.user?.id },
+    });
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "User not found.",
+      });
+    }
+
+    const transactions = [
       // delete all workspaces where user is owner
-      return ctx.prisma.workspace.findMany({
+      ctx.prisma.workspace.deleteMany({
         where: {
           members: {
             some: {
               role: "OWNER",
-              userId: ctx.session.user?.id
+              userId: ctx.session.user?.id,
             },
-          }
+          },
         },
-        select: {
-          id: true,
-          name: true,
-          personal: true,
-          createdAt: true,
-          _count: {
-            select: {
-              members: true,
-              boards: true,
-            }
-          }
-        },
-      })
-    }),
-
-  deleteAccount: protectedProcedure
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.findFirst({
-        where: { id: ctx.session.user?.id },
-      });
-      if (!user) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "User not found.",
-        });
-      }
-
-      const transactions = [
-        // delete all workspaces where user is owner
-        ctx.prisma.workspace.deleteMany({
-          where: {
-            members: {
-              some: {
-                role: "OWNER",
-                userId: ctx.session.user?.id
-              },
-            }
-          }
-        }),
-        ctx.prisma.user.delete({
-          where: {
-            id: ctx.session.user?.id
-          }
-        })
-      ];
-
-      // promote next owner
-      return Promise.all(transactions);
-    })
-  ,
-  // passkey ---------------
-  fethMyPasskeys: protectedProcedure
-    .query(async ({ ctx }) => {
-      return ctx.prisma.passkey.findMany({
+      }),
+      ctx.prisma.user.delete({
         where: {
-          userId: ctx.session.user?.id
+          id: ctx.session.user?.id,
         },
-        select: {
-          id: true,
-          name: true,
-          createdAt: true,
-        }
-      })
-    }),
+      }),
+    ];
+
+    // promote next owner
+    return Promise.all(transactions);
+  }),
+  // passkey ---------------
+  fethMyPasskeys: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.passkey.findMany({
+      where: {
+        userId: ctx.session.user?.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+      },
+    });
+  }),
   removePasskey: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const passkey = await ctx.prisma.passkey.findFirst({
         where: { id: input.id, userId: ctx.session.user?.id },
-      })
+      });
       if (!passkey) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -393,7 +405,7 @@ export const AuthenticationRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const passkey = await ctx.prisma.passkey.findFirst({
         where: { id: input.id, userId: ctx.session.user?.id },
-      })
+      });
       if (!passkey) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -421,9 +433,9 @@ export const AuthenticationRouter = createTRPCRouter({
       // fetch list of already registered passkeys
       const passkeys = await ctx.prisma.passkey.findMany({
         where: {
-          userId: user.id
+          userId: user.id,
         },
-      })
+      });
       if (passkeys.length === 0) {
         throw new TRPCError({
           code: "BAD_REQUEST",
@@ -432,16 +444,21 @@ export const AuthenticationRouter = createTRPCRouter({
       }
       const options = generateAuthenticationOptions({
         // Require users to use a previously-registered authenticator
-        allowCredentials: passkeys.map(passkey => ({
-          id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64url')),
-          type: 'public-key',
+        allowCredentials: passkeys.map((passkey) => ({
+          id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
+          type: "public-key",
         })),
         rpID: env.DOMAIN_NAME,
         timeout: 60000,
-        userVerification: 'preferred',
+        userVerification: "preferred",
       });
       // Remember this challenge for this user
-      await ctx.redis.set(`passkey-auth-challange:${input.email}`, options.challenge, "EX", 60);
+      await ctx.redis.set(
+        `passkey-auth-challange:${input.email}`,
+        options.challenge,
+        "EX",
+        60
+      );
       return options;
     }),
   // passkeyVerifyAuth: publicProcedure
@@ -507,49 +524,56 @@ export const AuthenticationRouter = createTRPCRouter({
   //       })
   //     }
   //   }),
-  passkeyGenRegOpts: protectedProcedure
-    .query(async ({ ctx, input }) => {
-      // fetch list of already registered passkeys
-      const passkeys = await ctx.prisma.passkey.findMany({
-        where: {
-          userId: ctx.session.user?.id
-        },
-      })
-      const opts: GenerateRegistrationOptionsOpts = {
-        rpName: 'taskflow',
-        rpID: env.DOMAIN_NAME,
-        userID: ctx.session.user?.id,
-        userName: ctx.session.user?.email,
-        userDisplayName: ctx.session.user?.name || ctx.session.user?.email,
-        timeout: 60000,
-        attestationType: 'none',
-        /**
-         * Passing in a user's list of already-registered authenticator IDs here prevents users from
-         * registering the same device multiple times. The authenticator will simply throw an error in
-         * the browser if it's asked to perform registration when one of these ID's already resides
-         * on it.
-         */
-        excludeCredentials: passkeys.map(passkey => ({
-          id: Uint8Array.from(Buffer.from(passkey.credentialID, 'base64url')),
-          type: 'public-key',
-          transports: passkey.transports,
-        } satisfies PublicKeyCredentialDescriptorFuture)),
-        authenticatorSelection: {
-          residentKey: 'discouraged',
-        },
-        supportedAlgorithmIDs: [-7, -257],
-      };
-
-      const options = generateRegistrationOptions(opts);
-
+  passkeyGenRegOpts: protectedProcedure.query(async ({ ctx, input }) => {
+    // fetch list of already registered passkeys
+    const passkeys = await ctx.prisma.passkey.findMany({
+      where: {
+        userId: ctx.session.user?.id,
+      },
+    });
+    const opts: GenerateRegistrationOptionsOpts = {
+      rpName: "taskflow",
+      rpID: env.DOMAIN_NAME,
+      userID: ctx.session.user?.id,
+      userName: ctx.session.user?.email,
+      userDisplayName: ctx.session.user?.name || ctx.session.user?.email,
+      timeout: 60000,
+      attestationType: "none",
       /**
-       * The server needs to temporarily remember this value for verification, so don't lose it until
-       * after you verify an authenticator response.
+       * Passing in a user's list of already-registered authenticator IDs here prevents users from
+       * registering the same device multiple times. The authenticator will simply throw an error in
+       * the browser if it's asked to perform registration when one of these ID's already resides
+       * on it.
        */
-      await ctx.redis.set(`passkey-reg-challange:${ctx.session.user.id}`, options.challenge, "EX", 60);
+      excludeCredentials: passkeys.map(
+        (passkey) =>
+          ({
+            id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
+            type: "public-key",
+            transports: passkey.transports,
+          } satisfies PublicKeyCredentialDescriptorFuture)
+      ),
+      authenticatorSelection: {
+        residentKey: "discouraged",
+      },
+      supportedAlgorithmIDs: [-7, -257],
+    };
 
-      return options;
-    }),
+    const options = generateRegistrationOptions(opts);
+
+    /**
+     * The server needs to temporarily remember this value for verification, so don't lose it until
+     * after you verify an authenticator response.
+     */
+    await ctx.redis.set(
+      `passkey-reg-challange:${ctx.session.user.id}`,
+      options.challenge,
+      "EX",
+      60
+    );
+
+    return options;
+  }),
 
   passkeyVerifyReg: protectedProcedure
     .input(z.any())
@@ -557,13 +581,15 @@ export const AuthenticationRouter = createTRPCRouter({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const body: RegistrationResponseJSON = input;
       const user = ctx.session.user;
-      const expectedChallenge = await ctx.redis.get(`passkey-reg-challange:${ctx.session.user.id}`);
+      const expectedChallenge = await ctx.redis.get(
+        `passkey-reg-challange:${ctx.session.user.id}`
+      );
 
       if (!expectedChallenge) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Error registering passkey. Please try again.",
-        })
+        });
       }
       let verification: VerifiedRegistrationResponse;
       try {
@@ -581,7 +607,7 @@ export const AuthenticationRouter = createTRPCRouter({
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: _error.message,
-        })
+        });
       }
       const { verified, registrationInfo } = verification;
       if (verified && registrationInfo) {
@@ -589,7 +615,7 @@ export const AuthenticationRouter = createTRPCRouter({
         // check for passkey in db
         const existingDevice = await ctx.prisma.passkey.count({
           where: {
-            credentialID: Buffer.from(credentialID).toString('base64url'),
+            credentialID: Buffer.from(credentialID).toString("base64url"),
           },
         });
         if (!existingDevice) {
@@ -597,22 +623,21 @@ export const AuthenticationRouter = createTRPCRouter({
           await ctx.prisma.passkey.create({
             data: {
               name: `New Passkey (rename me)`,
-              credentialPublicKey: Buffer.from(credentialPublicKey).toString('base64url'),
-              credentialID:
-                Buffer.from(credentialID).toString('base64url'),
+              credentialPublicKey:
+                Buffer.from(credentialPublicKey).toString("base64url"),
+              credentialID: Buffer.from(credentialID).toString("base64url"),
               counter,
               transports: body.response.transports,
               user: {
                 connect: {
-                  id: user.id
-                }
-              }
-            }
+                  id: user.id,
+                },
+              },
+            },
           });
         }
       }
       await ctx.redis.del(`passkey-reg-challange:${ctx.session.user.id}`);
       return { verified };
-    })
+    }),
 });
-

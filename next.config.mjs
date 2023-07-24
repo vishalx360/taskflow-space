@@ -14,7 +14,8 @@ const config = {
       "lh3.googleusercontent.com",
       "www.gravatar.com",
       "images.unsplash.com",
-      "avatars.githubusercontent.com"
+      "avatars.githubusercontent.com",
+      "media.licdn.com",
     ],
   },
   /**
@@ -33,6 +34,6 @@ const config = {
   },
   eslint: {
     ignoreDuringBuilds: true,
-  }
+  },
 };
 export default config;

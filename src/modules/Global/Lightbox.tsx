@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import React, { Fragment, useState, type ReactNode } from "react";
+import React, { Fragment, type ReactNode,useState } from "react";
 import { FiX } from "react-icons/fi";
 
 export default function Lightbox({ children }: { children: ReactNode }) {

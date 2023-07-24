@@ -1,8 +1,8 @@
 import Divider from "../Global/Divider";
 import ConnectedAccountSection from "./ConnectedAccountSection";
+import DeleteAccountSection from "./deleteAccountSection";
 import PasskeySection from "./PasskeySection";
 import UpdatePasswordSection from "./UpdatePasswordSection";
-import DeleteAccountSection from "./deleteAccountSection";
 
 function SecuritySection() {
   return (

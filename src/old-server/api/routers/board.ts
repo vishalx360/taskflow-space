@@ -1,13 +1,13 @@
 import { TRPCError } from "@trpc/server";
 import random from "lodash.random";
 import { z } from "zod";
-import Backgrounds from "../../../utils/BoardBackgrounds.json";
 
+import Backgrounds from "../../../utils/BoardBackgrounds.json";
 import {
-  CreateNewBoardSchema, UpdateBoardSchema
+  CreateNewBoardSchema,
+  UpdateBoardSchema,
 } from "../../../utils/ValidationSchema";
 import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
-
 
 const GetRandomBackgroundGradient = () => {
   const background =
@@ -19,30 +19,30 @@ const GetRandomBackgroundGradient = () => {
   }
 };
 
-
 export const BoardRouter = createTRPCRouter({
-
-  getRecentBoards: protectedProcedure
-    .query(({ ctx, input }) => {
-      return ctx.prisma.board.findMany({
-        where: {
-          Workspace: {
-            members: {
-              some: { userId: ctx.session.user.id }
-            }
-          }
+  getRecentBoards: protectedProcedure.query(({ ctx, input }) => {
+    return ctx.prisma.board.findMany({
+      where: {
+        Workspace: {
+          members: {
+            some: { userId: ctx.session.user.id },
+          },
         },
-        orderBy: { updatedAt: "desc" },
-        take: 4
-      });
-    }),
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 4,
+    });
+  }),
 
   getAllBoards: protectedProcedure
     .input(z.object({ workspaceId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.prisma.board.findMany({
-        where: { workspaceId: input.workspaceId, Workspace: { members: { some: { userId: ctx.session.user.id } } } },
-        orderBy: { updatedAt: "desc" }
+        where: {
+          workspaceId: input.workspaceId,
+          Workspace: { members: { some: { userId: ctx.session.user.id } } },
+        },
+        orderBy: { updatedAt: "desc" },
       });
     }),
   deleteBoard: protectedProcedure
@@ -74,15 +74,18 @@ export const BoardRouter = createTRPCRouter({
         });
       }
 
-
       await ctx.prisma.board.delete({
         where: { id: input.boardId },
       });
 
-      return ctx.pusher.trigger(`workspace-${board.workspaceId}`, "workspace:update", {
-        workspaceId: board.workspaceId,
-        initiatorId: ctx.session.user.id,
-      });
+      return ctx.pusher.trigger(
+        `workspace-${board.workspaceId}`,
+        "workspace:update",
+        {
+          workspaceId: board.workspaceId,
+          initiatorId: ctx.session.user.id,
+        }
+      );
     }),
 
   createNewBoard: protectedProcedure
@@ -110,7 +113,8 @@ export const BoardRouter = createTRPCRouter({
       if (!hasPermission) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You dont have permission to create a board in this workspace",
+          message:
+            "You dont have permission to create a board in this workspace",
         });
       }
 
@@ -122,13 +126,16 @@ export const BoardRouter = createTRPCRouter({
           description: input.description,
         },
       });
-      await ctx.pusher.trigger(`workspace-${input.workspaceId}`, "workspace:update", {
-        workspaceId: input.workspaceId,
-        initiatorId: ctx.session.user.id,
-      });
+      await ctx.pusher.trigger(
+        `workspace-${input.workspaceId}`,
+        "workspace:update",
+        {
+          workspaceId: input.workspaceId,
+          initiatorId: ctx.session.user.id,
+        }
+      );
       return newBoard;
     }),
-
 
   getBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
@@ -149,7 +156,7 @@ export const BoardRouter = createTRPCRouter({
         where: {
           workspaceId: board.workspaceId,
           userId: ctx.session.user.id,
-        }
+        },
       });
 
       if (!hasPermission) {
@@ -168,7 +175,7 @@ export const BoardRouter = createTRPCRouter({
         where: { id: input.boardId },
         include: {
           lists: true,
-          Workspace: true
+          Workspace: true,
         },
       });
     }),
@@ -214,10 +221,14 @@ export const BoardRouter = createTRPCRouter({
         initiatorId: ctx.session.user.id,
       });
 
-      await ctx.pusher.trigger(`workspace-${board.workspaceId}`, "workspace:update", {
-        workspaceId: board.workspaceId,
-        initiatorId: ctx.session.user.id,
-      });
+      await ctx.pusher.trigger(
+        `workspace-${board.workspaceId}`,
+        "workspace:update",
+        {
+          workspaceId: board.workspaceId,
+          initiatorId: ctx.session.user.id,
+        }
+      );
 
       return {
         name: input.name,

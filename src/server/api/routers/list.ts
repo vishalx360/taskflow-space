@@ -1,13 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "@/server/api/trpc";
+
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+
 import {
   CreateListSchema,
-  UpdateListSchema
+  UpdateListSchema,
 } from "../../../utils/ValidationSchema";
 
 export const ListRouter = createTRPCRouter({

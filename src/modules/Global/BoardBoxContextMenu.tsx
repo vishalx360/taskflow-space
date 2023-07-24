@@ -1,15 +1,15 @@
+import { type Board } from "@prisma/client";
+import { useRouter } from "next/router";
+import { type ReactNode } from "react";
+
+import { useBoardSettingsModal } from "@/contexts/BoardSettingsModalContext";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuShortcut,
   ContextMenuTrigger,
 } from "@/modules/ui/context-menu";
-import { type ReactNode } from "react";
-
-import { useBoardSettingsModal } from "@/contexts/BoardSettingsModalContext";
-import { ContextMenuShortcut } from "@/modules/ui/context-menu";
-import { type Board } from "@prisma/client";
-import { useRouter } from "next/router";
 
 export function BoardBoxContextMenu({
   children,

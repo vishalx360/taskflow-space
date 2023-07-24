@@ -1,13 +1,15 @@
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/modules/ui/button";
-import { type SigninOptions } from "@/pages/signin";
-import { emailSchema } from "@/utils/ValidationSchema";
-import { api } from "@/utils/api";
-import { Field, Form, Formik, type FieldProps } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
+import { motion } from "framer-motion";
 import { LucideArrowRight } from "lucide-react";
 import { useCallback, useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-import { motion } from "framer-motion";
+
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/modules/ui/button";
+import { type SigninOptions } from "@/pages/signin";
+import { api } from "@/utils/api";
+import { emailSchema } from "@/utils/ValidationSchema";
+
 export function FetchSigninOptionsSection({
   setSigninOptions,
 }: {

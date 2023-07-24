@@ -1,3 +1,7 @@
+import { type Board } from "@prisma/client";
+import Link from "next/link";
+import { FiArrowLeft } from "react-icons/fi";
+
 import BoardSettingsModal from "@/modules/Board/BoardSettingsModal/BoardSettingsModal";
 import LogoImage from "@/modules/Global/LogoImage";
 import {
@@ -6,9 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/modules/ui/tooltip";
-import { type Board } from "@prisma/client";
-import Link from "next/link";
-import { FiArrowLeft } from "react-icons/fi";
+
 import WorkspaceMembersModal from "./WorkspaceMembersModal/WorkspaceMembersModal";
 
 function BoardNavbar({ board }: { board: Board }) {

@@ -1,13 +1,14 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { type Board, type Workspace } from "@prisma/client";
+import { motion } from "framer-motion";
 import geopattern from "geopattern";
+import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from "react-timeago";
 
 import { api } from "@/utils/api";
-import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
+
 import { BoardBoxMotionVariants } from "./BoardBox";
 import { BoardListGridError } from "./BoardGrid";
 import CreateNewBoardModal from "./CreateNewBoardModal";

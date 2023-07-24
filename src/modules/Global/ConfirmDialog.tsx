@@ -1,3 +1,5 @@
+import { type ReactNode } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/modules/ui/alert-dialog";
-import { type ReactNode } from "react";
+
 import { Button } from "../ui/button";
 
 export function ConfirmDialog({

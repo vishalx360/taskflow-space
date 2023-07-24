@@ -1,17 +1,19 @@
-import ioredis from 'ioredis'
-import { env } from '../env.mjs'
+import ioredis from "ioredis";
 
-const globalForRedis = global as unknown as { redisClient: ioredis }
+import { env } from "../env.mjs";
 
-export const redisClient = globalForRedis.redisClient ?? new ioredis(env.REDIS_URL)
+const globalForRedis = global as unknown as { redisClient: ioredis };
 
-redisClient.on('error', (err) => {
-    console.error('Redis error: ', err)
-})
+export const redisClient =
+  globalForRedis.redisClient ?? new ioredis(env.REDIS_URL);
+
+redisClient.on("error", (err) => {
+  console.error("Redis error: ", err);
+});
 redisClient.on("connect", () => {
-    console.log("Redis connected");
+  console.log("Redis connected");
 });
 
-if (process.env.NODE_ENV !== 'production') {
-    globalForRedis.redisClient = redisClient
+if (process.env.NODE_ENV !== "production") {
+  globalForRedis.redisClient = redisClient;
 }

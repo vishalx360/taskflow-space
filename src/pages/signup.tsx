@@ -1,22 +1,23 @@
+import { Field, type FieldProps, Form, Formik } from "formik";
+import { motion } from "framer-motion";
+import { LucideArrowLeft } from "lucide-react";
+import { type GetServerSidePropsContext } from "next";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { getServerSession } from "next-auth";
+import { getSession, signIn } from "next-auth/react";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
 import LogoImage from "@/modules/Global/LogoImage";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
 import { authOptions } from "@/server/auth";
-import { SignUpSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import { motion } from "framer-motion";
-import { LucideArrowLeft } from "lucide-react";
-import { type GetServerSidePropsContext } from "next";
-import { getServerSession } from "next-auth";
-import { signIn } from "next-auth/react";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { SignUpSchema } from "@/utils/ValidationSchema";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -195,16 +196,17 @@ export default function SignInPage() {
     </>
   );
 }
-// if signin redirect to dashboard
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res, authOptions);
+  const session = await getSession(context);
   if (session) {
     return {
       redirect: {
         destination: "/dashboard",
       },
     };
-  } else {
-    return { props: {} };
   }
+  return {
+    props: { session },
+  };
 }

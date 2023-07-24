@@ -1,3 +1,12 @@
+import { type Board } from "@prisma/client";
+import { Field, type FieldProps,Form, Formik } from "formik";
+import {
+  type Dispatch,
+  type MutableRefObject,
+  type SetStateAction,
+} from "react";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
 import {
   AccordionContent,
@@ -7,16 +16,9 @@ import {
 import { Button } from "@/modules/ui/button";
 import { Input } from "@/modules/ui/input";
 import { Textarea } from "@/modules/ui/text-area";
-import { UpdateBoardSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
-import { type Board } from "@prisma/client";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import {
-  type Dispatch,
-  type MutableRefObject,
-  type SetStateAction,
-} from "react";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { UpdateBoardSchema } from "@/utils/ValidationSchema";
+
 import UpdateBoardBackgroundSection from "./UpdateBoardBackgroundSection";
 
 function UpdateBoardSection({

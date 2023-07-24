@@ -1,3 +1,9 @@
+import { Check, LucideMail } from "lucide-react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { type Dispatch, type SetStateAction,useState } from "react";
+import { FiX } from "react-icons/fi";
+
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";
 import {
@@ -8,11 +14,7 @@ import {
 } from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
 import getGravatar from "@/utils/getGravatar";
-import { Check, LucideMail } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { useState, type Dispatch, type SetStateAction } from "react";
-import { FiX } from "react-icons/fi";
+
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../InvitationDrawer/InvitationRow";
 
 export default function ViewInvitationModal({

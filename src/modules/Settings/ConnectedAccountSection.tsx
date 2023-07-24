@@ -1,10 +1,12 @@
-import { useToast } from "@/hooks/use-toast";
-import { api } from "@/utils/api";
 import { LucideLock } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import { Button } from "../ui/button";
+
+import { useToast } from "@/hooks/use-toast";
+import { api } from "@/utils/api";
+
 import { ConfirmDialog } from "../Global/ConfirmDialog";
+import { Button } from "../ui/button";
 
 function ConnectedAccountSection() {
   const { data: connectedAccounts, isLoading } =

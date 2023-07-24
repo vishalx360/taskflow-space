@@ -1,11 +1,12 @@
+import { type Task, type WorkspaceMember } from "@prisma/client";
+import { LucideCheck, LucideUserPlus } from "lucide-react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";
 import { api } from "@/utils/api";
 import getGravatar from "@/utils/getGravatar";
-import { type Task, type WorkspaceMember } from "@prisma/client";
-import { LucideCheck, LucideUserPlus } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
 
 export type UserType = {
   id: string | null;

@@ -1,11 +1,13 @@
-import getGravatar from "@/utils/getGravatar";
 import { Transition } from "@headlessui/react";
 import { motion } from "framer-motion";
-import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
+
+import getGravatar from "@/utils/getGravatar";
+
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 
@@ -14,11 +16,20 @@ async function handelLogout() {
   return;
 }
 
-const NavLinks = [
+const DesktopNavLinks = [
   { title: "Benefit", href: "/#benifits" },
   { title: "Features", href: "/#features" },
   { title: "Pricing", href: "/#pricing" },
   { title: "About us", href: "/#aboutus" },
+];
+
+const MobileNavLinks = [
+  { title: "Benefit", href: "/#benifits" },
+  { title: "Features", href: "/#features" },
+  { title: "Pricing", href: "/#pricing" },
+  { title: "About us", href: "/#aboutus" },
+  { title: "Sign in", href: "/signin" },
+  { title: "Sign up", href: "/signup" },
 ];
 
 function HomeNavbar() {
@@ -130,7 +141,7 @@ function HomeNavbar() {
                 </div>
               )}
 
-              {NavLinks.map((navlink) => (
+              {MobileNavLinks.map((navlink) => (
                 <Link
                   key={navlink.href}
                   className="transform text-gray-700 transition-colors duration-300  lg:mx-8"
@@ -163,7 +174,7 @@ function HomeNavbar() {
         {/* desktop navbar */}
         <div className="hidden lg:block">
           <div className="mt-0 flex flex-row items-center  ">
-            {NavLinks.map((navlink) => (
+            {DesktopNavLinks.map((navlink) => (
               <Link
                 key={navlink.href}
                 className="mx-8 scroll-smooth border-black  text-gray-700  duration-300  hover:border-b-2"

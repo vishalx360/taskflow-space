@@ -1,6 +1,8 @@
-import CreatorLogo from "@/../public/vishalAvatar.png";
 import Image from "next/image";
 import Link from "next/link";
+
+import CreatorLogo from "@/../public/vishalAvatar.png";
+
 import Divider from "../Global/Divider";
 
 function AboutSection() {

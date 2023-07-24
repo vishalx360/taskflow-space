@@ -1,7 +1,8 @@
-import getGravatar from "@/utils/getGravatar";
 import { type WorkspaceMember } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+
+import getGravatar from "@/utils/getGravatar";
 
 export type UserType = {
   image: string | null;

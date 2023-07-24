@@ -1,16 +1,18 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/modules/ui/tabs";
 import { AnimatePresence } from "framer-motion";
 import { LucideGem, LucideLock, LucideUser } from "lucide-react";
 import { usePathname } from "next/navigation";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/modules/ui/tabs";
+
 import Fade from "../Global/Fade";
-import ProfileSection from "./profileSection";
+// import ProfileSection from "./profileSection";
 import SecuritySection from "./securitySection";
 import SubscriptionSection from "./subscriptionSection";
 
 const TabsPathMap = [
-  "/dashboard/settings/profile",
-  "/dashboard/settings/subscription",
+  // "/dashboard/settings/profile",
   "/dashboard/settings/security",
+  "/dashboard/settings/subscription",
 ];
 
 function Settings() {
@@ -39,7 +41,7 @@ function Settings() {
         className="w-full px-3"
       >
         <TabsList className="mb-10">
-          <TabsTrigger
+          {/* <TabsTrigger
             className="md:px-5"
             onClick={handelClick}
             data-value="/dashboard/settings/profile"
@@ -47,7 +49,7 @@ function Settings() {
           >
             <LucideUser width={20} className="mr-4" />
             Profile
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger
             onClick={handelClick}
             data-value="/dashboard/settings/security"
@@ -72,14 +74,13 @@ function Settings() {
           </TabsTrigger> */}
         </TabsList>
         <AnimatePresence mode="wait">
-          <TabsContent value="/dashboard/settings/profile">
+          {/* <TabsContent value="/dashboard/settings/profile">
             <Fade>
               <ProfileSection />
             </Fade>
-          </TabsContent>
+          </TabsContent> */}
           <TabsContent value="/dashboard/settings/security">
             <Fade>
-              {" "}
               <SecuritySection />
             </Fade>
           </TabsContent>

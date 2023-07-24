@@ -1,3 +1,8 @@
+import { type Workspace } from "@prisma/client";
+import { LucideLayoutDashboard } from "lucide-react";
+import { useState } from "react";
+import { MdSettings } from "react-icons/md";
+
 import {
   Dialog,
   DialogContent,
@@ -5,13 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/modules/ui/dialog";
-import { type Workspace } from "@prisma/client";
-import { LucideLayoutDashboard } from "lucide-react";
-import { useState } from "react";
-import { MdSettings } from "react-icons/md";
+
 import IconButton from "../../Global/IconButton";
 import DangerZone from "./DangerZone";
 import RenameWorkspaceSection from "./RenameWorkspaceSection";
+
 export default function WorkspaceSettingsModal({
   workspace,
   hideText = false,

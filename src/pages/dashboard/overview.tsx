@@ -1,6 +1,7 @@
+import Head from "next/head";
+
 import DashboardLayout from "@/modules/Dashboard/DashboardLayout";
 import Overview from "@/modules/Dashboard/OverView";
-import Head from "next/head";
 
 function DashboardPage() {
   return (

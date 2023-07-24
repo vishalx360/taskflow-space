@@ -1,3 +1,10 @@
+import { type ResetPasswordToken } from "@prisma/client";
+import { ErrorMessage, Field, type FieldProps,Form, Formik } from "formik";
+import { LucideArrowLeft, LucideInfo } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
 import LogoImage from "@/modules/Global/LogoImage";
 import { Button } from "@/modules/ui/button";
@@ -6,17 +13,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/modules/ui/hover-card";
-import { newPasswordSchema } from "@/utils/ValidationSchema";
-import { api } from "@/utils/api";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import { LucideArrowLeft, LucideInfo } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-
 import { Input } from "@/modules/ui/input";
-import { type ResetPasswordToken } from "@prisma/client";
-import { ErrorMessage } from "formik";
+import { api } from "@/utils/api";
+import { newPasswordSchema } from "@/utils/ValidationSchema";
 
 export default function ResetPasswordPage() {
   const router = useRouter();

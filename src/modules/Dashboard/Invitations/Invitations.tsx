@@ -1,6 +1,8 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/modules/ui/tabs";
 import { LucideArrowDown, LucideArrowUp } from "lucide-react";
 import { useState } from "react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/modules/ui/tabs";
+
 import { type WorkspaceMemberInvitationWithSenderAndRecevier } from "../../Global/InvitationDrawer/InvitationRow";
 import {
   ReceviedInvitationsList,

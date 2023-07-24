@@ -1,8 +1,10 @@
-import getGravatar from "@/utils/getGravatar";
 import { type WorkspaceMemberInvitation } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 import TimeAgo from "react-timeago";
+
+import getGravatar from "@/utils/getGravatar";
+
 import { type UserType } from "./MemberRow";
 
 type WorkspaceMemberInvitationWithSenderAndRecevier =

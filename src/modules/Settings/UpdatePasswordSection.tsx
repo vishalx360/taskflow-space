@@ -1,3 +1,9 @@
+import { ErrorMessage, Field, type FieldProps, Form, Formik } from "formik";
+import { LucideAlertCircle, LucideInfo, LucideKey } from "lucide-react";
+import { useRef, useState } from "react";
+import { MdPassword } from "react-icons/md";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -11,16 +17,12 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/modules/ui/hover-card";
-import { UpdatePasswordSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
-import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
-import { LucideAlertCircle, LucideInfo, LucideKey } from "lucide-react";
-import { useRef, useState } from "react";
-import { MdPassword } from "react-icons/md";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { UpdatePasswordSchema } from "@/utils/ValidationSchema";
+
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 function UpdatePasswordSection() {
   const [isOpen, setIsOpen] = useState(false);

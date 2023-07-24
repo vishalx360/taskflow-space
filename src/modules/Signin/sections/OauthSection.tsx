@@ -1,9 +1,10 @@
-import { Alert, AlertDescription, AlertTitle } from "@/modules/ui/alert";
-import { Button } from "@/modules/ui/button";
-import { SigninOptions } from "@/pages/signin";
 import { LucideAlertCircle } from "lucide-react";
 import Link from "next/link";
 import { MdPassword } from "react-icons/md";
+
+import { Alert, AlertDescription, AlertTitle } from "@/modules/ui/alert";
+import { Button } from "@/modules/ui/button";
+import { type SigninOptions } from "@/pages/signin";
 
 export function OauthSection({
   signinOptions,

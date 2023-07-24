@@ -1,4 +1,21 @@
+import { Field, type FieldProps,Form, Formik } from "formik";
+import { motion } from "framer-motion";
+import geopattern from "geopattern";
+import random from "lodash.random";
+import { Plus, RefreshCcw, Table2 } from "lucide-react";
+import Image from "next/image";
+import { generateSlug, type RandomWordOptions } from "random-word-slugs";
+import { type ReactNode,useRef, useState } from "react";
+import { FaPlusCircle } from "react-icons/fa";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/modules/ui/accordion";
 import {
   Dialog,
   DialogContent,
@@ -6,32 +23,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/modules/ui/dialog";
-import { api } from "@/utils/api";
-import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
-import geopattern from "geopattern";
-import random from "lodash.random";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/modules/ui/accordion";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import { Plus, RefreshCcw, Table2 } from "lucide-react";
-import { useRef, useState, type ReactNode } from "react";
-import { FaPlusCircle } from "react-icons/fa";
-import { toFormikValidationSchema } from "zod-formik-adapter";
-import UpdateBoardBackgroundSection from "../Board/BoardSettingsModal/UpdateBoardBackgroundSection";
-import { Button } from "../ui/button";
-
-import Backgrounds from "../../utils/BoardBackgrounds.json";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/text-area";
-
-import Image from "next/image";
-import { generateSlug, type RandomWordOptions } from "random-word-slugs";
-
 import {
   Select,
   SelectContent,
@@ -39,7 +30,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/modules/ui/select";
-import { motion } from "framer-motion";
+import { api } from "@/utils/api";
+import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
+
+import Backgrounds from "../../utils/BoardBackgrounds.json";
+import UpdateBoardBackgroundSection from "../Board/BoardSettingsModal/UpdateBoardBackgroundSection";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/text-area";
 import { BoardBoxMotionVariants } from "./BoardBox";
 
 const slugOption: RandomWordOptions<2> = {

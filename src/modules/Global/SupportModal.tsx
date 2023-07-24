@@ -1,3 +1,8 @@
+import { LifeBuoy, LucideMail } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Children, cloneElement, type ReactNode,useState } from "react";
+
 import SupportLogo from "@/../public/logo/taskflow-128.png";
 import { Button } from "@/modules/ui/button";
 import {
@@ -7,10 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/modules/ui/dialog";
-import { LifeBuoy, LucideMail } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Children, cloneElement, useState, type ReactNode } from "react";
 
 export function SupportModal({ children }: { children?: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);

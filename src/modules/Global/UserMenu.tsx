@@ -7,6 +7,10 @@ import {
   Plus,
   Settings,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import { RxCaretSort } from "react-icons/rx";
 
 import {
   DropdownMenu,
@@ -18,10 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/modules/ui/dropdown-menu";
 import getGravatar from "@/utils/getGravatar";
-import { signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
-import { RxCaretSort } from "react-icons/rx";
+
 import CreateNewBoardModal from "../Dashboard/CreateNewBoardModal";
 import CreateNewWorkspaceModal from "../Dashboard/CreateNewWorkspaceModal";
 import { AboutModal } from "./AboutModal";
@@ -29,9 +30,8 @@ import { SupportModal } from "./SupportModal";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
-
-  function handelLogout() {
-    void signOut();
+  async function handelLogout() {
+    await signOut();
   }
   return (
     <DropdownMenu>

@@ -1,9 +1,3 @@
-import { env } from "@/env.mjs";
-import { redisClient } from "@/lib/redisClient";
-import { prisma } from "@/server/db";
-import NewUserSideEffects from "@/utils/NewUserSideEffects";
-import { PasskeySigninSchema, SigninSchema, SigninTokenSchema } from "@/utils/ValidationSchema";
-import { signJTW, verifyJWT } from "@/utils/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { verifyAuthenticationResponse } from "@simplewebauthn/server";
 import { type AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
@@ -11,15 +5,24 @@ import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
-  getServerSession,
   type DefaultSession,
-  type NextAuthOptions
+  getServerSession,
+  type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 
-
+import { env } from "@/env.mjs";
+import { redisClient } from "@/lib/redisClient";
+import { prisma } from "@/server/db";
+import { signJTW, verifyJWT } from "@/utils/jwt";
+import NewUserSideEffects from "@/utils/NewUserSideEffects";
+import {
+  PasskeySigninSchema,
+  SigninSchema,
+  SigninTokenSchema,
+} from "@/utils/ValidationSchema";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -70,10 +73,10 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET,
   jwt: {
     async encode({ secret, token }) {
-      return await signJTW(token, secret)
+      return await signJTW(token, secret);
     },
     async decode({ secret, token }) {
-      return await verifyJWT(token, secret)
+      return await verifyJWT(token, secret);
     },
     maxAge: 30 * 24 * 60 * 60, // 30 days in seconds
   },
@@ -96,10 +99,16 @@ export const authOptions: NextAuthOptions = {
           where: { email: creds.email },
         });
         if (!user) {
-          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid credentials",
+          });
         }
         if (!user.password) {
-          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Password not set, please use other login method" })
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Password not set, please use other login method",
+          });
         }
         const isValidPassword = await verify(user.password, creds.password);
         if (!isValidPassword) {
@@ -120,7 +129,7 @@ export const authOptions: NextAuthOptions = {
         email: {
           label: "Email",
           type: "email",
-          placeholder: ""
+          placeholder: "",
         },
         passkey: {
           label: "Passkey",
@@ -135,16 +144,23 @@ export const authOptions: NextAuthOptions = {
           where: { email: req?.body?.email },
         });
         if (!user) {
-          throw new TRPCError({ code: "UNAUTHORIZED", "message": "No user found" })
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "No user found",
+          });
         }
-        const passkey: AuthenticationResponseJSON = JSON.parse(req?.body?.passkey);
-        const expectedChallenge = await redisClient.get(`passkey-auth-challange:${req.body.email}`)
+        const passkey: AuthenticationResponseJSON = JSON.parse(
+          req?.body?.passkey
+        );
+        const expectedChallenge = await redisClient.get(
+          `passkey-auth-challange:${req.body.email}`
+        );
 
         if (!expectedChallenge) {
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Error:A authenticating passkey. Please try again.",
-          })
+          });
         }
         const registeredPasskey = await prisma.passkey.findFirst({
           where: {
@@ -159,7 +175,7 @@ export const authOptions: NextAuthOptions = {
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Error:B authenticating passkey.",
-          })
+          });
         }
 
         let verification;
@@ -171,8 +187,12 @@ export const authOptions: NextAuthOptions = {
             expectedRPID: env.DOMAIN_NAME,
             authenticator: {
               counter: registeredPasskey.counter,
-              credentialID: Uint8Array.from(Buffer.from(registeredPasskey.credentialID, 'base64url')),
-              credentialPublicKey: Uint8Array.from(Buffer.from(registeredPasskey.credentialPublicKey, 'base64url')),
+              credentialID: Uint8Array.from(
+                Buffer.from(registeredPasskey.credentialID, "base64url")
+              ),
+              credentialPublicKey: Uint8Array.from(
+                Buffer.from(registeredPasskey.credentialPublicKey, "base64url")
+              ),
             },
           });
         } catch (error) {
@@ -181,7 +201,7 @@ export const authOptions: NextAuthOptions = {
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: _error.message,
-          })
+          });
         }
         const { verified } = verification;
         if (verified) {
@@ -191,9 +211,11 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             image: user.image,
           };
-
         } else {
-          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid credentials",
+          });
         }
       },
     }),
@@ -210,13 +232,19 @@ export const authOptions: NextAuthOptions = {
         const creds = await SigninTokenSchema.parseAsync(credentials);
         const SigninToken = await redisClient.get(creds.token);
         if (!SigninToken) {
-          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid credentials",
+          });
         }
         const user = await prisma.user.findUnique({
           where: { id: SigninToken },
         });
         if (!user) {
-          throw new TRPCError({ code: "UNAUTHORIZED", "message": "Invalid credentials" })
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Invalid credentials",
+          });
         }
         return {
           id: user.id,
@@ -245,18 +273,21 @@ export const authOptions: NextAuthOptions = {
       allowDangerousEmailAccountLinking: true,
     }),
   ],
-  cookies: env.NODE_ENV === 'development' ? {} : {
-    sessionToken: {
-      name: `next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: true,
-        domain: `.${env.DOMAIN_NAME}`
-      }
-    },
-  },
+  cookies:
+    env.NODE_ENV === "development"
+      ? {}
+      : {
+          sessionToken: {
+            name: `next-auth.session-token`,
+            options: {
+              httpOnly: true,
+              sameSite: "lax",
+              path: "/",
+              secure: true,
+              domain: `.${env.DOMAIN_NAME}`,
+            },
+          },
+        },
   pages: {
     signIn: "/signin",
     newUser: "/signup",

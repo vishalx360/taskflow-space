@@ -1,17 +1,17 @@
+import { Form, Formik } from "formik";
+import { LucideArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
+import { useCallback, useState } from "react";
+import { FcKey } from "react-icons/fc";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
 import { type SectionMapKeys, type SigninOptions } from "@/pages/signin";
 import { SigninSchema } from "@/utils/ValidationSchema";
-import { Form, Formik } from "formik";
-import { LucideAlertCircle, LucideArrowRight } from "lucide-react";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
-import { FcKey } from "react-icons/fc";
-import { MdPassword } from "react-icons/md";
-import { toFormikValidationSchema } from "zod-formik-adapter";
 
 export function CredentialSection({
   signinOptions,

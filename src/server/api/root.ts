@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "@/server/api/trpc";
+
 import { AuthenticationRouter } from "./routers/authentication";
 import { BoardRouter } from "./routers/board";
 import { ListRouter } from "./routers/list";

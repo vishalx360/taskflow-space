@@ -1,7 +1,9 @@
 import { type Task } from "@prisma/client";
 import dynamic from "next/dynamic";
+
 import { TaskContextMenu } from "../Global/TaskContextMenu";
 import TaskModal from "../Global/TaskModal/TaskModal";
+
 const Draggable = dynamic(
   () =>
     import("react-beautiful-dnd").then((mod) => {
@@ -34,9 +36,15 @@ export function TaskCard({
               {...provided.draggableProps}
               {...provided.dragHandleProps}
             >
-              <div className={`border-1 w-full rounded-xl border-gray-400 bg-gray-50 px-4 py-3 shadow ${isDragging ? "border-dotted bg-[#f0f0f0]" : ""}`}
+              <div
+                className={`border-1 w-full rounded-xl border-gray-400 bg-gray-50 px-4 py-3 shadow ${
+                  isDragging ? "border-dotted bg-[#f0f0f0]" : ""
+                }`}
               >
-                <p className={`md:text-md line-clamp-2 text-sm font-medium text-black ${task?.pending ? "text-neutral-600" : "text-black"}`}
+                <p
+                  className={`md:text-md line-clamp-2 text-sm font-medium text-black ${
+                    task?.pending ? "text-neutral-600" : "text-black"
+                  }`}
                 >
                   {task?.title}
                 </p>

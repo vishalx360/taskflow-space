@@ -1,3 +1,8 @@
+import { type Workspace } from "@prisma/client";
+import { LucideUsers } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
 import {
   Dialog,
@@ -8,10 +13,7 @@ import {
 } from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
 import getGravatar from "@/utils/getGravatar";
-import { type Workspace } from "@prisma/client";
-import { LucideUsers } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
+
 import InviteSection from "./InviteSection";
 import LeaveWorkspaceSection from "./LeaveWorkspaceSection";
 import MembersList, { MemberListSkeleton } from "./MembersList";

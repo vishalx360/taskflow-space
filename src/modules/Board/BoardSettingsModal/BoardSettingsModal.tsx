@@ -1,3 +1,14 @@
+import { type Board } from "@prisma/client";
+import { Layout } from "lucide-react";
+import {
+  Children,
+  cloneElement,
+  type ReactNode,
+  useEffect,
+  useRef,
+} from "react";
+import { MdSettings } from "react-icons/md";
+
 import { useBoardSettingsModal } from "@/contexts/BoardSettingsModalContext";
 import {
   Accordion,
@@ -14,16 +25,7 @@ import {
   DialogTrigger,
 } from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
-import { type Board } from "@prisma/client";
-import { Layout } from "lucide-react";
-import {
-  Children,
-  cloneElement,
-  useEffect,
-  useRef,
-  type ReactNode,
-} from "react";
-import { MdSettings } from "react-icons/md";
+
 import DeleteBoardSection from "./DeleteBoardSection";
 import UpdateBoardSection from "./UpdateBoardSection";
 

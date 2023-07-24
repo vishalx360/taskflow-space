@@ -1,18 +1,19 @@
-import BoardList, { BoardListSkeleton } from "@/modules/Dashboard/BoardList";
-import { api } from "@/utils/api";
+import { AnimatePresence, motion } from "framer-motion";
 import { BiLoaderAlt } from "react-icons/bi";
-import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
-import BoardGrid, { RecentBoardGrid } from "./BoardGrid";
-import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
-import WorkspaceSettingsModal from "./WorkspaceSettingsModal/WorkspaceSettingsModal";
 
+import BoardList, { BoardListSkeleton } from "@/modules/Dashboard/BoardList";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/modules/ui/accordion";
-import { AnimatePresence, motion } from "framer-motion";
+import { api } from "@/utils/api";
+
+import WorkspaceMembersModal from "../Board/WorkspaceMembersModal/WorkspaceMembersModal";
+import BoardGrid, { RecentBoardGrid } from "./BoardGrid";
+import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
+import WorkspaceSettingsModal from "./WorkspaceSettingsModal/WorkspaceSettingsModal";
 
 function Workspaces() {
   const {

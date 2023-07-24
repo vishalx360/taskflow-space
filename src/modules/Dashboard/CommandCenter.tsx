@@ -1,3 +1,8 @@
+import { type Workspace } from "@prisma/client";
+import { Layout, LayoutDashboard, LucideSearch } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
 import {
   CommandDialog,
   CommandEmpty,
@@ -9,15 +14,9 @@ import {
   CommandShortcut,
 } from "@/modules/ui/command";
 import { api } from "@/utils/api";
-import { LayoutDashboard } from "lucide-react";
 
-import { useEffect, useState } from "react";
 import CreateNewBoardModal from "./CreateNewBoardModal";
 import CreateNewWorkspaceModal from "./CreateNewWorkspaceModal";
-
-import { type Workspace } from "@prisma/client";
-import { Layout, LucideSearch } from "lucide-react";
-import Link from "next/link";
 
 function CommandCenter() {
   const [open, setOpen] = useState(false);

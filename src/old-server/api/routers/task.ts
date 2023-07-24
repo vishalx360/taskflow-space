@@ -1,15 +1,16 @@
 import { TRPCError } from "@trpc/server";
 import { LexoRank } from "lexorank";
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
 
 import {
-  CreateTaskSchema, MoveTaskSchema, UpdateTaskMemberSchema, UpdateTaskSchema
+  CreateTaskSchema,
+  MoveTaskSchema,
+  UpdateTaskMemberSchema,
+  UpdateTaskSchema,
 } from "../../../utils/ValidationSchema";
-
+import { createTRPCRouter, protectedProcedure } from "../fastify_trpc";
 
 export const TaskRouter = createTRPCRouter({
-
   // Tasks
   createTask: protectedProcedure
     .input(CreateTaskSchema)
@@ -70,7 +71,7 @@ export const TaskRouter = createTRPCRouter({
           rank,
         },
       });
-      // send pusher event to board channel 
+      // send pusher event to board channel
       await ctx.pusher.trigger(`board-${board.id}`, "task:created", {
         task: newTask,
         listId: input.listId,
@@ -96,7 +97,7 @@ export const TaskRouter = createTRPCRouter({
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, },
+        select: { workspaceId: true },
       });
       if (!board) {
         throw new TRPCError({
@@ -152,7 +153,7 @@ export const TaskRouter = createTRPCRouter({
       // check if list belongs to user
       const board = await ctx.prisma.board.findUnique({
         where: { id: list.boardId },
-        select: { workspaceId: true, },
+        select: { workspaceId: true },
       });
       if (!board) {
         throw new TRPCError({
@@ -183,12 +184,12 @@ export const TaskRouter = createTRPCRouter({
                 select: {
                   email: true,
                   name: true,
-                  image: true
-                }
-              }
-            }
-          }
-        }
+                  image: true,
+                },
+              },
+            },
+          },
+        },
       });
     }),
 
@@ -243,7 +244,6 @@ export const TaskRouter = createTRPCRouter({
         });
       }
 
-
       const updatedTask = await ctx.prisma.task.update({
         where: { id: input.taskId },
         data: {
@@ -251,8 +251,8 @@ export const TaskRouter = createTRPCRouter({
           description: input.description,
         },
       });
-      console.log(updatedTask)
-      // send pusher event to board channel 
+      console.log(updatedTask);
+      // send pusher event to board channel
       await ctx.pusher.trigger(`board-${board.id}`, "task:updated", {
         task: updatedTask,
         listId: task.listId,
@@ -312,7 +312,6 @@ export const TaskRouter = createTRPCRouter({
         });
       }
 
-
       let prevTask;
       let nextTask;
 
@@ -332,7 +331,9 @@ export const TaskRouter = createTRPCRouter({
       let rank = LexoRank.middle().toString();
       // if putting in middle
       if (prevTask && nextTask) {
-        rank = LexoRank.parse(prevTask?.rank).between(LexoRank.parse(nextTask?.rank)).toString();
+        rank = LexoRank.parse(prevTask?.rank)
+          .between(LexoRank.parse(nextTask?.rank))
+          .toString();
       }
       // if putting on bottom and prev exist
       if (prevTask && !nextTask) {
@@ -351,7 +352,7 @@ export const TaskRouter = createTRPCRouter({
         },
       });
       // send lists to update
-      // send pusher event to board channel 
+      // send pusher event to board channel
       await ctx.pusher.trigger(`board-${list.boardId}`, "task:moved", {
         lists: [task.listId, input.newListId],
         initiatorId: ctx.session.user.id,
@@ -413,7 +414,7 @@ export const TaskRouter = createTRPCRouter({
       await ctx.prisma.task.delete({
         where: { id: input.taskId },
       });
-      // send pusher event to board channel 
+      // send pusher event to board channel
       await ctx.pusher.trigger(`board-${list.boardId}`, "task:deleted", {
         task: { id: input.taskId },
         listId: task.listId,
@@ -426,7 +427,7 @@ export const TaskRouter = createTRPCRouter({
   updateTaskMember: protectedProcedure
     .input(UpdateTaskMemberSchema)
     .mutation(async ({ ctx, input }) => {
-      console.log(input)
+      console.log(input);
       const task = await ctx.prisma.task.findUnique({
         where: { id: input.taskId },
         select: { listId: true },
@@ -478,9 +479,9 @@ export const TaskRouter = createTRPCRouter({
         const taskMember = await ctx.prisma.taskMember.findFirst({
           where: {
             taskId: input.taskId,
-            userId: input.userId
-          }
-        })
+            userId: input.userId,
+          },
+        });
         if (!taskMember) {
           throw new TRPCError({
             code: "FORBIDDEN",
@@ -488,9 +489,8 @@ export const TaskRouter = createTRPCRouter({
           });
         }
         await ctx.prisma.taskMember.delete({
-          where: { id: taskMember.id }
+          where: { id: taskMember.id },
         });
-
       } else {
         await ctx.prisma.taskMember.create({
           data: {
@@ -499,10 +499,14 @@ export const TaskRouter = createTRPCRouter({
           },
         });
       }
-      // send pusher event to board channel 
-      return ctx.pusher.trigger(`board-${list.boardId}`, "task-member:updated", {
-        task: { id: input.taskId },
-        initiatorId: ctx.session.user.id,
-      });
+      // send pusher event to board channel
+      return ctx.pusher.trigger(
+        `board-${list.boardId}`,
+        "task-member:updated",
+        {
+          task: { id: input.taskId },
+          initiatorId: ctx.session.user.id,
+        }
+      );
     }),
 });

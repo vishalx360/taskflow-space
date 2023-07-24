@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+
 import BOARD_1_URL from "../../../public/board1.jpeg";
 import BOARD_3_URL from "../../../public/board2.jpeg";
 import BOARD_2_URL from "../../../public/board3.png";
@@ -38,7 +39,7 @@ function HeroSection() {
               href="/signup"
               className="text-md  inline-block  w-full rounded-lg bg-black px-8 py-3 text-center font-bold  leading-5 text-white transition-colors hover:bg-black/80 focus:outline-none lg:mx-0 lg:w-auto"
             >
-              Sign up now
+              Get started
             </Link>
             <Link
               href="/#pricing"

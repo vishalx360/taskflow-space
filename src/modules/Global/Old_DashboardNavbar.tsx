@@ -1,11 +1,13 @@
-import getGravatar from "@/utils/getGravatar";
 import { Menu, Transition } from "@headlessui/react";
-import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import { Fragment, memo, useState } from "react";
 import { FiChevronDown, FiExternalLink, FiLogOut } from "react-icons/fi";
+
+import getGravatar from "@/utils/getGravatar";
+
 import InvitationDrawer from "./InvitationDrawer/InvitationsDrawer";
 import LogoImage from "./LogoImage";
 import { UserMenu } from "./UserMenu";

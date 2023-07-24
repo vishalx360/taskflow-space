@@ -1,3 +1,11 @@
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+import BENIFIT_1_IMG from "../../../public/benifit_1.png";
+import BENIFIT_2_IMG from "../../../public/benifit_2.png";
+import BENIFIT_3_IMG from "../../../public/benifit_3.png";
+
 function FeaturesSection() {
   return (
     <section
@@ -18,14 +26,6 @@ function FeaturesSection() {
 }
 
 export default FeaturesSection;
-
-import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-
-import BENIFIT_1_IMG from "../../../public/benifit_1.png";
-import BENIFIT_2_IMG from "../../../public/benifit_2.png";
-import BENIFIT_3_IMG from "../../../public/benifit_3.png";
 const FeatureListData = [
   {
     image: BENIFIT_1_IMG,

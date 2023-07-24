@@ -1,3 +1,13 @@
+import { Transition } from "@headlessui/react";
+import { type Task } from "@prisma/client";
+import { format, isSameDay } from "date-fns";
+import { Field, type FieldProps,Form, Formik } from "formik";
+import { LucideUserPlus } from "lucide-react";
+import { type Dispatch, type SetStateAction,useState } from "react";
+import { MdDelete } from "react-icons/md";
+import Timeago from "react-timeago";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/modules/ui/avatar";
 import { Button } from "@/modules/ui/button";
@@ -16,18 +26,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/modules/ui/tooltip";
-import { UpdateTaskSchema } from "@/utils/ValidationSchema";
 import { api } from "@/utils/api";
 import getGravatar from "@/utils/getGravatar";
-import { Transition } from "@headlessui/react";
-import { type Task } from "@prisma/client";
-import { format, isSameDay } from "date-fns";
-import { Field, Form, Formik, type FieldProps } from "formik";
-import { LucideUserPlus } from "lucide-react";
-import { useState, type Dispatch, type SetStateAction } from "react";
-import { MdDelete } from "react-icons/md";
-import Timeago from "react-timeago";
-import { toFormikValidationSchema } from "zod-formik-adapter";
+import { UpdateTaskSchema } from "@/utils/ValidationSchema";
+
 import TaskMemberSelector from "./TaskMemberSelector";
 
 export default function TaskModal({
