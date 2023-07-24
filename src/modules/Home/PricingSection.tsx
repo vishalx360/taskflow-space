@@ -4,8 +4,8 @@ import StripeSubcription, {
 
 function PricingSection() {
   return (
-    <section id="pricing" className="min-h-screen scroll-mt-16 bg-white ">
-      <div className="container mx-auto px-6 py-16 ">
+    <section id="pricing" className="min-h-screen pt-6 scroll-mt-16 bg-white border-b-2 ">
+      <div className="container mx-auto px-6 py-6 ">
         <div className="mb-10 flex flex-col items-center justify-center ">
           <h1 className="my-5 text-[2.5rem] font-bold">Pricing</h1>
           <p className="text-center">

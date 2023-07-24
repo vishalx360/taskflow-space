@@ -1,8 +1,8 @@
 import { Form, Formik } from "formik";
 import { LucideArrowRight } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
 import { useCallback, useState } from "react";
 import { FcKey } from "react-icons/fc";
 import { toFormikValidationSchema } from "zod-formik-adapter";

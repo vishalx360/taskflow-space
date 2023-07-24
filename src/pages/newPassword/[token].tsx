@@ -1,5 +1,5 @@
 import { type ResetPasswordToken } from "@prisma/client";
-import { ErrorMessage, Field, type FieldProps,Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
 import { LucideArrowLeft, LucideInfo } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";

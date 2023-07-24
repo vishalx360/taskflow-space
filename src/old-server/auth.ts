@@ -5,8 +5,8 @@ import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
-  type DefaultSession,
   getServerSession,
+  type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -277,17 +277,17 @@ export const authOptions: NextAuthOptions = {
     env.NODE_ENV === "development"
       ? {}
       : {
-          sessionToken: {
-            name: `next-auth.session-token`,
-            options: {
-              httpOnly: true,
-              sameSite: "lax",
-              path: "/",
-              secure: true,
-              domain: `.${env.DOMAIN_NAME}`,
-            },
+        sessionToken: {
+          name: `next-auth.session-token`,
+          options: {
+            httpOnly: true,
+            sameSite: "lax",
+            path: "/",
+            secure: true,
+            domain: `.${env.DOMAIN_NAME}`,
           },
         },
+      },
   pages: {
     signIn: "/signin",
     newUser: "/signup",

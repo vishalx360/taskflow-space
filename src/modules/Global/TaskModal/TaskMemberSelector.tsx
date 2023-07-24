@@ -1,7 +1,7 @@
 import { type Task, type WorkspaceMember } from "@prisma/client";
 import { LucideCheck, LucideUserPlus } from "lucide-react";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/modules/ui/button";

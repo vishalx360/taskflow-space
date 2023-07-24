@@ -1,10 +1,10 @@
 import "@/styles/globals.css";
 
+import { type Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Head from "next/head";
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import NextNprogress from "nextjs-progressbar";
 import { MdArrowUpward } from "react-icons/md";
 import ScrollToTop from "react-scroll-to-top";

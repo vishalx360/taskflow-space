@@ -1,5 +1,5 @@
 import { type Board } from "@prisma/client";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import {
   type Dispatch,
   type MutableRefObject,

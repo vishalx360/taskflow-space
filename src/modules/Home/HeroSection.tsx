@@ -2,13 +2,13 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-import BOARD_1_URL from "../../../public/board1.jpeg";
 import BOARD_3_URL from "../../../public/board2.jpeg";
 import BOARD_2_URL from "../../../public/board3.png";
+import BOARD_1_URL from "../../../public/dashboard-desktop.png";
 
 function HeroSection() {
   return (
-    <section className="h-screen overflow-x-hidden bg-gradient-to-t from-black/10 to-white md:h-[110vh] md:overflow-x-visible ">
+    <section className="h-screen overflow-hidden bg-gradient-to-t from-black/10 to-white md:h-[110vh] md:overflow-x-visible ">
       <div className=" mx-auto py-16 text-center">
         <div className="container  mx-auto max-w-2xl px-5">
           <motion.div

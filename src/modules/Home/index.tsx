@@ -1,4 +1,5 @@
 import AboutSection from "./AboutSection";
+import AccessSection from "./AccessSection";
 import BenifitsSection from "./BenifitsSection";
 import FeaturesSection from "./FeaturesSection";
 import FooterSection from "./FooterSection";
@@ -14,6 +15,7 @@ function Home() {
       <BenifitsSection />
       <FeaturesSection />
       <PricingSection />
+      {/* <AccessSection /> */}
       <AboutSection />
       <FooterSection />
     </>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import CreatorLogo from "@/../public/vishalAvatar.png";
 
 import Divider from "../Global/Divider";
+import Mockup from "@/../public/mockup.png";
 
 function AboutSection() {
   return (
@@ -14,7 +15,9 @@ function AboutSection() {
       <div className="container mx-auto max-w-[900px] px-6 py-16 ">
         <div className="p-2">
           <h1 className="my-5 text-center text-[2.5rem] font-bold">About us</h1>
-
+          <div className="my-5 flex w-full items-center justify-center p-5 py-10">
+            <Image alt="mockup" src={Mockup} height={300} width={500} />
+          </div>
           <div className="space-y-3 text-neutral-700 md:text-xl">
             <p>
               Taskflow is a versatile task management application designed to

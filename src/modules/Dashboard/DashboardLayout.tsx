@@ -1,9 +1,9 @@
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { type Channel } from "pusher-js";
 import { useEffect } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -94,10 +94,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   }, [session?.user.id]);
 
   return (
-    <div className="relative flex items-center  overflow-hidden ">
+    <div className="relative flex items-center overflow-hidden bg-neutral-200 ">
       {/* <DashboardSidebar /> */}
-      <div className=" left-0 top-0 hidden h-screen w-[25em] bg-neutral-200 md:block">
-        <div className="flex h-20 flex-col items-center justify-center bg-neutral-500/5">
+      <div className=" left-0 top-0 hidden h-screen w-[25em] md:block">
+        <div className="flex h-20 flex-col items-center justify-center">
           <Link href="/" className="p-5">
             <LogoImage dark width={220} />
           </Link>
@@ -133,7 +133,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       </div>
       {/* Main Section */}
       <AnimatePresence mode="wait">
-        <div className="h-screen w-full overflow-y-auto">
+        <div className="h-screen w-full overflow-y-auto rounded-l-3xl bg-white md:mt-3">
           <Scrollbars>
             <div className="container mx-auto p-0  md:px-5">
               {pathname !== "/dashboard/overview" &&

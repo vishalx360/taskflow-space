@@ -54,21 +54,21 @@ export function createServer(opts: ServerOptions) {
     parseOptions:
       env.NODE_ENV === "development"
         ? {
-            // signed: true,
-            httpOnly: true,
-            sameSite: "lax",
-            path: "/",
-            secure: false,
-            domain: "localhost",
-          }
+          // signed: true,
+          httpOnly: true,
+          sameSite: "lax",
+          path: "/",
+          secure: false,
+          domain: "localhost",
+        }
         : {
-            signed: true,
-            httpOnly: true,
-            sameSite: "lax",
-            path: "/",
-            secure: true,
-            domain: `.${env.DOMAIN_NAME}`,
-          }, // options for parsing cookies
+          signed: true,
+          httpOnly: true,
+          sameSite: "lax",
+          path: "/",
+          secure: true,
+          domain: `.${env.DOMAIN_NAME}`,
+        }, // options for parsing cookies
   } as FastifyCookieOptions);
 
   void server.register(cors, {

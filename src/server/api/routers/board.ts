@@ -175,7 +175,11 @@ export const BoardRouter = createTRPCRouter({
       return ctx.prisma.board.findUnique({
         where: { id: input.boardId },
         include: {
-          lists: true,
+          lists: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
           Workspace: true,
         },
       });

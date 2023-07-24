@@ -139,9 +139,8 @@ export const WorkspaceRouter = createTRPCRouter({
       const mailOptions = await BASIC_EMAIL({
         recevierEmail: input.email,
         subject: "You have been invited to join a workspace on Taskflow",
-        body: ` ${
-          recepientUser?.name ? recepientUser.name : ""
-        } You have been invited to join a workspace on Taskflow. Please click on the link below to join the workspace.
+        body: ` ${recepientUser?.name ? recepientUser.name : ""
+          } You have been invited to join a workspace on Taskflow. Please click on the link below to join the workspace.
         <br/>
         Sign in and visit:
         <br/>

@@ -15,9 +15,7 @@ function FeaturesSection() {
       <div className="container mx-auto px-6 py-16 ">
         <div className="mb-10 flex flex-col items-center justify-center ">
           <h1 className="my-5 text-[2.5rem] font-bold">Features</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-          </p>
+          <p>Take Control of Your Tasks and Team.</p>
         </div>
         <Features />
       </div>
@@ -25,37 +23,40 @@ function FeaturesSection() {
   );
 }
 
+// Kanban Board
+// Visualize and organize tasks using a powerful Kanban board system for enhanced productivity.
+
+// Collaborative Team Invites
+// Invite team members to your boards, promoting seamless collaboration and efficient task management.
+
+// Customizable Board Backgrounds
+// Personalize your boards with custom backgrounds to reflect your unique style and boost inspiration.
+
 export default FeaturesSection;
 const FeatureListData = [
   {
-    image: BENIFIT_1_IMG,
-    title: "lorem ipsum",
+    image: BENIFIT_2_IMG,
+    title: "Kanban Board",
     description:
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti unde est quasi fuga ipsa minima.",
+      "Visualize and organize tasks using a powerful Kanban board system for enhanced productivity.",
   },
   {
-    image: BENIFIT_2_IMG,
-    title: "Lorem ipsum dolor sita",
+    image: BENIFIT_1_IMG,
+    title: "Personal Workspaces",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
+      "Create your own personalized workspace to organize tasks, collaborate with teams, and boost your productivity like never before.",
   },
   {
     image: BENIFIT_3_IMG,
-    title: "Lorem ipsum dolor sitb",
+    title: "Collaborative Team Invites",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
+      "Invite team members to your boards, promoting seamless collaboration and efficient task management.",
   },
   {
-    image: BENIFIT_2_IMG,
-    title: "Lorem ipsum dolor sitc",
+    image: BENIFIT_1_IMG,
+    title: "Customizable Board Backgrounds",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
-  },
-  {
-    image: BENIFIT_2_IMG,
-    title: "Lorem ipsum dolor sitd",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis deleniti obcaecati laborum esse?",
+      "Personalize your boards with custom backgrounds to reflect your unique style and boost inspiration.",
   },
 ];
 

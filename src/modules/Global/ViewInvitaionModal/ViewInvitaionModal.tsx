@@ -1,7 +1,7 @@
 import { Check, LucideMail } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { type Dispatch, type SetStateAction,useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { FiX } from "react-icons/fi";
 
 import { useToast } from "@/hooks/use-toast";

@@ -1,12 +1,12 @@
 import { type Board, type Task } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { LexoRank } from "lexorank";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Error from "next/error";
 import Head from "next/head";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { type DropResult } from "react-beautiful-dnd";
 import { Scrollbars } from "react-custom-scrollbars-2";
@@ -218,7 +218,7 @@ function Board() {
     mutation.mutate({
       taskId: removed?.id || "",
       newListId: destination.droppableId,
-      newRank: newRank,
+      newRank: newRank || LexoRank.middle().toString(),
     });
     return;
   };
@@ -291,11 +291,10 @@ function BoardSkeleton(): JSX.Element {
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
-              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${
-                background
+              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${background
                   ? "border-white/50 text-white"
                   : "border-neutral-400 text-neutral-600"
-              }`}
+                }`}
             >
               <FiArrowLeft className="text-xl" />
             </Link>

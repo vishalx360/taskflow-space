@@ -1,33 +1,35 @@
 import Image from "next/image";
 
-import BENIFIT_1_IMG from "../../../public/benifit_1.png";
 import BENIFIT_2_IMG from "../../../public/benifit_2.png";
 import BENIFIT_3_IMG from "../../../public/benifit_3.png";
+import BENIFIT_1_IMG from "../../../public/passkey.png";
 
 const benifits = [
   {
     poster: "#",
     image: BENIFIT_1_IMG,
-    title: "Custom backgrounds",
+    name: "Passkey Support",
+    title: "Authentication Made Easy",
     description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et adipisci eos eligendi illum alias distinctio, ea rem nam sint repellendus voluptatem aliquam dolor rerum nostrum voluptatibus eum mollitia ratione deleniti.",
+      "Enjoy a secure and hassle-free login process with passkey support, ensuring your data stays protected at all times.",
   },
   {
     poster: "#",
     image: BENIFIT_2_IMG,
-    title: "Custom Boards",
+    name: "Email Alerts",
+    title: "Stay Updated, Stay on Track",
     description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et adipisci eos eligendi illum alias distinctio, ea rem nam sint repellendus voluptatem aliquam dolor rerum nostrum voluptatibus eum mollitia ratione deleniti.",
+      "Receive timely email alerts and notifications, keeping you informed about task updates and deadlines, so you never miss a beat.",
   },
   {
     poster: "#",
     image: BENIFIT_3_IMG,
-    title: "Bring all your team",
+    name: "Real-time Updates",
+    title: "Stay in Sync, Always",
     description:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et adipisci eos eligendi illum alias distinctio, ea rem nam sint repellendus voluptatem aliquam dolor rerum nostrum voluptatibus eum mollitia ratione deleniti.",
+      "Experience real-time updates on tasks and projects, enabling seamless collaboration and ensuring everyone is on the same page.",
   },
 ];
-
 function BenifitsSection() {
   return (
     <section
@@ -36,7 +38,7 @@ function BenifitsSection() {
     >
       <div className="container mx-auto px-6 py-16 ">
         <div className="space-y-4">
-          <h1 className="whitespace-nowrap text-sm font-semibold text-blue-500">
+          <h1 className="whitespace-nowrap text-sm font-semibold text-blue-600">
             WHY USE TASKFLOW.SPACE
           </h1>
           <div className="mb-10 flex max-w-4xl flex-col  gap-10 md:flex-row md:items-center md:gap-20">
@@ -66,6 +68,9 @@ function BenifitsSection() {
                   />
                 </div>
                 <div className="row-span-2 space-y-2 p-1 text-left lg:row-span-1">
+                  <h1 className="text-xl font-medium text-blue-600">
+                    {benifit.name}
+                  </h1>
                   <h1 className="text-2xl font-medium">{benifit.title}</h1>
                   <p>{benifit.description}</p>
                 </div>
