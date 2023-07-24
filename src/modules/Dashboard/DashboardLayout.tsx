@@ -1,9 +1,9 @@
 import { cva } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import { LucideHome, LucideMails, LucideSettings2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { type Channel } from "pusher-js";
 import { useEffect } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";

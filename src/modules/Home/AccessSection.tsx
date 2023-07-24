@@ -2,7 +2,6 @@ import Image from "next/image";
 
 import Mockup from "@/../public/mockup.png";
 
-
 function AccessSection() {
   return (
     <section

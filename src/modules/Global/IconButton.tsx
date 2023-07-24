@@ -15,8 +15,9 @@ function IconButton({
   return (
     <button
       onClick={onClick}
-      className={`py-2 ${children ? "px-4" : "px-2"
-        } flex items-center gap-2 rounded-xl bg-gray-200 text-sm font-normal ${className}`}
+      className={`py-2 ${
+        children ? "px-4" : "px-2"
+      } flex items-center gap-2 rounded-xl bg-gray-200 text-sm font-normal ${className}`}
     >
       <Icon />
       {children}

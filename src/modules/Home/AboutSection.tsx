@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import Mockup from "@/../public/mockup.png";
 import CreatorLogo from "@/../public/vishalAvatar.png";
 
 import Divider from "../Global/Divider";
-import Mockup from "@/../public/mockup.png";
 
 function AboutSection() {
   return (

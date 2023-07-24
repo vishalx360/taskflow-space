@@ -1,8 +1,8 @@
 import { startAuthentication } from "@simplewebauthn/browser";
 import { LucideAlertCircle, LucideArrowRight } from "lucide-react";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import { useRef, useState } from "react";
 import { FcInfo, FcKey, FcLock, FcUnlock } from "react-icons/fc";
 import { MdPassword } from "react-icons/md";

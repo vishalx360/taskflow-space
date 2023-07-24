@@ -23,8 +23,9 @@ function SecondaryLinkButton({
     : {};
   return (
     <a
-      className={`bg-brand-light block w-full  rounded-full border-2 border-accent px-3  py-2 text-center font-semibold md:px-10 md:py-3 ${className || ""
-        }`}
+      className={`bg-brand-light block w-full  rounded-full border-2 border-accent px-3  py-2 text-center font-semibold md:px-10 md:py-3 ${
+        className || ""
+      }`}
       {...rest}
       href={href}
       {...externalProps}

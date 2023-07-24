@@ -1,5 +1,5 @@
 import { type ResetPasswordToken } from "@prisma/client";
-import { ErrorMessage, Field, Form, Formik, type FieldProps } from "formik";
+import { ErrorMessage, Field, type FieldProps,Form, Formik } from "formik";
 import { LucideArrowLeft, LucideInfo } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -192,7 +192,7 @@ function LoadingToken() {
         <LucideArrowLeft width={20} /> <span>Sign in</span>
       </Link>
       <h1 className="text-xl font-medium leading-tight tracking-tight text-neutral-900 dark:text-white md:text-2xl">
-        Checking Link...
+        Security Check...
       </h1>
       <p className="text-neutral-700">
         Please wait while we check your reset password link.
