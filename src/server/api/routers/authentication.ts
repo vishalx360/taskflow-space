@@ -602,7 +602,7 @@ export const AuthenticationRouter = createTRPCRouter({
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge,
-          expectedOrigin: [env.VERCEL_URL, env.NEXTAUTH_URL],
+          expectedOrigin: env.NODE_ENV == "production" ? `https://${env.DOMAIN_NAME}` : env.NEXTAUTH_URL,
           supportedAlgorithmIDs: [-7, -257],
           expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,
