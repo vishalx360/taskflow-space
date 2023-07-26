@@ -73,7 +73,7 @@ function PasskeySection() {
     }
   }
 
-  const { data: passkeys } = api.authentication.fethMyPasskeys.useQuery();
+  const { data: passkeys, isLoading } = api.authentication.fethMyPasskeys.useQuery();
 
   return (
     <div>
@@ -94,37 +94,48 @@ function PasskeySection() {
       </div>
       {/* show all connected passkey */}
       <div className=" flex flex-col space-y-2">
-        {passkeys?.length !== 0 ? (
+
+        {isLoading ? (
           <>
-            {passkeys?.map((passkey) => (
-              <PasskeyRow
-                key={passkey.id}
-                name={passkey.name}
-                id={passkey.id}
-                type="securitykey"
-                createdAt={passkey.createdAt}
-              />
-            ))}
+            <div className="my-3 h-16 w-full animate-pulse rounded-xl bg-gray-300 "></div>
+            <div className="my-3 h-16 w-full animate-pulse rounded-xl bg-gray-300 "></div>
           </>
         ) : (
+
           <>
-            <div className="rounded-md border p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="mr-5">
-                    <LucideAlertCircle className="h-8 w-8" />
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-sm font-medium capitalize">
-                      No passkeys connected
-                    </span>
-                    <span className="text-xs text-neutral-500">
-                      You have no passkeys connected to your account.
-                    </span>
+            {passkeys?.length !== 0 ? (
+              <>
+                {passkeys?.map((passkey) => (
+                  <PasskeyRow
+                    key={passkey.id}
+                    name={passkey.name}
+                    id={passkey.id}
+                    type="securitykey"
+                    createdAt={passkey.createdAt}
+                  />
+                ))}
+              </>
+            ) : (
+              <>
+                <div className="rounded-md border p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="mr-5">
+                        <LucideAlertCircle className="h-8 w-8" />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-sm font-medium capitalize">
+                          No passkeys connected
+                        </span>
+                        <span className="text-xs text-neutral-500">
+                          You have no passkeys connected to your account.
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </>
         )}
       </div>
