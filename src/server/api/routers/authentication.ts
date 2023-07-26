@@ -602,7 +602,7 @@ export const AuthenticationRouter = createTRPCRouter({
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge,
-          expectedOrigin: process.env.VERCEL_URL,
+          expectedOrigin: "https://vishalx360.dev",
           supportedAlgorithmIDs: [-7, -257],
           expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,
