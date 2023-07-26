@@ -372,7 +372,10 @@ export const AuthenticationRouter = createTRPCRouter({
   }),
   // passkey ---------------
   fetchvercel: publicProcedure.query(async ({ ctx }) => {
-    return { VERCEL_URL: process.env.VERCEL_URL, NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL }
+    return {
+      "env-mjs-VERCEL_URL": env.VERCEL_URL,
+      VERCEL_URL: process.env.VERCEL_URL,
+    }
   }),
   fethMyPasskeys: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.passkey.findMany({
@@ -600,7 +603,7 @@ export const AuthenticationRouter = createTRPCRouter({
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge,
-          expectedOrigin: env.VERCEL_URL || env.NEXTAUTH_URL,
+          expectedOrigin: process.env.VERCEL_URL,
           expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,
         };
