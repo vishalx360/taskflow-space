@@ -373,8 +373,8 @@ export const AuthenticationRouter = createTRPCRouter({
   // passkey ---------------
   fetchvercel: publicProcedure.query(async ({ ctx }) => {
     return {
-      "env-mjs-VERCEL_URL": env.VERCEL_URL,
-      VERCEL_URL: process.env.VERCEL_URL,
+      VERCEL_URL: env.VERCEL_URL,
+      NEXTAUTH_URL: env.NEXTAUTH_URL
     }
   }),
   fethMyPasskeys: protectedProcedure.query(async ({ ctx }) => {
@@ -602,7 +602,7 @@ export const AuthenticationRouter = createTRPCRouter({
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge,
-          expectedOrigin: env.NEXTAUTH_URL,
+          expectedOrigin: [env.VERCEL_URL, env.NEXTAUTH_URL],
           supportedAlgorithmIDs: [-7, -257],
           expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,
