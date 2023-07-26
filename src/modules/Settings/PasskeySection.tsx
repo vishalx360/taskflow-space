@@ -52,8 +52,10 @@ function PasskeySection() {
       });
     },
   });
+  const [isRegistering, setIsRegistering] = useState(false);
 
   async function HandelRegister() {
+    setIsRegistering(true);
     const options = await utils.authentication.passkeyGenRegOpts.fetch();
     try {
       const GetCredentialResponse = await startRegistration(options);
@@ -71,6 +73,7 @@ function PasskeySection() {
         });
       }
     }
+    setIsRegistering(false);
   }
 
   const { data: passkeys, isLoading } = api.authentication.fethMyPasskeys.useQuery();
@@ -85,6 +88,7 @@ function PasskeySection() {
       <div className="my-5 flex items-center justify-between">
         <h2 className="text-gray-500">Your passkeys</h2>
         <Button
+          isLoading={isRegistering}
           LeftIcon={LucidePlus}
           onClick={HandelRegister}
           variant="outline"
@@ -238,7 +242,6 @@ function PasskeyRow({ id, name, createdAt, type = "phone" }: PasskeyRowProps) {
                           </Button>
                           <Button
                             variant="outline"
-                            isLoading={renameMutation.isLoading}
                             type="button"
                             onClick={() => setEditMode(false)}
                             LeftIcon={LucideX}

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import BENIFIT_1_IMG from "../../../public/benifit_1.png";
 import BENIFIT_2_IMG from "../../../public/benifit_2.png";
 import BENIFIT_3_IMG from "../../../public/benifit_3.png";
+import BENIFIT_4_IMG from "../../../public/benifit_4.png";
 
 function FeaturesSection() {
   return (
@@ -41,7 +42,7 @@ const FeatureListData = [
       "Visualize and organize tasks using a powerful Kanban board system for enhanced productivity.",
   },
   {
-    image: BENIFIT_1_IMG,
+    image: BENIFIT_4_IMG,
     title: "Personal Workspaces",
     description:
       "Create your own personalized workspace to organize tasks, collaborate with teams, and boost your productivity like never before.",

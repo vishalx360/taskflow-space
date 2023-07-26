@@ -133,7 +133,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       </div>
       {/* Main Section */}
       <AnimatePresence mode="wait">
-        <div className="h-screen w-full overflow-y-auto rounded-l-3xl bg-white md:mt-3">
+        <div className="h-screen w-full overflow-y-auto rounded-l-[20px] bg-white ">
           <Scrollbars>
             <div className="container mx-auto p-0  md:px-5">
               {pathname !== "/dashboard/overview" &&
