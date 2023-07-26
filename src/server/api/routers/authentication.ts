@@ -1,9 +1,9 @@
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
+  verifyRegistrationResponse,
   type GenerateRegistrationOptionsOpts,
   type VerifiedRegistrationResponse,
-  verifyRegistrationResponse,
   type VerifyRegistrationResponseOpts,
 } from "@simplewebauthn/server";
 import {
@@ -20,6 +20,7 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 
+import { env } from "@/env.mjs";
 import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import NewUserSideEffects from "../../../utils/NewUserSideEffects";
 import {
@@ -28,7 +29,6 @@ import {
   SignUpSchema,
   UpdatePasswordSchema,
 } from "../../../utils/ValidationSchema";
-import { env } from "@/env.mjs";
 
 export const AuthenticationRouter = createTRPCRouter({
   fetchSigninOptions: publicProcedure
@@ -371,6 +371,9 @@ export const AuthenticationRouter = createTRPCRouter({
     return Promise.all(transactions);
   }),
   // passkey ---------------
+  fetchvercel: publicProcedure.query(async ({ ctx }) => {
+    return { VERCEL_URL: process.env.VERCEL_URL, NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL }
+  }),
   fethMyPasskeys: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.passkey.findMany({
       where: {
@@ -545,6 +548,7 @@ export const AuthenticationRouter = createTRPCRouter({
        * the browser if it's asked to perform registration when one of these ID's already resides
        * on it.
        */
+      supportedAlgorithmIDs: [-7, -257],
       excludeCredentials: passkeys.map(
         (passkey) =>
         ({
