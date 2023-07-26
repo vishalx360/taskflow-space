@@ -551,7 +551,6 @@ export const AuthenticationRouter = createTRPCRouter({
        * the browser if it's asked to perform registration when one of these ID's already resides
        * on it.
        */
-      supportedAlgorithmIDs: [-7, -257],
       excludeCredentials: passkeys.map(
         (passkey) =>
         ({
@@ -604,6 +603,7 @@ export const AuthenticationRouter = createTRPCRouter({
           response: body,
           expectedChallenge,
           expectedOrigin: process.env.VERCEL_URL,
+          supportedAlgorithmIDs: [-7, -257],
           expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,
         };
