@@ -310,7 +310,7 @@ export function UpdateListName({ list }: { list: List }) {
             <input
               ref={InputRef}
               disabled={mutation.isLoading}
-              className="w-full border-neutral-400 bg-transparent px-2 pb-1 font-bold outline-none  hover:border-b-2 focus:border-b-2 active:border-none border-none"
+              className="w-full border-none border-neutral-400 bg-transparent px-2 pb-1 font-bold  outline-none hover:border-b-2 focus:border-b-2 active:border-none"
               {...field}
             />
           )}
@@ -399,7 +399,7 @@ export function CreateList({ boardId }: { boardId: string }) {
                         }
                         type="submit"
                         className="flex-[2] rounded-xl"
-                      // LeftIcon={FaPlus}
+                        // LeftIcon={FaPlus}
                       >
                         Create
                       </Button>

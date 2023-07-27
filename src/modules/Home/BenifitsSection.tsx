@@ -1,4 +1,3 @@
-
 import { LucideBell, LucideLock, LucideRefreshCw } from "lucide-react";
 import Link from "next/link";
 
@@ -64,17 +63,21 @@ function BenifitsSection() {
                   />
                 </div> */}
                 <div className="row-span-2 space-y-2 p-1 text-left lg:row-span-1">
-                  <div className="mb-5 flex items-center text-blue-600 gap-2">
+                  <div className="mb-5 flex items-center gap-2 text-blue-600">
                     <benifit.icon size={30} />
-                    <h1 className="text-xl font-semibold ">
-                      {benifit.name}
-                    </h1>
+                    <h1 className="text-xl font-semibold ">{benifit.name}</h1>
                   </div>
                   <h1 className="text-2xl font-medium">{benifit.title}</h1>
-                  <p>{benifit.description}
+                  <p>
+                    {benifit.description}
                     {benifit.learnMoreLink && (
-                      <Link className="underline underline-offset-2 ml-1" href={benifit.learnMoreLink}>Learn More about passkeys</Link>)
-                    }
+                      <Link
+                        className="ml-1 underline underline-offset-2"
+                        href={benifit.learnMoreLink}
+                      >
+                        Learn More about passkeys
+                      </Link>
+                    )}
                   </p>
                 </div>
               </div>

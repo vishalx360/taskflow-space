@@ -76,7 +76,8 @@ function PasskeySection() {
     setIsRegistering(false);
   }
 
-  const { data: passkeys, isLoading } = api.authentication.fethMyPasskeys.useQuery();
+  const { data: passkeys, isLoading } =
+    api.authentication.fethMyPasskeys.useQuery();
 
   return (
     <div>
@@ -98,14 +99,12 @@ function PasskeySection() {
       </div>
       {/* show all connected passkey */}
       <div className=" flex flex-col space-y-2">
-
         {isLoading ? (
           <>
             <div className="my-3 h-16 w-full animate-pulse rounded-xl bg-gray-300 "></div>
             <div className="my-3 h-16 w-full animate-pulse rounded-xl bg-gray-300 "></div>
           </>
         ) : (
-
           <>
             {passkeys?.length !== 0 ? (
               <>

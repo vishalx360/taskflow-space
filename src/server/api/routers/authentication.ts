@@ -1,9 +1,9 @@
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
-  verifyRegistrationResponse,
   type GenerateRegistrationOptionsOpts,
   type VerifiedRegistrationResponse,
+  verifyRegistrationResponse,
   type VerifyRegistrationResponseOpts,
 } from "@simplewebauthn/server";
 import {
@@ -14,13 +14,13 @@ import { TRPCError } from "@trpc/server";
 import { hash, verify } from "argon2";
 import { z } from "zod";
 
+import { env } from "@/env.mjs";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
 
-import { env } from "@/env.mjs";
 import { BASIC_EMAIL } from "../../../utils/email-templates/EmailTemplates";
 import NewUserSideEffects from "../../../utils/NewUserSideEffects";
 import {
@@ -185,8 +185,9 @@ export const AuthenticationRouter = createTRPCRouter({
       const mailOptions = await BASIC_EMAIL({
         recevierEmail: input.email,
         subject: "Reset Password",
-        body: ` ${user?.name ? user.name : "You"
-          } have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
+        body: ` ${
+          user?.name ? user.name : "You"
+        } have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
         <br/>
         https://taskflow.space/newPassword/${newToken?.id}
         <br/>
@@ -374,8 +375,8 @@ export const AuthenticationRouter = createTRPCRouter({
   fetchvercel: publicProcedure.query(async ({ ctx }) => {
     return {
       VERCEL_URL: env.VERCEL_URL,
-      NEXTAUTH_URL: env.NEXTAUTH_URL
-    }
+      NEXTAUTH_URL: env.NEXTAUTH_URL,
+    };
   }),
   fethMyPasskeys: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.passkey.findMany({
@@ -553,11 +554,11 @@ export const AuthenticationRouter = createTRPCRouter({
        */
       excludeCredentials: passkeys.map(
         (passkey) =>
-        ({
-          id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
-          type: "public-key",
-          transports: passkey.transports,
-        } satisfies PublicKeyCredentialDescriptorFuture)
+          ({
+            id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
+            type: "public-key",
+            transports: passkey.transports,
+          } satisfies PublicKeyCredentialDescriptorFuture)
       ),
       authenticatorSelection: {
         residentKey: "discouraged",
@@ -602,7 +603,12 @@ export const AuthenticationRouter = createTRPCRouter({
         const opts: VerifyRegistrationResponseOpts = {
           response: body,
           expectedChallenge,
-          expectedOrigin: ["https://taskflow-space.vercel.app", env.NODE_ENV == "production" ? `https://${env.DOMAIN_NAME}` : env.NEXTAUTH_URL],
+          expectedOrigin: [
+            "https://taskflow-space.vercel.app",
+            env.NODE_ENV == "production"
+              ? `https://${env.DOMAIN_NAME}`
+              : env.NEXTAUTH_URL,
+          ],
           supportedAlgorithmIDs: [-7, -257],
           expectedRPID: env.DOMAIN_NAME,
           requireUserVerification: true,

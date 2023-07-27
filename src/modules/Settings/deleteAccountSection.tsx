@@ -1,5 +1,6 @@
-import { Field, Form, Formik, type FieldProps } from "formik";
+import { Field, type FieldProps,Form, Formik } from "formik";
 import { LucideInfo, LucideUserMinus } from "lucide-react";
+import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import Timeago from "react-timeago";
@@ -16,7 +17,6 @@ import {
 } from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
 
-import { useRouter } from "next/router";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
@@ -41,7 +41,7 @@ function DeleteAccountSection() {
     onSuccess: async () => {
       toast({ title: `Account Deleted Successfully` });
       await signOut();
-      router.push("/signin")
+      router.push("/signin");
     },
   });
   return (
@@ -130,7 +130,7 @@ function DeleteAccountSection() {
                         required
                         placeholder="DELETE ACCOUNT"
                         {...field}
-                      // className="text-md  block w-full rounded-xl   text-neutral-800 transition-all focus:outline-none focus:outline"
+                        // className="text-md  block w-full rounded-xl   text-neutral-800 transition-all focus:outline-none focus:outline"
                       />
                       <Button
                         isLoading={mutation.isLoading}

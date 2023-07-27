@@ -5,8 +5,8 @@ import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
-  getServerSession,
   type DefaultSession,
+  getServerSession,
   type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -55,21 +55,32 @@ export const authOptions: NextAuthOptions = {
       // seed personal workspace with default board with list and taks
       if (isNewUser) {
         // NewUserSideEffects(user.id, user.email);
-        fetch(`${env.NODE_ENV == "production" ? `https://${env.DOMAIN_NAME}` : env.NEXTAUTH_URL}/api/webhook/newuser`, {
-          method: "POST", // Specify the HTTP request type as POST
-          body: JSON.stringify({
-            email: user.email,
-            userID: user.id
-          }),
-          headers: {
-            "Content-Type": "application/json"
+        fetch(
+          `${
+            env.NODE_ENV == "production"
+              ? `https://${env.DOMAIN_NAME}`
+              : env.NEXTAUTH_URL
+          }/api/webhook/newuser`,
+          {
+            method: "POST", // Specify the HTTP request type as POST
+            body: JSON.stringify({
+              email: user.email,
+              userID: user.id,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        }).then(() => {
-          // Request was successfully sent, but we are not waiting for a response.
-          console.log("newuser webhook initiated successfully.");
-        })
+        )
+          .then(() => {
+            // Request was successfully sent, but we are not waiting for a response.
+            console.log("newuser webhook initiated successfully.");
+          })
           .catch((error) => {
-            console.error("Error occurred while initiating newuser webhook:", error);
+            console.error(
+              "Error occurred while initiating newuser webhook:",
+              error
+            );
           });
       }
     },
