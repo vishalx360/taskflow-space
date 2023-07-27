@@ -1,4 +1,4 @@
-import { Field, type FieldProps, Form, Formik } from "formik";
+import { Field, Form, Formik, type FieldProps } from "formik";
 import { LucideInfo, LucideUserMinus } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
@@ -16,12 +16,13 @@ import {
 } from "@/modules/ui/dialog";
 import { api } from "@/utils/api";
 
+import { useRouter } from "next/router";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 function DeleteAccountSection() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const router = useRouter();
   const { toast } = useToast();
   const { data: deleteConsequences, isLoading } =
     api.authentication.fetchDeleteConsequences.useQuery(undefined, {
@@ -40,6 +41,7 @@ function DeleteAccountSection() {
     onSuccess: async () => {
       toast({ title: `Account Deleted Successfully` });
       await signOut();
+      router.push("/signin")
     },
   });
   return (
@@ -128,14 +130,14 @@ function DeleteAccountSection() {
                         required
                         placeholder="DELETE ACCOUNT"
                         {...field}
-                        // className="text-md  block w-full rounded-xl   text-neutral-800 transition-all focus:outline-none focus:outline"
+                      // className="text-md  block w-full rounded-xl   text-neutral-800 transition-all focus:outline-none focus:outline"
                       />
                       <Button
                         isLoading={mutation.isLoading}
                         disabled={
                           !form.dirty || Object.keys(form.errors).length !== 0
                         }
-                        loadingText="Leave..."
+                        loadingText="Deleting..."
                         variant="destructiveOutline"
                         className="w-fit whitespace-nowrap"
                       >
