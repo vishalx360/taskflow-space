@@ -1,6 +1,10 @@
 import { Transition } from "@headlessui/react";
 import { motion } from "framer-motion";
-import { LucideAlignRight, LucideArrowBigRight,LucideArrowRight  } from "lucide-react";
+import {
+  LucideAlignRight,
+  LucideArrowBigRight,
+  LucideArrowRight,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
@@ -13,19 +17,7 @@ import Divider from "../Global/Divider";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 
-async function handelLogout() {
-  await signOut();
-  return;
-}
-
-const DesktopNavLinks = [
-  { title: "Benefit", href: "/#benifits" },
-  { title: "Features", href: "/#features" },
-  { title: "Pricing", href: "/#pricing" },
-  { title: "About us", href: "/#aboutus" },
-];
-
-const MobileNavLinks = [
+const NavLinks = [
   { title: "Benefit", href: "/#benifits" },
   { title: "Features", href: "/#features" },
   { title: "Pricing", href: "/#pricing" },
@@ -141,11 +133,15 @@ function HomeNavbar() {
                 </div>
               )}
 
-              {MobileNavLinks.map((navlink) => (
+              {NavLinks.map((navlink) => (
                 <Link
                   key={navlink.href}
                   className="transform text-gray-700 transition-colors duration-300  lg:mx-8"
-                  href={navlink.href}
+                  href={
+                    status === "authenticated"
+                      ? "/home" + navlink.href
+                      : navlink.href
+                  }
                 >
                   {navlink.title}
                 </Link>
@@ -176,23 +172,20 @@ function HomeNavbar() {
                 </Link>
               )}
             </div>
-
-            {/* <a
-                className="mt-4 block rounded-lg bg-green-600 px-5 py-2 text-center text-sm capitalize text-white hover:bg-green-500 lg:mt-0 lg:w-auto"
-                href="#"
-              >
-                Get started
-              </a> */}
           </Transition>
         </div>
         {/* desktop navbar */}
         <div className="hidden lg:block">
           <div className="mt-0 flex flex-row items-center  ">
-            {DesktopNavLinks.map((navlink) => (
+            {NavLinks.map((navlink) => (
               <Link
                 key={navlink.href}
                 className="mx-8 scroll-smooth border-black  text-gray-700  duration-300  hover:border-b-2"
-                href={navlink.href}
+                href={
+                  status === "authenticated"
+                    ? "/home" + navlink.href
+                    : navlink.href
+                }
               >
                 {navlink.title}
               </Link>

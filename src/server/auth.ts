@@ -56,9 +56,10 @@ export const authOptions: NextAuthOptions = {
       if (isNewUser) {
         // NewUserSideEffects(user.id, user.email);
         fetch(
-          `${env.NODE_ENV == "production"
-            ? `https://${env.DOMAIN_NAME}`
-            : env.NEXTAUTH_URL
+          `${
+            env.NODE_ENV == "production"
+              ? `https://${env.DOMAIN_NAME}`
+              : env.NEXTAUTH_URL
           }/api/webhook/newuser`,
           {
             method: "POST", // Specify the HTTP request type as POST
