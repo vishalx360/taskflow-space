@@ -56,10 +56,9 @@ export const authOptions: NextAuthOptions = {
       if (isNewUser) {
         // NewUserSideEffects(user.id, user.email);
         fetch(
-          `${
-            env.NODE_ENV == "production"
-              ? `https://${env.DOMAIN_NAME}`
-              : env.NEXTAUTH_URL
+          `${env.NODE_ENV == "production"
+            ? `https://${env.DOMAIN_NAME}`
+            : env.NEXTAUTH_URL
           }/api/webhook/newuser`,
           {
             method: "POST", // Specify the HTTP request type as POST
@@ -217,7 +216,12 @@ export const authOptions: NextAuthOptions = {
           verification = await verifyAuthenticationResponse({
             response: passkey,
             expectedChallenge,
-            expectedOrigin: env.VERCEL_URL ?? env.NEXTAUTH_URL,
+            expectedOrigin: [
+              "https://taskflow-space.vercel.app",
+              env.NODE_ENV == "production"
+                ? `https://${env.DOMAIN_NAME}`
+                : env.NEXTAUTH_URL,
+            ],
             expectedRPID: env.DOMAIN_NAME,
             authenticator: {
               counter: registeredPasskey.counter,
