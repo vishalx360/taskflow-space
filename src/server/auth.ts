@@ -53,12 +53,13 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   events: {
-    // async signIn({ user, isNewUser }) {
-    //   // seed personal workspace with default board with list and taks
-    //   if (isNewUser) {
-    //     await NewUserSideEffects(user.id, user.email);
-    //   }
-    // },
+    async signIn({ user, isNewUser }) {
+      // seed personal workspace with default board with list and taks
+      if (isNewUser) {
+        NewUserSideEffects(user.id, user.email);
+      }
+    },
+
   },
   callbacks: {
     session: ({ session, token }) => {
