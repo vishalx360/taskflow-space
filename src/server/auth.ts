@@ -23,7 +23,6 @@ import {
   SigninSchema,
   SigninTokenSchema,
 } from "@/utils/ValidationSchema";
-
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -56,10 +55,25 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, isNewUser }) {
       // seed personal workspace with default board with list and taks
       if (isNewUser) {
-        NewUserSideEffects(user.id, user.email);
+        // NewUserSideEffects(user.id, user.email);
+        fetch("/api/webhook/newuser", {
+          method: "POST", // Specify the HTTP request type as POST
+          body: JSON.stringify({
+            email: user.email,
+            userID: user.id
+          }),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }).then(() => {
+          // Request was successfully sent, but we are not waiting for a response.
+          console.log("newuser webhook initiated successfully.");
+        })
+          .catch((error) => {
+            console.error("Error occurred while initiating newuser webhook:", error);
+          });
       }
     },
-
   },
   callbacks: {
     session: ({ session, token }) => {
