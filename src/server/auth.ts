@@ -52,6 +52,14 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  events: {
+    async signIn({ user, isNewUser }) {
+      // seed personal workspace with default board with list and taks
+      if (isNewUser) {
+        await NewUserSideEffects(user.id, user.email);
+      }
+    },
+  },
   callbacks: {
     session: ({ session, token }) => {
       if (token) {
@@ -63,14 +71,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
 
-    jwt: async ({ token, user, isNewUser }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        // seed personal workspace with default board with list and taks
-        if (isNewUser) {
-          await NewUserSideEffects(user.id, user.email);
-        }
       }
       return token;
     },
