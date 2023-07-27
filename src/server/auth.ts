@@ -5,8 +5,8 @@ import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
 import { type GetServerSidePropsContext } from "next";
 import {
-  type DefaultSession,
   getServerSession,
+  type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -17,7 +17,6 @@ import { env } from "@/env.mjs";
 import { redisClient } from "@/lib/redisClient";
 import { prisma } from "@/server/db";
 import { signJTW, verifyJWT } from "@/utils/jwt";
-import NewUserSideEffects from "@/utils/NewUserSideEffects";
 import {
   PasskeySigninSchema,
   SigninSchema,
@@ -56,7 +55,7 @@ export const authOptions: NextAuthOptions = {
       // seed personal workspace with default board with list and taks
       if (isNewUser) {
         // NewUserSideEffects(user.id, user.email);
-        fetch(`${env.NEXTAUTH_URL}/api/webhook/newuser`, {
+        fetch(`${env.NODE_ENV == "production" ? `https://${env.DOMAIN_NAME}` : env.NEXTAUTH_URL}/api/webhook/newuser`, {
           method: "POST", // Specify the HTTP request type as POST
           body: JSON.stringify({
             email: user.email,
