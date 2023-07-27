@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
       // seed personal workspace with default board with list and taks
       if (isNewUser) {
         // NewUserSideEffects(user.id, user.email);
-        fetch("/api/webhook/newuser", {
+        fetch(`${env.NEXTAUTH_URL}/api/webhook/newuser`, {
           method: "POST", // Specify the HTTP request type as POST
           body: JSON.stringify({
             email: user.email,
