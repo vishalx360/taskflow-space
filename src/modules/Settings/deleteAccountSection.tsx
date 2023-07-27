@@ -1,4 +1,4 @@
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { LucideInfo, LucideUserMinus } from "lucide-react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";

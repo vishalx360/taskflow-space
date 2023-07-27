@@ -1,5 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { motion } from "framer-motion";
+import { LucideAlignRight, LucideArrowBigRight,LucideArrowRight  } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
@@ -8,6 +9,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 import getGravatar from "@/utils/getGravatar";
 
+import Divider from "../Global/Divider";
 import LogoImage from "../Global/LogoImage";
 import { UserMenu } from "../Global/UserMenu";
 
@@ -28,8 +30,6 @@ const MobileNavLinks = [
   { title: "Features", href: "/#features" },
   { title: "Pricing", href: "/#pricing" },
   { title: "About us", href: "/#aboutus" },
-  { title: "Sign in", href: "/signin" },
-  { title: "Sign up", href: "/signup" },
 ];
 
 function HomeNavbar() {
@@ -127,7 +127,7 @@ function HomeNavbar() {
             leave="transition-all duration-150"
             leaveFrom="translate-y-0 w-full opacity-100"
             leaveTo="-translate-y-10 opacity-0"
-            className="absolute inset-x-0 top-20 z-20 block w-full rounded-b-xl bg-neutral-100 px-6 py-4 shadow-xl transition-all duration-300 ease-in-out"
+            className="absolute inset-x-0 top-20 z-20 block w-full rounded-b-xl bg-neutral-50 px-6 py-4 shadow-xl transition-all duration-300 ease-in-out"
           >
             <div className="flex flex-col space-y-5">
               {status === "authenticated" && (
@@ -150,16 +150,30 @@ function HomeNavbar() {
                   {navlink.title}
                 </Link>
               ))}
+              <Divider />
+              {status === "unauthenticated" ? (
+                <>
+                  <Link
+                    href="/api/auth/signin"
+                    className="text-left font-bold text-gray-700 transition-colors duration-300  lg:mx-8"
+                  >
+                    Signin <LucideArrowRight className="ml-2 inline" />
+                  </Link>
 
-              {status === "authenticated" && (
-                <button
-                  onClick={() => {
-                    void handelLogout();
-                  }}
-                  className="text-left text-gray-700 transition-colors duration-300  lg:mx-8"
+                  <Link
+                    href="/api/auth/signup"
+                    className="text-left font-bold text-gray-700 transition-colors duration-300  lg:mx-8"
+                  >
+                    Signup <LucideArrowRight className="ml-2 inline" />
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  href="/api/auth/signout"
+                  className="text-left font-bold text-red-700 transition-colors duration-300  lg:mx-8"
                 >
                   Logout
-                </button>
+                </Link>
               )}
             </div>
 

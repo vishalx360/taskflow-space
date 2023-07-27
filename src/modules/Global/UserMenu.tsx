@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { RxCaretSort } from "react-icons/rx";
 
 import {
@@ -30,9 +30,7 @@ import { SupportModal } from "./SupportModal";
 
 export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
   const { data: session } = useSession();
-  async function handelLogout() {
-    await signOut();
-  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -121,13 +119,12 @@ export function UserMenu({ withDetails = false }: { withDetails?: boolean }) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer text-red-600"
-          onClick={handelLogout}
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
+        <Link href="/api/auth/signout">
+          <DropdownMenuItem className="cursor-pointer text-red-600">
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );
