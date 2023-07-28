@@ -167,12 +167,12 @@ export const BoardRouter = createTRPCRouter({
         });
       }
 
-      await ctx.prisma.board.update({
+      const updateLastVisited = ctx.prisma.board.update({
         where: { id: input.boardId },
         data: { updatedAt: new Date() },
       });
 
-      return ctx.prisma.board.findUnique({
+      const findQuery = ctx.prisma.board.findUnique({
         where: { id: input.boardId },
         include: {
           lists: {
@@ -183,6 +183,10 @@ export const BoardRouter = createTRPCRouter({
           Workspace: true,
         },
       });
+
+      const result = await Promise.all([updateLastVisited, findQuery]);
+
+      return result[1];
     }),
 
   updateBoard: protectedProcedure
