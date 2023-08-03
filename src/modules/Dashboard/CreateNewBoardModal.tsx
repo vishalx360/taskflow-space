@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/modules/ui/select";
 import { api } from "@/utils/api";
-import { CreateNewBoardSchema } from "@/utils/ValidationSchema";
+import { CreateBoardSchema } from "@/utils/ValidationSchema";
 
 import Backgrounds from "../../utils/BoardBackgrounds.json";
 import UpdateBoardBackgroundSection from "../Board/BoardSettingsModal/UpdateBoardBackgroundSection";
@@ -87,7 +87,7 @@ export default function CreateNewBoardModal({
   const { toast } = useToast();
   const { data: workspaces } = api.workspace.getAllWorkspace.useQuery();
 
-  const mutation = api.board.createNewBoard.useMutation({
+  const mutation = api.board.createBoard.useMutation({
     onError(error) {
       toast({
         variant: "destructive",
@@ -144,7 +144,7 @@ export default function CreateNewBoardModal({
                 workspaceId: workspaceId || "",
                 background: GetRandomBackgroundGradient(),
               }}
-              validationSchema={toFormikValidationSchema(CreateNewBoardSchema)}
+              validationSchema={toFormikValidationSchema(CreateBoardSchema)}
               onSubmit={(values) => {
                 mutation.mutate(values);
               }}

@@ -8,8 +8,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "start": "next start",
-    "format": "npx prettier --write . --ignore-path .gitignore --cache",
-    "lint": "next lint -- --ignore-path .gitignore",
+    "format": "npx prettier --write . --ignore-path .prettierignore --cache",
+    "lint": "next lint -- --ignore-path .eslintignore",
     "lint:fix": "npm run format && npm run lint -- --fix",
     "resetdb": "npx prisma migrate reset --preview-feature",
     "updatedb": "npx prisma db push"

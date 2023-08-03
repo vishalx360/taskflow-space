@@ -6,7 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import Backgrounds from "../../../utils/BoardBackgrounds.json";
 import {
-  CreateNewBoardSchema,
+  CreateBoardSchema,
   UpdateBoardSchema,
 } from "../../../utils/ValidationSchema";
 
@@ -46,51 +46,9 @@ export const BoardRouter = createTRPCRouter({
         orderBy: { updatedAt: "desc" },
       });
     }),
-  deleteBoard: protectedProcedure
-    .input(z.object({ boardId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const board = await ctx.prisma.board.findUnique({
-        where: { id: input.boardId },
-        select: { workspaceId: true },
-      });
-      if (!board) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Board not found.",
-        });
-      }
 
-      const hasPermission = await ctx.prisma.workspaceMember.count({
-        where: {
-          workspaceId: board.workspaceId,
-          userId: ctx.session.user.id,
-          role: { in: ["OWNER", "ADMIN"] },
-        },
-      });
-
-      if (!hasPermission) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "You dont have permission to delete this board.",
-        });
-      }
-
-      await ctx.prisma.board.delete({
-        where: { id: input.boardId },
-      });
-
-      return ctx.pusher.trigger(
-        `workspace-${board.workspaceId}`,
-        "workspace:update",
-        {
-          workspaceId: board.workspaceId,
-          initiatorId: ctx.session.user.id,
-        }
-      );
-    }),
-
-  createNewBoard: protectedProcedure
-    .input(CreateNewBoardSchema)
+  createBoard: protectedProcedure
+    .input(CreateBoardSchema)
     .mutation(async ({ ctx, input }) => {
       // check if board name is taken
       const nameTaken = await ctx.prisma.board.count({
@@ -137,7 +95,6 @@ export const BoardRouter = createTRPCRouter({
       );
       return newBoard;
     }),
-
   getBoard: protectedProcedure
     .input(z.object({ boardId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -243,5 +200,48 @@ export const BoardRouter = createTRPCRouter({
         name: input.name,
         background: input.background,
       };
+    }),
+
+  deleteBoard: protectedProcedure
+    .input(z.object({ boardId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const board = await ctx.prisma.board.findUnique({
+        where: { id: input.boardId },
+        select: { workspaceId: true },
+      });
+      if (!board) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Board not found.",
+        });
+      }
+
+      const hasPermission = await ctx.prisma.workspaceMember.count({
+        where: {
+          workspaceId: board.workspaceId,
+          userId: ctx.session.user.id,
+          role: { in: ["OWNER", "ADMIN"] },
+        },
+      });
+
+      if (!hasPermission) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You dont have permission to delete this board.",
+        });
+      }
+
+      await ctx.prisma.board.delete({
+        where: { id: input.boardId },
+      });
+
+      return ctx.pusher.trigger(
+        `workspace-${board.workspaceId}`,
+        "workspace:update",
+        {
+          workspaceId: board.workspaceId,
+          initiatorId: ctx.session.user.id,
+        }
+      );
     }),
 });
