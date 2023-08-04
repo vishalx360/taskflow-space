@@ -9,8 +9,8 @@ import {
 } from "drizzle-orm/pg-core";
 
 // autnentication tables
-export const accounts = pgTable(
-  "accounts",
+export const account = pgTable(
+  "account",
   {
     id: varchar("id", { length: 191 }).primaryKey().notNull(),
     userId: varchar("userId", { length: 191 }).notNull(),
@@ -29,14 +29,14 @@ export const accounts = pgTable(
   },
   (account) => ({
     providerProviderAccountIdIndex: uniqueIndex(
-      "accounts__provider__providerAccountId__idx"
+      "account__provider__providerAccountId__idx"
     ).on(account.provider, account.providerAccountId),
-    userIdIndex: index("accounts__userId__idx").on(account.userId),
+    userIdIndex: index("account__userId__idx").on(account.userId),
   })
 );
 
-export const sessions = pgTable(
-  "sessions",
+export const session = pgTable(
+  "session",
   {
     id: varchar("id", { length: 191 }).primaryKey().notNull(),
     sessionToken: varchar("sessionToken", { length: 191 }).notNull(),
@@ -46,15 +46,15 @@ export const sessions = pgTable(
     updated_at: timestamp("updated_at").notNull().defaultNow(),
   },
   (session) => ({
-    sessionTokenIndex: uniqueIndex("sessions__sessionToken__idx").on(
+    sessionTokenIndex: uniqueIndex("session__sessionToken__idx").on(
       session.sessionToken
     ),
-    userIdIndex: index("sessions__userId__idx").on(session.userId),
+    userIdIndex: index("session__userId__idx").on(session.userId),
   })
 );
 
-export const users = pgTable(
-  "users",
+export const user = pgTable(
+  "user",
   {
     id: varchar("id", { length: 191 }).primaryKey().notNull(),
     name: varchar("name", { length: 191 }),
@@ -65,12 +65,14 @@ export const users = pgTable(
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   },
   (user) => ({
-    emailIndex: uniqueIndex("users__email__idx").on(user.email),
+    emailIndex: uniqueIndex("user__email__idx").on(user.email),
   })
 );
 
-export const verificationTokens = pgTable(
-  "verification_tokens",
+// export const userRelation = pgTable("")
+
+export const verificationToken = pgTable(
+  "verification_token",
   {
     identifier: varchar("identifier", { length: 191 }).primaryKey().notNull(),
     token: varchar("token", { length: 191 }).notNull(),
@@ -79,24 +81,24 @@ export const verificationTokens = pgTable(
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
   },
   (verificationToken) => ({
-    tokenIndex: uniqueIndex("verification_tokens__token__idx").on(
+    tokenIndex: uniqueIndex("verification_token__token__idx").on(
       verificationToken.token
     ),
   })
 );
 
 export const resetPasswordToken = pgTable("ResetPasswordToken", {
-  id: text("id").primaryKey().notNull(),
+  id: varchar("id", { length: 191 }).primaryKey().notNull(),
   expires: timestamp("expires", { precision: 3, mode: "string" }).notNull(),
   email: text("email").notNull(),
 });
 
 export const passkey = pgTable("Passkey", {
-  id: text("id").primaryKey().notNull(),
+  id: varchar("id", { length: 191 }).primaryKey().notNull(),
   name: text("name").notNull(),
   userId: text("userId")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    .references(() => user.id, { onDelete: "cascade", onUpdate: "cascade" }),
   createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
     .defaultNow()
     .notNull(),

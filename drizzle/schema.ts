@@ -1,6 +1,6 @@
 import { boolean, index, integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
-import { users } from "./auth_schema";
+import { user } from "./auth_schema";
 
 export const workspaceMemberRoles = pgEnum("WorkspaceMemberRoles", [
   "MEMBER",
@@ -8,7 +8,7 @@ export const workspaceMemberRoles = pgEnum("WorkspaceMemberRoles", [
   "OWNER",
 ]);
 
-export const workspace = pgTable("Workspace", {
+export const workspace = pgTable("workspace", {
   id: text("id").primaryKey().notNull(),
   createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
     .defaultNow()
@@ -17,7 +17,7 @@ export const workspace = pgTable("Workspace", {
   personal: boolean("personal").default(false).notNull(),
 });
 
-export const board = pgTable("Board", {
+export const board = pgTable("board", {
   id: text("id").primaryKey().notNull(),
   createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
     .defaultNow()
@@ -36,7 +36,7 @@ export const board = pgTable("Board", {
     .notNull(),
 });
 
-export const list = pgTable("List", {
+export const list = pgTable("list", {
   id: text("id").primaryKey().notNull(),
   createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
     .defaultNow()
@@ -47,7 +47,7 @@ export const list = pgTable("List", {
     .references(() => board.id, { onDelete: "cascade", onUpdate: "cascade" }),
 });
 
-export const task = pgTable("Task", {
+export const task = pgTable("task", {
   id: text("id").primaryKey().notNull(),
   createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
     .defaultNow()
@@ -60,23 +60,21 @@ export const task = pgTable("Task", {
   rank: text("rank").notNull(),
 });
 
-export const taskMember = pgTable(
-  "TaskMember",
-  {
-    id: text("id").primaryKey().notNull(),
-    createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
-      .defaultNow()
-      .notNull(),
-    taskId: text("taskId")
-      .notNull()
-      .references(() => task.id, { onDelete: "cascade", onUpdate: "cascade" }),
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, {
-        onDelete: "restrict",
-        onUpdate: "cascade",
-      }),
-  },
+export const taskMember = pgTable("taskMember", {
+  id: text("id").primaryKey().notNull(),
+  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  taskId: text("taskId")
+    .notNull()
+    .references(() => task.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+},
   (table) => {
     return {
       userIdTaskIdIdx: index("TaskMember_userId_taskId_idx").on(
@@ -88,17 +86,17 @@ export const taskMember = pgTable(
 );
 
 export const workspaceMemberInvitation = pgTable(
-  "WorkspaceMemberInvitation",
+  "workspaceMemberInvitation",
   {
     id: text("id").primaryKey().notNull(),
-    recepientId: text("recepientId").references(() => users.id, {
+    recepientId: text("recepientId").references(() => user.id, {
       onDelete: "set null",
       onUpdate: "cascade",
     }),
     recepientEmail: text("recepientEmail").notNull(),
     senderId: text("senderId")
       .notNull()
-      .references(() => users.id, {
+      .references(() => user.id, {
         onDelete: "restrict",
         onUpdate: "cascade",
       }),
@@ -123,12 +121,12 @@ export const workspaceMemberInvitation = pgTable(
 );
 
 export const workspaceMember = pgTable(
-  "WorkspaceMember",
+  "workspaceMember",
   {
     id: text("id").primaryKey().notNull(),
     userId: text("userId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade", onUpdate: "cascade" }),
     role: workspaceMemberRoles("role").default("MEMBER").notNull(),
     workspaceId: text("workspaceId")
       .notNull()

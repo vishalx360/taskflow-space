@@ -3,12 +3,12 @@ import { and, eq } from "drizzle-orm";
 import { NeonHttpDatabase } from "drizzle-orm/neon-http";
 import type { Adapter } from "next-auth/adapters";
 
-import { accounts, sessions, users, verificationTokens } from "./auth_schema";
+import { account, session, user, verificationToken } from "./auth_schema";
 
 export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
   return {
     async createUser(userData) {
-      await db.insert(users).values({
+      await db.insert(user).values({
         id: createId(),
         email: userData.email,
         emailVerified: userData.emailVerified,
@@ -17,8 +17,8 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
       });
       const rows = await db
         .select()
-        .from(users)
-        .where(eq(users.email, userData.email))
+        .from(user)
+        .where(eq(user.email, userData.email))
         .limit(1);
       const row = rows[0];
       if (!row) throw new Error("User not found");
@@ -27,8 +27,8 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     async getUser(id) {
       const rows = await db
         .select()
-        .from(users)
-        .where(eq(users.id, id))
+        .from(user)
+        .where(eq(user.id, id))
         .limit(1);
       const row = rows[0];
       return row ?? null;
@@ -36,8 +36,8 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     async getUserByEmail(email) {
       const rows = await db
         .select()
-        .from(users)
-        .where(eq(users.email, email))
+        .from(user)
+        .where(eq(user.email, email))
         .limit(1);
       const row = rows[0];
       return row ?? null;
@@ -45,12 +45,12 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     async getUserByAccount({ providerAccountId, provider }) {
       const rows = await db
         .select()
-        .from(users)
-        .innerJoin(accounts, eq(users.id, accounts.userId))
+        .from(user)
+        .innerJoin(account, eq(user.id, account.userId))
         .where(
           and(
-            eq(accounts.providerAccountId, providerAccountId),
-            eq(accounts.provider, provider)
+            eq(account.providerAccountId, providerAccountId),
+            eq(account.provider, provider)
           )
         )
         .limit(1);
@@ -59,21 +59,21 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     },
     async updateUser({ id, ...userData }) {
       if (!id) throw new Error("User not found");
-      await db.update(users).set(userData).where(eq(users.id, id));
+      await db.update(user).set(userData).where(eq(user.id, id));
       const rows = await db
         .select()
-        .from(users)
-        .where(eq(users.id, id))
+        .from(user)
+        .where(eq(user.id, id))
         .limit(1);
       const row = rows[0];
       if (!row) throw new Error("User not found");
       return row;
     },
     async deleteUser(userId) {
-      await db.delete(users).where(eq(users.id, userId));
+      await db.delete(user).where(eq(user.id, userId));
     },
     async linkAccount(account) {
-      await db.insert(accounts).values({
+      await db.insert(account).values({
         id: createId(),
         userId: account.userId,
         type: account.type,
@@ -90,16 +90,16 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     },
     async unlinkAccount({ providerAccountId, provider }) {
       await db
-        .delete(accounts)
+        .delete(account)
         .where(
           and(
-            eq(accounts.providerAccountId, providerAccountId),
-            eq(accounts.provider, provider)
+            eq(account.providerAccountId, providerAccountId),
+            eq(account.provider, provider)
           )
         );
     },
     async createSession(data) {
-      await db.insert(sessions).values({
+      await db.insert(session).values({
         id: createId(),
         expires: data.expires,
         sessionToken: data.sessionToken,
@@ -107,8 +107,8 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
       });
       const rows = await db
         .select()
-        .from(sessions)
-        .where(eq(sessions.sessionToken, data.sessionToken))
+        .from(session)
+        .where(eq(session.sessionToken, data.sessionToken))
         .limit(1);
       const row = rows[0];
       if (!row) throw new Error("User not found");
@@ -117,17 +117,17 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     async getSessionAndUser(sessionToken) {
       const rows = await db
         .select({
-          user: users,
+          user: user,
           session: {
-            id: sessions.id,
-            userId: sessions.userId,
-            sessionToken: sessions.sessionToken,
-            expires: sessions.expires,
+            id: session.id,
+            userId: session.userId,
+            sessionToken: session.sessionToken,
+            expires: session.expires,
           },
         })
-        .from(sessions)
-        .innerJoin(users, eq(users.id, sessions.userId))
-        .where(eq(sessions.sessionToken, sessionToken))
+        .from(session)
+        .innerJoin(user, eq(user.id, session.userId))
+        .where(eq(session.sessionToken, sessionToken))
         .limit(1);
       const row = rows[0];
       if (!row) return null;
@@ -144,31 +144,31 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     },
     async updateSession(session) {
       await db
-        .update(sessions)
+        .update(session)
         .set(session)
-        .where(eq(sessions.sessionToken, session.sessionToken));
+        .where(eq(session.sessionToken, session.sessionToken));
       const rows = await db
         .select()
-        .from(sessions)
-        .where(eq(sessions.sessionToken, session.sessionToken))
+        .from(session)
+        .where(eq(session.sessionToken, session.sessionToken))
         .limit(1);
       const row = rows[0];
       if (!row) throw new Error("Coding bug: updated session not found");
       return row;
     },
     async deleteSession(sessionToken) {
-      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken));
+      await db.delete(session).where(eq(session.sessionToken, sessionToken));
     },
     async createVerificationToken(verificationToken) {
-      await db.insert(verificationTokens).values({
+      await db.insert(verificationToken).values({
         expires: verificationToken.expires,
         identifier: verificationToken.identifier,
         token: verificationToken.token,
       });
       const rows = await db
         .select()
-        .from(verificationTokens)
-        .where(eq(verificationTokens.token, verificationToken.token))
+        .from(verificationToken)
+        .where(eq(verificationToken.token, verificationToken.token))
         .limit(1);
       const row = rows[0];
       if (!row)
@@ -178,17 +178,17 @@ export function DrizzleAdapter(db: NeonHttpDatabase): Adapter {
     async useVerificationToken({ identifier, token }) {
       const rows = await db
         .select()
-        .from(verificationTokens)
-        .where(eq(verificationTokens.token, token))
+        .from(verificationToken)
+        .where(eq(verificationToken.token, token))
         .limit(1);
       const row = rows[0];
       if (!row) return null;
       await db
-        .delete(verificationTokens)
+        .delete(verificationToken)
         .where(
           and(
-            eq(verificationTokens.token, token),
-            eq(verificationTokens.identifier, identifier)
+            eq(verificationToken.token, token),
+            eq(verificationToken.identifier, identifier)
           )
         );
       return row;
