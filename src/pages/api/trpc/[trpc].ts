@@ -7,9 +7,6 @@ import { createTRPCContext } from "@/server/api/trpc";
 // export API handler
 export default createNextApiHandler({
   router: appRouter,
-  batching: {
-    enabled: false,
-  },
   createContext: createTRPCContext,
   onError:
     env.NODE_ENV === "development"
