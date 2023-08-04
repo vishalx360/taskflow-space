@@ -66,7 +66,7 @@ export const UpdatePasswordSchema = z
     path: ["newPassword"], // path of error
   });
 
-export const CreateNewBoardSchema = z.object({
+export const CreateBoardSchema = z.object({
   name: z
     .string()
     .min(4, "Must contain at least 4 characters")

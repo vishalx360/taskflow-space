@@ -58,6 +58,7 @@ export default function TaskModal({
       taskId: defaultTaskData.id,
     },
     {
+      enabled: isOpen,
       placeholderData: defaultTaskData,
       cacheTime: 1000,
     }
