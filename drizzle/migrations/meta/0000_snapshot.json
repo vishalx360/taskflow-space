@@ -98,17 +98,12 @@
       "indexes": {
         "accounts__provider__providerAccountId__idx": {
           "name": "accounts__provider__providerAccountId__idx",
-          "columns": [
-            "provider",
-            "providerAccountId"
-          ],
+          "columns": ["provider", "providerAccountId"],
           "isUnique": true
         },
         "accounts__userId__idx": {
           "name": "accounts__userId__idx",
-          "columns": [
-            "userId"
-          ],
+          "columns": ["userId"],
           "isUnique": false
         }
       },
@@ -162,16 +157,12 @@
       "indexes": {
         "sessions__sessionToken__idx": {
           "name": "sessions__sessionToken__idx",
-          "columns": [
-            "sessionToken"
-          ],
+          "columns": ["sessionToken"],
           "isUnique": true
         },
         "sessions__userId__idx": {
           "name": "sessions__userId__idx",
-          "columns": [
-            "userId"
-          ],
+          "columns": ["userId"],
           "isUnique": false
         }
       },
@@ -231,9 +222,7 @@
       "indexes": {
         "users__email__idx": {
           "name": "users__email__idx",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -281,9 +270,7 @@
       "indexes": {
         "verification_tokens__token__idx": {
           "name": "verification_tokens__token__idx",
-          "columns": [
-            "token"
-          ],
+          "columns": ["token"],
           "isUnique": true
         }
       },

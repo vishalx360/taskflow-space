@@ -1,89 +1,151 @@
-import {
-    index,
-    integer,
-    pgTable,
-    text,
-    timestamp,
-    uniqueIndex,
-    varchar
-} from 'drizzle-orm/pg-core';
+import { boolean, index, integer, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
+import { users } from "./auth_schema";
 
+export const workspaceMemberRoles = pgEnum("WorkspaceMemberRoles", [
+  "MEMBER",
+  "ADMIN",
+  "OWNER",
+]);
 
+export const workspace = pgTable("Workspace", {
+  id: text("id").primaryKey().notNull(),
+  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  name: text("name").notNull(),
+  personal: boolean("personal").default(false).notNull(),
+});
 
-// autnentication tables
-export const accounts = pgTable(
-    'accounts',
-    {
-        id: varchar('id', { length: 191 }).primaryKey().notNull(),
-        userId: varchar('userId', { length: 191 }).notNull(),
-        type: varchar('type', { length: 191 }).notNull(),
-        provider: varchar('provider', { length: 191 }).notNull(),
-        providerAccountId: varchar('providerAccountId', { length: 191 }).notNull(),
-        access_token: text('access_token'),
-        expires_in: integer('expires_in'),
-        id_token: text('id_token'),
-        refresh_token: text('refresh_token'),
-        refresh_token_expires_in: integer('refresh_token_expires_in'),
-        scope: varchar('scope', { length: 191 }),
-        token_type: varchar('token_type', { length: 191 }),
-        createdAt: timestamp('createdAt').defaultNow().notNull(),
-        updatedAt: timestamp('updatedAt').defaultNow().notNull(),
-    },
-    account => ({
-        providerProviderAccountIdIndex: uniqueIndex(
-            'accounts__provider__providerAccountId__idx'
-        ).on(account.provider, account.providerAccountId),
-        userIdIndex: index('accounts__userId__idx').on(account.userId),
-    })
+export const board = pgTable("Board", {
+  id: text("id").primaryKey().notNull(),
+  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { precision: 3, mode: "string" }).notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  workspaceId: text("workspaceId")
+    .notNull()
+    .references(() => workspace.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  background: text("background")
+    .default("gradient:linear-gradient(to right, #0f2027, #203a43, #2c5364)")
+    .notNull(),
+});
+
+export const list = pgTable("List", {
+  id: text("id").primaryKey().notNull(),
+  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  name: text("name").notNull(),
+  boardId: text("boardId")
+    .notNull()
+    .references(() => board.id, { onDelete: "cascade", onUpdate: "cascade" }),
+});
+
+export const task = pgTable("Task", {
+  id: text("id").primaryKey().notNull(),
+  createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  listId: text("listId")
+    .notNull()
+    .references(() => list.id, { onDelete: "cascade", onUpdate: "cascade" }),
+  rank: text("rank").notNull(),
+});
+
+export const taskMember = pgTable(
+  "TaskMember",
+  {
+    id: text("id").primaryKey().notNull(),
+    createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+      .defaultNow()
+      .notNull(),
+    taskId: text("taskId")
+      .notNull()
+      .references(() => task.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, {
+        onDelete: "restrict",
+        onUpdate: "cascade",
+      }),
+  },
+  (table) => {
+    return {
+      userIdTaskIdIdx: index("TaskMember_userId_taskId_idx").on(
+        table.taskId,
+        table.userId
+      ),
+    };
+  }
 );
 
-export const sessions = pgTable(
-    'sessions',
-    {
-        id: varchar('id', { length: 191 }).primaryKey().notNull(),
-        sessionToken: varchar('sessionToken', { length: 191 }).notNull(),
-        userId: varchar('userId', { length: 191 }).notNull(),
-        expires: timestamp('expires').notNull(),
-        created_at: timestamp('created_at').notNull().defaultNow(),
-        updated_at: timestamp('updated_at').notNull().defaultNow(),
-    },
-    session => ({
-        sessionTokenIndex: uniqueIndex('sessions__sessionToken__idx').on(
-            session.sessionToken
-        ),
-        userIdIndex: index('sessions__userId__idx').on(session.userId),
-    })
+export const workspaceMemberInvitation = pgTable(
+  "WorkspaceMemberInvitation",
+  {
+    id: text("id").primaryKey().notNull(),
+    recepientId: text("recepientId").references(() => users.id, {
+      onDelete: "set null",
+      onUpdate: "cascade",
+    }),
+    recepientEmail: text("recepientEmail").notNull(),
+    senderId: text("senderId")
+      .notNull()
+      .references(() => users.id, {
+        onDelete: "restrict",
+        onUpdate: "cascade",
+      }),
+    role: workspaceMemberRoles("role").default("MEMBER").notNull(),
+    workspaceId: text("workspaceId")
+      .notNull()
+      .references(() => workspace.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    createdAt: timestamp("createdAt", { precision: 3, mode: "string" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => {
+    return {
+      recepientEmailIdx: index(
+        "WorkspaceMemberInvitation_recepientEmail_idx"
+      ).on(table.recepientEmail),
+    };
+  }
 );
 
-export const users = pgTable(
-    'users',
-    {
-        id: varchar('id', { length: 191 }).primaryKey().notNull(),
-        name: varchar('name', { length: 191 }),
-        email: varchar('email', { length: 191 }).notNull(),
-        emailVerified: timestamp('emailVerified'),
-        image: varchar('image', { length: 191 }),
-        created_at: timestamp('created_at').notNull().defaultNow(),
-        updatedAt: timestamp('updatedAt').defaultNow().notNull(),
-    },
-    user => ({
-        emailIndex: uniqueIndex('users__email__idx').on(user.email),
-    })
-);
-
-export const verificationTokens = pgTable(
-    'verification_tokens',
-    {
-        identifier: varchar('identifier', { length: 191 }).primaryKey().notNull(),
-        token: varchar('token', { length: 191 }).notNull(),
-        expires: timestamp('expires').notNull(),
-        created_at: timestamp('created_at').notNull().defaultNow(),
-        updatedAt: timestamp('updatedAt').defaultNow().notNull(),
-    },
-    verificationToken => ({
-        tokenIndex: uniqueIndex('verification_tokens__token__idx').on(
-            verificationToken.token
-        ),
-    })
+export const workspaceMember = pgTable(
+  "WorkspaceMember",
+  {
+    id: text("id").primaryKey().notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    role: workspaceMemberRoles("role").default("MEMBER").notNull(),
+    workspaceId: text("workspaceId")
+      .notNull()
+      .references(() => workspace.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    memberSince: timestamp("memberSince", { precision: 3, mode: "string" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => {
+    return {
+      userIdWorkspaceIdIdx: index("WorkspaceMember_userId_workspaceId_idx").on(
+        table.userId,
+        table.workspaceId
+      ),
+    };
+  }
 );

@@ -3,6 +3,8 @@ import { verifyAuthenticationResponse } from "@simplewebauthn/server";
 import { type AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
 import { TRPCError } from "@trpc/server";
 import { verify } from "argon2";
+import { users } from "drizzle/schema";
+import { eq } from "drizzle-orm";
 import { type GetServerSidePropsContext } from "next";
 import {
   type DefaultSession,
@@ -23,8 +25,6 @@ import {
   SigninSchema,
   SigninTokenSchema,
 } from "@/utils/ValidationSchema";
-import { users } from "drizzle/schema";
-import { eq } from "drizzle-orm";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -59,9 +59,10 @@ export const authOptions: NextAuthOptions = {
       if (isNewUser) {
         // NewUserSideEffects(user.id, user.email);
         fetch(
-          `${env.NODE_ENV == "production"
-            ? `https://${env.DOMAIN_NAME}`
-            : env.NEXTAUTH_URL
+          `${
+            env.NODE_ENV == "production"
+              ? `https://${env.DOMAIN_NAME}`
+              : env.NEXTAUTH_URL
           }/api/webhook/newuser`,
           {
             method: "POST", // Specify the HTTP request type as POST
@@ -101,7 +102,7 @@ export const authOptions: NextAuthOptions = {
       const [dbUser] = await drizzleDB
         .select()
         .from(users)
-        .where(eq(users.email, token.email || ''))
+        .where(eq(users.email, token.email || ""))
         .limit(1);
 
       if (!dbUser) {

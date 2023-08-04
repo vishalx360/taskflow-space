@@ -12,7 +12,10 @@
     "lint": "next lint -- --ignore-path .eslintignore",
     "lint:fix": "npm run format && npm run lint -- --fix",
     "resetdb": "npx prisma migrate reset --preview-feature",
-    "updatedb": "npx prisma db push"
+    "updatedb": "npx prisma db push",
+    "introspect": "npx drizzle-kit introspect:pg",
+    "migrate": "tsx drizzle.migrate.ts",
+    "generate": "npx drizzle-kit generate:pg"
   },
   "dependencies": {
     "@auth/core": "^0.5.1",
