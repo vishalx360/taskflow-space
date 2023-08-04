@@ -101,7 +101,14 @@ export const BoardRouter = createTRPCRouter({
       // check if board exist and user has permission to view it
       const board = await ctx.prisma.board.findUnique({
         where: { id: input.boardId },
-        select: { workspaceId: true },
+        include: {
+          lists: {
+            orderBy: {
+              createdAt: "asc",
+            },
+          },
+          Workspace: true,
+        },
       });
       if (!board) {
         throw new TRPCError({
@@ -124,26 +131,12 @@ export const BoardRouter = createTRPCRouter({
         });
       }
 
-      const updateLastVisited = ctx.prisma.board.update({
+      await ctx.prisma.board.update({
         where: { id: input.boardId },
         data: { updatedAt: new Date() },
       });
 
-      const findQuery = ctx.prisma.board.findUnique({
-        where: { id: input.boardId },
-        include: {
-          lists: {
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-          Workspace: true,
-        },
-      });
-
-      const result = await Promise.all([updateLastVisited, findQuery]);
-
-      return result[1];
+      return board;
     }),
 
   updateBoard: protectedProcedure
