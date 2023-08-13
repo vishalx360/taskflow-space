@@ -1,5 +1,7 @@
 # Taskflow
 
+![Taskflow.Space Software Poster](public/site_poster.png?raw=true "Taskflow.space")
+
 Taskflow is a powerful application designed to help individuals and teams stay organized, efficient, and productive. Our platform offers a range of unique features and benefits, including:
 
 Workspaces: Taskflow allows you to create multiple workspaces, each with its own set of tasks and team members. This feature allows you to keep different projects separate and organized.
@@ -11,8 +13,6 @@ Team Members: You can easily invite team members to join your workspace, allowin
 Member Roles: Taskflow offers a range of member roles, from admin to viewer, allowing you to control who has access to what information.
 
 Custom Board Background: You can customize your workspace by adding a custom board background, making your workspace more personalized and enjoyable to work in.
-
-![Taskflow.Space Software Poster](public/site_poster.png?raw=true "Taskflow.space")
 
 ## Tech Stack
 
