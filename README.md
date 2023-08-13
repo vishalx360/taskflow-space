@@ -31,3 +31,7 @@ Custom Board Background: You can customize your workspace by adding a custom boa
 ## System Architecture Diagram
 
 ![Taskflow.Space System Architecture](/arch-diagram.png?raw=true "Taskflow.space")
+
+## Database Schema
+
+![Taskflow.Space System Architecture](/database-schema.png "Taskflow.space")
