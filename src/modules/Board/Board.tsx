@@ -67,7 +67,7 @@ function Board() {
   const utils = api.useContext();
   const { data: board, isLoading } = api.board.getBoard.useQuery(
     { boardId: boardId || "" },
-    { enabled: Boolean(boardId), retry: true, }
+    { enabled: Boolean(boardId), retry: true }
   );
 
   const syncListDebounced = useDebouncedCallback(
@@ -291,10 +291,11 @@ function BoardSkeleton(): JSX.Element {
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
-              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${background
+              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${
+                background
                   ? "border-white/50 text-white"
                   : "border-neutral-400 text-neutral-600"
-                }`}
+              }`}
             >
               <FiArrowLeft className="text-xl" />
             </Link>

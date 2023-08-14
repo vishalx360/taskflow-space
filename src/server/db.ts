@@ -16,11 +16,12 @@ export const prisma =
       env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });
 
-
-
 const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
   models: [],
-  storage: { type: "redis", options: { client: redisClient, invalidation: { referencesTTL: 300 }, } },
+  storage: {
+    type: "redis",
+    options: { client: redisClient, invalidation: { referencesTTL: 300 } },
+  },
   cacheTime: 500,
   transformer: {
     serialize: (result) => superjson.serialize(result),

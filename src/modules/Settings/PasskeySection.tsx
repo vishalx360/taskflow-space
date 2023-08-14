@@ -3,7 +3,6 @@ import { Field, type FieldProps, Form, Formik } from "formik";
 import {
   LucideAlertCircle,
   LucideCheck,
-  LucideEdit,
   LucidePlus,
   LucideTrash2,
   LucideX,
@@ -280,7 +279,7 @@ function PasskeyRow({ id, name, createdAt, type = "phone" }: PasskeyRowProps) {
           <div className="flex gap-2">
             <Button
               size="sm"
-              LeftIcon={LucideEdit}
+              // LeftIcon={Edit}
               variant="outline"
               onClick={() => setEditMode(true)}
               className="px-4 text-xs"
