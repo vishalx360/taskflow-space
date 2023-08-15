@@ -22,7 +22,7 @@ const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
     type: "redis",
     options: { client: redisClient, invalidation: { referencesTTL: 300 } },
   },
-  cacheTime: 500,
+  cacheTime: 60 * 60 * 48,
   transformer: {
     serialize: (result) => superjson.serialize(result),
     deserialize: (serialized) => superjson.deserialize(serialized),
