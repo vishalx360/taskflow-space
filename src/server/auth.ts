@@ -54,34 +54,31 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, isNewUser }) {
       // seed personal workspace with default board with list and taks
       if (isNewUser) {
-        // NewUserSideEffects(user.id, user.email);
-        fetch(
-          `${
-            env.NODE_ENV == "production"
+        try {
+          const response = await fetch(
+            `${env.NODE_ENV == "production"
               ? `https://${env.DOMAIN_NAME}`
               : env.NEXTAUTH_URL
-          }/api/webhook/newuser`,
-          {
-            method: "POST", // Specify the HTTP request type as POST
-            body: JSON.stringify({
-              email: user.email,
-              userID: user.id,
-            }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then(() => {
-            // Request was successfully sent, but we are not waiting for a response.
+            }/api/webhook/newuser`,
+            {
+              method: "POST", // Specify the HTTP request type as POST
+              body: JSON.stringify({
+                email: user.email,
+                userID: user.id,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.ok) {
             console.log("newuser webhook initiated successfully.");
-          })
-          .catch((error) => {
-            console.error(
-              "Error occurred while initiating newuser webhook:",
-              error
-            );
-          });
+          } else {
+            console.error("Error occurred while initiating newuser webhook:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error occurred while initiating newuser webhook:", error);
+        }
       }
     },
   },
