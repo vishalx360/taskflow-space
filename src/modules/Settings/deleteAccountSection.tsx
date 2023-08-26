@@ -41,7 +41,9 @@ function DeleteAccountSection() {
     onSuccess: async () => {
       toast({ title: `Account Deleted Successfully` });
       await signOut();
-      router.push("/signin");
+      setTimeout(() => {
+        router.push("/signin");
+      }, 1000);
     },
   });
   return (
