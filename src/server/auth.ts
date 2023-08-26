@@ -17,12 +17,12 @@ import { env } from "@/env.mjs";
 import { redisClient } from "@/lib/redisClient";
 import { prisma } from "@/server/db";
 import { signJTW, verifyJWT } from "@/utils/jwt";
+import NewUserSideEffects from "@/utils/NewUserSideEffects";
 import {
   PasskeySigninSchema,
   SigninSchema,
   SigninTokenSchema,
 } from "@/utils/ValidationSchema";
-import NewUserSideEffects from "@/utils/NewUserSideEffects";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -56,31 +56,6 @@ export const authOptions: NextAuthOptions = {
       // seed personal workspace with default board with list and taks
       if (isNewUser) {
         await NewUserSideEffects(user.id, user.email);
-        // try {
-        //   const response = await fetch(
-        //     `${env.NODE_ENV == "production"
-        //       ? `https://${env.DOMAIN_NAME}`
-        //       : env.NEXTAUTH_URL
-        //     }/api/webhook/newuser`,
-        //     {
-        //       method: "POST", // Specify the HTTP request type as POST
-        //       body: JSON.stringify({
-        //         email: user.email,
-        //         userID: user.id,
-        //       }),
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //     }
-        //   );
-        //   if (response.ok) {
-        //     console.log("newuser webhook initiated successfully.");
-        //   } else {
-        //     console.error("Error occurred while initiating newuser webhook:", response.statusText);
-        //   }
-        // } catch (error) {
-        //   console.error("Error occurred while initiating newuser webhook:", error);
-        // }
       }
     },
   },
