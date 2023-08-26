@@ -82,14 +82,31 @@ function HeroSection() {
             }}
             className="z-20 w-72 shadow-2xl md:w-[1000px]"
           >
-            <Image
-              alt="Poster"
-              width={1920}
-              height={1080}
-              placeholder="blur"
-              className="h-full w-full rounded-lg "
-              src={BOARD_2_URL}
-            />
+
+            <div className="">
+              <video poster="/taj.png" playsInline autoPlay muted loop className=" w-full h-full object-cover rounded-lg">
+                {/* smaller screen */}
+                <source
+                  src="/taskflow.webm"
+                  type="video/webm"
+                />
+                <source
+                  src="/taskflow-compressed.webm"
+                  type="video/webm"
+                />
+              </video>
+
+              {/* <Image
+                alt="Poster"
+                width={1920}
+                height={1080}
+                placeholder="blur"
+                className="h-full w-full rounded-lg "
+                src={BOARD_2_URL}
+              /> */}
+            </div>
+
+
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 0, y: 0, scale: 0.9 }}

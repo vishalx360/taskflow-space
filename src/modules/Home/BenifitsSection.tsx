@@ -32,6 +32,11 @@ function BenifitsSection() {
       className=" scroll-mt-16 bg-gradient-to-b from-black/10 to-white "
     >
       <div className="container mx-auto px-6 py-16 ">
+
+        {/* <div className="flex items-center justify-start"> */}
+
+
+
         <div className="space-y-4">
           <h1 className="whitespace-nowrap text-sm font-semibold text-blue-600">
             WHY USE TASKFLOW.SPACE
@@ -46,6 +51,7 @@ function BenifitsSection() {
               business finances.
             </p>
           </div>
+          {/* </div> */}
         </div>
 
         <div className="mt-20 grid grid-rows-3 gap-10 md:grid-cols-3 md:grid-rows-1">
