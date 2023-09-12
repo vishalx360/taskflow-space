@@ -1,5 +1,4 @@
 import AboutSection from "./AboutSection";
-import AccessSection from "./AccessSection";
 import BenifitsSection from "./BenifitsSection";
 import FeaturesSection from "./FeaturesSection";
 import FooterSection from "./FooterSection";

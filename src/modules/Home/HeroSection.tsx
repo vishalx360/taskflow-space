@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 import BOARD_3_URL from "../../../public/board2.jpeg";
-import BOARD_2_URL from "../../../public/board3.png";
 import BOARD_1_URL from "../../../public/dashboard-desktop.png";
 
 function HeroSection() {
@@ -82,18 +81,18 @@ function HeroSection() {
             }}
             className="z-20 w-72 shadow-2xl md:w-[1000px]"
           >
-
             <div className="">
-              <video poster="/taj.png" playsInline autoPlay muted loop className=" w-full h-full object-cover rounded-lg">
+              <video
+                poster="/taj.png"
+                playsInline
+                autoPlay
+                muted
+                loop
+                className=" h-full w-full rounded-lg object-cover"
+              >
                 {/* smaller screen */}
-                <source
-                  src="/taskflow.webm"
-                  type="video/webm"
-                />
-                <source
-                  src="/taskflow-compressed.webm"
-                  type="video/webm"
-                />
+                <source src="/taskflow.webm" type="video/webm" />
+                <source src="/taskflow-compressed.webm" type="video/webm" />
               </video>
 
               {/* <Image
@@ -105,8 +104,6 @@ function HeroSection() {
                 src={BOARD_2_URL}
               /> */}
             </div>
-
-
           </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 0, y: 0, scale: 0.9 }}

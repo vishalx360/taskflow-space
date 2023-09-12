@@ -1,11 +1,10 @@
-import { Field, type FieldProps, Form, Formik } from "formik";
+import { Field, type FieldProps,Form, Formik } from "formik";
 import { motion } from "framer-motion";
 import { LucideArrowLeft } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { getServerSession } from "next-auth";
 import { getSession, signIn } from "next-auth/react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -15,7 +14,6 @@ import { useToast } from "@/hooks/use-toast";
 import LogoImage from "@/modules/Global/LogoImage";
 import PasswordInput from "@/modules/Global/PasswordInput";
 import { Button } from "@/modules/ui/button";
-import { authOptions } from "@/server/auth";
 import { api } from "@/utils/api";
 import { SignUpSchema } from "@/utils/ValidationSchema";
 

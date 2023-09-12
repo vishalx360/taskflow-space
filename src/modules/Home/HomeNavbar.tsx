@@ -1,13 +1,9 @@
 import { Transition } from "@headlessui/react";
 import { motion } from "framer-motion";
-import {
-  LucideAlignRight,
-  LucideArrowBigRight,
-  LucideArrowRight,
-} from "lucide-react";
+import { LucideArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 

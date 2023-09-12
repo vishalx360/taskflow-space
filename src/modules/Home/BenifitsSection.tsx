@@ -32,10 +32,7 @@ function BenifitsSection() {
       className=" scroll-mt-16 bg-gradient-to-b from-black/10 to-white "
     >
       <div className="container mx-auto px-6 py-16 ">
-
         {/* <div className="flex items-center justify-start"> */}
-
-
 
         <div className="space-y-4">
           <h1 className="whitespace-nowrap text-sm font-semibold text-blue-600">

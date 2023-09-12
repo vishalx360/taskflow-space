@@ -1,6 +1,4 @@
-import StripeSubcription, {
-  SubscriptionSection,
-} from "../Settings/subscriptionSection";
+import StripeSubcription from "../Settings/subscriptionSection";
 
 function PricingSection() {
   return (
