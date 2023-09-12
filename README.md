@@ -19,20 +19,8 @@
     - [Database](#database)
     - [Deployment and Hosting](#deployment-and-hosting)
   - [Database Schema](#database-schema)
-    - [Authentication Schema](#authentication-schema)
-      - [User](#user)
-      - [Account](#account)
-      - [Session](#session)
-      - [VerificationToken and ResetPasswordToken](#verificationtoken-and-resetpasswordtoken)
-      - [Passkey](#passkey)
-    - [Application Schema](#application-schema)
-      - [Workspace](#workspace)
-      - [WorkspaceMember](#workspacemember)
-      - [WorkspaceMemberInvitation](#workspacememberinvitation)
-      - [Board](#board)
-      - [List](#list)
-      - [Task](#task)
-      - [TaskMember](#taskmember)
+    - [Authentication Schema:](#authentication-schema)
+    - [Application Schema:](#application-schema)
   - [Contributing](#contributing)
   - [Code of Conduct](#code-of-conduct)
   - [License](#license)
@@ -93,80 +81,64 @@ This technology stack, combined with a well-designed architecture, enables Taskf
 
 In Taskflow, the database schema is designed to support various features of the application, including user management, workspaces, tasks, boards, and more. Below is an overview of the key database models and their relationships.
 
-### Authentication Schema
+### Authentication Schema:
 
-#### User
+- **User:**
 
-- Represents a user in the system.
-- Contains fields such as `id`, `name`, `email`, `image`, and `password`.
-- Has associations with tasks, workspaces, and workspace invitations.
-- Supports extra fields like `tasks` and `workspaces`.
+  - Represents system users with fields like id, name, email, image, and password.
+  - Linked to tasks, workspaces, and invitations.
 
-#### Account
+- **Account:**
 
-- Represents external authentication accounts linked to a user.
-- Contains fields like `id`, `userId`, `type`, and `provider`.
-- Allows associations with the user.
+  - Represents external authentication accounts linked to users.
+  - Fields include id, userId, type, and provider.
 
-#### Session
+- **Session:**
 
-- Represents user sessions for authentication.
-- Contains fields such as `id`, `sessionToken`, `userId`, and `expires`.
-- Associated with the user for session management.
+  - Represents user sessions with fields like id, sessionToken, userId, and expires.
 
-#### VerificationToken and ResetPasswordToken
+- **VerificationToken and ResetPasswordToken:**
 
-- Used for email verification and password reset.
-- Store information like `token`, `expires`, and `identifier`.
+  - Used for email verification and password reset, storing token information.
 
-#### Passkey
+- **Passkey:**
+  - Represents passkeys for authentication with fields like id, name, userId, counter, and transports.
 
-- Represents passkeys used for authentication.
-- Contains fields like `id`, `name`, `userId`, `counter`, and `transports`.
+### Application Schema:
 
-### Application Schema
+- **Workspace:**
 
-#### Workspace
+  - Represents Taskflow workspaces with fields like id, createdAt, name, and personal.
+  - Associated with boards and members.
 
-- Represents a workspace within Taskflow.
-- Contains fields like `id`, `createdAt`, `name`, and `personal`.
-- Associated with boards and members.
+- **WorkspaceMember:**
 
-#### WorkspaceMember
+  - Represents members within a workspace with fields like id, userId, role, and memberSince.
+  - Linked to a user and workspace.
 
-- Represents members within a workspace.
-- Contains fields like `id`, `userId`, `role`, and `memberSince`.
-- Associated with a user and workspace.
+- **WorkspaceMemberInvitation:**
 
-#### WorkspaceMemberInvitation
+  - Represents workspace invitations with fields like id, recipient, recipientEmail, sender, and role.
+  - Associated with a workspace.
 
-- Represents invitations to join a workspace.
-- Contains fields like `id`, `recepient`, `recepientEmail`, `sender`, and `role`.
-- Associated with a workspace.
+- **Board:**
 
-#### Board
+  - Represents boards within a workspace with fields like id, createdAt, updatedAt, name, and description.
+  - Linked to lists and a workspace.
 
-- Represents a board within a workspace.
-- Contains fields like `id`, `createdAt`, `updatedAt`, `name`, and `description`.
-- Associated with lists and a workspace.
+- **List:**
 
-#### List
+  - Represents lists within a board with fields like id, createdAt, name, and boardId.
+  - Associated with tasks and a board.
 
-- Represents a list within a board.
-- Contains fields like `id`, `createdAt`, `name`, and `boardId`.
-- Associated with tasks and a board.
+- **Task:**
 
-#### Task
+  - Represents tasks within a list with fields like id, createdAt, title, description, listId, and rank.
+  - Associated with members and a list.
 
-- Represents tasks within a list.
-- Contains fields like `id`, `createdAt`, `title`, `description`, `listId`, and `rank`.
-- Associated with members and a list.
-
-#### TaskMember
-
-- Represents members assigned to a task.
-- Contains fields like `id`, `createdAt`, `taskId`, and `userId`.
-- Associated with a task and a user.
+- **TaskMember:**
+  - Represents members assigned to a task with fields like id, createdAt, taskId, and userId.
+  - Linked to a task and a user.
 
 The database schema is designed to support the collaborative and organizational features of Taskflow, allowing users to manage tasks, workspaces, and more effectively.
 
