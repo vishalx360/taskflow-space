@@ -7,6 +7,7 @@ import {
   type VerifyRegistrationResponseOpts,
 } from "@simplewebauthn/server";
 import {
+  AuthenticatorTransportFuture,
   type PublicKeyCredentialDescriptorFuture,
   type RegistrationResponseJSON,
 } from "@simplewebauthn/typescript-types";
@@ -185,9 +186,8 @@ export const AuthenticationRouter = createTRPCRouter({
       const mailOptions = await BASIC_EMAIL({
         recevierEmail: input.email,
         subject: "Reset Password",
-        body: ` ${
-          user?.name ? user.name : "You"
-        } have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
+        body: ` ${user?.name ? user.name : "You"
+          } have requested to reset your password. If you did not make this request, please ignore this email. If you did make this request, please click the link below to reset your password. 
         <br/>
         https://taskflow.space/newPassword/${newToken?.id}
         <br/>
@@ -449,7 +449,7 @@ export const AuthenticationRouter = createTRPCRouter({
           message: "No registred passkeys found.",
         });
       }
-      const options = generateAuthenticationOptions({
+      const options = await generateAuthenticationOptions({
         // Require users to use a previously-registered authenticator
         allowCredentials: passkeys.map((passkey) => ({
           id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
@@ -542,8 +542,8 @@ export const AuthenticationRouter = createTRPCRouter({
       rpName: "taskflow",
       rpID: env.DOMAIN_NAME,
       userID: ctx.session.user?.id,
-      userName: ctx.session.user?.email,
-      userDisplayName: ctx.session.user?.name || ctx.session.user?.email,
+      userName: ctx.session.user?.email!,
+      userDisplayName: ctx.session.user?.name || ctx.session.user?.email!,
       timeout: 60000,
       attestationType: "none",
       /**
@@ -554,11 +554,11 @@ export const AuthenticationRouter = createTRPCRouter({
        */
       excludeCredentials: passkeys.map(
         (passkey) =>
-          ({
-            id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
-            type: "public-key",
-            transports: passkey.transports,
-          } satisfies PublicKeyCredentialDescriptorFuture)
+        ({
+          id: Uint8Array.from(Buffer.from(passkey.credentialID, "base64url")),
+          type: "public-key",
+          transports: passkey.transports as AuthenticatorTransportFuture[],
+        } satisfies PublicKeyCredentialDescriptorFuture)
       ),
       authenticatorSelection: {
         residentKey: "discouraged",
@@ -566,7 +566,7 @@ export const AuthenticationRouter = createTRPCRouter({
       supportedAlgorithmIDs: [-7, -257],
     };
 
-    const options = generateRegistrationOptions(opts);
+    const options = await generateRegistrationOptions(opts);
 
     /**
      * The server needs to temporarily remember this value for verification, so don't lose it until

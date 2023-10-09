@@ -25,7 +25,10 @@ function PasskeySection() {
   const { toast } = useToast();
   const utils = api.useContext();
 
-  const PasskeyVerifyReg = api.authentication.passkeyVerifyReg.useMutation({
+  const [isRegistering, setIsRegistering] = useState(false);
+
+
+  const { mutate: verifyRegister, isLoading: verifyingRegisteration } = api.authentication.passkeyVerifyReg.useMutation({
     onError: (error) => {
       // remove optimistic update on error
       toast({
@@ -51,14 +54,13 @@ function PasskeySection() {
       });
     },
   });
-  const [isRegistering, setIsRegistering] = useState(false);
 
   async function HandelRegister() {
     setIsRegistering(true);
     const options = await utils.authentication.passkeyGenRegOpts.fetch();
     try {
       const GetCredentialResponse = await startRegistration(options);
-      await PasskeyVerifyReg.mutate(GetCredentialResponse);
+      await verifyRegister(GetCredentialResponse);
     } catch (error) {
       if (error?.name === "InvalidStateError") {
         toast({
@@ -75,7 +77,7 @@ function PasskeySection() {
     setIsRegistering(false);
   }
 
-  const { data: passkeys, isLoading } =
+  const { data: passkeys, isLoading, isRefetching } =
     api.authentication.fethMyPasskeys.useQuery();
 
   return (
@@ -88,7 +90,7 @@ function PasskeySection() {
       <div className="my-5 flex items-center justify-between">
         <h2 className="text-gray-500">Your passkeys</h2>
         <Button
-          isLoading={isRegistering}
+          isLoading={isRegistering || verifyingRegisteration}
           LeftIcon={LucidePlus}
           onClick={HandelRegister}
           variant="outline"
@@ -98,11 +100,18 @@ function PasskeySection() {
       </div>
       {/* show all connected passkey */}
       <div className=" flex flex-col space-y-2">
-        {isLoading ? (
-          <>
-            <div className="my-3 h-16 w-full animate-pulse rounded-xl bg-gray-300 "></div>
-            <div className="my-3 h-16 w-full animate-pulse rounded-xl bg-gray-300 "></div>
-          </>
+        {isLoading || isRefetching ? (
+          <div className="flex items-center gap-5">
+            <div className="my-3 aspect-square h-16 w-16 animate-pulse rounded-xl bg-gray-300 "></div>
+            <div className="h-full w-full">
+              <div className="my-3 h-6 w-full animate-pulse rounded-xl bg-gray-300 "></div>
+              <div className="my-3 h-6 w-[90%] animate-pulse rounded-xl bg-gray-300 "></div>
+            </div>
+            <div className="flex h-full w-full items-center gap-2">
+              <div className="my-3 h-6 w-full animate-pulse rounded-xl bg-gray-300 "></div>
+              <div className="my-3 h-6 w-full animate-pulse rounded-xl bg-gray-300 "></div>
+            </div>
+          </div>
         ) : (
           <>
             {passkeys?.length !== 0 ? (

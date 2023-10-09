@@ -69,14 +69,14 @@ dependencies:
     specifier: ^1.0.7
     version: 1.0.7(@types/react-dom@18.2.11)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
   '@simplewebauthn/browser':
-    specifier: ^7.4.0
-    version: 7.4.0
+    specifier: ^8.3.1
+    version: 8.3.1
   '@simplewebauthn/server':
-    specifier: ^7.4.0
-    version: 7.4.0
+    specifier: ^8.2.0
+    version: 8.2.0
   '@simplewebauthn/typescript-types':
-    specifier: ^7.4.0
-    version: 7.4.0
+    specifier: ^8.0.0
+    version: 8.0.0
   '@t3-oss/env-nextjs':
     specifier: ^0.3.1
     version: 0.3.1(typescript@5.2.2)(zod@3.22.4)
@@ -2201,22 +2201,14 @@ packages:
     resolution: {integrity: sha512-6i/8UoL0P5y4leBIGzvkZdS85RDMG9y1ihZzmTZQ5LdHUYmZ7pKFoj8X0236s3lusPs1Fa5HTQUpwI+UfTcmeA==}
     dev: true
 
-  /@simplewebauthn/browser@7.4.0:
-    resolution: {integrity: sha512-qqCZ99lFWjtyza8NCtCpRm3GU5u8/QFeBfMgW5+U/E8Qyc4lvUcuJ8JTbrhksVQLZWSY1c/6Xw11QZ5e+D1hNw==}
+  /@simplewebauthn/browser@8.3.1:
+    resolution: {integrity: sha512-bMW7oOkxX4ydRAkkPtJ1do2k9yOoIGc/hZYebcuEOVdJoC6wwVpu97mYY7Mz8B9hLlcaR5WFgBsLl5tSJVzm8A==}
     dependencies:
-      '@simplewebauthn/typescript-types': 7.4.0
+      '@simplewebauthn/typescript-types': 8.0.0
     dev: false
 
-  /@simplewebauthn/iso-webcrypto@7.4.0:
-    resolution: {integrity: sha512-LSx8zghjH+z9IFOhBdDv2AyhqnzDUCYFxFiwJbToowOigCgf4Y8fyZle9Y+0NS232bIoU6j/lgv5iT32m3eGyA==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    dependencies:
-      '@simplewebauthn/typescript-types': 7.4.0
-      '@types/node': 18.18.4
-    dev: false
-
-  /@simplewebauthn/server@7.4.0:
-    resolution: {integrity: sha512-Y6jj2WsE3zBDagSdOg3b7+SMw7zHku0Od45Q1ZpA19Wd5aUbV2mH281SbdhFN4UuKcGQSeeAgUObAWHvgxNOVA==}
+  /@simplewebauthn/server@8.2.0:
+    resolution: {integrity: sha512-nknf7kCa5V61Kk2zn1vTuKeAlyut9aWduIcbHNQWpMCEJqH/m8cXpb+9UV42MEQRIk8JVC1GSNeEx56QVTfJHw==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@hexagon/base64': 1.1.28
@@ -2225,20 +2217,15 @@ packages:
       '@peculiar/asn1-rsa': 2.3.6
       '@peculiar/asn1-schema': 2.3.6
       '@peculiar/asn1-x509': 2.3.6
-      '@simplewebauthn/iso-webcrypto': 7.4.0
-      '@simplewebauthn/typescript-types': 7.4.0
-      '@types/debug': 4.1.9
-      '@types/node': 18.18.4
+      '@simplewebauthn/typescript-types': 8.0.0
       cbor-x: 1.5.4
-      cross-fetch: 3.1.8
-      debug: 4.3.4
+      cross-fetch: 4.0.0
     transitivePeerDependencies:
       - encoding
-      - supports-color
     dev: false
 
-  /@simplewebauthn/typescript-types@7.4.0:
-    resolution: {integrity: sha512-8/ZjHeUPe210Bt5oyaOIGx4h8lHdsQs19BiOT44gi/jBEgK7uBGA0Fy7NRsyh777al3m6WM0mBf0UR7xd4R7WQ==}
+  /@simplewebauthn/typescript-types@8.0.0:
+    resolution: {integrity: sha512-d7Izb2H+LZJteXMkS8DmpAarD6mZdpIOu/av/yH4/u/3Pd6DKFLyBM3j8BMmUvUqpzvJvHARNrRfQYto58mtTQ==}
     dev: false
 
   /@swc/helpers@0.5.2:
@@ -2369,12 +2356,6 @@ packages:
       '@types/node': 18.18.4
     dev: true
 
-  /@types/debug@4.1.9:
-    resolution: {integrity: sha512-8Hz50m2eoS56ldRlepxSBa6PWEVCtzUo/92HgLc2qTMnotJNIm7xP+UZhyWoYsyOdd5dxZ+NZLb24rsKyFs2ow==}
-    dependencies:
-      '@types/ms': 0.7.32
-    dev: false
-
   /@types/eslint@8.44.3:
     resolution: {integrity: sha512-iM/WfkwAhwmPff3wZuPLYiHX18HI24jU8k1ZSH7P8FHwxTjZ2P6CoX2wnF43oprR+YXJM6UUxATkNvyv/JHd+g==}
     dependencies:
@@ -2450,10 +2431,6 @@ packages:
   /@types/mime@3.0.2:
     resolution: {integrity: sha512-Wj+fqpTLtTbG7c0tH47dkahefpLKEbB+xAZuLq7b4/IDHPl/n6VoXcyUQ2bypFlbSwvCr0y+bD4euTTqTJsPxQ==}
     dev: true
-
-  /@types/ms@0.7.32:
-    resolution: {integrity: sha512-xPSg0jm4mqgEkNhowKgZFBNtwoEwF6gJ4Dhww+GFpm3IgtNseHQZ5IqdNwnquZEoANxyDAKDRAdVo4Z72VvD/g==}
-    dev: false
 
   /@types/node-fetch@2.6.6:
     resolution: {integrity: sha512-95X8guJYhfqiuVVhRFxVQcf4hW/2bCuoPwDasMf/531STFoNoWTT7YDnWdXHEZKqAGUigmpG31r2FE70LwnzJw==}
@@ -3177,8 +3154,8 @@ packages:
       is-what: 4.1.15
     dev: false
 
-  /cross-fetch@3.1.8:
-    resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
+  /cross-fetch@4.0.0:
+    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
     dependencies:
       node-fetch: 2.7.0
     transitivePeerDependencies:
