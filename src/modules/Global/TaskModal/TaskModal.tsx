@@ -1,9 +1,9 @@
 import { Transition } from "@headlessui/react";
 import { type Task } from "@prisma/client";
 import { format, isSameDay } from "date-fns";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { LucideUserPlus } from "lucide-react";
-import { type Dispatch, type SetStateAction,useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import Timeago from "react-timeago";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -50,7 +50,7 @@ export default function TaskModal({
   function openModal() {
     setIsOpen(true);
   }
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
 
   const { data: task } = api.task.getTask.useQuery(
@@ -270,7 +270,7 @@ function DeleteTask({
   task: Task;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
 
   const deleteMutation = api.task.deleteTask.useMutation({

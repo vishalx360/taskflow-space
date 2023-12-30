@@ -1,5 +1,5 @@
 import { type Workspace } from "@prisma/client";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { type Dispatch, type SetStateAction } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -16,7 +16,7 @@ function RenameWorkspaceSection({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const { toast } = useToast();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const mutation = api.workspace.transferWorkspaceOwnership.useMutation({
     onError(error) {
       toast({

@@ -1,11 +1,11 @@
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { motion } from "framer-motion";
 import geopattern from "geopattern";
 import random from "lodash.random";
 import { Plus, RefreshCcw, Table2 } from "lucide-react";
 import Image from "next/image";
 import { generateSlug, type RandomWordOptions } from "random-word-slugs";
-import { type ReactNode,useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -83,7 +83,7 @@ export default function CreateNewBoardModal({
     setIsOpen(true);
   }
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
   const { data: workspaces } = api.workspace.getAllWorkspace.useQuery();
 
@@ -288,7 +288,7 @@ export default function CreateNewBoardModal({
                                   required
                                   placeholder="Board name"
                                   {...field}
-                                  // className="text-md  block w-full rounded-xl   p-2.5 text-neutral-800 transition-all focus:outline-none focus:outline"
+                                // className="text-md  block w-full rounded-xl   p-2.5 text-neutral-800 transition-all focus:outline-none focus:outline"
                                 />
                                 <Button
                                   type="button"

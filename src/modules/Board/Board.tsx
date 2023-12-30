@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Error from "next/error";
 import Head from "next/head";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { type DropResult } from "react-beautiful-dnd";
@@ -62,11 +62,12 @@ const DragDropContext = dynamic(
 function Board() {
   const { toast } = useToast();
   const { data: session } = useSession();
-  const boardId = useSearchParams().get("boardId");
+  const params = useParams();
+  const boardId = params ? params["boardId"] : "";
   // fetch board details from boardId.
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { data: board, isLoading } = api.board.getBoard.useQuery(
-    { boardId: boardId || "" },
+    { boardId: boardId },
     { enabled: Boolean(boardId), retry: true }
   );
 
@@ -291,11 +292,10 @@ function BoardSkeleton(): JSX.Element {
           <div className="flex items-center gap-10">
             <Link
               href="/dashboard"
-              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${
-                background
-                  ? "border-white/50 text-white"
-                  : "border-neutral-400 text-neutral-600"
-              }`}
+              className={`flex items-center gap-5 rounded-full border-2  p-2 transition duration-200 ease-in-out hover:bg-neutral-300/20  ${background
+                ? "border-white/50 text-white"
+                : "border-neutral-400 text-neutral-600"
+                }`}
             >
               <FiArrowLeft className="text-xl" />
             </Link>

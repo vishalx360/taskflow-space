@@ -1,5 +1,5 @@
 import { type Board } from "@prisma/client";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -16,7 +16,7 @@ function DeleteBoardSection({
   closeModal: () => void;
 }) {
   const router = useRouter();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
   const mutation = api.board.deleteBoard.useMutation({
     onError(error) {

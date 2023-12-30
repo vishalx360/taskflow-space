@@ -1,9 +1,9 @@
 import { Menu, Transition } from "@headlessui/react";
 import { type Board, type List, type Task } from "@prisma/client";
-import { ErrorMessage, Field, type FieldProps,Form, Formik } from "formik";
+import { ErrorMessage, Field, type FieldProps, Form, Formik } from "formik";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { Fragment, memo, type RefObject,useRef } from "react";
+import { Fragment, memo, type RefObject, useRef } from "react";
 import { BiDotsHorizontalRounded, BiLoaderAlt } from "react-icons/bi";
 import { useDebouncedCallback } from "use-debounce";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -131,7 +131,7 @@ export function AddToListForm({
 }) {
   // createTask mutation
   const { toast } = useToast();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const syncListDebounced = useDebouncedCallback(
     // function
     async (listId: string) => {
@@ -321,7 +321,7 @@ export function UpdateListName({ list }: { list: List }) {
 }
 
 export function CreateList({ boardId }: { boardId: string }) {
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
   const mutation = api.list.createList.useMutation({
     onError(error) {
@@ -399,7 +399,7 @@ export function CreateList({ boardId }: { boardId: string }) {
                         }
                         type="submit"
                         className="flex-[2] rounded-xl"
-                        // LeftIcon={FaPlus}
+                      // LeftIcon={FaPlus}
                       >
                         Create
                       </Button>
@@ -441,7 +441,7 @@ export function DeleteListButton({
   list: List;
 }) {
   const { toast } = useToast();
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   const mutation = api.list.deleteList.useMutation({
     onError(error) {
@@ -484,7 +484,7 @@ export function ClearListButton({
   closeMenu: () => void;
   list: List;
 }) {
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
   const mutation = api.list.clearList.useMutation({
     onError(error) {

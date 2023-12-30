@@ -1,4 +1,4 @@
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { motion } from "framer-motion";
 import { LucideArrowLeft } from "lucide-react";
 import { type GetServerSidePropsContext } from "next";
@@ -19,7 +19,7 @@ import { SignUpSchema } from "@/utils/ValidationSchema";
 
 export default function SignInPage() {
   const router = useRouter();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
 
   const mutation = api.authentication.signup.useMutation({

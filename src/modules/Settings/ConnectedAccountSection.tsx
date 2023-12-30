@@ -59,7 +59,7 @@ const IconMap = {
 
 function AccountRow({ provider, isConnected }: AccountRowProps) {
   const { toast } = useToast();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   // TODO: add confirmation modal
   const { mutate: disconnectAccount } =
     api.authentication.disconnectOauthProvider.useMutation({

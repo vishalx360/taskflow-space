@@ -22,7 +22,7 @@ export default function BoardGrid({ workspace }: { workspace: Workspace }) {
   });
   const [parent] = useAutoAnimate();
   const { data: session } = useSession();
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   // await ctx.pusher.trigger(`workspace-${input.workspaceId}`, "workspace:update", {
   useEffect(() => {

@@ -52,7 +52,7 @@ export default function BoardSettingsModal({
     }
   }, [board]);
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
   // update board background
   const UpdatelocalBackground = (background: string) => {
     utils.board.getBoard.setData({ boardId: board?.id || "" }, (prev) => {

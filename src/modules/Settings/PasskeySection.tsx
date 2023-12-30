@@ -23,7 +23,7 @@ import { Label } from "../ui/label";
 
 function PasskeySection() {
   const { toast } = useToast();
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   const [isRegistering, setIsRegistering] = useState(false);
 
@@ -168,7 +168,7 @@ interface PasskeyRowProps {
 function PasskeyRow({ id, name, createdAt, type = "phone" }: PasskeyRowProps) {
   const { toast } = useToast();
   const [editMode, setEditMode] = useState(false);
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const removeMutation = api.authentication.removePasskey.useMutation({
     onError(error) {
       toast({

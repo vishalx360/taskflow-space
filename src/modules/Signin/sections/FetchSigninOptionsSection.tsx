@@ -16,7 +16,7 @@ export function FetchSigninOptionsSection({
   setSigninOptions: React.Dispatch<React.SetStateAction<SigninOptions | null>>;
 }) {
   const { toast } = useToast();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchSigninOptions = useCallback(async (email: string) => {

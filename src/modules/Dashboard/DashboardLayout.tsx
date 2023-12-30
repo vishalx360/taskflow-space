@@ -68,7 +68,7 @@ const Navlinks = [
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
   // await ctx.pusher.trigger(`workspace-${input.workspaceId}`, "workspace:update", {
   useEffect(() => {

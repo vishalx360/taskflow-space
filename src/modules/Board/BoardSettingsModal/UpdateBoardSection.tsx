@@ -1,5 +1,5 @@
 import { type Board } from "@prisma/client";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import {
   type Dispatch,
   type MutableRefObject,
@@ -32,7 +32,7 @@ function UpdateBoardSection({
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   UpdatelocalBackground: (background: string) => void;
 }) {
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
   const mutation = api.board.updateBoard.useMutation({
     onError(error) {

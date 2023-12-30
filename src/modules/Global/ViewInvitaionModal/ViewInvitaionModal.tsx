@@ -1,7 +1,7 @@
 import { Check, LucideMail } from "lucide-react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { type Dispatch, type SetStateAction,useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { FiX } from "react-icons/fi";
 
 import { useToast } from "@/hooks/use-toast";
@@ -33,7 +33,7 @@ export default function ViewInvitationModal({
     setCurrentInvitation(null);
   }
   const [isRejecting, setIsRejecting] = useState(false);
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
 
   const recepientMutation = api.workspace.inviteResponse.useMutation({

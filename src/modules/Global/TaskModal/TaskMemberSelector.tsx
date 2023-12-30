@@ -67,7 +67,7 @@ export function TaskMemberRow({
   const { data: session } = useSession();
   const { user } = member;
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
 
   const mutation = api.task.updateTaskMember.useMutation({

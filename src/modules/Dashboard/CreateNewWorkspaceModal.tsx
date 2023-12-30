@@ -1,6 +1,6 @@
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { LayoutDashboard, Plus } from "lucide-react";
-import { type ReactNode,useState } from "react";
+import { type ReactNode, useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import { useToast } from "@/hooks/use-toast";
@@ -24,7 +24,7 @@ export default function CreateNewWorkspaceModal({
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   function closeModal() {
     setIsOpen(false);

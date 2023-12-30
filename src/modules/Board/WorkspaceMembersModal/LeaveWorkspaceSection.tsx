@@ -1,5 +1,5 @@
 import { type Workspace } from "@prisma/client";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { type Dispatch, type SetStateAction } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -21,7 +21,7 @@ function LeaveWorkspaceSection({
   workspace: Workspace;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const { toast } = useToast();
 
   const mutation = api.workspace.leaveWorkspace.useMutation({

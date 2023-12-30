@@ -24,7 +24,7 @@ export function PasskeySection({
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
-  const utils = api.useContext();
+  const utils = api.useUtils();
 
   const locked = useRef(true);
 

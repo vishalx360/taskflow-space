@@ -1,5 +1,5 @@
 import { type Workspace } from "@prisma/client";
-import { Field, type FieldProps,Form, Formik } from "formik";
+import { Field, type FieldProps, Form, Formik } from "formik";
 import { type Dispatch, type SetStateAction } from "react";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -17,7 +17,7 @@ function DeleteWorkspaceSection({
 }) {
   const { toast } = useToast();
 
-  const utils = api.useContext();
+  const utils = api.useUtils();
   const mutation = api.workspace.deleteWorkspace.useMutation({
     onError(error) {
       toast({
